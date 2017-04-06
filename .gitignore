@@ -1,5 +1,2 @@
-classes
-results
-.classpath
-.svn/
-.settings/
+/results/
+/target/

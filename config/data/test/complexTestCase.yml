@@ -3,7 +3,6 @@
     Name : Open Homepage
     Request :
        Url : ${host}/posters/
-       Encoded : "false"
        Xhr: "false"
     Response :
        Httpcode : "200"
@@ -12,7 +11,7 @@
                 XPath: id('titleIndex')
                 Matches: "Check out our *" 
             - Button:
-                XPath: id('btnShowLoginForm')
+                XPath: //*[@class='goToLogin]
     Subrequests: 
         - Static:
             - ${host}/posters/assets/css/bootstrap-2.3.1.min.css
@@ -175,7 +174,6 @@
     Request :
         Url: ${hostsec}/posters/paymentMethodCompleted
         Method : POST
-        Encoded : "false"
         Parameters :
             - creditCardNumber : "4111111111111111"
             - name : Dagobert Duck
