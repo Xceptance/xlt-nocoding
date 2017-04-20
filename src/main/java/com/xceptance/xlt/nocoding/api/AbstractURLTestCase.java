@@ -214,13 +214,6 @@ public class AbstractURLTestCase extends AbstractTestCase
 
     private void setupURLActionList()
     {
-        try
-        {
-            actions = urlActionListFacade.buildUrlActions();
-        }
-        catch (final Exception e)
-        {
-            throw new IllegalArgumentException(e.getMessage() + ". Because: " + e.getCause().getMessage(), e);
-        }
+        actions = urlActionListFacade.buildUrlActions();
     }
 }
