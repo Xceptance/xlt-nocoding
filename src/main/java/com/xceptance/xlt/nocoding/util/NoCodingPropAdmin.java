@@ -10,10 +10,6 @@ import com.xceptance.xlt.engine.XltWebClient;
 
 public class NoCodingPropAdmin
 {
-    private final String fullTestCaseName;
-
-    private final String testName;
-
     private final XltProperties xltProperties;
 
     public static final String JAVASCRIPTENABLED = "com.xceptance.xlt.javaScriptEnabled";
@@ -40,15 +36,11 @@ public class NoCodingPropAdmin
 
     public static final String TLSVERSION = "com.xceptance.xlt.nocoding.TLSVersion";
 
-    public NoCodingPropAdmin(final XltProperties xltProperties, final String fullTestCaseName, final String testName)
+    public NoCodingPropAdmin(final XltProperties xltProperties)
     {
-        ParameterUtils.isNotNull(fullTestCaseName, "fullTestCaseName");
         ParameterUtils.isNotNull(xltProperties, "XltProperties");
-        ParameterUtils.isNotNull(testName, "testName");
 
-        this.fullTestCaseName = fullTestCaseName;
         this.xltProperties = xltProperties;
-        this.testName = testName;
     }
 
     public void configWebClient(final XltWebClient webClient)
@@ -76,7 +68,7 @@ public class NoCodingPropAdmin
 
     private void setJavaScriptEnabled(final XltWebClient webClient)
     {
-        final String property = getPropertyByKey(JAVASCRIPTENABLED);
+        final String property = getPropertyByKey(JAVASCRIPTENABLED, "true");
         if (property.equalsIgnoreCase("true") || property.equalsIgnoreCase("false"))
         {
             final boolean bool = Boolean.valueOf(property);
@@ -91,7 +83,7 @@ public class NoCodingPropAdmin
 
     private void setCssEnabled(final XltWebClient webClient)
     {
-        final String property = getPropertyByKey(CSSENABLED);
+        final String property = getPropertyByKey(CSSENABLED, "true");
 
         if (property.equalsIgnoreCase("true") || property.equalsIgnoreCase("false"))
         {
@@ -107,7 +99,7 @@ public class NoCodingPropAdmin
 
     private void setLoadStaticContent(final XltWebClient webClient)
     {
-        final String property = getPropertyByKey(LOADSTATICCONTENT);
+        final String property = getPropertyByKey(LOADSTATICCONTENT, "true");
 
         if (property.equalsIgnoreCase("true") || property.equalsIgnoreCase("false"))
         {
@@ -148,7 +140,7 @@ public class NoCodingPropAdmin
 
     private void setRedirectEnabled(final XltWebClient webClient)
     {
-        final String property = getPropertyByKey(REDIRECTENABLED);
+        final String property = getPropertyByKey(REDIRECTENABLED, "true");
 
         if (property.equalsIgnoreCase("true") || property.equalsIgnoreCase("false"))
         {
@@ -164,79 +156,27 @@ public class NoCodingPropAdmin
 
     public String getPropertyByKey(final String key)
     {
-        final String effectiveKey = getEffectiveKey(key);
-        final String property = xltProperties.getProperty(effectiveKey);
-        return property;
+        return xltProperties.getProperty(key);
     }
 
     public String getPropertyByKey(final String key, final String defaultValue)
     {
-        final String effectiveKey = getEffectiveKey(key);
-        final String property = xltProperties.getProperty(effectiveKey, defaultValue);
-        return property;
+        return xltProperties.getProperty(key, defaultValue);
     }
 
     public int getPropertyByKey(final String key, final int defaultValue)
     {
-        final String effectiveKey = getEffectiveKey(key);
-        final int property = xltProperties.getProperty(effectiveKey, defaultValue);
-        return property;
+        return xltProperties.getProperty(key, defaultValue);
     }
 
     public boolean getPropertyByKey(final String key, final boolean defaultValue)
     {
-        final String effectiveKey = getEffectiveKey(key);
-        final boolean property = xltProperties.getProperty(effectiveKey, defaultValue);
-        return property;
+        return xltProperties.getProperty(key, defaultValue);
     }
 
     public long getPropertyByKey(final String key, final long defaultValue)
     {
-        final String effectiveKey = getEffectiveKey(key);
-        final long property = xltProperties.getProperty(effectiveKey, defaultValue);
-        return property;
-    }
-
-    /**
-     * Returns the effective key to be used for property lookup via one of the getProperty(...) methods.
-     * <p>
-     * When looking up a key, "password" for example, the following effective keys are tried, in this order:
-     * <ol>
-     * <li>the test user name plus simple key, e.g. "TAuthor.password"</li>
-     * <li>the test class name plus simple key, e.g. "com.xceptance.xlt.samples.tests.TAuthor.password"</li>
-     * <li>the simple key, e.g. "password"</li>
-     * </ol>
-     *
-     * @param bareKey
-     *            the bare property key, i.e. without any prefixes
-     * @return the first key that produces a result
-     */
-    protected String getEffectiveKey(final String bareKey)
-    {
-        final String effectiveKey;
-
-        // 1. use the current user name as prefix
-        final String userNameQualifiedKey = testName + "." + bareKey;
-        if (xltProperties.containsKey(userNameQualifiedKey))
-        {
-            effectiveKey = userNameQualifiedKey;
-        }
-        else
-        {
-            // 2. use the current class name as prefix
-            final String classNameQualifiedKey = fullTestCaseName + "." + bareKey;
-            if (xltProperties.containsKey(classNameQualifiedKey))
-            {
-                effectiveKey = classNameQualifiedKey;
-            }
-            else
-            {
-                // 3. use the bare key
-                effectiveKey = bareKey;
-            }
-        }
-
-        return effectiveKey;
+        return xltProperties.getProperty(key, defaultValue);
     }
 
     public XltProperties getProperties()

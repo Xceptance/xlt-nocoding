@@ -7,7 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 
 import com.xceptance.xlt.api.data.GeneralDataProvider;
-import com.xceptance.xlt.api.engine.Session;
 import com.xceptance.xlt.api.tests.AbstractTestCase;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.api.util.XltProperties;
@@ -131,7 +130,7 @@ public class AbstractURLTestCase extends AbstractTestCase
 
     private void loadNoCodingPropAdmin()
     {
-        propertiesAdmin = new NoCodingPropAdmin(properties, getTestName(), Session.getCurrent().getUserName());
+        propertiesAdmin = new NoCodingPropAdmin(properties);
     }
 
     private void loadGeneralDataProvider()

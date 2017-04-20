@@ -20,7 +20,7 @@ public class LightWeightPageActionFactoryTest
     @Before
     public void setup()
     {
-        propAdmin = new NoCodingPropAdmin(XltProperties.getInstance(), "", "");
+        propAdmin = new NoCodingPropAdmin(XltProperties.getInstance());
         mockObjects = new MockObjects();
         mockObjects.setUrlString(mockObjects.urlStringDemoHtml);
         mockObjects.initURL();

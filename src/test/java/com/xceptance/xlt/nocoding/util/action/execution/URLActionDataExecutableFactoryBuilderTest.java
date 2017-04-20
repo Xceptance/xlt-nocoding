@@ -14,7 +14,7 @@ public class URLActionDataExecutableFactoryBuilderTest
     @BeforeClass
     public static void setup()
     {
-        propAdmin = new NoCodingPropAdmin(XltProperties.getInstance(), "", "");
+        propAdmin = new NoCodingPropAdmin(XltProperties.getInstance());
     }
 
     @Test
@@ -59,5 +59,4 @@ public class URLActionDataExecutableFactoryBuilderTest
         final URLActionDataExecutionableFactory actionFactory = factory.buildFactory();
         Assert.assertTrue(actionFactory instanceof LightWeightPageActionFactory);
     }
-
 }
