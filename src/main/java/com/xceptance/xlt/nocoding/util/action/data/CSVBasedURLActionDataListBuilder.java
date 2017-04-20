@@ -184,20 +184,16 @@ public class CSVBasedURLActionDataListBuilder extends URLActionDataListBuilder
     private URLActionData buildURLActionDataFromCSVRecord(final CSVRecord csvRecord)
     {
         final String urlString = csvRecord.get(URL);
-        if (urlString == null)
-        {
-            throw new IllegalArgumentException("url null");
-        }
 
-        final String name = StringUtils.defaultIfBlank(csvRecord.get(NAME), "Action-" + (csvRecord.getRecordNumber() - 1));
+        final String name = getValueByName(csvRecord, NAME, "Action-" + (csvRecord.getRecordNumber() - 1));
 
-        final String type = StringUtils.defaultIfBlank(csvRecord.get(TYPE), TYPE_DEFAULT);
-        final String method = StringUtils.defaultIfBlank(csvRecord.get(METHOD), METHOD_DEFAULT);
-        final String encoded = StringUtils.defaultIfBlank(csvRecord.get(ENCODED), ENCODED_DEFAULT);
+        final String type = getValueByName(csvRecord, TYPE, TYPE_DEFAULT);
+        final String method = getValueByName(csvRecord, METHOD, METHOD_DEFAULT);
+        final String encoded = getValueByName(csvRecord, ENCODED, ENCODED_DEFAULT);
 
-        final String parametersString = csvRecord.get(PARAMETERS);
+        final String parametersString = getValueByName(csvRecord, PARAMETERS, null);
 
-        final String responseCode = StringUtils.defaultIfBlank(csvRecord.get(RESPONSECODE), RESPONSECODE_DEFAULT);
+        final String responseCode = getValueByName(csvRecord, RESPONSECODE, RESPONSECODE_DEFAULT);
 
         List<NameValuePair> parameters = new ArrayList<>();
 
@@ -235,10 +231,10 @@ public class CSVBasedURLActionDataListBuilder extends URLActionDataListBuilder
         String validationMode = null;
         String validationValue = null;
 
-        final String regexpString = csvRecord.isSet(REGEXP) ? csvRecord.get(REGEXP) : null;
-        final String xPath = csvRecord.isSet(XPATH) ? csvRecord.get(XPATH) : null;
+        final String regexpString = getValueByName(csvRecord, REGEXP, null);
+        final String xPath = getValueByName(csvRecord, XPATH, null);
 
-        final String text = csvRecord.get(TEXT);
+        final String text = getValueByName(csvRecord, TEXT, null);
 
         if (StringUtils.isNotBlank(regexpString))
         {
@@ -284,7 +280,7 @@ public class CSVBasedURLActionDataListBuilder extends URLActionDataListBuilder
         for (int i = 1; i <= DYNAMIC_GETTER_COUNT; i++)
         {
             String key = XPATH_GETTER_PREFIX + i;
-            final String xpath = csvRecord.isSet(key) ? csvRecord.get(key) : null;
+            final String xpath = getValueByName(csvRecord, key, null);
             if (StringUtils.isNotBlank(xpath))
             {
                 final URLActionDataStore storeItem = new URLActionDataStore(key, URLActionDataStore.XPATH, xpath, interpreter);
@@ -292,7 +288,7 @@ public class CSVBasedURLActionDataListBuilder extends URLActionDataListBuilder
             }
 
             key = REGEXP_GETTER_PREFIX + i;
-            final String regexp = csvRecord.isSet(key) ? csvRecord.get(key) : null;
+            final String regexp = getValueByName(csvRecord, key, null);
             if (StringUtils.isNotBlank(regexp))
             {
                 final URLActionDataStore storeItem = new URLActionDataStore(REGEXP_GETTER_PREFIX + i, URLActionDataStore.REGEXP, regexp,
@@ -301,6 +297,22 @@ public class CSVBasedURLActionDataListBuilder extends URLActionDataListBuilder
             }
         }
         return resultList;
+    }
+
+    private String getValueByName(final CSVRecord csvRecord, final String name, final String defaultValue)
+    {
+        String value = null;
+
+        try
+        {
+            value = csvRecord.get(name);
+        }
+        catch (final IllegalArgumentException e)
+        {
+            // no mapping was found for 'name' -> fall through
+        }
+
+        return StringUtils.defaultIfBlank(value, defaultValue);
     }
 
     private URLActionData buildURLActionData(final CSVRecord csvRecord)
