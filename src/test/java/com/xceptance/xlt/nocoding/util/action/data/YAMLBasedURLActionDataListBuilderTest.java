@@ -22,7 +22,7 @@ public class YAMLBasedURLActionDataListBuilderTest
 
     private GeneralDataProvider dataProvider;
 
-    private final String path = "./config/data/test/";
+    private final String path = "./target/test-classes/test-scripts/";
 
     private final String fileTmp = path + "tmp.yml";
 

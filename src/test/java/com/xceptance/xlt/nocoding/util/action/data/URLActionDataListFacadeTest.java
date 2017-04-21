@@ -16,7 +16,7 @@ public class URLActionDataListFacadeTest
 
     private static final String fileWithYmlExtension = "file.yml";
 
-    private static final String fileWithCsvExtension = "./config/data/test/simple.csv";
+    private static final String fileWithCsvExtension = "./target/test-classes/test-scripts/simple.csv";
 
     private static final String fileWithUnknownExtension = "file.unknown";
 
