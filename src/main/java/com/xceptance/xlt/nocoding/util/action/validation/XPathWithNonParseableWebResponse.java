@@ -24,7 +24,7 @@ import org.xml.sax.SAXException;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.xceptance.xlt.api.util.XltLogger;
-import com.xceptance.xlt.nocoding.util.ConcreteNodeList;
+import com.xceptance.xlt.nocoding.util.EmptyNodeList;
 import com.xceptance.xlt.nocoding.util.ParameterUtils;
 
 /**
@@ -161,10 +161,9 @@ public class XPathWithNonParseableWebResponse implements XPathGetable
     }
 
     private NodeList createNodeListByXPathFromInputSource(final String xPath)
-
     {
         XltLogger.runTimeLogger.debug("Getting Elements by XPath: " + xPath);
-        NodeList list = new ConcreteNodeList();
+        NodeList list = new EmptyNodeList();
         try
         {
             list = (NodeList) this.xPath.compile(xPath).evaluate(xmlInputSource, XPathConstants.NODESET);
