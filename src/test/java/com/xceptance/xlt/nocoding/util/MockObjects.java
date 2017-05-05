@@ -128,7 +128,7 @@ public class MockObjects
 
         // set up a web connection that always returns our test content / headers
         final MockWebConnection conn = new MockWebConnection();
-        conn.setDefaultResponse(content, 200, "OK", "text/html", "UTF-8", headers);
+        conn.setDefaultResponse(content, 200, "OK", "text/html", StandardCharsets.UTF_8, headers);
         client.setWebConnection(conn);
     }
 

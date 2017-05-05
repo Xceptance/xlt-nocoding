@@ -16,7 +16,7 @@
  */
 package com.xceptance.xlt.nocoding.util.bsh;
 
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import com.xceptance.xlt.api.util.XltRandom;
 

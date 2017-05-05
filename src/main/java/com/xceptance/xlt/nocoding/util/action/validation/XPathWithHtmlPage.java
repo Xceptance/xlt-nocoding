@@ -1,7 +1,6 @@
 package com.xceptance.xlt.nocoding.util.action.validation;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import com.gargoylesoftware.htmlunit.html.DomNode;
@@ -69,28 +68,24 @@ public class XPathWithHtmlPage implements XPathGetable
         }
     }
 
-    @SuppressWarnings("unchecked")
     private List<DomNode> getHtmlElementListByXPath(final String xPath)
     {
         XltLogger.runTimeLogger.debug("Getting Elements by XPath: " + xPath);
 
-        List<DomNode> htmlElements = Collections.<DomNode> emptyList();
-
         try
         {
-            htmlElements = (List<DomNode>) htmlPage.getByXPath(xPath);
+            final List<DomNode> htmlElements = htmlPage.getByXPath(xPath);
 
-            if (htmlElements == null)
+            if (htmlElements.isEmpty())
             {
                 XltLogger.runTimeLogger.debug("No Elements found!, XPath: " + xPath);
-                htmlElements = Collections.<DomNode> emptyList();
             }
+
+            return htmlElements;
         }
         catch (final Exception e)
         {
             throw new IllegalArgumentException("Failed to get Elements by XPath: " + xPath + ", Because: " + e.getMessage());
         }
-        return htmlElements;
     }
-
 }

@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -303,7 +304,7 @@ public class URLActionDataRequestBuilder
         {
             XltLogger.runTimeLogger.debug("Method : " + method);
         }
-        final String charSet = request.getCharset();
+        final Charset charSet = request.getCharset();
         if (charSet != null)
         {
             XltLogger.runTimeLogger.debug("Chraset: " + charSet);
