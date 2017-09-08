@@ -12,7 +12,7 @@ import com.gargoylesoftware.htmlunit.util.NameValuePair;
 
 public class Request
 {
-    private final String urlAsString;
+    private String urlAsString;
 
     private HttpMethod method;
 
@@ -110,51 +110,69 @@ public class Request
 
     public WebRequest buildWebRequest() throws MalformedURLException
     {
+        if (isEncodeParameters())
+        {
+            encodeParameters();
+        }
+        if (isEncodeBody())
+        {
+            encodeBody();
+        }
+        handleParameters();
+
         final URL url = new URL(this.urlAsString);
+
         final WebRequest webRequest = new WebRequest(url, this.method);
-        // set the request as xhr request if specified
-        if (this.isXhr)
+
+        if (isXhr())
         {
             webRequest.setXHR();
         }
         webRequest.setAdditionalHeaders(headers);
 
-        // encode parameters if need
-        if (encodeParameters)
-        {
-            // TODO encode Parameters
-        }
+        webRequest.setRequestBody(body);
+        return webRequest;
+    }
 
-        // if this is a post request, we need to place the parameters in the body
-        // else we place it in the url
+    private void encodeBody()
+    {
+        // TODO encode body
+
+    }
+
+    private void handleParameters()
+    {
+        String parametersAsString = "";
+        final Iterator<NameValuePair> iterator = parameters.iterator();
+        NameValuePair next;
+        while (iterator.hasNext())
+        {
+            next = iterator.next();
+            if (iterator.hasNext())
+            {
+                parametersAsString += next.getName() + "=" + next.getValue() + "&";
+            }
+            else
+            {
+                parametersAsString += next.getName() + "=" + next.getValue();
+            }
+        }
         if (this.method == HttpMethod.POST)
         {
-            String parametersAsString = "";
-            final Iterator<NameValuePair> iterator = parameters.iterator();
-            NameValuePair next;
-            while (iterator.hasNext())
-            {
-                next = iterator.next();
-                if (iterator.hasNext())
-                {
-                    parametersAsString += next.getName() + "=" + next.getValue() + "&";
-                }
-                else
-                {
-                    parametersAsString += next.getName() + "=" + next.getValue();
-                }
-
-            }
-
             body = body + parametersAsString;
-            webRequest.setRequestBody(body);
         }
-
-        if (encodeBody)
+        else
         {
-            // TODO encode body
+            this.urlAsString += "?" + parametersAsString;
         }
-        return webRequest;
+    }
+
+    private void encodeParameters()
+    {
+        // TODO encode Parameters
+        // String urlString = url.toString();
+        // urlString = StringUtils.replace(urlString, "&amp;", "&");
+        // URL newUrl = new URL(urlString);
     }
 
 }
