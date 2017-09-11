@@ -110,27 +110,37 @@ public class Request
 
     public WebRequest buildWebRequest() throws MalformedURLException
     {
-        if (isEncodeParameters())
+        if (getParameters() != null)
         {
-            encodeParameters();
+            if (isEncodeParameters())
+            {
+                encodeParameters();
+            }
+            handleParameters();
         }
         if (isEncodeBody())
         {
             encodeBody();
         }
-        handleParameters();
+        // TODO Encode URL?
 
         final URL url = new URL(this.urlAsString);
-
         final WebRequest webRequest = new WebRequest(url, this.method);
 
         if (isXhr())
         {
             webRequest.setXHR();
         }
-        webRequest.setAdditionalHeaders(headers);
 
-        webRequest.setRequestBody(body);
+        if (getHeaders() != null)
+        {
+            webRequest.setAdditionalHeaders(headers);
+        }
+
+        if (getMethod() == HttpMethod.POST || getMethod() == HttpMethod.PUT || getMethod() == HttpMethod.PATCH)
+        {
+            webRequest.setRequestBody(body);
+        }
         return webRequest;
     }
 

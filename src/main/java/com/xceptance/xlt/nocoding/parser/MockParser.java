@@ -1,9 +1,7 @@
 package com.xceptance.xlt.nocoding.parser;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.xceptance.xlt.nocoding.scriptItem.NoCodingScriptItem;
@@ -28,8 +26,6 @@ public class MockParser implements Parser
         final List<NoCodingScriptItem> itemList = new ArrayList<NoCodingScriptItem>();
         final Request request = new Request("https://localhost:8443/posters/");
         request.setMethod(HttpMethod.GET);
-        final Map<String, String> parameters = new HashMap();
-        parameters.put("", "");
         request.setParameters(null);
         request.setBody("");
         request.setEncodeBody(false);

@@ -33,11 +33,11 @@ public class NoCodingLightWeigthAction extends NoCodingAction
     protected void execute() throws Exception
     {
         // build the webrequest out of the data in request
-        final WebRequest webRequest = this.request.buildWebRequest();
+        final WebRequest webRequest = getRequest().buildWebRequest();
         // fire the lightweight request
         setLightWeightPage(((XltWebClient) getWebClient()).getLightWeightPage(webRequest));
         // Validate response
-        this.response.validate(getLightWeightPage());
+        getResponse().validate(getLightWeightPage());
 
         dumpPage(getLightWeightPage());
 

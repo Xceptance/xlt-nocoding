@@ -32,4 +32,19 @@ public abstract class NoCodingAction extends AbstractWebAction implements NoCodi
         super.run();
     }
 
+    public Request getRequest()
+    {
+        return request;
+    }
+
+    public Response getResponse()
+    {
+        return response;
+    }
+
+    public List<AbstractSubrequest> getSubrequests()
+    {
+        return subrequests;
+    }
+
 }

@@ -1,6 +1,5 @@
 package com.xceptance.xlt.nocoding.scriptItem.action;
 
-import java.net.URL;
 import java.util.List;
 
 import com.gargoylesoftware.htmlunit.Page;
@@ -38,9 +37,9 @@ public class NoCodingHTMLAction extends NoCodingAction
     @Override
     protected void execute() throws Exception
     {
-        // Fires a standard request
-        final URL url = new URL(this.request.getUrl());
-        final WebRequest webRequest = createWebRequestSettings(url, this.request.getMethod(), EMPTY_PARAMETER_LIST);
+        // Build webrequest
+        final WebRequest webRequest = getRequest().buildWebRequest();
+        // Send webrequest and receive response
         final Page result = getWebClient().getPage(webRequest);
 
         setHtmlPage(waitForPageIsComplete(result, waitingTime));
