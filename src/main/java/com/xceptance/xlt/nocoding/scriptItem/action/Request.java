@@ -2,7 +2,6 @@ package com.xceptance.xlt.nocoding.scriptItem.action;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +11,7 @@ import com.gargoylesoftware.htmlunit.util.NameValuePair;
 
 public class Request
 {
-    private String urlAsString;
+    private final String urlAsString;
 
     private HttpMethod method;
 
@@ -108,24 +107,36 @@ public class Request
         return urlAsString;
     }
 
+    /**
+     * Fills in the default values for each attribute
+     */
+    public void fillData()
+    {
+        /*
+         * TODO Think about how to fill data, do we have placeholder values that refer to default values or would it be better
+         * to have these assigned "null"/empty?
+         */
+    }
+
     public WebRequest buildWebRequest() throws MalformedURLException
     {
-        if (getParameters() != null)
-        {
-            if (isEncodeParameters())
-            {
-                encodeParameters();
-            }
-            handleParameters();
-        }
         if (isEncodeBody())
         {
             encodeBody();
         }
-        // TODO Encode URL?
+
+        if (isEncodeParameters())
+        {
+            encodeParameters();
+        }
 
         final URL url = new URL(this.urlAsString);
         final WebRequest webRequest = new WebRequest(url, this.method);
+        // TODO hier vielleicht lieber weglassen und im parser dafür ne leere liste erzeugen
+        if (parameters != null)
+        {
+            webRequest.setRequestParameters(parameters);
+        }
 
         if (isXhr())
         {
@@ -150,32 +161,33 @@ public class Request
 
     }
 
-    private void handleParameters()
-    {
-        String parametersAsString = "";
-        final Iterator<NameValuePair> iterator = parameters.iterator();
-        NameValuePair next;
-        while (iterator.hasNext())
-        {
-            next = iterator.next();
-            if (iterator.hasNext())
-            {
-                parametersAsString += next.getName() + "=" + next.getValue() + "&";
-            }
-            else
-            {
-                parametersAsString += next.getName() + "=" + next.getValue();
-            }
-        }
-        if (this.method == HttpMethod.POST)
-        {
-            body = body + parametersAsString;
-        }
-        else
-        {
-            this.urlAsString += "?" + parametersAsString;
-        }
-    }
+    // private void handleParameters()
+    // {
+    // String parametersAsString = "";
+    // final Iterator<NameValuePair> iterator = parameters.iterator();
+    // NameValuePair next;
+    // while (iterator.hasNext())
+    // {
+    // // TODO nach helpern dafür suchen, die das lösen
+    // next = iterator.next();
+    // if (iterator.hasNext())
+    // {
+    // parametersAsString += next.getName() + "=" + next.getValue() + "&";
+    // }
+    // else
+    // {
+    // parametersAsString += next.getName() + "=" + next.getValue();
+    // }
+    // }
+    // if (this.method == HttpMethod.POST)
+    // {
+    // body = parametersAsString;
+    // }
+    // else
+    // {
+    // this.urlAsString += "?" + parametersAsString;
+    // }
+    // }
 
     private void encodeParameters()
     {

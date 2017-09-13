@@ -3,11 +3,12 @@ package com.xceptance.xlt.nocoding.scriptItem.action;
 import java.util.List;
 
 import com.xceptance.xlt.api.actions.AbstractWebAction;
-import com.xceptance.xlt.nocoding.scriptItem.NoCodingScriptItem;
+import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
+import com.xceptance.xlt.nocoding.util.PropertyManager;
 
-public abstract class NoCodingAction extends AbstractWebAction implements NoCodingScriptItem
+public abstract class Action extends AbstractWebAction implements ScriptItem
 {
 
     protected final Request request;
@@ -16,7 +17,10 @@ public abstract class NoCodingAction extends AbstractWebAction implements NoCodi
 
     protected final List<AbstractSubrequest> subrequests;
 
-    public NoCodingAction(final AbstractWebAction previousAction, final String timerName, final Request request, final Response response,
+    // TODO AbstractWebAction wirklich nötig? -> Vielleicht erst zur Laufzeit erzeugen
+    // Stattdessen vllt lieber WebClient explizit wo erzeugen und übergeben
+    // dh in execute von LightWeight/DomAction dann das erzeugen und an xlt anbinden
+    public Action(final AbstractWebAction previousAction, final String timerName, final Request request, final Response response,
         final List<AbstractSubrequest> subrequests)
     {
         super(previousAction, timerName);
@@ -27,7 +31,7 @@ public abstract class NoCodingAction extends AbstractWebAction implements NoCodi
     }
 
     @Override
-    public void executeAction() throws Throwable
+    public void executeItem(final PropertyManager propertyManager) throws Throwable
     {
         super.run();
     }

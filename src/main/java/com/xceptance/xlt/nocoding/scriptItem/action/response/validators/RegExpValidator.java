@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.scriptItem.action.response;
+package com.xceptance.xlt.nocoding.scriptItem.action.response.validators;
 
 import java.util.regex.Pattern;
 

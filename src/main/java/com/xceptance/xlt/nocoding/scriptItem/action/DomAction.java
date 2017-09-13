@@ -14,14 +14,14 @@ import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
 
-public class NoCodingHTMLAction extends NoCodingAction
+public class DomAction extends Action
 {
     private HtmlPage htmlPage;
 
     private final long waitingTime = 30000;
 
-    public NoCodingHTMLAction(final AbstractWebAction previousAction, final String timerName, final Request request,
-        final Response response, final List<AbstractSubrequest> subrequests)
+    public DomAction(final AbstractWebAction previousAction, final String timerName, final Request request, final Response response,
+        final List<AbstractSubrequest> subrequests)
     {
         super(previousAction, timerName, request, response, subrequests);
         // TODO Auto-generated constructor stub
@@ -44,8 +44,8 @@ public class NoCodingHTMLAction extends NoCodingAction
 
         setHtmlPage(waitForPageIsComplete(result, waitingTime));
 
-        // Validate response
-        this.response.validate(getHtmlPage());
+        // Validate and store response
+        this.response.execute(getHtmlPage());
         dumpPage(getHtmlPage());
     }
 

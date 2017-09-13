@@ -1,9 +1,9 @@
-package com.xceptance.xlt.nocoding.scriptItem.action.response;
+package com.xceptance.xlt.nocoding.scriptItem.action.response.validators;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
 
-public class CookieValidator extends AbstractValidator
+public class HeaderValidator extends AbstractValidator
 {
 
     @Override

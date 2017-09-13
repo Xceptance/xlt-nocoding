@@ -11,22 +11,19 @@ import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
 
-public class NoCodingLightWeigthAction extends NoCodingAction
+public class LightWeigthAction extends Action
 {
     private LightWeightPage lightWeightPage;
 
-    public NoCodingLightWeigthAction(final AbstractWebAction previousAction, final String timerName, final Request request,
-        final Response response, final List<AbstractSubrequest> subrequests)
+    public LightWeigthAction(final AbstractWebAction previousAction, final String timerName, final Request request, final Response response,
+        final List<AbstractSubrequest> subrequests)
     {
         super(previousAction, timerName, request, response, subrequests);
-        // TODO Auto-generated constructor stub
     }
 
     @Override
     public void preValidate() throws Exception
     {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -36,9 +33,19 @@ public class NoCodingLightWeigthAction extends NoCodingAction
         final WebRequest webRequest = getRequest().buildWebRequest();
         // fire the lightweight request
         setLightWeightPage(((XltWebClient) getWebClient()).getLightWeightPage(webRequest));
-        // Validate response
-        getResponse().validate(getLightWeightPage());
 
+        // Validate response if it is specified
+        if (getResponse() != null)
+        {
+            getResponse().execute(getLightWeightPage());
+        }
+        else // do standard validations
+        {
+            new Response().execute(getLightWeightPage());
+        }
+
+        // TODO zu spät, finally führt auch aus wenn failt
+        // fällt aber evtl weg wenn abstractwebaction weg ist
         dumpPage(getLightWeightPage());
 
     }
@@ -46,7 +53,6 @@ public class NoCodingLightWeigthAction extends NoCodingAction
     @Override
     protected void postValidate() throws Exception
     {
-
     }
 
     private void dumpPage(final LightWeightPage lightWeightPage)
