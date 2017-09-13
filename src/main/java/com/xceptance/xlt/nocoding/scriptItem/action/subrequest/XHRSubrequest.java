@@ -11,4 +11,11 @@ public class XHRSubrequest extends AbstractSubrequest
         this.name = name;
         this.requestUrl = requestUrl;
     }
+
+    @Override
+    public void execute()
+    {
+        // TODO Auto-generated method stub
+
+    }
 }

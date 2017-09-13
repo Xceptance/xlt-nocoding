@@ -10,4 +10,11 @@ public class StaticSubrequest extends AbstractSubrequest
     {
         this.urls = urls;
     }
+
+    @Override
+    public void execute()
+    {
+        // TODO Auto-generated method stub
+
+    }
 }

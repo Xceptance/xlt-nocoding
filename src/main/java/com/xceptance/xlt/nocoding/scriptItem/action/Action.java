@@ -27,7 +27,6 @@ public abstract class Action extends AbstractWebAction implements ScriptItem
         this.request = request;
         this.response = response;
         this.subrequests = subrequests;
-        // TODO Auto-generated constructor stub
     }
 
     @Override

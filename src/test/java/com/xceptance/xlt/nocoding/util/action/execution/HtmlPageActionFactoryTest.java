@@ -40,7 +40,7 @@ public class HtmlPageActionFactoryTest
     {
         final HtmlPageActionFactory factory = new HtmlPageActionFactory(propAdmin);
         final URLActionDataExecutionable executionable = factory.createPageAction("Action", request);
-        executionable.executeAction();
+        executionable.executeItem();
         Assert.assertNotNull(executionable.getResult());
     }
 
@@ -49,9 +49,9 @@ public class HtmlPageActionFactoryTest
     {
         final HtmlPageActionFactory factory = new HtmlPageActionFactory(propAdmin);
         URLActionDataExecutionable executionable = factory.createPageAction("Action", request);
-        executionable.executeAction();
+        executionable.executeItem();
         executionable = factory.createXhrPageAction("Xhr", request);
-        executionable.executeAction();
+        executionable.executeItem();
         Assert.assertNotNull(executionable.getResult());
     }
 

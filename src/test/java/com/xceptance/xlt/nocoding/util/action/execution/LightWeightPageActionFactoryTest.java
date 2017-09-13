@@ -40,7 +40,7 @@ public class LightWeightPageActionFactoryTest
     {
         final LightWeightPageActionFactory factory = new LightWeightPageActionFactory(propAdmin);
         final URLActionDataExecutionable executionable = factory.createPageAction("Action", request);
-        executionable.executeAction();
+        executionable.executeItem();
         Assert.assertNotNull(executionable.getResult());
     }
 
@@ -49,9 +49,9 @@ public class LightWeightPageActionFactoryTest
     {
         final LightWeightPageActionFactory factory = new LightWeightPageActionFactory(propAdmin);
         URLActionDataExecutionable executionable = factory.createPageAction("Action", request);
-        executionable.executeAction();
+        executionable.executeItem();
         executionable = factory.createXhrPageAction("Xhr", request);
-        executionable.executeAction();
+        executionable.executeItem();
         Assert.assertNotNull(executionable.getResult());
     }
 
