@@ -2,64 +2,48 @@ package com.xceptance.xlt.nocoding.scriptItem.action;
 
 import java.util.List;
 
-import com.gargoylesoftware.htmlunit.WebRequest;
-import com.xceptance.xlt.api.actions.AbstractWebAction;
-import com.xceptance.xlt.api.engine.Session;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
-import com.xceptance.xlt.engine.SessionImpl;
-import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
+import com.xceptance.xlt.nocoding.util.PropertyManager;
+import com.xceptance.xlt.nocoding.util.WebAction.LightWeightPageAction;
 
 public class LightWeigthAction extends Action
 {
     private LightWeightPage lightWeightPage;
 
-    public LightWeigthAction(final AbstractWebAction previousAction, final String timerName, final Request request, final Response response,
-        final List<AbstractSubrequest> subrequests)
+    public LightWeigthAction(final Request request, final Response response, final List<AbstractSubrequest> subrequests)
     {
-        super(previousAction, timerName, request, response, subrequests);
+        super(request, response, subrequests);
     }
 
     @Override
-    public void preValidate() throws Exception
+    public void execute(final PropertyManager propertyManager) throws Throwable
     {
-    }
-
-    @Override
-    protected void execute() throws Exception
-    {
-        // build the webrequest out of the data in request
-        final WebRequest webRequest = getRequest().buildWebRequest();
-        // fire the lightweight request
-        setLightWeightPage(((XltWebClient) getWebClient()).getLightWeightPage(webRequest));
+        final LightWeightPageAction action = new LightWeightPageAction(null, this.getRequest().getName(),
+                                                                       this.getRequest().buildWebRequest());
+        // Execute the WebRequest in xlt
+        action.run();
+        setLightWeightPage(action.getLightWeightPage());
 
         // Validate response if it is specified
         if (getResponse() != null)
         {
+            this.getResponse().setPropertyManager(propertyManager);
             getResponse().execute(getLightWeightPage());
         }
-        else // do standard validations
+        // do standard validations
+        else
         {
             new Response().execute(getLightWeightPage());
         }
 
-        // TODO zu spät, finally führt auch aus wenn failt
-        // fällt aber evtl weg wenn abstractwebaction weg ist
-        dumpPage(getLightWeightPage());
-
-    }
-
-    @Override
-    protected void postValidate() throws Exception
-    {
-    }
-
-    private void dumpPage(final LightWeightPage lightWeightPage)
-    {
-        if (lightWeightPage != null)
+        if (getSubrequests() != null)
         {
-            ((SessionImpl) Session.getCurrent()).getRequestHistory().add(lightWeightPage);
+            for (final AbstractSubrequest abstractSubrequest : subrequests)
+            {
+                abstractSubrequest.execute();
+            }
         }
 
     }

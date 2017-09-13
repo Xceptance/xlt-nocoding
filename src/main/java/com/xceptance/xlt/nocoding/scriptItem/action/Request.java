@@ -11,6 +11,8 @@ import com.gargoylesoftware.htmlunit.util.NameValuePair;
 
 public class Request
 {
+    private final String name;
+
     private final String urlAsString;
 
     private HttpMethod method;
@@ -27,9 +29,10 @@ public class Request
 
     private boolean encodeBody;
 
-    public Request(final String url)
+    public Request(final String url, final String name)
     {
         this.urlAsString = url;
+        this.name = name;
     }
 
     public HttpMethod getMethod()
@@ -105,6 +108,11 @@ public class Request
     public String getUrl()
     {
         return urlAsString;
+    }
+
+    public String getName()
+    {
+        return name;
     }
 
     /**

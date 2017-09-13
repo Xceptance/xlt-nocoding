@@ -9,12 +9,15 @@ import com.xceptance.xlt.api.validators.HtmlEndTagValidator;
 import com.xceptance.xlt.api.validators.HttpResponseCodeValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.AbstractResponseStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.AbstractValidator;
+import com.xceptance.xlt.nocoding.util.PropertyManager;
 
 public class Response
 {
     public static int DEFAULT_HTTPCODE = 200;
 
     private final int httpcode;
+
+    private PropertyManager propertyManager;
 
     private final List<AbstractResponseStore> responseStore;
 
@@ -34,6 +37,16 @@ public class Response
         validation = null;
     }
 
+    public PropertyManager getPropertyManager()
+    {
+        return propertyManager;
+    }
+
+    public void setPropertyManager(final PropertyManager propertyManager)
+    {
+        this.propertyManager = propertyManager;
+    }
+
     public void execute(final HtmlPage page) throws Exception
     {
         this.validate(page);
@@ -50,9 +63,12 @@ public class Response
     {
         // Check for complete HTML.
         HtmlEndTagValidator.getInstance().validate(page);
-        for (final AbstractValidator abstractValidator : validation)
+        if (validation != null)
         {
-            abstractValidator.validate(page);
+            for (final AbstractValidator abstractValidator : validation)
+            {
+                abstractValidator.validate(page);
+            }
         }
     }
 
@@ -75,18 +91,25 @@ public class Response
 
     public void store(final HtmlPage page) throws Exception
     {
-        for (final AbstractResponseStore abstractResponseStore : responseStore)
+        if (responseStore != null)
         {
-            abstractResponseStore.store(page);
+            for (final AbstractResponseStore abstractResponseStore : responseStore)
+            {
+                abstractResponseStore.setGlobalStorage(this.propertyManager.getGlobalStorage());
+                abstractResponseStore.store(page);
+            }
         }
     }
 
     public void store(final LightWeightPage page) throws Exception
     {
-
-        for (final AbstractResponseStore abstractResponseStore : responseStore)
+        if (responseStore != null)
         {
-            abstractResponseStore.store(page);
+            for (final AbstractResponseStore abstractResponseStore : responseStore)
+            {
+                abstractResponseStore.setGlobalStorage(this.propertyManager.getGlobalStorage());
+                abstractResponseStore.store(page);
+            }
         }
     }
 

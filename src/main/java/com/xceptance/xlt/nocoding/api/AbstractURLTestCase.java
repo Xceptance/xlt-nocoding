@@ -44,7 +44,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
         {
             // TODO Log Eintrag!
             // TODO übergib die propertyManager, etc entweder hier oder im parser
-            item.executeItem(propertyManager);
+            item.execute(propertyManager);
         }
     }
 }

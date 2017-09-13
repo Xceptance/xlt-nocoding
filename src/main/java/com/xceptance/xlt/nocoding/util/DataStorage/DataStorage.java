@@ -31,4 +31,14 @@ public class DataStorage
     {
         this.configItem.put(key, value);
     }
+
+    public String getVariableByKey(final String key)
+    {
+        return this.variables.get(key);
+    }
+
+    public String getConfigItemByKey(final String key)
+    {
+        return this.configItem.get(key);
+    }
 }

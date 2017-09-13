@@ -5,5 +5,5 @@ import com.xceptance.xlt.nocoding.util.PropertyManager;
 public interface ScriptItem
 {
 
-    public void executeItem(PropertyManager propertyManager) throws Throwable;
+    public void execute(PropertyManager propertyManager) throws Throwable;
 }

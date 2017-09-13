@@ -7,7 +7,7 @@ public class StoreItem implements ScriptItem
 {
 
     @Override
-    public void executeItem(final PropertyManager propertyManager) throws Throwable
+    public void execute(final PropertyManager propertyManager) throws Throwable
     {
         // TODO Auto-generated method stub
     }

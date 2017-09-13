@@ -15,4 +15,14 @@ public class PropertyManager
         this.globalStorage = globalStorage;
     }
 
+    public XltProperties getProperties()
+    {
+        return properties;
+    }
+
+    public DataStorage getGlobalStorage()
+    {
+        return globalStorage;
+    }
+
 }

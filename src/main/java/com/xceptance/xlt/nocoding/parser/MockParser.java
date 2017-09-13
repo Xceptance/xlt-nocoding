@@ -8,6 +8,8 @@ import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.LightWeigthAction;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.AbstractResponseStore;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.RegExpStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.AbstractValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.RegExpValidator;
 
@@ -29,7 +31,7 @@ public class MockParser implements Parser
     private List<ScriptItem> parseEasy()
     {
         final List<ScriptItem> itemList = new ArrayList<ScriptItem>();
-        final Request request = new Request("https://localhost:8443/posters/");
+        final Request request = new Request("https://localhost:8443/posters/", "Visit Homepage");
         request.setMethod(HttpMethod.GET);
         request.setParameters(null);
         request.setBody("");
@@ -38,15 +40,14 @@ public class MockParser implements Parser
         request.setHeaders(null);
         request.setXhr(false);
 
-        // private final int httpcode;
-        // private final Store storage;
-
         final List<AbstractValidator> validation = new ArrayList<AbstractValidator>();
         validation.add(new RegExpValidator("<title>Posters\\s-\\sThe\\sUltimate\\sOnline\\sShop</title>"));
+        final List<AbstractResponseStore> responseStore = new ArrayList<AbstractResponseStore>();
+        responseStore.add(new RegExpStore("Blub", "<title>(.*?)</title>"));
 
-        final Response response = new Response(200, null, validation);
+        final Response response = new Response(200, responseStore, validation);
         // final Subrequest subrequest = new Subrequest();
-        final ScriptItem actionItem = new LightWeigthAction(null, "Login", request, response, null);
+        final ScriptItem actionItem = new LightWeigthAction(request, response, null);
         itemList.add(actionItem);
         return itemList;
     }
@@ -59,10 +60,10 @@ public class MockParser implements Parser
     private List<ScriptItem> parseMedium()
     {
         final List<ScriptItem> itemList = new ArrayList<ScriptItem>();
-        final Request request = new Request("https://localhost:8443/posters/");
+        final Request request = new Request("https://localhost:8443/posters/", "Visit Homepage");
 
         // final Subrequest subrequest = new Subrequest();
-        final ScriptItem actionItem = new LightWeigthAction(null, "Login", request, null, null);
+        final ScriptItem actionItem = new LightWeigthAction(request, null, null);
         itemList.add(actionItem);
         return itemList;
     }
@@ -75,10 +76,10 @@ public class MockParser implements Parser
     private List<ScriptItem> parseHard()
     {
         final List<ScriptItem> itemList = new ArrayList<ScriptItem>();
-        final Request request = new Request("${host}/posters/");
+        final Request request = new Request("${host}/posters/", "Visit Homepage");
 
         // final Subrequest subrequest = new Subrequest();
-        final ScriptItem actionItem = new LightWeigthAction(null, "Login", request, null, null);
+        final ScriptItem actionItem = new LightWeigthAction(request, null, null);
         itemList.add(actionItem);
         return itemList;
 

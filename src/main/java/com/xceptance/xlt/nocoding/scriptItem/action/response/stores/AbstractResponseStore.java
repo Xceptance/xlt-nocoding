@@ -6,7 +6,14 @@ import com.xceptance.xlt.nocoding.util.DataStorage.DataStorage;
 
 public abstract class AbstractResponseStore
 {
+    protected final String variableName;
+
     protected DataStorage globalStorage;
+
+    public AbstractResponseStore(final String variableName)
+    {
+        this.variableName = variableName;
+    }
 
     public abstract void store(HtmlPage page) throws Exception;
 
@@ -20,6 +27,11 @@ public abstract class AbstractResponseStore
     public void setGlobalStorage(final DataStorage globalStorage)
     {
         this.globalStorage = globalStorage;
+    }
+
+    public String getVariableName()
+    {
+        return variableName;
     }
 
 }

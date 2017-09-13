@@ -1,10 +1,6 @@
 package com.xceptance.xlt.common.tests;
 
 import com.gargoylesoftware.htmlunit.WebRequest;
-import com.xceptance.xlt.nocoding.actions.Downloader;
-import com.xceptance.xlt.nocoding.util.action.data.URLActionData;
-import com.xceptance.xlt.nocoding.util.action.execution.URLActionDataExecutionable;
-import com.xceptance.xlt.nocoding.util.action.validation.URLActionDataResponseHandler;
 
 /**
  * Here, the important stuff is done:
