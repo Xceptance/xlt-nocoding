@@ -8,8 +8,9 @@ public class XpathStore extends AbstractResponseStore
 
     private final String xpath;
 
-    public XpathStore(final String xpath)
+    public XpathStore(final String variableName, final String xpath)
     {
+        super(variableName);
         this.xpath = xpath;
     }
 

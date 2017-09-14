@@ -32,7 +32,7 @@ public class RegExpStore extends AbstractResponseStore
     @Override
     public void store(final HtmlPage page) throws Exception
     {
-        // TODO Auto-generated method stub
+        throw new Exception("Cannot use a regular expression in dom mode. Please use the lightweight mode.");
     }
 
     @Override
@@ -47,6 +47,6 @@ public class RegExpStore extends AbstractResponseStore
         }
 
         Assert.assertNotNull("Couldn't find anything with the regexp", foundContent);
-        this.globalStorage.storeDefault(this.getVariableName(), foundContent);
+        this.globalStorage.storeVariable(this.getVariableName(), foundContent);
     }
 }

@@ -21,13 +21,11 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
 
     private PropertyManager propertyManager;
 
-    private DataStorage globalStorage;
-
     @Before
     public void initialize()
     {
-        this.globalStorage = new DataStorage();
-        propertyManager = new PropertyManager(XltProperties.getInstance(), globalStorage);
+        final DataStorage globalStore = new DataStorage();
+        propertyManager = new PropertyManager(XltProperties.getInstance(), globalStore);
 
         // this.parser = new MockParser(globalStorage);
         // TODO Think about whether we really want to use this to share the global storage
@@ -46,5 +44,10 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
             // TODO übergib die propertyManager, etc entweder hier oder im parser
             item.execute(propertyManager);
         }
+
+        final String allVariables = this.propertyManager.getGlobalStorage().getAllVariables();
+        System.out.println(allVariables);
+        System.out.println(this.propertyManager.getGlobalStorage().getVariableByKey("Blub"));
+
     }
 }

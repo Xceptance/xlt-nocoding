@@ -41,4 +41,14 @@ public class DataStorage
     {
         return this.configItem.get(key);
     }
+
+    public String getAllVariables()
+    {
+        return variables.toString();
+    }
+
+    public String getAllConfigItems()
+    {
+        return configItem.toString();
+    }
 }

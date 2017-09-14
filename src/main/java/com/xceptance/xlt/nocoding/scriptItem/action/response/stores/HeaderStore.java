@@ -8,8 +8,9 @@ public class HeaderStore extends AbstractResponseStore
 
     private final String header;
 
-    public HeaderStore(final String header)
+    public HeaderStore(final String variableName, final String header)
     {
+        super(variableName);
         this.header = header;
     }
 

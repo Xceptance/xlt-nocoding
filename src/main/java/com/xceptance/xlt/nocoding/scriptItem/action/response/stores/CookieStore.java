@@ -8,8 +8,9 @@ public class CookieStore extends AbstractResponseStore
 
     private final String cookie;
 
-    public CookieStore(final String cookie)
+    public CookieStore(final String variableName, final String cookie)
     {
+        super(variableName);
         this.cookie = cookie;
     }
 
