@@ -42,6 +42,7 @@ public class LightWeigthAction extends Action
         {
             for (final AbstractSubrequest abstractSubrequest : subrequests)
             {
+                abstractSubrequest.setPropertyManager(propertyManager);
                 abstractSubrequest.execute();
             }
         }
