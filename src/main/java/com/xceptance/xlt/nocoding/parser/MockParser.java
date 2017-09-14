@@ -12,6 +12,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.AbstractResp
 import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.RegExpStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.AbstractValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.RegExpValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
 
 public class MockParser implements Parser
 {
@@ -47,7 +48,29 @@ public class MockParser implements Parser
 
         final Response response = new Response(200, responseStore, validation);
         // final Subrequest subrequest = new Subrequest();
-        final ScriptItem actionItem = new LightWeigthAction(request, response, null);
+        final List<AbstractSubrequest> subrequests = new ArrayList<AbstractSubrequest>();
+
+        // /**
+        // * Subrequest
+        // */
+        // final Request requestOfSubrequest = new Request("https://localhost:8443/posters/topCategory/Dining",
+        // "Navigate final to second product page.");
+        // final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+        // parameters.add(new NameValuePair("categoryID", "2"));
+        // parameters.add(new NameValuePair("page", "2"));
+        // requestOfSubrequest.setParameters(parameters);
+        //
+        // final List<AbstractValidator> validationForResponseOfSubrequest = new ArrayList<AbstractValidator>();
+        // validationForResponseOfSubrequest.add(new RegExpValidator("<h4*> Peperoni Sandwich</h4>"));
+        // final Response responseOfSubrequest = new Response(200, null, validationForResponseOfSubrequest);
+        // final XHRSubrequest subrequest = new XHRSubrequest("Navigate to second product page.", requestOfSubrequest,
+        // responseOfSubrequest);
+        // subrequests.add(subrequest);
+
+        /**
+         * ONE Action
+         */
+        final ScriptItem actionItem = new LightWeigthAction(request, response, subrequests);
         itemList.add(actionItem);
         return itemList;
     }
@@ -69,7 +92,7 @@ public class MockParser implements Parser
     }
 
     /**
-     * this time we have to parse some weird parameters, namely ${host} and such
+     * this time we have to parse some parameters, namely ${host} and such
      * 
      * @return List of NoCodingScriptItems
      */

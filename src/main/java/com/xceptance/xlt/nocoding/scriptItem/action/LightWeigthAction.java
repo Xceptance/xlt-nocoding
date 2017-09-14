@@ -20,8 +20,20 @@ public class LightWeigthAction extends Action
     @Override
     public void execute(final PropertyManager propertyManager) throws Throwable
     {
-        final LightWeightPageAction action = new LightWeightPageAction(null, this.getRequest().getName(),
-                                                                       this.getRequest().buildWebRequest());
+        final LightWeightPageAction action;
+
+        // In the first action, we do not have a webclient, therefore we build it
+        if (propertyManager.getWebClient() == null)
+        {
+            action = new LightWeightPageAction(null, this.getRequest().getName(), this.getRequest().buildWebRequest());
+            propertyManager.setWebClient(action.getWebClient());
+        }
+        // in every other case, we already know the webclient and reuse it
+        else
+        {
+            action = new LightWeightPageAction(null, this.getRequest().getName(), this.getRequest().buildWebRequest(),
+                                               propertyManager.getWebClient());
+        }
         // Execute the WebRequest in xlt
         action.run();
         setLightWeightPage(action.getLightWeightPage());
