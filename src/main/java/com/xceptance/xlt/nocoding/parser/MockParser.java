@@ -50,9 +50,9 @@ public class MockParser implements Parser
         // final Subrequest subrequest = new Subrequest();
         final List<AbstractSubrequest> subrequests = new ArrayList<AbstractSubrequest>();
 
-        // /**
-        // * Subrequest
-        // */
+        /**
+         * Subrequest
+         */
         // final Request requestOfSubrequest = new Request("https://localhost:8443/posters/topCategory/Dining",
         // "Navigate final to second product page.");
         // final List<NameValuePair> parameters = new ArrayList<NameValuePair>();

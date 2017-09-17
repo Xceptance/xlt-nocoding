@@ -8,11 +8,11 @@ import com.xceptance.xlt.api.actions.AbstractHtmlPageAction;
 import com.xceptance.xlt.api.util.XltException;
 import com.xceptance.xlt.engine.XltWebClient;
 
-public class HtmlPageAction extends AbstractHtmlPageAction
+public class DomPageAction extends AbstractHtmlPageAction
 {
     private final WebRequest webRequest;
 
-    public HtmlPageAction(final AbstractHtmlPageAction previousAction, final String timerName, final WebRequest webRequest)
+    public DomPageAction(final AbstractHtmlPageAction previousAction, final String timerName, final WebRequest webRequest)
     {
         super(previousAction, timerName);
         this.webRequest = webRequest;

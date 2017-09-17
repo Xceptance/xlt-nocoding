@@ -3,6 +3,7 @@ package com.xceptance.xlt.nocoding.scriptItem.action.subrequest;
 import com.xceptance.xlt.nocoding.scriptItem.action.LightWeigthAction;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
+import com.xceptance.xlt.nocoding.util.PropertyManager;
 
 public class XHRSubrequest extends AbstractSubrequest
 {
@@ -20,13 +21,13 @@ public class XHRSubrequest extends AbstractSubrequest
     }
 
     @Override
-    public void execute() throws Throwable
+    public void execute(final PropertyManager propertyManager) throws Throwable
     {
         // set xhr to true
         request.setXhr(true);
         // build a lightweightaction since xhr is only lightweight
         final LightWeigthAction action = new LightWeigthAction(request, response, null);
         // execute the action
-        action.execute(this.propertyManager);
+        action.execute(propertyManager);
     }
 }

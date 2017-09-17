@@ -77,7 +77,7 @@ public class Response
         new HttpResponseCodeValidator(httpcode).validate(page);
         // Check the content length, compare delivered content length to the
         // content length that was announced in the HTTP response header.
-        // TODO Content Length needn't be specified
+        // TODO Content Length needn't be specified, check for it then validate
         ContentLengthValidator.getInstance().validate(page);
 
         if (validation != null)

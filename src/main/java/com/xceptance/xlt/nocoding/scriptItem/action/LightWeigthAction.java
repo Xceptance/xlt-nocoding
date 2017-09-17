@@ -3,6 +3,7 @@ package com.xceptance.xlt.nocoding.scriptItem.action;
 import java.util.List;
 
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
+import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
 import com.xceptance.xlt.nocoding.util.PropertyManager;
@@ -21,19 +22,9 @@ public class LightWeigthAction extends Action
     public void execute(final PropertyManager propertyManager) throws Throwable
     {
         final LightWeightPageAction action;
+        action = new LightWeightPageAction(this.getRequest().getName(), this.getRequest().buildWebRequest(), propertyManager.getWebClient(),
+                                           (final LightWeightPageAction x) -> doExecute(x));
 
-        // In the first action, we do not have a webclient, therefore we build it
-        if (propertyManager.getWebClient() == null)
-        {
-            action = new LightWeightPageAction(null, this.getRequest().getName(), this.getRequest().buildWebRequest());
-            propertyManager.setWebClient(action.getWebClient());
-        }
-        // in every other case, we already know the webclient and reuse it
-        else
-        {
-            action = new LightWeightPageAction(null, this.getRequest().getName(), this.getRequest().buildWebRequest(),
-                                               propertyManager.getWebClient());
-        }
         // Execute the WebRequest in xlt
         action.run();
         setLightWeightPage(action.getLightWeightPage());
@@ -55,7 +46,7 @@ public class LightWeigthAction extends Action
             for (final AbstractSubrequest abstractSubrequest : subrequests)
             {
                 abstractSubrequest.setPropertyManager(propertyManager);
-                abstractSubrequest.execute();
+                abstractSubrequest.execute(propertyManager);
             }
         }
 
@@ -71,4 +62,16 @@ public class LightWeigthAction extends Action
         this.lightWeightPage = lightWeightPage;
     }
 
+    public void doExecute(final LightWeightPageAction action) throws Exception
+    {
+        if (action.getWebRequest().isXHR())
+        {
+            action.setLightWeightPage(((XltWebClient) action.getWebClient()).getLightWeightPage(action.getWebRequest()));
+        }
+        else
+        {
+            action.setLightWeightPage(((XltWebClient) action.getWebClient()).getLightWeightPage(action.getWebRequest()));
+        }
+
+    }
 }

@@ -41,7 +41,8 @@ public class RegExpValidator extends AbstractValidator
         }
         else
         {
-            final String matchingString = Pattern.compile(pattern).matcher(pageContent).group(1);
+            // TODO Matching Group hinzufügen!
+            final String matchingString = Pattern.compile(pattern).matcher(pageContent).group();
             final int solution = matcherString.compareTo(matchingString);
             Assert.assertTrue("Found content does not equal matcher", solution == 0);
         }

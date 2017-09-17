@@ -2,35 +2,35 @@ package com.xceptance.xlt.nocoding.util.WebAction;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebRequest;
+import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.actions.AbstractLightWeightPageAction;
-import com.xceptance.xlt.engine.XltWebClient;
+import com.xceptance.xlt.nocoding.util.ThrowingConsumer;
 
 public class LightWeightPageAction extends AbstractLightWeightPageAction
 {
 
     private final WebRequest webRequest;
 
+    private WebResponse webResponse;
+
     private WebClient webClient;
 
-    public LightWeightPageAction(final AbstractLightWeightPageAction previousAction, final String timerName, final WebRequest webRequest)
-    {
-        super(previousAction, timerName);
-        this.webRequest = webRequest;
-        this.webClient = getWebClient();
-    }
+    private ThrowingConsumer<LightWeightPageAction> function;
 
-    public LightWeightPageAction(final AbstractLightWeightPageAction previousAction, final String timerName, final WebRequest webRequest,
-        final WebClient webClient)
+    public LightWeightPageAction(final String timerName, final WebRequest webRequest, final WebClient webClient,
+        final ThrowingConsumer<LightWeightPageAction> function)
     {
-        super(previousAction, timerName);
+        super(timerName);
         this.webRequest = webRequest;
         this.webClient = webClient;
+        this.function = function;
     }
 
     @Override
     protected void execute() throws Exception
     {
-        setLightWeightPage(((XltWebClient) getWebClient()).getLightWeightPage(webRequest));
+        function.accept(this);
+
     }
 
     @Override
@@ -60,6 +60,31 @@ public class LightWeightPageAction extends AbstractLightWeightPageAction
     public void setWebClient(final WebClient webClient)
     {
         this.webClient = webClient;
+    }
+
+    public WebRequest getWebRequest()
+    {
+        return webRequest;
+    }
+
+    public ThrowingConsumer<LightWeightPageAction> getFunction()
+    {
+        return function;
+    }
+
+    public void setFunction(final ThrowingConsumer<LightWeightPageAction> function)
+    {
+        this.function = function;
+    }
+
+    public WebResponse getWebResponse()
+    {
+        return webResponse;
+    }
+
+    public void setWebResponse(final WebResponse webResponse)
+    {
+        this.webResponse = webResponse;
     }
 
 }

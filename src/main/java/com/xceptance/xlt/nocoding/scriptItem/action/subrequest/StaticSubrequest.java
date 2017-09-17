@@ -3,6 +3,7 @@ package com.xceptance.xlt.nocoding.scriptItem.action.subrequest;
 import java.util.List;
 
 import com.xceptance.xlt.engine.XltWebClient;
+import com.xceptance.xlt.nocoding.util.PropertyManager;
 
 public class StaticSubrequest extends AbstractSubrequest
 {
@@ -14,10 +15,10 @@ public class StaticSubrequest extends AbstractSubrequest
     }
 
     @Override
-    public void execute() throws Exception
+    public void execute(final PropertyManager propertyManager) throws Exception
     {
         // TODO Auto-generated method stub
-        final Downloader downloader = new Downloader((XltWebClient) this.propertyManager.getWebClient());
+        final Downloader downloader = new Downloader((XltWebClient) propertyManager.getWebClient());
         for (final String url : urls)
         {
             downloader.addRequest(url);

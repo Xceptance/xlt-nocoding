@@ -6,7 +6,7 @@ public abstract class AbstractSubrequest
 {
     protected PropertyManager propertyManager;
 
-    public abstract void execute() throws Throwable;
+    public abstract void execute(PropertyManager propertyManager) throws Throwable;
 
     public PropertyManager getPropertyManager()
     {
