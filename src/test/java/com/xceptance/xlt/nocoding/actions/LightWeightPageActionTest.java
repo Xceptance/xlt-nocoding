@@ -45,7 +45,7 @@ public class LightWeightPageActionTest
     @Test
     public void testConstructor() throws Throwable
     {
-        final LightWeightPageAction action = new LightWeightPageAction(null, name, request, null, factory);
+        final WebAction action = new WebAction(null, name, request, null, factory);
         downloader = new Downloader((XltWebClient) action.getWebClient());
         action.setDownloader(downloader);
         Assert.assertEquals(urlString, action.getUrl().toString());
@@ -55,7 +55,7 @@ public class LightWeightPageActionTest
     public void testGetLightWeightHtmlPageContent() throws Throwable
     {
 
-        final LightWeightPageAction action = new LightWeightPageAction(null, name, request, null, factory);
+        final WebAction action = new WebAction(null, name, request, null, factory);
         downloader = new Downloader((XltWebClient) action.getWebClient());
         action.setDownloader(downloader);
         action.run();
@@ -67,7 +67,7 @@ public class LightWeightPageActionTest
     @Test(expected = IllegalArgumentException.class)
     public void testGetResultWithLightWeigtHtmlPage() throws Throwable
     {
-        final LightWeightPageAction action = new LightWeightPageAction(null, name, request, null, factory);
+        final WebAction action = new WebAction(null, name, request, null, factory);
         downloader = new Downloader((XltWebClient) action.getWebClient());
         action.setDownloader(downloader);
         action.run();

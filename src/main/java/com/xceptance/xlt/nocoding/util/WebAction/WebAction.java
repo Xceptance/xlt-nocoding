@@ -6,8 +6,10 @@ import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.actions.AbstractLightWeightPageAction;
 import com.xceptance.xlt.nocoding.util.ThrowingConsumer;
 
-public class LightWeightPageAction extends AbstractLightWeightPageAction
+public class WebAction extends AbstractLightWeightPageAction
 {
+
+    // TODO We want to have the opportunity to set a html page and a lightweight page
 
     private final WebRequest webRequest;
 
@@ -15,10 +17,10 @@ public class LightWeightPageAction extends AbstractLightWeightPageAction
 
     private WebClient webClient;
 
-    private ThrowingConsumer<LightWeightPageAction> function;
+    private ThrowingConsumer<WebAction> function;
 
-    public LightWeightPageAction(final String timerName, final WebRequest webRequest, final WebClient webClient,
-        final ThrowingConsumer<LightWeightPageAction> function)
+    public WebAction(final String timerName, final WebRequest webRequest, final WebClient webClient,
+        final ThrowingConsumer<WebAction> function)
     {
         super(timerName);
         this.webRequest = webRequest;
@@ -67,12 +69,12 @@ public class LightWeightPageAction extends AbstractLightWeightPageAction
         return webRequest;
     }
 
-    public ThrowingConsumer<LightWeightPageAction> getFunction()
+    public ThrowingConsumer<WebAction> getFunction()
     {
         return function;
     }
 
-    public void setFunction(final ThrowingConsumer<LightWeightPageAction> function)
+    public void setFunction(final ThrowingConsumer<WebAction> function)
     {
         this.function = function;
     }

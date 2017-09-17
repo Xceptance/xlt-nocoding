@@ -7,7 +7,7 @@ import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
 import com.xceptance.xlt.nocoding.util.PropertyManager;
-import com.xceptance.xlt.nocoding.util.WebAction.LightWeightPageAction;
+import com.xceptance.xlt.nocoding.util.WebAction.WebAction;
 
 public class LightWeigthAction extends Action
 {
@@ -21,9 +21,9 @@ public class LightWeigthAction extends Action
     @Override
     public void execute(final PropertyManager propertyManager) throws Throwable
     {
-        final LightWeightPageAction action;
-        action = new LightWeightPageAction(this.getRequest().getName(), this.getRequest().buildWebRequest(), propertyManager.getWebClient(),
-                                           (final LightWeightPageAction x) -> doExecute(x));
+        final WebAction action;
+        action = new WebAction(this.getRequest().getName(), this.getRequest().buildWebRequest(), propertyManager.getWebClient(),
+                                           (final WebAction x) -> doExecute(x));
 
         // Execute the WebRequest in xlt
         action.run();
@@ -62,7 +62,7 @@ public class LightWeigthAction extends Action
         this.lightWeightPage = lightWeightPage;
     }
 
-    public void doExecute(final LightWeightPageAction action) throws Exception
+    public void doExecute(final WebAction action) throws Exception
     {
         if (action.getWebRequest().isXHR())
         {

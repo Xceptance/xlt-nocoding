@@ -10,7 +10,7 @@ import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
 import com.xceptance.xlt.nocoding.util.PropertyManager;
-import com.xceptance.xlt.nocoding.util.WebAction.DomPageAction;
+import com.xceptance.xlt.nocoding.util.WebAction.WebAction;
 
 public class DomAction extends Action
 {
@@ -24,10 +24,12 @@ public class DomAction extends Action
     }
 
     @Override
-    public void execute(final PropertyManager propertyManager) throws Exception
+    public void execute(final PropertyManager propertyManager) throws Throwable
     {
-        final DomPageAction action = new DomPageAction(null, this.getRequest().getName(), this.getRequest().buildWebRequest());
-        this.htmlPage = action.getHtmlPage();
+        final WebAction action = new WebAction(this.getRequest().getName(), this.getRequest().buildWebRequest(),
+                                               propertyManager.getWebClient(), (final WebAction x) -> doExecute(x));
+
+        action.run();
     }
 
     public HtmlPage getHtmlPage()
@@ -77,14 +79,10 @@ public class DomAction extends Action
 
     public void doExecute(final WebAction action) throws Exception
     {
-        if (action.getWebRequest().isXHR())
-        {
-            action.setLightWeightPage(((XltWebClient) action.getWebClient()).getLightWeightPage(action.getWebRequest()));
-        }
-        else
-        {
-            action.setLightWeightPage(((XltWebClient) action.getWebClient()).getLightWeightPage(action.getWebRequest()));
-        }
+        // TODO Extract waiting time
+        final long waitingTime = 30000;
+        final Page result = action.getWebClient().getPage(action.getWebRequest());
+        setHtmlPage(waitForPageIsComplete(result, waitingTime));
 
     }
 
