@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.SgmlPage;
+import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.xceptance.xlt.api.util.XltException;
 import com.xceptance.xlt.engine.XltWebClient;
@@ -26,7 +27,8 @@ public class DomAction extends Action
     @Override
     public void execute(final PropertyManager propertyManager) throws Throwable
     {
-        final WebAction action = new WebAction(this.getRequest().getName(), this.getRequest().buildWebRequest(),
+        final List<WebRequest> requestsOfSubrequest = null;
+        final WebAction action = new WebAction(this.getRequest().getName(), this.getRequest().buildWebRequest(), requestsOfSubrequest,
                                                propertyManager.getWebClient(), (final WebAction x) -> doExecute(x));
 
         action.run();

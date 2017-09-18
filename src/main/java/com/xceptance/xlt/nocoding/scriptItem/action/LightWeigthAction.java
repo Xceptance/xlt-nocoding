@@ -1,9 +1,11 @@
 package com.xceptance.xlt.nocoding.scriptItem.action;
 
+import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.gargoylesoftware.htmlunit.WebRequest;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
-import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
 import com.xceptance.xlt.nocoding.util.PropertyManager;
@@ -21,13 +23,13 @@ public class LightWeigthAction extends Action
     @Override
     public void execute(final PropertyManager propertyManager) throws Throwable
     {
-        final WebAction action;
-        action = new WebAction(this.getRequest().getName(), this.getRequest().buildWebRequest(), propertyManager.getWebClient(),
-                                           (final WebAction x) -> doExecute(x));
+        final List<WebRequest> requestsOfSubrequest = buildWebRequestFromSubrequests(this.subrequests);
+        final WebAction action = new WebAction(this.getRequest().getName(), this.getRequest().buildWebRequest(), requestsOfSubrequest,
+                                               propertyManager.getWebClient(), (final WebAction x) -> doExecute(x));
 
         // Execute the WebRequest in xlt
         action.run();
-        setLightWeightPage(action.getLightWeightPage());
+        setLightWeightPage(new LightWeightPage(action.getWebResponse(), action.getTimerName()));
 
         // Validate response if it is specified
         if (getResponse() != null)
@@ -52,6 +54,16 @@ public class LightWeigthAction extends Action
 
     }
 
+    private List<WebRequest> buildWebRequestFromSubrequests(final List<AbstractSubrequest> subrequests) throws MalformedURLException
+    {
+        final List<WebRequest> webRequests = new ArrayList<WebRequest>(subrequests.size());
+        for (final AbstractSubrequest subrequest : subrequests)
+        {
+            webRequests.add(subrequest.getWebRequest());
+        }
+        return webRequests;
+    }
+
     public LightWeightPage getLightWeightPage()
     {
         return lightWeightPage;
@@ -64,13 +76,27 @@ public class LightWeigthAction extends Action
 
     public void doExecute(final WebAction action) throws Exception
     {
+        // TODO Result Browser?
+        // TODO Unterscheidung Subrequest als Main Request vs normale Request
         if (action.getWebRequest().isXHR())
         {
-            action.setLightWeightPage(((XltWebClient) action.getWebClient()).getLightWeightPage(action.getWebRequest()));
+            action.setWebResponse(action.getWebClient().loadWebResponse(action.getWebRequest()));
         }
         else
         {
-            action.setLightWeightPage(((XltWebClient) action.getWebClient()).getLightWeightPage(action.getWebRequest()));
+            action.setWebResponse(action.getWebClient().loadWebResponse(action.getWebRequest()));
+        }
+
+        for (final WebRequest subrequest : action.getSubrequests())
+        {
+            if (subrequest.isXHR())
+            {
+                action.getSubrequestResponses().add(action.getWebClient().loadWebResponse(subrequest));
+            }
+            else
+            {
+                action.setWebResponse(action.getWebClient().loadWebResponse(subrequest));
+            }
         }
 
     }

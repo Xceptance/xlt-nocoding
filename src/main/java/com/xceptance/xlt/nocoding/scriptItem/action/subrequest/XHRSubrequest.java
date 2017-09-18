@@ -1,5 +1,8 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.subrequest;
 
+import java.net.MalformedURLException;
+
+import com.gargoylesoftware.htmlunit.WebRequest;
 import com.xceptance.xlt.nocoding.scriptItem.action.LightWeigthAction;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
@@ -29,5 +32,11 @@ public class XHRSubrequest extends AbstractSubrequest
         final LightWeigthAction action = new LightWeigthAction(request, response, null);
         // execute the action
         action.execute(propertyManager);
+    }
+
+    @Override
+    public WebRequest getWebRequest() throws MalformedURLException
+    {
+        return this.request.buildWebRequest();
     }
 }

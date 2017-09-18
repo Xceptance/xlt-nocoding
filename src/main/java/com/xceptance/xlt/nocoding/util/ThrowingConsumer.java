@@ -1,4 +1,5 @@
 package com.xceptance.xlt.nocoding.util;
+
 import java.util.function.Consumer;
 
 @FunctionalInterface
@@ -14,10 +15,6 @@ public interface ThrowingConsumer<T> extends Consumer<T>
         }
         catch (final Exception e)
         {
-            // Implement your own exception handling logic here..
-            // For example:
-            System.out.println("handling an exception...");
-            // Or ...
             throw new RuntimeException(e);
         }
     }

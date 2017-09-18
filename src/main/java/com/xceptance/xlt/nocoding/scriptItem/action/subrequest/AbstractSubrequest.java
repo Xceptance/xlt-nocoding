@@ -1,5 +1,8 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.subrequest;
 
+import java.net.MalformedURLException;
+
+import com.gargoylesoftware.htmlunit.WebRequest;
 import com.xceptance.xlt.nocoding.util.PropertyManager;
 
 public abstract class AbstractSubrequest
@@ -17,5 +20,7 @@ public abstract class AbstractSubrequest
     {
         this.propertyManager = propertyManager;
     }
+
+    public abstract WebRequest getWebRequest() throws MalformedURLException;
 
 }
