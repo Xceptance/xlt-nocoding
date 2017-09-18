@@ -1,7 +1,7 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response.stores;
 
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.xceptance.xlt.api.htmlunit.LightWeightPage;
+import com.gargoylesoftware.htmlunit.WebResponse;
+import com.xceptance.xlt.nocoding.util.PropertyManager;
 
 public class XpathStore extends AbstractResponseStore
 {
@@ -15,17 +15,13 @@ public class XpathStore extends AbstractResponseStore
     }
 
     @Override
-    public void store(final HtmlPage page) throws Exception
+    public void store(final PropertyManager propertyManager, final WebResponse webResponse) throws Exception
     {
-        // TODO Auto-generated method stub
+        // TODO check for mode - throw error if not dom mode
+        // if(propertyManager.mode = lightweight)
+        // throw new IllegalStateException("Cannot use an xpath expression in the lightweight mode. Please use the dom mode.");
 
-    }
-
-    @Override
-    public void store(final LightWeightPage page) throws Exception
-    {
-        // TODO Auto-generated method stub
-
+        // TODO xPath Magic
     }
 
 }

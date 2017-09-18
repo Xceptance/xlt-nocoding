@@ -42,7 +42,7 @@ public class MockParser implements Parser
         request.setXhr(false);
 
         final List<AbstractValidator> validation = new ArrayList<AbstractValidator>();
-        validation.add(new RegExpValidator("<title>Posters\\s-\\sThe\\sUltimate\\sOnline\\sShop</title>"));
+        validation.add(new RegExpValidator("Title", "<title>Posters\\s-\\sThe\\sUltimate\\sOnline\\sShop</title>"));
         final List<AbstractResponseStore> responseStore = new ArrayList<AbstractResponseStore>();
         responseStore.add(new RegExpStore("Blub", "<title>(.*?)</title>"));
 

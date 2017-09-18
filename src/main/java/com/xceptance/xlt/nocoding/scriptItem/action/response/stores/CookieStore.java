@@ -1,7 +1,10 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response.stores;
 
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.xceptance.xlt.api.htmlunit.LightWeightPage;
+import java.util.List;
+
+import com.gargoylesoftware.htmlunit.WebResponse;
+import com.gargoylesoftware.htmlunit.util.NameValuePair;
+import com.xceptance.xlt.nocoding.util.PropertyManager;
 
 public class CookieStore extends AbstractResponseStore
 {
@@ -15,16 +18,25 @@ public class CookieStore extends AbstractResponseStore
     }
 
     @Override
-    public void store(final HtmlPage page) throws Exception
+    public void store(final PropertyManager propertyManager, final WebResponse webResponse) throws Exception
     {
-        // TODO Auto-generated method stub
+        final List<NameValuePair> headers = webResponse.getResponseHeaders();
+        headers.forEach((final NameValuePair x) -> {
+            if (x.getName().equals("Cookie"))
+            {
+                if (x.getValue().contains(cookie))
+                {
+                    final String cookieContent = x.getValue();
+                    propertyManager.getGlobalStorage().storeVariable(getVariableName(), cookieContent);
+                }
+            }
 
-    }
-
-    @Override
-    public void store(final LightWeightPage page) throws Exception
-    {
-        // TODO Auto-generated method stub
+        });
+        // Check if we found the cookie
+        if (propertyManager.getGlobalStorage().getVariableByKey(getVariableName()) == null)
+        {
+            throw new Exception("Cookie not found");
+        }
 
     }
 

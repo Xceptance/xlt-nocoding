@@ -35,20 +35,18 @@ public class LightWeigthAction extends Action
         // Validate response if it is specified
         if (getResponse() != null)
         {
-            this.getResponse().setPropertyManager(propertyManager);
-            getResponse().execute(getLightWeightPage());
+            getResponse().execute(propertyManager, action.getWebResponse());
         }
         // do standard validations
         else
         {
-            new Response().execute(getLightWeightPage());
+            new Response().execute(propertyManager, action.getWebResponse());
         }
 
         if (getSubrequests() != null)
         {
             for (final AbstractSubrequest abstractSubrequest : subrequests)
             {
-                abstractSubrequest.setPropertyManager(propertyManager);
                 abstractSubrequest.execute(propertyManager);
             }
         }

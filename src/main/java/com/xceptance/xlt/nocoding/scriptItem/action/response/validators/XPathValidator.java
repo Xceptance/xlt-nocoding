@@ -1,56 +1,42 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response.validators;
 
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.xceptance.xlt.api.htmlunit.LightWeightPage;
+import com.gargoylesoftware.htmlunit.WebResponse;
+import com.xceptance.xlt.nocoding.util.PropertyManager;
 
 public class XPathValidator extends AbstractValidator
 {
-    public final static byte EXISTS = 0;
-
-    public final static byte MATCHES = 1;
-
-    public final static byte COUNT = 2;
 
     private final String xPathExpression;
 
-    private final String matcher;
+    private final String text;
 
-    private final int count;
+    private final Integer count;
 
-    private final byte mode;
-
-    public XPathValidator(final String xPathExpression, final byte mode)
+    public XPathValidator(final String validationName, final String xPathExpression)
     {
-        this(xPathExpression, "", -1, mode);
+        this(validationName, xPathExpression, null, null);
     }
 
-    public XPathValidator(final String xPathExpression, final String matcher, final byte mode)
+    public XPathValidator(final String validationName, final String xPathExpression, final String text)
     {
-        this(xPathExpression, matcher, -1, mode);
+        this(validationName, xPathExpression, text, null);
     }
 
-    public XPathValidator(final String xPathExpression, final int count, final byte mode)
+    public XPathValidator(final String validationName, final String xPathExpression, final Integer count)
     {
-        this(xPathExpression, "", count, mode);
+        this(validationName, xPathExpression, null, count);
     }
 
-    public XPathValidator(final String xPathExpression, final String matcher, final int count, final byte mode)
+    private XPathValidator(final String validationName, final String xPathExpression, final String text, final Integer count)
     {
+        super(validationName);
         this.xPathExpression = xPathExpression;
-        this.matcher = matcher;
+        this.text = text;
         this.count = count;
-        this.mode = mode;
     }
 
     @Override
-    public void validate(final HtmlPage page) throws Exception
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void validate(final LightWeightPage page) throws Exception
+    public void validate(final PropertyManager propertyManager, final WebResponse webResponse) throws Exception
     {
         // TODO Auto-generated method stub
 

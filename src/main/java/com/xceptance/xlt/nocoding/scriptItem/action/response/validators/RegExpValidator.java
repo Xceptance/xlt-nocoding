@@ -4,38 +4,42 @@ import java.util.regex.Pattern;
 
 import org.junit.Assert;
 
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
+import com.xceptance.xlt.nocoding.util.PropertyManager;
 
 public class RegExpValidator extends AbstractValidator
 {
     final String pattern;
 
-    final String matcherString;
+    final String text;
 
-    public RegExpValidator(final String pattern)
+    final Integer count;
+
+    public RegExpValidator(final String validationName, final String pattern)
     {
-        this(pattern, null);
+        this(validationName, pattern, null, null);
     }
 
-    public RegExpValidator(final String pattern, final String matcherString)
+    public RegExpValidator(final String validationName, final String pattern, final String text)
     {
+        this(validationName, pattern, text, null);
+    }
+
+    public RegExpValidator(final String validationName, final String pattern, final String text, final Integer count)
+    {
+        super(validationName);
         this.pattern = pattern;
-        this.matcherString = matcherString;
+        this.text = text;
+        this.count = count;
     }
 
     @Override
-    public void validate(final HtmlPage page) throws Exception
+    public void validate(final PropertyManager propertyManager, final WebResponse webResponse) throws Exception
     {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void validate(final LightWeightPage page) throws Exception
-    {
+        final LightWeightPage page = new LightWeightPage(webResponse, propertyManager.getWebClient().getTimerName());
         final String pageContent = page.getContent();
-        if (matcherString == null)
+        if (text == null)
         {
             Assert.assertTrue("Pattern did not match", Pattern.compile(pattern).matcher(pageContent).find());
         }
@@ -43,7 +47,7 @@ public class RegExpValidator extends AbstractValidator
         {
             // TODO Matching Group hinzufügen!
             final String matchingString = Pattern.compile(pattern).matcher(pageContent).group();
-            final int solution = matcherString.compareTo(matchingString);
+            final int solution = text.compareTo(matchingString);
             Assert.assertTrue("Found content does not equal matcher", solution == 0);
         }
     }

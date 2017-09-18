@@ -5,13 +5,12 @@ import java.util.regex.Pattern;
 
 import org.junit.Assert;
 
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
+import com.xceptance.xlt.nocoding.util.PropertyManager;
 
 public class RegExpStore extends AbstractResponseStore
 {
-
-    // private final String regExp;
 
     private final int group;
 
@@ -30,14 +29,12 @@ public class RegExpStore extends AbstractResponseStore
     }
 
     @Override
-    public void store(final HtmlPage page) throws Exception
+    public void store(final PropertyManager propertyManager, final WebResponse webResponse) throws Exception
     {
-        throw new Exception("Cannot use a regular expression in dom mode. Please use the lightweight mode.");
-    }
-
-    @Override
-    public void store(final LightWeightPage page) throws Exception
-    {
+        // TODO check for mode - throw error if not light weigth mode
+        // if(propertyManager.mode = dom)
+        // throw new IllegalStateException("Cannot use a regular expression in dom mode. Please use the lightweight mode.");
+        final LightWeightPage page = new LightWeightPage(webResponse, propertyManager.getWebClient().getTimerName());
         final String pageContent = page.getContent();
         String foundContent = null;
         final Matcher matcher = this.pattern.matcher(pageContent);
@@ -47,6 +44,6 @@ public class RegExpStore extends AbstractResponseStore
         }
 
         Assert.assertNotNull("Couldn't find anything with the regexp", foundContent);
-        this.globalStorage.storeVariable(this.getVariableName(), foundContent);
+        propertyManager.getGlobalStorage().storeVariable(getVariableName(), foundContent);
     }
 }
