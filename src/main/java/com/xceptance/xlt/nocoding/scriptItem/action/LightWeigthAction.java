@@ -43,22 +43,26 @@ public class LightWeigthAction extends Action
             new Response().execute(propertyManager, action.getWebResponse());
         }
 
-        if (getSubrequests() != null)
-        {
-            for (final AbstractSubrequest abstractSubrequest : subrequests)
-            {
-                abstractSubrequest.execute(propertyManager);
-            }
-        }
+        // if (getSubrequests() != null || !getSubrequests().isEmpty())
+        // {
+        // for (final AbstractSubrequest abstractSubrequest : subrequests)
+        // {
+        // abstractSubrequest.execute(propertyManager);
+        // }
+        // }
 
     }
 
     private List<WebRequest> buildWebRequestFromSubrequests(final List<AbstractSubrequest> subrequests) throws MalformedURLException
     {
-        final List<WebRequest> webRequests = new ArrayList<WebRequest>(subrequests.size());
-        for (final AbstractSubrequest subrequest : subrequests)
+        List<WebRequest> webRequests = null;
+        if (subrequests != null)
         {
-            webRequests.add(subrequest.getWebRequest());
+            webRequests = new ArrayList<WebRequest>(subrequests.size());
+            for (final AbstractSubrequest subrequest : subrequests)
+            {
+                webRequests.add(subrequest.getWebRequest());
+            }
         }
         return webRequests;
     }

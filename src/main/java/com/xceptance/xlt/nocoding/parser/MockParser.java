@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.gargoylesoftware.htmlunit.HttpMethod;
+import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.LightWeigthAction;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.AbstractResponseStore;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.HeaderStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.RegExpStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.AbstractValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.RegExpValidator;
@@ -31,28 +33,35 @@ public class MockParser implements Parser
      */
     private List<ScriptItem> parseEasy()
     {
-        final List<ScriptItem> itemList = new ArrayList<ScriptItem>();
+        /**
+         * Request
+         */
         final Request request = new Request("https://localhost:8443/posters/", "Visit Homepage");
         request.setMethod(HttpMethod.GET);
         request.setParameters(null);
-        request.setBody("");
+        request.setBody(null);
         request.setEncodeBody(false);
         request.setEncodeParameters(false);
         request.setHeaders(null);
         request.setXhr(false);
 
+        /**
+         * Response
+         */
+
+        // Validator
         final List<AbstractValidator> validation = new ArrayList<AbstractValidator>();
         validation.add(new RegExpValidator("Title", "<title>Posters\\s-\\sThe\\sUltimate\\sOnline\\sShop</title>"));
+        // Store
         final List<AbstractResponseStore> responseStore = new ArrayList<AbstractResponseStore>();
         responseStore.add(new RegExpStore("Blub", "<title>(.*?)</title>"));
-
+        // Response
         final Response response = new Response(200, responseStore, validation);
-        // final Subrequest subrequest = new Subrequest();
-        final List<AbstractSubrequest> subrequests = new ArrayList<AbstractSubrequest>();
 
         /**
          * Subrequest
          */
+        final List<AbstractSubrequest> subrequests = new ArrayList<AbstractSubrequest>();
         // final Request requestOfSubrequest = new Request("https://localhost:8443/posters/topCategory/Dining",
         // "Navigate final to second product page.");
         // final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
@@ -70,6 +79,7 @@ public class MockParser implements Parser
         /**
          * ONE Action
          */
+        final List<ScriptItem> itemList = new ArrayList<ScriptItem>();
         final ScriptItem actionItem = new LightWeigthAction(request, response, subrequests);
         itemList.add(actionItem);
         return itemList;
@@ -106,6 +116,68 @@ public class MockParser implements Parser
         itemList.add(actionItem);
         return itemList;
 
+    }
+
+    /**
+     * Parses all fields that can be specified
+     * 
+     * @return List of NoCodingScriptItems
+     */
+    private List<ScriptItem> parseEasyLogin()
+    {
+        /**
+         * Request
+         */
+        final Request request1 = new Request("https://localhost:8443/posters/", "Open Website");
+        final Request request2 = new Request("https://localhost:8443/posters/login", "Go to Login");
+        final Request request3 = new Request("https://localhost:8443/posters/login", "login");
+        request3.setMethod(HttpMethod.POST);
+        final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+        parameters.add(new NameValuePair("email", "john@doe.com"));
+        parameters.add(new NameValuePair("password", "topsecret"));
+        parameters.add(new NameValuePair("btnSignIn", ""));
+        request3.setParameters(parameters);
+        final Request request4 = new Request("https://localhost:8443/posters/", "Login Redirection");
+
+        /**
+         * Response
+         */
+
+        // Validator
+        List<AbstractValidator> validation = new ArrayList<AbstractValidator>();
+        validation.add(new RegExpValidator("Title", "<title>Posters\\s-\\sThe\\sUltimate\\sOnline\\sShop</title>"));
+        // Response
+        final Response response1 = new Response(null, validation);
+
+        validation = new ArrayList<AbstractValidator>();
+        validation.add(new RegExpValidator("login-form Existance", "<form\\\\sid=\\\"formLogin\\\"[\\\\s\\\\S]+?>"));
+        // Response
+        final Response response2 = new Response(null, validation);
+
+        // Store
+        final List<AbstractResponseStore> responseStore = new ArrayList<AbstractResponseStore>();
+        responseStore.add(new HeaderStore("loginRedirectLocation", "Location"));
+        // Response
+        final Response response3 = new Response(303, responseStore, null);
+
+        validation = new ArrayList<AbstractValidator>();
+        validation.add(new RegExpValidator("Login Greeting", "John"));
+        // Response
+        final Response response4 = new Response(303, null, validation);
+
+        /**
+         * Action
+         */
+        final List<ScriptItem> itemList = new ArrayList<ScriptItem>();
+        ScriptItem actionItem = new LightWeigthAction(request1, response1, null);
+        itemList.add(actionItem);
+        actionItem = new LightWeigthAction(request2, response2, null);
+        itemList.add(actionItem);
+        actionItem = new LightWeigthAction(request3, response3, null);
+        itemList.add(actionItem);
+        actionItem = new LightWeigthAction(request4, response4, null);
+        itemList.add(actionItem);
+        return itemList;
     }
 
 }

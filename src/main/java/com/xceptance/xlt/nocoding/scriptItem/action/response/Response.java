@@ -11,13 +11,18 @@ public class Response
 {
     public static int DEFAULT_HTTPCODE = 200;
 
-    private final int httpcode;
+    private final Integer httpcode;
 
     private final List<AbstractResponseStore> responseStore;
 
     private final List<AbstractValidator> validation;
 
-    public Response(final int httpcode, final List<AbstractResponseStore> responseStore, final List<AbstractValidator> validation)
+    public Response(final List<AbstractResponseStore> responseStore, final List<AbstractValidator> validation)
+    {
+        this(null, responseStore, validation);
+    }
+
+    public Response(final Integer httpcode, final List<AbstractResponseStore> responseStore, final List<AbstractValidator> validation)
     {
         this.httpcode = httpcode;
         this.responseStore = responseStore;

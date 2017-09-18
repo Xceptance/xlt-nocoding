@@ -41,7 +41,7 @@ public class WebAction extends AbstractWebAction
         this.subrequests = subrequests;
         this.webClient = webClient;
         this.function = function;
-        this.subrequestResponses = new ArrayList<WebResponse>(this.subrequests.size());
+        this.subrequestResponses = new ArrayList<WebResponse>();
     }
 
     @Override
