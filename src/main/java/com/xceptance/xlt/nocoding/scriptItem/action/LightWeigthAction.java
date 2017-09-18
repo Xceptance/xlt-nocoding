@@ -23,6 +23,7 @@ public class LightWeigthAction extends Action
     @Override
     public void execute(final PropertyManager propertyManager) throws Throwable
     {
+        // First we initialize some variables
         final List<WebRequest> requestsOfSubrequest = buildWebRequestFromSubrequests(this.subrequests);
         final WebAction action = new WebAction(this.getRequest().getName(), this.getRequest().buildWebRequest(), requestsOfSubrequest,
                                                propertyManager.getWebClient(), (final WebAction x) -> doExecute(x));
@@ -76,7 +77,6 @@ public class LightWeigthAction extends Action
 
     public void doExecute(final WebAction action) throws Exception
     {
-        // TODO Result Browser?
         // TODO Unterscheidung Subrequest als Main Request vs normale Request
         if (action.getWebRequest().isXHR())
         {
@@ -85,17 +85,27 @@ public class LightWeigthAction extends Action
         else
         {
             action.setWebResponse(action.getWebClient().loadWebResponse(action.getWebRequest()));
+            final LightWeightPage page = new LightWeightPage(action.getWebResponse(), action.getTimerName());
+            // TODO Result Browser?
+            // TODO fix this
+            // if (page != null)
+            // {
+            // ((SessionImpl) Session.getCurrent()).getRequestHistory().add(page);
+            // }
         }
 
-        for (final WebRequest subrequest : action.getSubrequests())
+        if (action.getSubrequests() != null || !action.getSubrequests().isEmpty())
         {
-            if (subrequest.isXHR())
+            for (final WebRequest subrequest : action.getSubrequests())
             {
-                action.getSubrequestResponses().add(action.getWebClient().loadWebResponse(subrequest));
-            }
-            else
-            {
-                action.setWebResponse(action.getWebClient().loadWebResponse(subrequest));
+                if (subrequest.isXHR())
+                {
+                    action.getSubrequestResponses().add(action.getWebClient().loadWebResponse(subrequest));
+                }
+                else
+                {
+                    action.setWebResponse(action.getWebClient().loadWebResponse(subrequest));
+                }
             }
         }
 
