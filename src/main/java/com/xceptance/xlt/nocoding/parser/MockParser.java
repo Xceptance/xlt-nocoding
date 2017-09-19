@@ -23,7 +23,7 @@ public class MockParser implements Parser
     public List<ScriptItem> parse()
     {
         // TODO Auto-generated method stub
-        return this.parseEasy();
+        return this.parseMediumLogin();
     }
 
     /**
@@ -123,7 +123,7 @@ public class MockParser implements Parser
      * 
      * @return List of NoCodingScriptItems
      */
-    private List<ScriptItem> parseEasyLogin()
+    private List<ScriptItem> parseMediumLogin()
     {
         /**
          * Request
@@ -150,7 +150,7 @@ public class MockParser implements Parser
         final Response response1 = new Response(null, validation);
 
         validation = new ArrayList<AbstractValidator>();
-        validation.add(new RegExpValidator("login-form Existance", "<form\\\\sid=\\\"formLogin\\\"[\\\\s\\\\S]+?>"));
+        validation.add(new RegExpValidator("login-form Existance", "<form\\sid=\"formLogin\"[\\s\\S]+?>"));
         // Response
         final Response response2 = new Response(null, validation);
 

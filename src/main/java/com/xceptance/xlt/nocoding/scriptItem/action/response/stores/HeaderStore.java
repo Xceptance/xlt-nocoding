@@ -31,7 +31,8 @@ public class HeaderStore extends AbstractResponseStore
         // Check if we found the cookie
         if (propertyManager.getGlobalStorage().getVariableByKey(getVariableName()) == null)
         {
-            throw new Exception("Cookie not found");
+            final String msg = "Header: " + header + " not found";
+            throw new Exception(msg);
         }
     }
 

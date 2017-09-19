@@ -8,6 +8,8 @@ import java.util.Map;
 import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
+import com.xceptance.xlt.nocoding.util.DefaultValue;
+import com.xceptance.xlt.nocoding.util.PropertyManager;
 
 public class Request
 {
@@ -17,9 +19,9 @@ public class Request
 
     private HttpMethod method;
 
-    private boolean isXhr;
+    private Boolean isXhr;
 
-    private boolean encodeParameters;
+    private Boolean encodeParameters;
 
     private List<NameValuePair> parameters;
 
@@ -27,7 +29,7 @@ public class Request
 
     private String body;
 
-    private boolean encodeBody;
+    private Boolean encodeBody;
 
     public Request(final String url, final String name)
     {
@@ -45,7 +47,7 @@ public class Request
         this.method = method;
     }
 
-    public boolean isXhr()
+    public Boolean isXhr()
     {
         return isXhr;
     }
@@ -55,7 +57,7 @@ public class Request
         this.isXhr = isXhr;
     }
 
-    public boolean isEncodeParameters()
+    public Boolean isEncodeParameters()
     {
         return encodeParameters;
     }
@@ -95,7 +97,7 @@ public class Request
         this.body = body;
     }
 
-    public boolean isEncodeBody()
+    public Boolean isEncodeBody()
     {
         return encodeBody;
     }
@@ -118,35 +120,43 @@ public class Request
     /**
      * Fills in the default values for each attribute
      */
-    public void fillData()
+    public void fillData(final PropertyManager propertyManager)
     {
-        /*
-         * TODO Think about how to fill data, do we have placeholder values that refer to default values or would it be better
-         * to have these assigned "null"/empty?
-         */
+        final DefaultValue defaultValues = propertyManager.getDefaultValues();
+        if (this.getMethod() == null)
+        {
+            this.method = defaultValues.METHOD;
+        }
+        if (this.isXhr == null)
+        {
+            this.isXhr = defaultValues.IS_XHR;
+        }
+        if (this.encodeParameters == null)
+        {
+            this.encodeParameters = defaultValues.ENCODE_PARAMETERS;
+        }
+        if (this.encodeBody == null)
+        {
+            this.encodeBody = defaultValues.ENCODE_BODY;
+        }
     }
 
     public WebRequest buildWebRequest() throws MalformedURLException
     {
-        if (isEncodeBody())
+        if (isEncodeBody() != null && isEncodeBody())
         {
             encodeBody();
         }
 
-        if (isEncodeParameters())
+        if (isEncodeParameters() != null && isEncodeParameters())
         {
             encodeParameters();
         }
 
         final URL url = new URL(this.urlAsString);
         final WebRequest webRequest = new WebRequest(url, this.method);
-        // TODO hier vielleicht lieber weglassen und im parser dafür ne leere liste erzeugen
-        if (parameters != null)
-        {
-            webRequest.setRequestParameters(parameters);
-        }
 
-        if (isXhr())
+        if (isXhr() != null && isXhr())
         {
             webRequest.setXHR();
         }
@@ -159,6 +169,14 @@ public class Request
         if (getMethod() == HttpMethod.POST || getMethod() == HttpMethod.PUT || getMethod() == HttpMethod.PATCH)
         {
             webRequest.setRequestBody(body);
+        }
+        else
+        {
+            // TODO hier vielleicht lieber weglassen und im parser dafür ne leere liste erzeugen
+            if (parameters != null)
+            {
+                webRequest.setRequestParameters(parameters);
+            }
         }
         return webRequest;
     }

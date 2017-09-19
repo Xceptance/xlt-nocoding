@@ -6,6 +6,8 @@ import com.xceptance.xlt.nocoding.util.DataStorage.DataStorage;
 
 public class PropertyManager
 {
+    private final DefaultValue defaultValues;
+
     private final XltProperties properties;
 
     private final DataStorage globalStorage;
@@ -17,6 +19,15 @@ public class PropertyManager
         this.properties = properties;
         this.globalStorage = globalStorage;
         this.webClient = new XltWebClient();
+        this.defaultValues = new DefaultValue();
+    }
+
+    public PropertyManager(final XltProperties properties, final DataStorage globalStorage, final DefaultValue defaultValues)
+    {
+        this.properties = properties;
+        this.globalStorage = globalStorage;
+        this.webClient = new XltWebClient();
+        this.defaultValues = defaultValues;
     }
 
     public XltProperties getProperties()
@@ -41,6 +52,11 @@ public class PropertyManager
     public XltWebClient getWebClient()
     {
         return webClient;
+    }
+
+    public DefaultValue getDefaultValues()
+    {
+        return defaultValues;
     }
 
 }

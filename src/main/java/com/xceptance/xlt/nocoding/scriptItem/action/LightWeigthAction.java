@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.gargoylesoftware.htmlunit.WebRequest;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.xceptance.xlt.api.engine.Session;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
+import com.xceptance.xlt.engine.SessionImpl;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
 import com.xceptance.xlt.nocoding.util.PropertyManager;
@@ -25,32 +28,51 @@ public class LightWeigthAction extends Action
     {
         // First we initialize some variables
         final List<WebRequest> requestsOfSubrequest = buildWebRequestFromSubrequests(this.subrequests);
+
+        // TODO find a better place for this
+        this.request.fillData(propertyManager);
+
         final WebAction action = new WebAction(this.getRequest().getName(), this.getRequest().buildWebRequest(), requestsOfSubrequest,
                                                propertyManager.getWebClient(), (final WebAction x) -> doExecute(x));
 
-        // Execute the WebRequest in xlt
-        action.run();
-        setLightWeightPage(new LightWeightPage(action.getWebResponse(), action.getTimerName()));
-
-        // Validate response if it is specified
-        if (getResponse() != null)
+        // TODO Talk about this
+        try
         {
-            getResponse().execute(propertyManager, action.getWebResponse());
+            // Execute the WebRequest in xlt
+            action.run();
+            setLightWeightPage(new LightWeightPage(action.getWebResponse(), action.getTimerName()));
+
+            // Validate response if it is specified
+            if (getResponse() != null)
+            {
+                getResponse().execute(propertyManager, action.getWebResponse());
+            }
+            // do standard validations
+            else
+            {
+                new Response().execute(propertyManager, action.getWebResponse());
+            }
+
+            // if (getSubrequests() != null || !getSubrequests().isEmpty())
+            // {
+            // for (final AbstractSubrequest abstractSubrequest : subrequests)
+            // {
+            // abstractSubrequest.execute(propertyManager);
+            // }
+            // }
         }
-        // do standard validations
-        else
+        finally
         {
-            new Response().execute(propertyManager, action.getWebResponse());
+            // Append the page to the result browser
+            if (action.getWebResponse() != null)
+            {
+                ((SessionImpl) Session.getCurrent()).getRequestHistory()
+                                                    .add(action.getTimerName(),
+                                                         new HtmlPage(action.getWebResponse(),
+                                                                      propertyManager.getWebClient().getCurrentWindow()));
+                ;
+            }
         }
-
-        // if (getSubrequests() != null || !getSubrequests().isEmpty())
-        // {
-        // for (final AbstractSubrequest abstractSubrequest : subrequests)
-        // {
-        // abstractSubrequest.execute(propertyManager);
-        // }
-        // }
-
     }
 
     private List<WebRequest> buildWebRequestFromSubrequests(final List<AbstractSubrequest> subrequests) throws MalformedURLException
@@ -96,7 +118,7 @@ public class LightWeigthAction extends Action
             // }
         }
 
-        if (action.getSubrequests() != null || !action.getSubrequests().isEmpty())
+        if (action.getSubrequests() != null && !action.getSubrequests().isEmpty())
         {
             for (final WebRequest subrequest : action.getSubrequests())
             {
