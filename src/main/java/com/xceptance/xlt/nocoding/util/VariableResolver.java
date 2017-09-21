@@ -1,15 +1,18 @@
-package com.xceptance.xlt.nocoding.util.DataStorage;
+package com.xceptance.xlt.nocoding.util;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.xceptance.xlt.nocoding.util.PropertyManager;
 
 public class VariableResolver
 {
 
     // TODO brauch ich nicht, siehe xlt -> (general)dataProvider
     public static String dataDirectory = "/config/data/default";
+
+    /**
+     * The pattern for finding variables
+     */
+    private final static Pattern parameterPattern = Pattern.compile("\\$\\{[^\\{\\}]*\\}");
 
     /**
      * Resolves string recursively from the inside to the outside
@@ -24,7 +27,7 @@ public class VariableResolver
     {
         // set replacement to our toResolve string
         String replacement = toResolve;
-        final Matcher matcher = Pattern.compile("\\$\\{[^\\{\\}]*\\}").matcher(toResolve);
+        final Matcher matcher = parameterPattern.matcher(toResolve);
         // TODO Das hier muss rekursiv werden, auch $Random, BeanShell kann rekursiv sein
         while (matcher.find())
         {
