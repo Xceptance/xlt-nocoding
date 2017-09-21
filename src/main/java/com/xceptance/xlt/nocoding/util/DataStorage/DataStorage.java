@@ -8,7 +8,7 @@ public class DataStorage
     private final Map<String, String> variables;
 
     // TODO this probably needs to be changed depending on meeting at September 14th
-    private final Map<String, String> configItem;
+    private Map<String, String> configItem;
 
     public DataStorage()
     {
@@ -27,7 +27,7 @@ public class DataStorage
         this.variables.put(key, value);
     }
 
-    public void storeDefault(final String key, final String value)
+    public void storeConfigItem(final String key, final String value)
     {
         this.configItem.put(key, value);
     }
@@ -51,4 +51,40 @@ public class DataStorage
     {
         return configItem.toString();
     }
+
+    public void loadDefaultConfig()
+    {
+        this.configItem = DefaultValue.defaultValues;
+        this.storeConfigItem("httpmethod", DefaultValue.HTTPMETHOD.toString());
+        this.storeConfigItem("isXhr", DefaultValue.IS_XHR.toString());
+        this.storeConfigItem("encodeParameters", DefaultValue.ENCODE_PARAMETERS.toString());
+        this.storeConfigItem("encodeBody", DefaultValue.ENCODE_PARAMETERS.toString());
+        this.storeConfigItem("httpcode", DefaultValue.HTTPCODE.toString());
+    }
+
+    public Map<String, String> getVariables()
+    {
+        return variables;
+    }
+
+    public Map<String, String> getConfigItem()
+    {
+        return configItem;
+    }
+
+    public String searchFor(final String resolvedTarget)
+    {
+        String found = "";
+        // TODO config raus
+        if (variables.containsKey(resolvedTarget))
+        {
+            found = variables.get(resolvedTarget);
+        }
+        else
+        {
+            found = null;
+        }
+        return found;
+    }
+
 }

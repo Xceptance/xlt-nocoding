@@ -26,6 +26,8 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
     {
         final DataStorage globalStore = new DataStorage();
         propertyManager = new PropertyManager(XltProperties.getInstance(), globalStore);
+        // TODO write in constructor?
+        propertyManager.getDataStorage().loadDefaultConfig();
 
         // this.parser = new MockParser(globalStorage);
         // TODO Think about whether we really want to use this to share the global storage
@@ -45,9 +47,9 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
             item.execute(propertyManager);
         }
 
-        final String allVariables = this.propertyManager.getGlobalStorage().getAllVariables();
+        final String allVariables = this.propertyManager.getDataStorage().getAllVariables();
         System.out.println(allVariables);
-        System.out.println(this.propertyManager.getGlobalStorage().getVariableByKey("Blub"));
+        System.out.println(this.propertyManager.getDataStorage().getVariableByKey("Blub"));
 
     }
 }

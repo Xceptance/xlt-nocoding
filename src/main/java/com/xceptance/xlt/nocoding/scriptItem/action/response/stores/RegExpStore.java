@@ -44,6 +44,6 @@ public class RegExpStore extends AbstractResponseStore
         }
 
         Assert.assertNotNull("Couldn't find anything with the regexp", foundContent);
-        propertyManager.getGlobalStorage().storeVariable(getVariableName(), foundContent);
+        propertyManager.getDataStorage().storeVariable(getVariableName(), foundContent);
     }
 }

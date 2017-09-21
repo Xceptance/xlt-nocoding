@@ -8,8 +8,8 @@ import java.util.Map;
 import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
-import com.xceptance.xlt.nocoding.util.DefaultValue;
 import com.xceptance.xlt.nocoding.util.PropertyManager;
+import com.xceptance.xlt.nocoding.util.DataStorage.DataStorage;
 
 public class Request
 {
@@ -17,7 +17,7 @@ public class Request
 
     private final String urlAsString;
 
-    private HttpMethod method;
+    private HttpMethod httpmethod;
 
     private Boolean isXhr;
 
@@ -37,14 +37,14 @@ public class Request
         this.name = name;
     }
 
-    public HttpMethod getMethod()
+    public HttpMethod getHttpmethod()
     {
-        return method;
+        return httpmethod;
     }
 
-    public void setMethod(final HttpMethod method)
+    public void setHttpmethod(final HttpMethod httpmethod)
     {
-        this.method = method;
+        this.httpmethod = httpmethod;
     }
 
     public Boolean isXhr()
@@ -122,22 +122,27 @@ public class Request
      */
     public void fillData(final PropertyManager propertyManager)
     {
-        final DefaultValue defaultValues = propertyManager.getDefaultValues();
-        if (this.getMethod() == null)
+        final DataStorage globalStorage = propertyManager.getDataStorage();
+        if (this.getHttpmethod() == null)
         {
-            this.method = defaultValues.METHOD;
+            final String method = globalStorage.getConfigItemByKey("httpmethod");
+            this.httpmethod = HttpMethod.valueOf(method);
+
         }
         if (this.isXhr == null)
         {
-            this.isXhr = defaultValues.IS_XHR;
+            final String isXhr = globalStorage.getConfigItemByKey("isXhr");
+            this.isXhr = Boolean.valueOf(isXhr);
         }
         if (this.encodeParameters == null)
         {
-            this.encodeParameters = defaultValues.ENCODE_PARAMETERS;
+            final String encodeParameters = globalStorage.getConfigItemByKey("encodeParameters");
+            this.encodeParameters = Boolean.valueOf(encodeParameters);
         }
         if (this.encodeBody == null)
         {
-            this.encodeBody = defaultValues.ENCODE_BODY;
+            final String encodeBody = globalStorage.getConfigItemByKey("encodeBody");
+            this.encodeBody = Boolean.valueOf(encodeBody);
         }
     }
 
@@ -154,7 +159,7 @@ public class Request
         }
 
         final URL url = new URL(this.urlAsString);
-        final WebRequest webRequest = new WebRequest(url, this.method);
+        final WebRequest webRequest = new WebRequest(url, getHttpmethod());
 
         if (isXhr() != null && isXhr())
         {
@@ -166,18 +171,17 @@ public class Request
             webRequest.setAdditionalHeaders(headers);
         }
 
-        if (getMethod() == HttpMethod.POST || getMethod() == HttpMethod.PUT || getMethod() == HttpMethod.PATCH)
+        if (parameters != null)
         {
-            webRequest.setRequestBody(body);
+            webRequest.setRequestParameters(parameters);
         }
-        else
-        {
-            // TODO hier vielleicht lieber weglassen und im parser dafür ne leere liste erzeugen
-            if (parameters != null)
-            {
-                webRequest.setRequestParameters(parameters);
-            }
-        }
+        // if (getHttpmethod() == HttpMethod.POST || getHttpmethod() == HttpMethod.PUT || getHttpmethod() == HttpMethod.PATCH)
+        // {
+        // if (body != null)
+        // {
+        // webRequest.setRequestBody(body);
+        // }
+        // }
         return webRequest;
     }
 

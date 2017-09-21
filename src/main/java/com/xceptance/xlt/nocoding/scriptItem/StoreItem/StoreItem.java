@@ -19,7 +19,7 @@ public class StoreItem implements ScriptItem
     public void execute(final PropertyManager propertyManager) throws Throwable
     {
         // TODO Auto-generated method stub
-        propertyManager.getGlobalStorage().storeVariable(variableName, value);
+        propertyManager.getDataStorage().storeVariable(variableName, value);
     }
 
 }

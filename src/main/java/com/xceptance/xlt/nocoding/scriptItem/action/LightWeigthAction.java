@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.gargoylesoftware.htmlunit.WebRequest;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.engine.Session;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
+import com.xceptance.xlt.engine.LightWeightPageImpl;
 import com.xceptance.xlt.engine.SessionImpl;
+import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
 import com.xceptance.xlt.nocoding.util.PropertyManager;
@@ -67,9 +69,8 @@ public class LightWeigthAction extends Action
             if (action.getWebResponse() != null)
             {
                 ((SessionImpl) Session.getCurrent()).getRequestHistory()
-                                                    .add(action.getTimerName(),
-                                                         new HtmlPage(action.getWebResponse(),
-                                                                      propertyManager.getWebClient().getCurrentWindow()));
+                                                    .add(new LightWeightPageImpl(action.getWebResponse(), action.getTimerName(),
+                                                                                 (XltWebClient) action.getWebClient()));
                 ;
             }
         }
@@ -108,7 +109,8 @@ public class LightWeigthAction extends Action
         }
         else
         {
-            action.setWebResponse(action.getWebClient().loadWebResponse(action.getWebRequest()));
+            final WebResponse response = action.getWebClient().loadWebResponse(action.getWebRequest());
+            action.setWebResponse(response);
             final LightWeightPage page = new LightWeightPage(action.getWebResponse(), action.getTimerName());
             // TODO Result Browser?
             // TODO fix this

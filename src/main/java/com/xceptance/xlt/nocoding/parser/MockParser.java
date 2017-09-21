@@ -37,7 +37,7 @@ public class MockParser implements Parser
          * Request
          */
         final Request request = new Request("https://localhost:8443/posters/", "Visit Homepage");
-        request.setMethod(HttpMethod.GET);
+        request.setHttpmethod(HttpMethod.GET);
         request.setParameters(null);
         request.setBody(null);
         request.setEncodeBody(false);
@@ -131,7 +131,7 @@ public class MockParser implements Parser
         final Request request1 = new Request("https://localhost:8443/posters/", "Open Website");
         final Request request2 = new Request("https://localhost:8443/posters/login", "Go to Login");
         final Request request3 = new Request("https://localhost:8443/posters/login", "login");
-        request3.setMethod(HttpMethod.POST);
+        request3.setHttpmethod(HttpMethod.POST);
         final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
         parameters.add(new NameValuePair("email", "john@doe.com"));
         parameters.add(new NameValuePair("password", "topsecret"));
@@ -158,6 +158,7 @@ public class MockParser implements Parser
         final List<AbstractResponseStore> responseStore = new ArrayList<AbstractResponseStore>();
         responseStore.add(new HeaderStore("loginRedirectLocation", "Location"));
         // Response
+        // final Response response3 = new Response(303, responseStore, null);
         final Response response3 = new Response(303, responseStore, null);
 
         validation = new ArrayList<AbstractValidator>();
@@ -169,7 +170,8 @@ public class MockParser implements Parser
          * Action
          */
         final List<ScriptItem> itemList = new ArrayList<ScriptItem>();
-        ScriptItem actionItem = new LightWeigthAction(request1, response1, null);
+        ScriptItem actionItem;
+        actionItem = new LightWeigthAction(request1, response1, null);
         itemList.add(actionItem);
         actionItem = new LightWeigthAction(request2, response2, null);
         itemList.add(actionItem);

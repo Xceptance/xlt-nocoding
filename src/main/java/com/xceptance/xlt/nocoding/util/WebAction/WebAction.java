@@ -2,10 +2,12 @@ package com.xceptance.xlt.nocoding.util.WebAction;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.WebResponse;
+import com.xceptance.common.lang.ReflectionUtils;
 import com.xceptance.xlt.api.actions.AbstractWebAction;
 import com.xceptance.xlt.nocoding.util.ThrowingConsumer;
 
@@ -47,6 +49,8 @@ public class WebAction extends AbstractWebAction
     @Override
     protected void execute() throws Exception
     {
+        final Map<String, WebResponse> pageLocalCache = ReflectionUtils.readInstanceField(getWebClient(), "pageLocalCache");
+        pageLocalCache.clear();
         function.accept(this);
     }
 

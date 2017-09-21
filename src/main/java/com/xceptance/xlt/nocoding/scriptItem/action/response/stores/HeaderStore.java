@@ -24,12 +24,12 @@ public class HeaderStore extends AbstractResponseStore
         headers.forEach((final NameValuePair x) -> {
             if (x.getName().equals(header))
             {
-                propertyManager.getGlobalStorage().storeVariable(getVariableName(), x.getValue());
+                propertyManager.getDataStorage().storeVariable(getVariableName(), x.getValue());
             }
 
         });
         // Check if we found the cookie
-        if (propertyManager.getGlobalStorage().getVariableByKey(getVariableName()) == null)
+        if (propertyManager.getDataStorage().getVariableByKey(getVariableName()) == null)
         {
             final String msg = "Header: " + header + " not found";
             throw new Exception(msg);

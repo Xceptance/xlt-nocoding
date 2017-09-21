@@ -27,13 +27,13 @@ public class CookieStore extends AbstractResponseStore
                 if (x.getValue().contains(cookie))
                 {
                     final String cookieContent = x.getValue();
-                    propertyManager.getGlobalStorage().storeVariable(getVariableName(), cookieContent);
+                    propertyManager.getDataStorage().storeVariable(getVariableName(), cookieContent);
                 }
             }
 
         });
         // Check if we found the cookie
-        if (propertyManager.getGlobalStorage().getVariableByKey(getVariableName()) == null)
+        if (propertyManager.getDataStorage().getVariableByKey(getVariableName()) == null)
         {
             throw new Exception("Cookie not found");
         }

@@ -10,7 +10,7 @@ import com.xceptance.xlt.nocoding.util.PropertyManager;
 
 public class RegExpValidator extends AbstractValidator
 {
-    final String pattern;
+    final Pattern pattern;
 
     final String text;
 
@@ -29,7 +29,7 @@ public class RegExpValidator extends AbstractValidator
     public RegExpValidator(final String validationName, final String pattern, final String text, final Integer count)
     {
         super(validationName);
-        this.pattern = pattern;
+        this.pattern = Pattern.compile(pattern);
         this.text = text;
         this.count = count;
     }
@@ -41,12 +41,12 @@ public class RegExpValidator extends AbstractValidator
         final String pageContent = page.getContent();
         if (text == null)
         {
-            Assert.assertTrue("Pattern did not match", Pattern.compile(pattern).matcher(pageContent).find());
+            Assert.assertTrue("Pattern did not match", pattern.matcher(pageContent).find());
         }
         else
         {
             // TODO Matching Group hinzufügen!
-            final String matchingString = Pattern.compile(pattern).matcher(pageContent).group();
+            final String matchingString = pattern.matcher(pageContent).group();
             final int solution = text.compareTo(matchingString);
             Assert.assertTrue("Found content does not equal matcher", solution == 0);
         }
