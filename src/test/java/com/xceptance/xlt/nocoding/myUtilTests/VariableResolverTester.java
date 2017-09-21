@@ -36,6 +36,15 @@ public class VariableResolverTester
             Assert.assertEquals("https://localhost:8443/posters/", resolved);
             resolved = VariableResolver.resolveString("${ho${blub}t}${host}", propertyManager);
             Assert.assertEquals("https://localhost:8443/posters/https://localhost:8443/posters/", resolved);
+
+            resolved = VariableResolver.resolveString("${ho${blub}t}${host}", propertyManager);
+            Assert.assertEquals("https://localhost:8443/posters/https://localhost:8443/posters/", resolved);
+
+            resolved = VariableResolver.resolveString("${RANDOM.Email()}", propertyManager);
+            Assert.assertNotNull(resolved);
+            resolved = VariableResolver.resolveString("${DATA.getEmail()}", propertyManager);
+            Assert.assertNotNull(resolved);
+            System.out.println(resolved);
         }
         catch (final Exception e)
         {
