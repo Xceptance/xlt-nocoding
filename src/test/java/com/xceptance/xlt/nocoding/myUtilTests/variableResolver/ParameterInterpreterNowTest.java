@@ -14,12 +14,14 @@
  *  limitations under the License.
  *
  */
-package com.xceptance.xlt.nocoding.util.bsh;
+package com.xceptance.xlt.nocoding.myUtilTests.variableResolver;
 
 import java.util.Random;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import com.xceptance.xlt.nocoding.util.variableResolver.ParameterInterpreterNow;
 
 public class ParameterInterpreterNowTest
 {

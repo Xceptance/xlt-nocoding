@@ -14,7 +14,7 @@
  *  limitations under the License.
  *
  */
-package com.xceptance.xlt.nocoding.util;
+package com.xceptance.xlt.nocoding.util.variableResolver;
 
 import org.apache.commons.lang3.RandomStringUtils;
 

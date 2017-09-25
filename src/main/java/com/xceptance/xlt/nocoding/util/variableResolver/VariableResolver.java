@@ -1,10 +1,11 @@
-package com.xceptance.xlt.nocoding.util;
+package com.xceptance.xlt.nocoding.util.variableResolver;
 
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.xceptance.xlt.api.data.GeneralDataProvider;
+import com.xceptance.xlt.nocoding.util.PropertyManager;
 
 import bsh.EvalError;
 import bsh.Interpreter;
@@ -25,7 +26,7 @@ public class VariableResolver
         interpreter = new Interpreter();
         try
         {
-            interpreter.set("NOW", String.valueOf(System.currentTimeMillis()));
+            interpreter.set("NOW", new ParameterInterpreterNow());
             interpreter.set("RANDOM", new ParameterInterpreterRandom());
             interpreter.set("DATE", new Date());
             interpreter.set("DATA", GeneralDataProvider.getInstance());

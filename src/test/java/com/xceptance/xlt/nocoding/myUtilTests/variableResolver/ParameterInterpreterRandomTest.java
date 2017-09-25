@@ -1,6 +1,8 @@
-package com.xceptance.xlt.nocoding.util.bsh;
+package com.xceptance.xlt.nocoding.myUtilTests.variableResolver;
 
 import org.junit.Test;
+
+import com.xceptance.xlt.nocoding.util.variableResolver.ParameterInterpreterRandom;
 
 public class ParameterInterpreterRandomTest
 {

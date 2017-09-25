@@ -14,7 +14,7 @@
  *  limitations under the License.
  *
  */
-package com.xceptance.xlt.nocoding.myUtilTests;
+package com.xceptance.xlt.nocoding.myUtilTests.variableResolver;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -22,8 +22,8 @@ import org.junit.Test;
 
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.util.PropertyManager;
-import com.xceptance.xlt.nocoding.util.VariableResolver;
 import com.xceptance.xlt.nocoding.util.DataStorage.DataStorage;
+import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
 import bsh.EvalError;
 
