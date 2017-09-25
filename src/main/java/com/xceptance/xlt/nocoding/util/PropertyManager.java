@@ -63,7 +63,12 @@ public class PropertyManager
 
     public String resolveString(final String toResolve)
     {
-        return resolver.resolveString(toResolve, this);
+        String resolvedString = null;
+        if (toResolve != null)
+        {
+            resolvedString = resolver.resolveString(toResolve, this);
+        }
+        return resolvedString;
     }
 
 }

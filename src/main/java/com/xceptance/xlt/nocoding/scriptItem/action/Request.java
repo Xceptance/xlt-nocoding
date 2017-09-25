@@ -2,17 +2,23 @@ package com.xceptance.xlt.nocoding.scriptItem.action;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
+import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.PropertyManager;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 public class Request
 {
+
     private String name;
 
     private String urlAsString;
@@ -31,10 +37,18 @@ public class Request
 
     private Boolean encodeBody;
 
+    public Map<String, String> variables;
+
+    public Request(final Map<String, String> variables)
+    {
+        this.variables = variables;
+    }
+
     public Request(final String url, final String name)
     {
         this.urlAsString = url;
         this.name = name;
+        this.variables = new HashMap<String, String>();
     }
 
     public HttpMethod getHttpmethod()
@@ -117,6 +131,16 @@ public class Request
         return name;
     }
 
+    public Map<String, String> getVariables()
+    {
+        return variables;
+    }
+
+    public void setVariables(final Map<String, String> variables)
+    {
+        this.variables = variables;
+    }
+
     /**
      * Fills in the default values for each attribute
      */
@@ -125,36 +149,74 @@ public class Request
         final DataStorage globalStorage = propertyManager.getDataStorage();
         if (this.getHttpmethod() == null)
         {
-            final String method = globalStorage.getConfigItemByKey("httpmethod");
-            this.httpmethod = HttpMethod.valueOf(method);
+            // final String method = globalStorage.getConfigItemByKey(Constants.METHOD);
+            variables.put(Constants.METHOD, globalStorage.getConfigItemByKey(Constants.METHOD));
+            // this.httpmethod = HttpMethod.valueOf(method);
 
         }
         if (this.isXhr == null)
         {
-            final String isXhr = globalStorage.getConfigItemByKey("isXhr");
-            this.isXhr = Boolean.valueOf(isXhr);
+            variables.put(Constants.XHR, globalStorage.getConfigItemByKey(Constants.XHR));
+            // final String isXhr = globalStorage.getConfigItemByKey(Constants.XHR);
+            // this.isXhr = Boolean.valueOf(isXhr);
         }
         if (this.encodeParameters == null)
         {
-            final String encodeParameters = globalStorage.getConfigItemByKey("encodeParameters");
-            this.encodeParameters = Boolean.valueOf(encodeParameters);
+            variables.put(Constants.ENCODEPARAMETERS, globalStorage.getConfigItemByKey(Constants.ENCODEPARAMETERS));
+            // final String encodeParameters = globalStorage.getConfigItemByKey(Constants.ENCODEPARAMETERS);
+            // this.encodeParameters = Boolean.valueOf(encodeParameters);
         }
         if (this.encodeBody == null)
         {
-            final String encodeBody = globalStorage.getConfigItemByKey("encodeBody");
-            this.encodeBody = Boolean.valueOf(encodeBody);
+            variables.put(Constants.ENCODEBODY, globalStorage.getConfigItemByKey(Constants.ENCODEBODY));
+            // final String encodeBody = globalStorage.getConfigItemByKey(Constants.ENCODEBODY);
+            // this.encodeBody = Boolean.valueOf(encodeBody);
         }
     }
 
     private void resolveValues(final PropertyManager propertyManager)
     {
-        name = propertyManager.resolveString(name);
-        urlAsString = propertyManager.resolveString(urlAsString);
-        body = propertyManager.resolveString(body);
+        // TODO Test these very throughly
+        String variable = propertyManager.resolveString(variables.get(Constants.NAME));
+        name = variable;
+        variable = propertyManager.resolveString(variables.get(Constants.URL));
+        urlAsString = variable;
+        variable = propertyManager.resolveString(variables.get(Constants.METHOD));
+        httpmethod = HttpMethod.valueOf(variable);
+        variable = propertyManager.resolveString(variables.get(Constants.XHR));
+        isXhr = Boolean.valueOf(variable);
+        variable = propertyManager.resolveString(variables.get(Constants.ENCODEPARAMETERS));
+        encodeParameters = Boolean.valueOf(variable);
 
-        // TODO look over this
-        // isXhr = Boolean.valueOf(propertyManager.resolveString(isXhr.toString()));
-        name = propertyManager.resolveString(name);
+        variable = propertyManager.resolveString(variables.get(Constants.PARAMETERS));
+        final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+        while (variable != null && !variable.isEmpty())
+        {
+            final String name = StringUtils.substringBefore(variable, Constants.PARAMETER_NAME_VALUE_SEPARATOR);
+            StringUtils.remove(variable, name + Constants.PARAMETER_NAME_VALUE_SEPARATOR);
+            final String value = StringUtils.substringBefore(variable, Constants.PARAMETER_PAIR_SEPARATOR);
+            StringUtils.remove(variable, value + Constants.PARAMETER_PAIR_SEPARATOR);
+            parameters.add(new NameValuePair(name, value));
+        }
+        this.parameters = parameters;
+
+        variable = propertyManager.resolveString(variables.get(Constants.HEADERS));
+        final Map<String, String> headers = new HashMap<String, String>();
+        while (variable != null && !variable.isEmpty())
+        {
+            final String name = StringUtils.substringBefore(variable, Constants.HEADER_NAME_VALUE_SEPARATOR);
+            StringUtils.remove(variable, name + Constants.HEADER_NAME_VALUE_SEPARATOR);
+            final String value = StringUtils.substringBefore(variable, Constants.HEADER_PAIR_SEPARATOR);
+            StringUtils.remove(variable, value + Constants.HEADER_PAIR_SEPARATOR);
+            headers.put(name, value);
+        }
+        this.headers = headers;
+
+        // TODO Body und encode body
+        variable = propertyManager.resolveString(variables.get(Constants.ENCODEBODY));
+        encodeBody = Boolean.valueOf(variable);
+        variable = propertyManager.resolveString(variables.get(Constants.BODY));
+        body = variable;
     }
 
     public WebRequest buildWebRequest(final PropertyManager propertyManager) throws MalformedURLException
@@ -188,7 +250,7 @@ public class Request
             webRequest.setAdditionalHeaders(headers);
         }
 
-        if (parameters != null)
+        if (getParameters() != null)
         {
             webRequest.setRequestParameters(parameters);
         }

@@ -1,7 +1,9 @@
 package com.xceptance.xlt.nocoding.parser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
@@ -15,6 +17,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.RegExpStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.AbstractValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.RegExpValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
+import com.xceptance.xlt.nocoding.util.Constants;
 
 public class MockParser implements Parser
 {
@@ -23,7 +26,7 @@ public class MockParser implements Parser
     public List<ScriptItem> parse()
     {
         // TODO Auto-generated method stub
-        return this.parseMediumLogin();
+        return this.parseEasy();
     }
 
     /**
@@ -36,14 +39,26 @@ public class MockParser implements Parser
         /**
          * Request
          */
-        final Request request = new Request("https://localhost:8443/posters/", "Visit Homepage");
-        request.setHttpmethod(HttpMethod.GET);
-        request.setParameters(null);
-        request.setBody(null);
-        request.setEncodeBody(false);
-        request.setEncodeParameters(false);
-        request.setHeaders(null);
-        request.setXhr(false);
+        final Map<String, String> variables = new HashMap<String, String>();
+        variables.put(Constants.NAME, "Visit Homepage");
+        variables.put(Constants.URL, "https://localhost:8443/posters");
+        variables.put(Constants.METHOD, "GET");
+        variables.put(Constants.PARAMETERS, null);
+        variables.put(Constants.BODY, null);
+        variables.put(Constants.ENCODEBODY, "false");
+        variables.put(Constants.ENCODEPARAMETERS, "false");
+        variables.put(Constants.HEADERS, null);
+        variables.put(Constants.XHR, "false");
+
+        final Request request = new Request(variables);
+        // final Request request = new Request("https://localhost:8443/posters/", "Visit Homepage");
+        // request.setHttpmethod(HttpMethod.GET);
+        // request.setParameters(null);
+        // request.setBody(null);
+        // request.setEncodeBody(false);
+        // request.setEncodeParameters(false);
+        // request.setHeaders(null);
+        // request.setXhr(false);
 
         /**
          * Response

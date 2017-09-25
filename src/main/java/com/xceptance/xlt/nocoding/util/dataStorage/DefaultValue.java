@@ -10,13 +10,13 @@ public class DefaultValue
     /**
      * Request Block
      */
-    public static HttpMethod HTTPMETHOD = HttpMethod.GET;
+    public static HttpMethod METHOD = HttpMethod.GET;
 
-    public static Boolean IS_XHR = false;
+    public static Boolean XHR = false;
 
-    public static Boolean ENCODE_PARAMETERS = false;
+    public static Boolean ENCODEPARAMETERS = false;
 
-    public static Boolean ENCODE_BODY = false;
+    public static Boolean ENCODEBODY = false;
 
     /**
      * Response Block

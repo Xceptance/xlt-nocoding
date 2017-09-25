@@ -3,6 +3,8 @@ package com.xceptance.xlt.nocoding.util.dataStorage;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.xceptance.xlt.nocoding.util.Constants;
+
 public class DataStorage
 {
     private final Map<String, String> variables;
@@ -55,11 +57,11 @@ public class DataStorage
     public void loadDefaultConfig()
     {
         this.configItem = DefaultValue.defaultValues;
-        this.storeConfigItem("httpmethod", DefaultValue.HTTPMETHOD.toString());
-        this.storeConfigItem("isXhr", DefaultValue.IS_XHR.toString());
-        this.storeConfigItem("encodeParameters", DefaultValue.ENCODE_PARAMETERS.toString());
-        this.storeConfigItem("encodeBody", DefaultValue.ENCODE_PARAMETERS.toString());
-        this.storeConfigItem("httpcode", DefaultValue.HTTPCODE.toString());
+        this.storeConfigItem(Constants.METHOD, DefaultValue.METHOD.toString());
+        this.storeConfigItem(Constants.XHR, DefaultValue.XHR.toString());
+        this.storeConfigItem(Constants.ENCODEPARAMETERS, DefaultValue.ENCODEPARAMETERS.toString());
+        this.storeConfigItem(Constants.ENCODEBODY, DefaultValue.ENCODEBODY.toString());
+        this.storeConfigItem(Constants.HTTPCODE, DefaultValue.HTTPCODE.toString());
     }
 
     public Map<String, String> getVariables()
