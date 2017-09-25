@@ -25,13 +25,15 @@ public class XHRSubrequest extends AbstractSubrequest
     @Override
     public void execute(final PropertyManager propertyManager) throws Throwable
     {
-        // set xhr to true
+
     }
 
     @Override
     public WebRequest getWebRequest() throws MalformedURLException
     {
-        request.setXhr(true);
-        return this.request.buildWebRequest();
+        // set xhr to true
+        // request.setXhr(true);
+        // return this.request.buildWebRequest(propertyManager);
+        return null;
     }
 }

@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.scriptItem.StoreItem;
+package com.xceptance.xlt.nocoding.scriptItem.storeItem;
 
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.util.PropertyManager;

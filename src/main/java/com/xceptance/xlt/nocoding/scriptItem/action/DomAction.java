@@ -28,8 +28,8 @@ public class DomAction extends Action
     public void execute(final PropertyManager propertyManager) throws Throwable
     {
         final List<WebRequest> requestsOfSubrequest = null;
-        final WebAction action = new WebAction(this.getRequest().getName(), this.getRequest().buildWebRequest(), requestsOfSubrequest,
-                                               propertyManager.getWebClient(), (final WebAction x) -> doExecute(x));
+        final WebAction action = new WebAction(this.getRequest().getName(), this.getRequest().buildWebRequest(propertyManager),
+                                               requestsOfSubrequest, propertyManager.getWebClient(), (final WebAction x) -> doExecute(x));
 
         action.run();
     }

@@ -120,7 +120,7 @@ public class Request
     /**
      * Fills in the default values for each attribute
      */
-    private void fillData(final PropertyManager propertyManager)
+    private void fillDefaultData(final PropertyManager propertyManager)
     {
         final DataStorage globalStorage = propertyManager.getDataStorage();
         if (this.getHttpmethod() == null)
@@ -153,14 +153,14 @@ public class Request
         body = propertyManager.resolveString(body);
 
         // TODO look over this
-        // isXhr = Boolean.getBoolean(propertyManager.resolveString(isXhr.toString()));
+        // isXhr = Boolean.valueOf(propertyManager.resolveString(isXhr.toString()));
         name = propertyManager.resolveString(name);
     }
 
     public WebRequest buildWebRequest(final PropertyManager propertyManager) throws MalformedURLException
     {
         // fill everything with data
-        fillData(propertyManager);
+        fillDefaultData(propertyManager);
         // then resolve variables
         resolveValues(propertyManager);
         // build the webRequest
