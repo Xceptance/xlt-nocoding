@@ -28,16 +28,12 @@ public class LightWeigthAction extends Action
     @Override
     public void execute(final PropertyManager propertyManager) throws Throwable
     {
-        // First we initialize some variables
         final List<WebRequest> requestsOfSubrequest = buildWebRequestFromSubrequests(this.subrequests);
 
-        // TODO find a better place for this
-        this.request.fillData(propertyManager);
+        final WebAction action = new WebAction(this.getRequest().getName(), this.getRequest().buildWebRequest(propertyManager),
+                                               requestsOfSubrequest, propertyManager.getWebClient(),
+                                               (final WebAction webAction) -> doExecute(webAction));
 
-        final WebAction action = new WebAction(this.getRequest().getName(), this.getRequest().buildWebRequest(), requestsOfSubrequest,
-                                               propertyManager.getWebClient(), (final WebAction x) -> doExecute(x));
-
-        // TODO Talk about this
         try
         {
             // Execute the WebRequest in xlt

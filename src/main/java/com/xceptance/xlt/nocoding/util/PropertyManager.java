@@ -1,24 +1,28 @@
 package com.xceptance.xlt.nocoding.util;
 
+import com.xceptance.xlt.api.data.GeneralDataProvider;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.DefaultValue;
+import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
 public class PropertyManager
 {
-
     private final XltProperties properties;
 
     private final DataStorage dataStorage;
 
     private XltWebClient webClient;
 
+    private final VariableResolver resolver;
+
     public PropertyManager(final XltProperties properties, final DataStorage dataStorage)
     {
         this.properties = properties;
         this.dataStorage = dataStorage;
         this.webClient = new XltWebClient();
+        this.resolver = new VariableResolver(GeneralDataProvider.getInstance());
         // TODO in Config auslagern!
         webClient.getOptions().setRedirectEnabled(false);
     }
@@ -28,6 +32,9 @@ public class PropertyManager
         this.properties = properties;
         this.dataStorage = dataStorage;
         this.webClient = new XltWebClient();
+        this.resolver = new VariableResolver(GeneralDataProvider.getInstance());
+        // TODO in Config auslagern!
+        webClient.getOptions().setRedirectEnabled(false);
     }
 
     public XltProperties getProperties()
@@ -52,6 +59,11 @@ public class PropertyManager
     public XltWebClient getWebClient()
     {
         return webClient;
+    }
+
+    public String resolveString(final String toResolve)
+    {
+        return resolver.resolveString(toResolve, this);
     }
 
 }

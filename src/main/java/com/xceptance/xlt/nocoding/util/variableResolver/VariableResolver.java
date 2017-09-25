@@ -12,10 +12,32 @@ import bsh.Interpreter;
 
 public class VariableResolver
 {
+    /**
+     * The pattern for finding variables
+     */
+    private final static Pattern PARAMETER_PATTERN = Pattern.compile("\\$\\{[^\\{\\}]*\\}");
 
-    public static Interpreter interpreter = new Interpreter();
+    public Interpreter interpreter;
 
-    static
+    public VariableResolver(final GeneralDataProvider dataProvider)
+    {
+        interpreter = new Interpreter();
+        try
+        {
+            interpreter.set("NOW", new ParameterInterpreterNow());
+            interpreter.set("RANDOM", new ParameterInterpreterRandom());
+            interpreter.set("DATE", new Date());
+            interpreter.set("DATA", dataProvider);
+        }
+        catch (final EvalError e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    // TODO remove?
+    public VariableResolver()
     {
         interpreter = new Interpreter();
         try
@@ -33,11 +55,6 @@ public class VariableResolver
     }
 
     /**
-     * The pattern for finding variables
-     */
-    private final static Pattern parameterPattern = Pattern.compile("\\$\\{[^\\{\\}]*\\}");
-
-    /**
      * Resolves string recursively from the inside to the outside
      * 
      * @param toResolve
@@ -47,11 +64,11 @@ public class VariableResolver
      * @return The resolved String
      * @throws EvalError
      */
-    public static String resolveString(final String toResolve, final PropertyManager propertyManager)
+    public String resolveString(final String toResolve, final PropertyManager propertyManager)
     {
         // Set replacement to our toResolve string
         String replacement = toResolve;
-        final Matcher matcher = parameterPattern.matcher(toResolve);
+        final Matcher matcher = PARAMETER_PATTERN.matcher(toResolve);
 
         while (matcher.find())
         {
@@ -74,10 +91,7 @@ public class VariableResolver
                 }
                 catch (final EvalError e)
                 {
-                    if (!e.getClass().equals(NullPointerException.class.getClass()))
-                    {
-                        throw new RuntimeException("variable", e);
-                    }
+                    throw new RuntimeException("Evaluation Error: ", e);
                 }
             }
 

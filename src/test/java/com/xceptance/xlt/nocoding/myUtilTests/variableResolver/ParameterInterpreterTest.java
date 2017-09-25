@@ -40,62 +40,63 @@ public class ParameterInterpreterTest
     public void setup()
     {
         propertyManager = new PropertyManager(XltProperties.getInstance(), new DataStorage());
+        interpreter = new VariableResolver();
     }
 
     @Test
     public void noParams() throws EvalError
     {
         final String toResolve = "No data here.";
-        Assert.assertEquals(toResolve, VariableResolver.resolveString(toResolve, propertyManager));
+        Assert.assertEquals(toResolve, interpreter.resolveString(toResolve, propertyManager));
     }
 
     @Test
     public void emptyParams()
     {
         final String toResolve = "No ${} here.";
-        Assert.assertEquals(toResolve, VariableResolver.resolveString(toResolve, propertyManager));
+        Assert.assertEquals(toResolve, interpreter.resolveString(toResolve, propertyManager));
     }
 
     @Test
     public void emptyParams_Spaces()
     {
         final String toResolve = "No ${  } here.";
-        Assert.assertEquals(toResolve, VariableResolver.resolveString(toResolve, propertyManager));
+        Assert.assertEquals(toResolve, interpreter.resolveString(toResolve, propertyManager));
     }
 
     @Test
     public void javaCall()
     {
         final String toResolve = "No ${Math.abs(-1)} here.";
-        Assert.assertEquals("No 1 here.", VariableResolver.resolveString(toResolve, propertyManager));
+        Assert.assertEquals("No 1 here.", interpreter.resolveString(toResolve, propertyManager));
     }
 
     @Test
     public void twoOccurences()
     {
         final String toResolve = "No ${Math.abs(-1)} here and ${Math.abs(-2)} here.";
-        Assert.assertEquals("No 1 here and 2 here.", VariableResolver.resolveString(toResolve, propertyManager));
+        Assert.assertEquals("No 1 here and 2 here.", interpreter.resolveString(toResolve, propertyManager));
     }
 
     @Test
     public void keepState()
     {
         final String toResolve = "No ${m = Math.abs(-1)} here and ${m + Math.abs(-2)} here.";
-        Assert.assertEquals("No 1 here and 3 here.", VariableResolver.resolveString(toResolve, propertyManager));
+        Assert.assertEquals("No 1 here and 3 here.", interpreter.resolveString(toResolve, propertyManager));
     }
 
     @Test
     public void stateAcrossCalls()
     {
-        Assert.assertEquals("No 1 here.", VariableResolver.resolveString("No ${m = Math.abs(-1)} here.", propertyManager));
-        Assert.assertEquals("No 2 here.", VariableResolver.resolveString("No ${m = m + Math.abs(-1)} here.", propertyManager));
+        Assert.assertEquals("No 1 here.", interpreter.resolveString("No ${m = Math.abs(-1)} here.", propertyManager));
+        Assert.assertEquals("No 2 here.", interpreter.resolveString("No ${m = m + Math.abs(-1)} here.", propertyManager));
     }
 
     @Test
     public void prePopulated()
     {
         final String toResolve = "No ${m = Math.abs(-1)} here and ${m + Math.abs(-2)} here.";
-        Assert.assertEquals("No 1 here and 3 here.", VariableResolver.resolveString(toResolve, propertyManager));
+        Assert.assertEquals("No 1 here and 3 here.", interpreter.resolveString(toResolve, propertyManager));
     }
     //
     // @Test
@@ -144,13 +145,13 @@ public class ParameterInterpreterTest
     @Test
     public void invalidEnd()
     {
-        Assert.assertEquals("Text${a", VariableResolver.resolveString("Text${a", propertyManager));
+        Assert.assertEquals("Text${a", interpreter.resolveString("Text${a", propertyManager));
     }
 
     @Test
     public void invalidStart()
     {
-        Assert.assertEquals("Text$ {a}", VariableResolver.resolveString("Text$ {a}", propertyManager));
+        Assert.assertEquals("Text$ {a}", interpreter.resolveString("Text$ {a}", propertyManager));
     }
 
     @Test
@@ -159,8 +160,8 @@ public class ParameterInterpreterTest
         // Assert.assertEquals("Text{", VariableResolver.resolveString("Text${'{'}", propertyManager));
         // Assert.assertEquals("Text}", VariableResolver.resolveString("Text${'}'}", propertyManager));
         Assert.assertEquals("TTe2t-TA12000",
-                            VariableResolver.resolveString("T${java.text.MessageFormat.format(\"Te{0}t\",2)}-T${java.text.MessageFormat.format(\"A{0}{1}\",1, 2)}000",
-                                                           propertyManager));
+                            interpreter.resolveString("T${java.text.MessageFormat.format(\"Te{0}t\",2)}-T${java.text.MessageFormat.format(\"A{0}{1}\",1, 2)}000",
+                                                      propertyManager));
     }
 
 }

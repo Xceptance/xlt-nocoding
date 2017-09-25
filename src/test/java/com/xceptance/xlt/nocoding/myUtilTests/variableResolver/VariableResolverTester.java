@@ -13,6 +13,8 @@ public class VariableResolverTester
 
     public PropertyManager propertyManager;
 
+    public VariableResolver interpreter;
+
     @Before
     public void init()
     {
@@ -20,6 +22,7 @@ public class VariableResolverTester
         final DataStorage dataStorage = propertyManager.getDataStorage();
         dataStorage.storeVariable("host", "https://localhost:8443/posters/");
         dataStorage.storeVariable("blub", "s");
+        interpreter = new VariableResolver();
     }
 
     @Test
@@ -28,29 +31,29 @@ public class VariableResolverTester
         try
         {
             String resolved;
-            // resolved = VariableResolver.resolveString("${host}", propertyManager);
-            // Assert.assertEquals("https://localhost:8443/posters/", resolved);
-            // resolved = VariableResolver.resolveString("${host}${host}", propertyManager);
-            // Assert.assertEquals("https://localhost:8443/posters/https://localhost:8443/posters/", resolved);
-            //
-            // resolved = VariableResolver.resolveString("${ho${blub}t}", propertyManager);
-            // Assert.assertEquals("https://localhost:8443/posters/", resolved);
-            // resolved = VariableResolver.resolveString("${ho${blub}t}${host}", propertyManager);
-            // Assert.assertEquals("https://localhost:8443/posters/https://localhost:8443/posters/", resolved);
-            //
-            // resolved = VariableResolver.resolveString("${ho${blub}t}${host}", propertyManager);
-            // Assert.assertEquals("https://localhost:8443/posters/https://localhost:8443/posters/", resolved);
-            //
-            // resolved = VariableResolver.resolveString("${RANDOM.Email()}", propertyManager);
-            // Assert.assertNotNull(resolved);
-            resolved = VariableResolver.resolveString("${DATA.getEmail()}", propertyManager);
+            resolved = interpreter.resolveString("${host}", propertyManager);
+            Assert.assertEquals("https://localhost:8443/posters/", resolved);
+            resolved = interpreter.resolveString("${host}${host}", propertyManager);
+            Assert.assertEquals("https://localhost:8443/posters/https://localhost:8443/posters/", resolved);
+
+            resolved = interpreter.resolveString("${ho${blub}t}", propertyManager);
+            Assert.assertEquals("https://localhost:8443/posters/", resolved);
+            resolved = interpreter.resolveString("${ho${blub}t}${host}", propertyManager);
+            Assert.assertEquals("https://localhost:8443/posters/https://localhost:8443/posters/", resolved);
+
+            resolved = interpreter.resolveString("${ho${blub}t}${host}", propertyManager);
+            Assert.assertEquals("https://localhost:8443/posters/https://localhost:8443/posters/", resolved);
+
+            resolved = interpreter.resolveString("${NOW.toString()}", propertyManager);
+            Assert.assertNotNull(resolved);
+            System.out.println(resolved);
+            resolved = interpreter.resolveString("${NOW.toString()}", propertyManager);
             Assert.assertNotNull(resolved);
             System.out.println(resolved);
 
-            // resolved = VariableResolver.resolveString("${NOW.toString()}", propertyManager);
-            // Assert.assertNotNull(resolved);
-            // System.out.println(resolved);
-            // resolved = VariableResolver.resolveString("${NOW.toString()}", propertyManager);
+            resolved = interpreter.resolveString("${RANDOM.Email()}", propertyManager);
+            Assert.assertNotNull(resolved);
+            // resolved = interpreter.resolveString("${DATA.getEmail()}", propertyManager);
             // Assert.assertNotNull(resolved);
             // System.out.println(resolved);
         }

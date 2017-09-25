@@ -13,9 +13,9 @@ import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 public class Request
 {
-    private final String name;
+    private String name;
 
-    private final String urlAsString;
+    private String urlAsString;
 
     private HttpMethod httpmethod;
 
@@ -120,7 +120,7 @@ public class Request
     /**
      * Fills in the default values for each attribute
      */
-    public void fillData(final PropertyManager propertyManager)
+    private void fillData(final PropertyManager propertyManager)
     {
         final DataStorage globalStorage = propertyManager.getDataStorage();
         if (this.getHttpmethod() == null)
@@ -146,8 +146,25 @@ public class Request
         }
     }
 
-    public WebRequest buildWebRequest() throws MalformedURLException
+    private void resolveValues(final PropertyManager propertyManager)
     {
+        name = propertyManager.resolveString(name);
+        urlAsString = propertyManager.resolveString(urlAsString);
+        body = propertyManager.resolveString(body);
+
+        // TODO look over this
+        // isXhr = Boolean.getBoolean(propertyManager.resolveString(isXhr.toString()));
+        name = propertyManager.resolveString(name);
+    }
+
+    public WebRequest buildWebRequest(final PropertyManager propertyManager) throws MalformedURLException
+    {
+        // fill everything with data
+        fillData(propertyManager);
+        // then resolve variables
+        resolveValues(propertyManager);
+        // build the webRequest
+
         if (isEncodeBody() != null && isEncodeBody())
         {
             encodeBody();
