@@ -157,6 +157,7 @@ public class ParameterInterpreterTest
     @Test
     public void invalidMoreCurlyBraces()
     {
+        // TODO '{' soll als String interpretiert werden
         // Assert.assertEquals("Text{", VariableResolver.resolveString("Text${'{'}", propertyManager));
         // Assert.assertEquals("Text}", VariableResolver.resolveString("Text${'}'}", propertyManager));
         Assert.assertEquals("TTe2t-TA12000",

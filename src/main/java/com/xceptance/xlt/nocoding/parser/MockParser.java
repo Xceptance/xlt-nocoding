@@ -26,7 +26,7 @@ public class MockParser implements Parser
     public List<ScriptItem> parse()
     {
         // TODO Auto-generated method stub
-        return this.parseEasy();
+        return this.parseMediumLogin();
     }
 
     /**
@@ -41,7 +41,7 @@ public class MockParser implements Parser
          */
         final Map<String, String> variables = new HashMap<String, String>();
         variables.put(Constants.NAME, "Visit Homepage");
-        variables.put(Constants.URL, "https://localhost:8443/posters");
+        variables.put(Constants.URL, "${host}");
         variables.put(Constants.METHOD, "GET");
         variables.put(Constants.PARAMETERS, null);
         variables.put(Constants.BODY, null);
@@ -108,7 +108,10 @@ public class MockParser implements Parser
     private List<ScriptItem> parseMedium()
     {
         final List<ScriptItem> itemList = new ArrayList<ScriptItem>();
-        final Request request = new Request("https://localhost:8443/posters/", "Visit Homepage");
+        final Map<String, String> variables = new HashMap<String, String>();
+        variables.put(Constants.NAME, "Visit Homepage");
+        variables.put(Constants.URL, "https://localhost:8443/posters/");
+        final Request request = new Request(variables);
 
         // final Subrequest subrequest = new Subrequest();
         final ScriptItem actionItem = new LightWeigthAction(request, null, null);
@@ -124,7 +127,10 @@ public class MockParser implements Parser
     private List<ScriptItem> parseHard()
     {
         final List<ScriptItem> itemList = new ArrayList<ScriptItem>();
-        final Request request = new Request("${host}/posters/", "Visit Homepage");
+        final Map<String, String> variables = new HashMap<String, String>();
+        variables.put(Constants.NAME, "Visit Homepage");
+        variables.put(Constants.URL, "${host}/posters/");
+        final Request request = new Request(variables);
 
         // final Subrequest subrequest = new Subrequest();
         final ScriptItem actionItem = new LightWeigthAction(request, null, null);
@@ -143,10 +149,11 @@ public class MockParser implements Parser
         /**
          * Request
          */
+
         final Request request1 = new Request("https://localhost:8443/posters/", "Open Website");
         final Request request2 = new Request("https://localhost:8443/posters/login", "Go to Login");
         final Request request3 = new Request("https://localhost:8443/posters/login", "login");
-        request3.setHttpmethod(HttpMethod.POST);
+        request3.setHttpmethod(HttpMethod.POST.toString());
         final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
         parameters.add(new NameValuePair("email", "john@doe.com"));
         parameters.add(new NameValuePair("password", "topsecret"));

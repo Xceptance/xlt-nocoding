@@ -23,7 +23,7 @@ public class PropertyManager
         this.dataStorage = dataStorage;
         this.webClient = new XltWebClient();
         this.resolver = new VariableResolver(GeneralDataProvider.getInstance());
-        // TODO in Config auslagern!
+        // TODO in Config auslagern! -> Damit funktioniert außerdem nicht mehr der EasyTestcase
         webClient.getOptions().setRedirectEnabled(false);
     }
 

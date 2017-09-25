@@ -25,6 +25,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
     public void initialize()
     {
         final DataStorage globalStore = new DataStorage();
+        globalStore.storeVariable("host", "https://localhost:8443");
         propertyManager = new PropertyManager(XltProperties.getInstance(), globalStore);
         // TODO write in constructor?
         propertyManager.getDataStorage().loadDefaultConfig();

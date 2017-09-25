@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -18,11 +19,19 @@ import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 public class Request
 {
-
+    /**
+     * The name of the WebAction
+     */
     private String name;
 
+    /**
+     * The URL of the website as String
+     */
     private String urlAsString;
 
+    /**
+     * The HttpMethod for the webrequest
+     */
     private HttpMethod httpmethod;
 
     private Boolean isXhr;
@@ -44,90 +53,218 @@ public class Request
         this.variables = variables;
     }
 
+    /**
+     * Simple constructor so we do not have to build a variable map when we want to fire basic requests
+     * 
+     * @param url
+     *            The URL of the website
+     * @param name
+     *            The name of the action
+     */
     public Request(final String url, final String name)
     {
-        this.urlAsString = url;
-        this.name = name;
         this.variables = new HashMap<String, String>();
+        variables.put(Constants.URL, url);
+        variables.put(Constants.NAME, name);
     }
 
     public HttpMethod getHttpmethod()
     {
-        return httpmethod;
+        HttpMethod method = null;
+        if (httpmethod == null && variables.containsKey(Constants.METHOD))
+        {
+            method = HttpMethod.valueOf(variables.get(Constants.METHOD));
+        }
+        else if (httpmethod != null)
+        {
+            method = httpmethod;
+        }
+        return method;
     }
 
-    public void setHttpmethod(final HttpMethod httpmethod)
+    public void setHttpmethod(final String httpmethod)
     {
-        this.httpmethod = httpmethod;
+        variables.put(Constants.METHOD, httpmethod);
     }
 
     public Boolean isXhr()
     {
+        Boolean isXhr = null;
+        if (this.isXhr == null && variables.containsKey(Constants.XHR))
+        {
+            isXhr = Boolean.valueOf(variables.get(Constants.XHR));
+        }
+        else if (this.isXhr != null)
+        {
+            isXhr = this.isXhr;
+        }
         return isXhr;
     }
 
-    public void setXhr(final boolean isXhr)
+    public void setXhr(final String isXhr)
     {
-        this.isXhr = isXhr;
+        variables.put(Constants.XHR, isXhr);
     }
 
     public Boolean isEncodeParameters()
     {
+        Boolean encodeParameters = null;
+        if (this.encodeParameters == null && variables.containsKey(Constants.ENCODEPARAMETERS))
+        {
+            encodeParameters = Boolean.valueOf(variables.get(Constants.ENCODEPARAMETERS));
+        }
+        else if (this.encodeParameters != null)
+        {
+            encodeParameters = this.encodeParameters;
+        }
         return encodeParameters;
     }
 
-    public void setEncodeParameters(final boolean encodeParameters)
+    public void setEncodeParameters(final String encodeParameters)
     {
-        this.encodeParameters = encodeParameters;
+        variables.put(Constants.ENCODEPARAMETERS, encodeParameters);
     }
 
     public List<NameValuePair> getParameters()
     {
+        List<NameValuePair> parameters = null;
+        if (this.parameters == null && variables.containsKey(Constants.PARAMETERS))
+        {
+            parameters = new ArrayList<NameValuePair>();
+            String variable = variables.get(Constants.PARAMETERS);
+            while (variable != null && !variable.isEmpty())
+            {
+                final String name = StringUtils.substringBefore(variable, Constants.PARAMETER_NAME_VALUE_SEPARATOR);
+                variable = StringUtils.remove(variable, name + Constants.PARAMETER_NAME_VALUE_SEPARATOR);
+                final String value = StringUtils.substringBefore(variable, Constants.PARAMETER_PAIR_SEPARATOR);
+                variable = StringUtils.remove(variable, value + Constants.PARAMETER_PAIR_SEPARATOR);
+                parameters.add(new NameValuePair(name, value));
+            }
+        }
+        else if (this.parameters != null)
+        {
+            parameters = this.parameters;
+        }
         return parameters;
     }
 
     public void setParameters(final List<NameValuePair> parameters)
     {
-        this.parameters = parameters;
+        String value = "";
+        final Iterator<NameValuePair> iterator = parameters.iterator();
+        while (iterator.hasNext())
+        {
+            final NameValuePair parameter = iterator.next();
+            value += parameter.getName() + Constants.PARAMETER_NAME_VALUE_SEPARATOR + parameter.getValue();
+
+            // if this is not the last one, add a pair separator
+            if (iterator.hasNext())
+            {
+                value += Constants.PARAMETER_PAIR_SEPARATOR;
+            }
+        }
+        variables.put(Constants.PARAMETERS, value);
     }
 
     public Map<String, String> getHeaders()
     {
+        Map<String, String> headers = null;
+        if (this.headers == null && variables.containsKey(Constants.HEADERS))
+        {
+            headers = new HashMap<String, String>();
+            String variable = variables.get(Constants.HEADERS);
+            while (variable != null && !variable.isEmpty())
+            {
+                final String name = StringUtils.substringBefore(variable, Constants.HEADER_NAME_VALUE_SEPARATOR);
+                variable = StringUtils.remove(variable, name + Constants.HEADER_NAME_VALUE_SEPARATOR);
+                final String value = StringUtils.substringBefore(variable, Constants.HEADER_PAIR_SEPARATOR);
+                variable = StringUtils.remove(variable, value + Constants.HEADER_PAIR_SEPARATOR);
+                headers.put(name, value);
+            }
+        }
+        else if (this.headers != null)
+        {
+            headers = this.headers;
+        }
         return headers;
     }
 
     public void setHeaders(final Map<String, String> headers)
     {
-        this.headers = headers;
+        String value = "";
+
+        for (final Map.Entry<String, String> header : headers.entrySet())
+        {
+            value += header.getKey() + Constants.HEADER_NAME_VALUE_SEPARATOR + header.getValue() + Constants.HEADER_PAIR_SEPARATOR;
+        }
+        // remove the last header pair separator
+        value = value.substring(0, value.length() - 1);
+        variables.put(Constants.HEADERS, value);
     }
 
     public String getBody()
     {
+        String body = null;
+        if (this.body == null && variables.containsKey(Constants.BODY))
+        {
+            body = variables.get(Constants.BODY);
+        }
+        else if (this.body != null)
+        {
+            body = this.body;
+        }
         return body;
     }
 
     public void setBody(final String body)
     {
-        this.body = body;
+        variables.put(Constants.BODY, body);
     }
 
     public Boolean isEncodeBody()
     {
+        Boolean encodeBody = null;
+        if (this.encodeBody == null && variables.containsKey(Constants.ENCODEBODY))
+        {
+            encodeBody = Boolean.valueOf(variables.get(Constants.ENCODEBODY));
+        }
+        else if (this.encodeBody != null)
+        {
+            encodeBody = this.encodeBody;
+        }
         return encodeBody;
     }
 
-    public void setEncodeBody(final boolean encodeBody)
+    public void setEncodeBody(final String encodeBody)
     {
-        this.encodeBody = encodeBody;
+        variables.put(Constants.ENCODEBODY, encodeBody);
     }
 
     public String getUrl()
     {
+        String urlAsString = null;
+        if (this.urlAsString == null && variables.containsKey(Constants.URL))
+        {
+            urlAsString = variables.get(Constants.URL);
+        }
+        else if (this.urlAsString != null)
+        {
+            urlAsString = this.urlAsString;
+        }
         return urlAsString;
     }
 
     public String getName()
     {
+        String name = null;
+        if (this.name == null && variables.containsKey(Constants.NAME))
+        {
+            name = variables.get(Constants.NAME);
+        }
+        else if (this.name != null)
+        {
+            name = this.name;
+        }
         return name;
     }
 
@@ -154,19 +291,19 @@ public class Request
             // this.httpmethod = HttpMethod.valueOf(method);
 
         }
-        if (this.isXhr == null)
+        if (this.isXhr() == null)
         {
             variables.put(Constants.XHR, globalStorage.getConfigItemByKey(Constants.XHR));
             // final String isXhr = globalStorage.getConfigItemByKey(Constants.XHR);
             // this.isXhr = Boolean.valueOf(isXhr);
         }
-        if (this.encodeParameters == null)
+        if (this.isEncodeParameters() == null)
         {
             variables.put(Constants.ENCODEPARAMETERS, globalStorage.getConfigItemByKey(Constants.ENCODEPARAMETERS));
             // final String encodeParameters = globalStorage.getConfigItemByKey(Constants.ENCODEPARAMETERS);
             // this.encodeParameters = Boolean.valueOf(encodeParameters);
         }
-        if (this.encodeBody == null)
+        if (this.isEncodeBody() == null)
         {
             variables.put(Constants.ENCODEBODY, globalStorage.getConfigItemByKey(Constants.ENCODEBODY));
             // final String encodeBody = globalStorage.getConfigItemByKey(Constants.ENCODEBODY);
@@ -177,46 +314,65 @@ public class Request
     private void resolveValues(final PropertyManager propertyManager)
     {
         // TODO Test these very throughly
+        // These have to be set!
         String variable = propertyManager.resolveString(variables.get(Constants.NAME));
         name = variable;
         variable = propertyManager.resolveString(variables.get(Constants.URL));
         urlAsString = variable;
         variable = propertyManager.resolveString(variables.get(Constants.METHOD));
         httpmethod = HttpMethod.valueOf(variable);
-        variable = propertyManager.resolveString(variables.get(Constants.XHR));
-        isXhr = Boolean.valueOf(variable);
-        variable = propertyManager.resolveString(variables.get(Constants.ENCODEPARAMETERS));
-        encodeParameters = Boolean.valueOf(variable);
 
-        variable = propertyManager.resolveString(variables.get(Constants.PARAMETERS));
-        final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-        while (variable != null && !variable.isEmpty())
+        if (variables.containsKey(Constants.XHR))
         {
-            final String name = StringUtils.substringBefore(variable, Constants.PARAMETER_NAME_VALUE_SEPARATOR);
-            StringUtils.remove(variable, name + Constants.PARAMETER_NAME_VALUE_SEPARATOR);
-            final String value = StringUtils.substringBefore(variable, Constants.PARAMETER_PAIR_SEPARATOR);
-            StringUtils.remove(variable, value + Constants.PARAMETER_PAIR_SEPARATOR);
-            parameters.add(new NameValuePair(name, value));
+            variable = propertyManager.resolveString(variables.get(Constants.XHR));
+            isXhr = Boolean.valueOf(variable);
         }
-        this.parameters = parameters;
-
-        variable = propertyManager.resolveString(variables.get(Constants.HEADERS));
-        final Map<String, String> headers = new HashMap<String, String>();
-        while (variable != null && !variable.isEmpty())
+        if (variables.containsKey(Constants.ENCODEPARAMETERS))
         {
-            final String name = StringUtils.substringBefore(variable, Constants.HEADER_NAME_VALUE_SEPARATOR);
-            StringUtils.remove(variable, name + Constants.HEADER_NAME_VALUE_SEPARATOR);
-            final String value = StringUtils.substringBefore(variable, Constants.HEADER_PAIR_SEPARATOR);
-            StringUtils.remove(variable, value + Constants.HEADER_PAIR_SEPARATOR);
-            headers.put(name, value);
+            variable = propertyManager.resolveString(variables.get(Constants.ENCODEPARAMETERS));
+            encodeParameters = Boolean.valueOf(variable);
         }
-        this.headers = headers;
 
-        // TODO Body und encode body
-        variable = propertyManager.resolveString(variables.get(Constants.ENCODEBODY));
-        encodeBody = Boolean.valueOf(variable);
-        variable = propertyManager.resolveString(variables.get(Constants.BODY));
-        body = variable;
+        if (variables.containsKey(Constants.PARAMETERS))
+        {
+            variable = propertyManager.resolveString(variables.get(Constants.PARAMETERS));
+            final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+            while (variable != null && !variable.isEmpty())
+            {
+                final String name = StringUtils.substringBefore(variable, Constants.PARAMETER_NAME_VALUE_SEPARATOR);
+                variable = StringUtils.remove(variable, name + Constants.PARAMETER_NAME_VALUE_SEPARATOR);
+                final String value = StringUtils.substringBefore(variable, Constants.PARAMETER_PAIR_SEPARATOR);
+                variable = StringUtils.remove(variable, value + Constants.PARAMETER_PAIR_SEPARATOR);
+                parameters.add(new NameValuePair(name, value));
+            }
+            this.parameters = parameters;
+        }
+
+        if (variables.containsKey(Constants.HEADERS))
+        {
+            variable = propertyManager.resolveString(variables.get(Constants.HEADERS));
+            final Map<String, String> headers = new HashMap<String, String>();
+            while (variable != null && !variable.isEmpty())
+            {
+                final String name = StringUtils.substringBefore(variable, Constants.HEADER_NAME_VALUE_SEPARATOR);
+                variable = StringUtils.remove(variable, name + Constants.HEADER_NAME_VALUE_SEPARATOR);
+                final String value = StringUtils.substringBefore(variable, Constants.HEADER_PAIR_SEPARATOR);
+                variable = StringUtils.remove(variable, value + Constants.HEADER_PAIR_SEPARATOR);
+                headers.put(name, value);
+            }
+            this.headers = headers;
+        }
+
+        if (variables.containsKey(Constants.ENCODEBODY))
+        {
+            variable = propertyManager.resolveString(variables.get(Constants.ENCODEBODY));
+            encodeBody = Boolean.valueOf(variable);
+        }
+        if (variables.containsKey(Constants.BODY))
+        {
+            variable = propertyManager.resolveString(variables.get(Constants.BODY));
+            body = variable;
+        }
     }
 
     public WebRequest buildWebRequest(final PropertyManager propertyManager) throws MalformedURLException

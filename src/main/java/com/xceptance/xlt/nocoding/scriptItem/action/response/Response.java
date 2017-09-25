@@ -1,6 +1,8 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.AbstractResponseStore;
@@ -11,11 +13,13 @@ public class Response
 {
     public static int DEFAULT_HTTPCODE = 200;
 
-    private final Integer httpcode;
+    private Integer httpcode;
 
-    private final List<AbstractResponseStore> responseStore;
+    private List<AbstractResponseStore> responseStore;
 
-    private final List<AbstractValidator> validation;
+    private List<AbstractValidator> validation;
+
+    public Map<String, String> variables;
 
     public Response(final List<AbstractResponseStore> responseStore, final List<AbstractValidator> validation)
     {
@@ -27,19 +31,40 @@ public class Response
         this.httpcode = httpcode;
         this.responseStore = responseStore;
         this.validation = validation;
+        variables = new HashMap<String, String>();
     }
 
     public Response()
     {
-        httpcode = DEFAULT_HTTPCODE;
-        responseStore = null;
-        validation = null;
+        this(DEFAULT_HTTPCODE, null, null);
+    }
+
+    public Response(final Map<String, String> variables)
+    {
+        this.variables = variables;
     }
 
     public void execute(final PropertyManager propertyManager, final WebResponse webResponse) throws Exception
     {
-        this.validate(propertyManager, webResponse);
-        this.store(propertyManager, webResponse);
+        // fill everything with data
+        fillDefaultData(propertyManager);
+        // then resolve variables
+        resolveValues(propertyManager);
+        // build the webRequest
+        validate(propertyManager, webResponse);
+        store(propertyManager, webResponse);
+    }
+
+    private void fillDefaultData(final PropertyManager propertyManager)
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    private void resolveValues(final PropertyManager propertyManager)
+    {
+        // TODO Auto-generated method stub
+
     }
 
     public void validate(final PropertyManager propertyManager, final WebResponse webResponse) throws Exception
