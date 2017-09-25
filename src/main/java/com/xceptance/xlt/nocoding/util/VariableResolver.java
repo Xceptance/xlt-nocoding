@@ -54,42 +54,45 @@ public class VariableResolver
      */
     public static String resolveString(final String toResolve, final PropertyManager propertyManager)
     {
-        // set replacement to our toResolve string
+        // Set replacement to our toResolve string
         String replacement = toResolve;
         final Matcher matcher = parameterPattern.matcher(toResolve);
-        // TODO Das hier muss rekursiv werden, auch $Random, BeanShell kann rekursiv sein
+
         while (matcher.find())
         {
             final String foundVariable = matcher.group();
             // Remove ${ and }
-            final String resolvedTarget = foundVariable.substring(2, foundVariable.length() - 1);
-            // Is this a DATA. or RANDOM. expression
-
-            // try to find it in the storage
-            String resolvedValue = propertyManager.getDataStorage().searchFor(resolvedTarget);
-            // if we didn't find it, ask beanshell
+            final String resolvedVariable = foundVariable.substring(2, foundVariable.length() - 1);
+            // Search in the storage for the variable
+            String resolvedValue = propertyManager.getDataStorage().searchFor(resolvedVariable);
+            // if we didn't find it, let beanshell handle the variable
             if (resolvedValue == null)
             {
                 try
                 {
-                    resolvedValue = (String) interpreter.eval(resolvedTarget);
+                    final Object beanShellEval = interpreter.eval(resolvedVariable);
+                    // if beanshell found something, we save it as a string
+                    if (beanShellEval != null)
+                    {
+                        resolvedValue = beanShellEval.toString();
+                    }
                 }
                 catch (final EvalError e)
                 {
-                    // TODO fancy things in here pls
-                    throw new RuntimeException("variabl", e);
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    if (!e.getClass().equals(NullPointerException.class.getClass()))
+                    {
+                        throw new RuntimeException("variable", e);
+                    }
                 }
             }
 
-            // finally replace it
+            // Replace the resolved value
             if (foundVariable != null && resolvedValue != null)
             {
                 replacement = toResolve.replace(foundVariable, resolvedValue);
+                // Finally resolve other placeholders
+                replacement = resolveString(replacement, propertyManager);
             }
-            // Finally resolve other placeholders
-            replacement = resolveString(replacement, propertyManager);
         }
 
         return replacement;
