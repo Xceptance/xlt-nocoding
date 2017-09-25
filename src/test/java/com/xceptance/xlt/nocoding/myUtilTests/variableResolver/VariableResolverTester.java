@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.xceptance.xlt.nocoding.util.PropertyManager;
-import com.xceptance.xlt.nocoding.util.DataStorage.DataStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
 public class VariableResolverTester

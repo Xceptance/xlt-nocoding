@@ -11,7 +11,7 @@ import com.xceptance.xlt.nocoding.parser.MockParser;
 import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.util.PropertyManager;
-import com.xceptance.xlt.nocoding.util.DataStorage.DataStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 public abstract class AbstractURLTestCase extends AbstractTestCase
 {

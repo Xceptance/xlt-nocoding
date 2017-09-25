@@ -22,7 +22,7 @@ import org.junit.Test;
 
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.util.PropertyManager;
-import com.xceptance.xlt.nocoding.util.DataStorage.DataStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
 import bsh.EvalError;

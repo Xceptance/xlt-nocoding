@@ -9,7 +9,7 @@ import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.util.PropertyManager;
-import com.xceptance.xlt.nocoding.util.DataStorage.DataStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 public class Request
 {

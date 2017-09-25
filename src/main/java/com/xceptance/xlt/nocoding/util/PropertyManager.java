@@ -2,8 +2,8 @@ package com.xceptance.xlt.nocoding.util;
 
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.engine.XltWebClient;
-import com.xceptance.xlt.nocoding.util.DataStorage.DataStorage;
-import com.xceptance.xlt.nocoding.util.DataStorage.DefaultValue;
+import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.DefaultValue;
 
 public class PropertyManager
 {

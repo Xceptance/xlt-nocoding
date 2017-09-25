@@ -14,7 +14,7 @@ import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
 import com.xceptance.xlt.nocoding.util.PropertyManager;
-import com.xceptance.xlt.nocoding.util.WebAction.WebAction;
+import com.xceptance.xlt.nocoding.util.webAction.WebAction;
 
 public class LightWeigthAction extends Action
 {

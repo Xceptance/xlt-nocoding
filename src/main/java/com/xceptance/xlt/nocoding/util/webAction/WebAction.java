@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.util.WebAction;
+package com.xceptance.xlt.nocoding.util.webAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +49,7 @@ public class WebAction extends AbstractWebAction
     @Override
     protected void execute() throws Exception
     {
+        // clear cache with the private method in WebClient, so we can fire a request twice in a run
         final Map<String, WebResponse> pageLocalCache = ReflectionUtils.readInstanceField(getWebClient(), "pageLocalCache");
         pageLocalCache.clear();
         function.accept(this);

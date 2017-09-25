@@ -13,13 +13,7 @@ import bsh.Interpreter;
 public class VariableResolver
 {
 
-    // TODO brauch ich nicht, siehe xlt -> (general)dataProvider
-    public static String dataDirectory = "/config/data/default";
-
     public static Interpreter interpreter = new Interpreter();
-
-    // TODO GeneralDataProvider einbinden
-    // public static DataProvider dataProvider = new DataProvider();
 
     static
     {
