@@ -17,7 +17,6 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.RegExpStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.AbstractValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.RegExpValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
-import com.xceptance.xlt.nocoding.util.Constants;
 
 public class MockParser implements Parser
 {
@@ -26,7 +25,7 @@ public class MockParser implements Parser
     public List<ScriptItem> parse()
     {
         // TODO Auto-generated method stub
-        return this.parseMediumLogin();
+        return this.parseHard();
     }
 
     /**
@@ -39,26 +38,14 @@ public class MockParser implements Parser
         /**
          * Request
          */
-        final Map<String, String> variables = new HashMap<String, String>();
-        variables.put(Constants.NAME, "Visit Homepage");
-        variables.put(Constants.URL, "${host}");
-        variables.put(Constants.METHOD, "GET");
-        variables.put(Constants.PARAMETERS, null);
-        variables.put(Constants.BODY, null);
-        variables.put(Constants.ENCODEBODY, "false");
-        variables.put(Constants.ENCODEPARAMETERS, "false");
-        variables.put(Constants.HEADERS, null);
-        variables.put(Constants.XHR, "false");
-
-        final Request request = new Request(variables);
-        // final Request request = new Request("https://localhost:8443/posters/", "Visit Homepage");
-        // request.setHttpmethod(HttpMethod.GET);
-        // request.setParameters(null);
-        // request.setBody(null);
-        // request.setEncodeBody(false);
-        // request.setEncodeParameters(false);
-        // request.setHeaders(null);
-        // request.setXhr(false);
+        final Request request = new Request("https://localhost:8443/posters/", "Visit Homepage");
+        request.setMethod(HttpMethod.GET.toString());
+        request.setParameters(null);
+        request.setBody(null);
+        request.setEncodeBody("false");
+        request.setEncodeParameters("false");
+        request.setHeaders(null);
+        request.setXhr("false");
 
         /**
          * Response
@@ -109,9 +96,7 @@ public class MockParser implements Parser
     {
         final List<ScriptItem> itemList = new ArrayList<ScriptItem>();
         final Map<String, String> variables = new HashMap<String, String>();
-        variables.put(Constants.NAME, "Visit Homepage");
-        variables.put(Constants.URL, "https://localhost:8443/posters/");
-        final Request request = new Request(variables);
+        final Request request = new Request("https://localhost:8443/posters/", "Visit Homepage");
 
         // final Subrequest subrequest = new Subrequest();
         final ScriptItem actionItem = new LightWeigthAction(request, null, null);
@@ -128,9 +113,7 @@ public class MockParser implements Parser
     {
         final List<ScriptItem> itemList = new ArrayList<ScriptItem>();
         final Map<String, String> variables = new HashMap<String, String>();
-        variables.put(Constants.NAME, "Visit Homepage");
-        variables.put(Constants.URL, "${host}/posters/");
-        final Request request = new Request(variables);
+        final Request request = new Request("${host}/posters/", "Visit Homepage");
 
         // final Subrequest subrequest = new Subrequest();
         final ScriptItem actionItem = new LightWeigthAction(request, null, null);
@@ -153,7 +136,7 @@ public class MockParser implements Parser
         final Request request1 = new Request("https://localhost:8443/posters/", "Open Website");
         final Request request2 = new Request("https://localhost:8443/posters/login", "Go to Login");
         final Request request3 = new Request("https://localhost:8443/posters/login", "login");
-        request3.setHttpmethod(HttpMethod.POST.toString());
+        request3.setMethod(HttpMethod.POST.toString());
         final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
         parameters.add(new NameValuePair("email", "john@doe.com"));
         parameters.add(new NameValuePair("password", "topsecret"));
