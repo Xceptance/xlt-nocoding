@@ -18,7 +18,6 @@ package com.xceptance.xlt.nocoding.myUtilTests.variableResolver;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.xceptance.xlt.api.util.XltProperties;
@@ -155,13 +154,12 @@ public class ParameterInterpreterTest
         Assert.assertEquals("Text$ {a}", interpreter.resolveString("Text$ {a}", propertyManager));
     }
 
-    @Ignore
     @Test
     public void invalidMoreCurlyBraces()
     {
         // TODO '{' soll als String interpretiert werden
-        // Assert.assertEquals("Text{", VariableResolver.resolveString("Text${'{'}", propertyManager));
-        // Assert.assertEquals("Text}", VariableResolver.resolveString("Text${'}'}", propertyManager));
+        Assert.assertEquals("Text{", interpreter.resolveString("Text${'{'}", propertyManager));
+        Assert.assertEquals("Text}", interpreter.resolveString("Text${'}'}", propertyManager));
         Assert.assertEquals("TTe2t-TA12000",
                             interpreter.resolveString("T${java.text.MessageFormat.format(\"Te{0}t\",2)}-T${java.text.MessageFormat.format(\"A{0}{1}\",1, 2)}000",
                                                       propertyManager));

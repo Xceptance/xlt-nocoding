@@ -1,9 +1,11 @@
 package com.xceptance.xlt.nocoding.util.variableResolver;
 
 import java.util.Date;
-import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import com.xceptance.xlt.api.data.GeneralDataProvider;
 import com.xceptance.xlt.nocoding.util.PropertyManager;
@@ -37,27 +39,15 @@ public class VariableResolver
         }
     }
 
-    // TODO remove?
     public VariableResolver()
     {
-        interpreter = new Interpreter();
-        try
-        {
-            interpreter.set("NOW", new ParameterInterpreterNow());
-            interpreter.set("RANDOM", new ParameterInterpreterRandom());
-            interpreter.set("DATE", new Date());
-            interpreter.set("DATA", GeneralDataProvider.getInstance());
-        }
-        catch (final EvalError e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        this(GeneralDataProvider.getInstance());
     }
 
     public String resolveString(final String toResolve, final PropertyManager propertyManager)
     {
-        return resolveStringNew(toResolve, propertyManager);
+        return resolveStringInAGoodWayHopefully(toResolve, propertyManager);
+        // return resolveStringNew(toResolve, propertyManager, 0, new Stack<Integer>());
     }
 
     /**
@@ -113,44 +103,83 @@ public class VariableResolver
         return replacement;
     }
 
-    static int recursionLevel = 0;
-
-    static Stack<Integer> recursiveLength = new Stack<Integer>();
-
-    public String resolveStringNew(final String toResolve, final PropertyManager propertyManager)
+    public String resolveStringInAGoodWayHopefully(final String toResolve, final PropertyManager propertyManager)
     {
-        final String toResolve_varDynamic = toResolve;
         String output = "";
-
-        for (int i = 0; i < toResolve_varDynamic.length(); i++)
+        // iterate over the whole String
+        for (int i = 0; i < toResolve.length(); i++)
         {
-            final char charAtPosition = toResolve_varDynamic.charAt(i);
-            // can there be a variable? is there a variable sign? is this followed by curly braces?
-            if (toResolve_varDynamic.length() >= i + 2 && charAtPosition == '$' && toResolve_varDynamic.charAt(i + 1) == '{')
-            {
-                // recursion
-                recursionLevel += 1;
-                System.out.println("Incrementing recursion to " + recursionLevel);
-                output += resolveStringNew(toResolve_varDynamic.substring(i + 2), propertyManager);
-                // since we found a variable, we are finished in this loop
-                recursionLevel -= 1;
-                System.out.println("Decrementing recursion to " + recursionLevel);
-                i += recursiveLength.pop() + 2;
+            // Save the current character
+            final char current = toResolve.charAt(i);
 
-            }
-            // did we encounter $ and { before }?
-            else if (charAtPosition == '}' && recursionLevel != 0)
+            if (current == '$')
             {
-                // We found a variable, so we need to save the length of the variable string
-                recursiveLength.push(i);
-                // Since this is a variable, we search for it in the dataStorage
-                if (propertyManager.getDataStorage().searchFor(output) != null)
+                // check for variable if there is another symbol
+                if (toResolve.length() > i + 1 && toResolve.charAt(i + 1) == '{')
                 {
-                    // resolve the value by overwriting output
-                    output = propertyManager.getDataStorage().getVariableByKey(output);
+                    // VARIABLE HANDLER
+                    // Raise i by two ( +1 -> {, +2 character after { )
+                    i = i + 2;
+                    // Search for variable in the new string and resolve it
+                    final Pair<String, Integer> resolvedPair = doRecursion(toResolve.substring(i), propertyManager);
+                    // Add the resolved variable to output
+                    output += resolvedPair.getLeft();
+                    // And raise i by the length of the variable name
+                    i += resolvedPair.getRight();
+
                 }
-                // if we didn't find it, we use beanshell
+                // happy path
                 else
+                {
+                    output += current;
+                }
+            }
+            else
+            {
+                output += current;
+            }
+        }
+        return output;
+    }
+
+    private Pair<String, Integer> doRecursion(final String toResolve, final PropertyManager propertyManager)
+    {
+        String output = "";
+        int length = 0;
+        // iterate over the whole String
+        for (int i = 0; i < toResolve.length(); i++)
+        {
+            // Save the current character
+            final char current = toResolve.charAt(i);
+
+            // If the current char is $, we might have found a variable
+            if (current == '$')
+            {
+                // check for variable if there is another symbol
+                if (toResolve.length() > i + 1 && toResolve.charAt(i + 1) == '{')
+                {
+                    // Raise i by two ( +1 -> {, +2 character after { )
+                    i = i + 2;
+                    final Pair<String, Integer> resolvedPair = doRecursion(toResolve.substring(i), propertyManager);
+                    // Add the resolved variable to output
+                    output += resolvedPair.getLeft();
+                    // And raise i by the length of the variable name
+                    i += resolvedPair.getRight();
+                }
+                // happy path
+                else
+                {
+                    output += current;
+                }
+            }
+            // We found a possible end
+            else if (current == '}')
+            {
+                // Since we are in this function, we did find a variable sign,
+                length = i;
+                String resolvedValue = propertyManager.getDataStorage().searchFor(output);
+                // if we didn't find it, let beanshell handle the variable
+                if (resolvedValue == null)
                 {
                     try
                     {
@@ -158,8 +187,13 @@ public class VariableResolver
                         // if beanshell found something, we save it as a string
                         if (beanShellEval != null)
                         {
-                            // resolve the value by overwriting output
-                            output = beanShellEval.toString();
+                            resolvedValue = beanShellEval.toString();
+                        }
+                        // BeanSheall doesn't know the variable, therefore we want the plain text
+                        else
+                        {
+                            // So we simply add ${ and } again.
+                            resolvedValue = "${" + output + "}";
                         }
                     }
                     catch (final EvalError e)
@@ -167,16 +201,25 @@ public class VariableResolver
                         throw new RuntimeException("Evaluation Error: ", e);
                     }
                 }
-                // and want to return
+
+                output = resolvedValue;
+                // we found a variable, therefore we are done
                 break;
             }
             else
             {
-                // normal case
-                output += charAtPosition;
+                output += current;
             }
         }
 
-        return output;
+        // handle missing ending curly brace aka }
+        if (output.equals(toResolve))
+        {
+            output = "${" + output;
+        }
+
+        final Pair<String, Integer> resolvedPair = new ImmutablePair<String, Integer>(output, length);
+        return resolvedPair;
     }
+
 }
