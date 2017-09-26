@@ -18,6 +18,7 @@ package com.xceptance.xlt.nocoding.myUtilTests.variableResolver;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.xceptance.xlt.api.util.XltProperties;
@@ -154,6 +155,7 @@ public class ParameterInterpreterTest
         Assert.assertEquals("Text$ {a}", interpreter.resolveString("Text$ {a}", propertyManager));
     }
 
+    @Ignore
     @Test
     public void invalidMoreCurlyBraces()
     {

@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.openqa.selenium.InvalidArgumentException;
+
 import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
@@ -31,6 +33,9 @@ public class Request
      */
     private String method;
 
+    /**
+     * Sets the WebRequest as Xhr request
+     */
     private String Xhr;
 
     private String encodeParameters;
@@ -148,7 +153,10 @@ public class Request
     }
 
     /**
-     * Fills in the default values for each attribute
+     * Fills in the default values for certain attributes
+     * 
+     * @param propertyManager
+     *            The propertyManager with the DataStorage
      */
     private void fillDefaultData(final PropertyManager propertyManager)
     {
@@ -175,7 +183,14 @@ public class Request
         }
     }
 
-    private void resolveValues(final PropertyManager propertyManager)
+    /**
+     * Tries to resolve all variables of non-null attributes. Variables are specified with by "${variable}".
+     * 
+     * @param propertyManager
+     *            The propertyManager with the DataStorage to use
+     * @throws InvalidArgumentException
+     */
+    private void resolveValues(final PropertyManager propertyManager) throws InvalidArgumentException
     {
         // Resolve name
         String resolvedValue = propertyManager.resolveString(getName());
@@ -187,20 +202,47 @@ public class Request
 
         // Resolve Httpmethod
         resolvedValue = propertyManager.resolveString(getMethod());
-        setMethod(resolvedValue);
+
+        // TODO [MEETING] In alter Suite wird darauf nicht geachtet, siehe auch weiter unten
+        if (HttpMethod.valueOf(resolvedValue) != null)
+        {
+            setMethod(resolvedValue);
+        }
+        else
+        {
+            throw new InvalidArgumentException("Httpmethod unknown");
+        }
 
         // Resolve (is)Xhr if it exists
         if (getXhr() != null)
         {
             resolvedValue = propertyManager.resolveString(getXhr());
-            setXhr(resolvedValue);
+            // confirm that the value is either false or true
+            if (resolvedValue.equalsIgnoreCase("false") || resolvedValue.equalsIgnoreCase("true"))
+            {
+                setXhr(resolvedValue);
+            }
+            // if the value is neither false nor true, throw an exception
+            else
+            {
+                throw new InvalidArgumentException("Xhr is neither true nor false");
+            }
         }
 
         // Resolve (is)EncodeParameters if it exists
         if (getEncodeParameters() != null)
         {
             resolvedValue = propertyManager.resolveString(getEncodeParameters());
-            setEncodeParameters(resolvedValue);
+            // confirm that the value is either false or true
+            if (resolvedValue.equalsIgnoreCase("false") || resolvedValue.equalsIgnoreCase("true"))
+            {
+                setEncodeParameters(resolvedValue);
+            }
+            // if the value is neither false nor true, throw an exception
+            else
+            {
+                throw new InvalidArgumentException("Xhr is neither true nor false");
+            }
         }
 
         // Resolve each parameter in parameters if they exist
@@ -239,7 +281,16 @@ public class Request
         if (getEncodeBody() != null)
         {
             resolvedValue = propertyManager.resolveString(getEncodeBody());
-            setEncodeBody(resolvedValue);
+            // confirm that the value is either false or true
+            if (resolvedValue.equalsIgnoreCase("false") || resolvedValue.equalsIgnoreCase("true"))
+            {
+                setEncodeBody(resolvedValue);
+            }
+            // if the value is neither false nor true, throw an exception
+            else
+            {
+                throw new InvalidArgumentException("Xhr is neither true nor false");
+            }
         }
 
         // Resolve Body
@@ -250,7 +301,15 @@ public class Request
         }
     }
 
-    public WebRequest buildWebRequest(final PropertyManager propertyManager) throws MalformedURLException
+    /**
+     * Builds the web request that is specified by this instance
+     * 
+     * @param propertyManager
+     *            The property manager that has the data storage
+     * @return WebRequest - The WebRequest that is generated based on the instance
+     * @throws MalformedURLException
+     */
+    public WebRequest buildWebRequest(final PropertyManager propertyManager) throws MalformedURLException, InvalidArgumentException
     {
         // fill in the default data if the attribute is not specified
         fillDefaultData(propertyManager);
@@ -258,7 +317,6 @@ public class Request
         resolveValues(propertyManager);
 
         // Finally build the webRequest
-
         if (getEncodeBody() != null && Boolean.valueOf(getEncodeBody()))
         {
             encodeBody();

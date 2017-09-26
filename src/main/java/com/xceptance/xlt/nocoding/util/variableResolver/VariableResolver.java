@@ -1,6 +1,7 @@
 package com.xceptance.xlt.nocoding.util.variableResolver;
 
 import java.util.Date;
+import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -54,6 +55,11 @@ public class VariableResolver
         }
     }
 
+    public String resolveString(final String toResolve, final PropertyManager propertyManager)
+    {
+        return resolveStringNew(toResolve, propertyManager);
+    }
+
     /**
      * Resolves string recursively from the inside to the outside
      * 
@@ -61,10 +67,10 @@ public class VariableResolver
      *            The String that you want to resolve
      * @param propertyManager
      *            The propertyManager with the global data storage inside
-     * @return The resolved String
+     * @return String - The resolved String
      * @throws EvalError
      */
-    public String resolveString(final String toResolve, final PropertyManager propertyManager)
+    public String resolveStringOld(final String toResolve, final PropertyManager propertyManager)
     {
         // Set replacement to our toResolve string
         String replacement = toResolve;
@@ -105,5 +111,72 @@ public class VariableResolver
         }
 
         return replacement;
+    }
+
+    static int recursionLevel = 0;
+
+    static Stack<Integer> recursiveLength = new Stack<Integer>();
+
+    public String resolveStringNew(final String toResolve, final PropertyManager propertyManager)
+    {
+        final String toResolve_varDynamic = toResolve;
+        String output = "";
+
+        for (int i = 0; i < toResolve_varDynamic.length(); i++)
+        {
+            final char charAtPosition = toResolve_varDynamic.charAt(i);
+            // can there be a variable? is there a variable sign? is this followed by curly braces?
+            if (toResolve_varDynamic.length() >= i + 2 && charAtPosition == '$' && toResolve_varDynamic.charAt(i + 1) == '{')
+            {
+                // recursion
+                recursionLevel += 1;
+                System.out.println("Incrementing recursion to " + recursionLevel);
+                output += resolveStringNew(toResolve_varDynamic.substring(i + 2), propertyManager);
+                // since we found a variable, we are finished in this loop
+                recursionLevel -= 1;
+                System.out.println("Decrementing recursion to " + recursionLevel);
+                i += recursiveLength.pop() + 2;
+
+            }
+            // did we encounter $ and { before }?
+            else if (charAtPosition == '}' && recursionLevel != 0)
+            {
+                // We found a variable, so we need to save the length of the variable string
+                recursiveLength.push(i);
+                // Since this is a variable, we search for it in the dataStorage
+                if (propertyManager.getDataStorage().searchFor(output) != null)
+                {
+                    // resolve the value by overwriting output
+                    output = propertyManager.getDataStorage().getVariableByKey(output);
+                }
+                // if we didn't find it, we use beanshell
+                else
+                {
+                    try
+                    {
+                        final Object beanShellEval = interpreter.eval(output);
+                        // if beanshell found something, we save it as a string
+                        if (beanShellEval != null)
+                        {
+                            // resolve the value by overwriting output
+                            output = beanShellEval.toString();
+                        }
+                    }
+                    catch (final EvalError e)
+                    {
+                        throw new RuntimeException("Evaluation Error: ", e);
+                    }
+                }
+                // and want to return
+                break;
+            }
+            else
+            {
+                // normal case
+                output += charAtPosition;
+            }
+        }
+
+        return output;
     }
 }
