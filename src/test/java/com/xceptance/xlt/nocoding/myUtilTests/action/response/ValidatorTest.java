@@ -46,14 +46,15 @@ public class ValidatorTest
         try
         {
             url = new URL("https://localhost:8443/posters/");
-            content = "<li class=\"userMenuHeader\">Welcome: Guest</li>\n"
-                      + "<li class=\"userMenuContent\"><a href=\"/posters/registration\"\n"
-                      + "    class=\"goToRegistration\" title=\"Create new account\"> <span\n"
-                      + "        class=\"glyphicon glyphicon-user\"></span> <span class=\"margin_left5\"></span><span\n"
-                      + "        class=\"text-primary\">Create new account</span>\n" + "</a></li>\n" + "<li class=\"userMenuContent\"><a\n"
-                      + "    href=\"/posters/login\" class=\"goToLogin\"\n" + "    title=\"Sign In\"><span\n"
-                      + "        class=\"glyphicon glyphicon-log-in\"></span> <span class=\"margin_left5\"></span><span\n"
-                      + "        class=\"text-primary\">Sign In</span>\n" + "</a></li>";
+            content = "blub";
+            // content = "<li class=\"userMenuHeader\">Welcome: Guest</li>\n"
+            // + "<li class=\"userMenuContent\"><a href=\"/posters/registration\"\n"
+            // + " class=\"goToRegistration\" title=\"Create new account\"> <span\n"
+            // + " class=\"glyphicon glyphicon-user\"></span> <span class=\"margin_left5\"></span><span\n"
+            // + " class=\"text-primary\">Create new account</span>\n" + "</a></li>\n" + "<li class=\"userMenuContent\"><a\n"
+            // + " href=\"/posters/login\" class=\"goToLogin\"\n" + " title=\"Sign In\"><span\n"
+            // + " class=\"glyphicon glyphicon-log-in\"></span> <span class=\"margin_left5\"></span><span\n"
+            // + " class=\"text-primary\">Sign In</span>\n" + "</a></li>";
             statusCode = 200;
             statusMessage = "A-OK";
             contentType = "text/html";
