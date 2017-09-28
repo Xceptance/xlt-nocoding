@@ -17,11 +17,6 @@ public class RegExpValidator extends AbstractValidator
 
     private String group;
 
-    public RegExpValidator(final String validationName, final String pattern)
-    {
-        this(validationName, pattern, null, null);
-    }
-
     public RegExpValidator(final String validationName, final String pattern, final String text)
     {
         this(validationName, pattern, text, null);

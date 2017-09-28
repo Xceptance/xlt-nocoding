@@ -89,10 +89,11 @@ public class HeaderValidator extends AbstractValidator
         // For each header,
         for (final NameValuePair header : headers)
         {
-            count++;
             // Search for the header name
             if (header.getName().equals(getHeader()))
             {
+                // Increment the amount of found headers
+                count++;
                 // If the header is found, verify the value if specified
                 if (getText() != null)
                 {
