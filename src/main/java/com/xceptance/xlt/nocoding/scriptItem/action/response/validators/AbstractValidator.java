@@ -14,4 +14,9 @@ public abstract class AbstractValidator
 
     public abstract void validate(final PropertyManager propertyManager, final WebResponse webResponse) throws Exception;
 
+    public String getValidationName()
+    {
+        return validationName;
+    }
+
 }

@@ -105,6 +105,10 @@ public class VariableResolver
 
     public String resolveStringInAGoodWayHopefully(final String toResolve, final PropertyManager propertyManager)
     {
+        /**
+         * When true, this ignores everything, until another ' apppears
+         */
+        Boolean ignore = false;
         String output = "";
         // iterate over the whole String
         for (int i = 0; i < toResolve.length(); i++)
@@ -112,7 +116,12 @@ public class VariableResolver
             // Save the current character
             final char current = toResolve.charAt(i);
 
-            if (current == '$')
+            if (current == '\'')
+            {
+                // invert the value of ignore
+                ignore = Boolean.logicalXor(ignore, false);
+            }
+            else if (!ignore && current == '$')
             {
                 // check for variable if there is another symbol
                 if (toResolve.length() > i + 1 && toResolve.charAt(i + 1) == '{')
@@ -144,6 +153,10 @@ public class VariableResolver
 
     private Pair<String, Integer> doRecursion(final String toResolve, final PropertyManager propertyManager)
     {
+        /**
+         * When true, this ignores everything, until another ' apppears
+         */
+        Boolean ignore = false;
         String output = "";
         int length = 0;
         // iterate over the whole String
@@ -152,8 +165,12 @@ public class VariableResolver
             // Save the current character
             final char current = toResolve.charAt(i);
 
-            // If the current char is $, we might have found a variable
-            if (current == '$')
+            if (current == '\'')
+            {
+                // invert the value of ignore
+                ignore = Boolean.logicalXor(ignore, false);
+            }
+            else if (!ignore && current == '$')
             {
                 // check for variable if there is another symbol
                 if (toResolve.length() > i + 1 && toResolve.charAt(i + 1) == '{')
@@ -179,7 +196,7 @@ public class VariableResolver
                 length = i;
                 String resolvedValue = propertyManager.getDataStorage().searchFor(output);
                 // if we didn't find it, let beanshell handle the variable
-                if (resolvedValue == null)
+                if (resolvedValue == null && !output.equals("{"))
                 {
                     try
                     {
@@ -201,6 +218,11 @@ public class VariableResolver
                         throw new RuntimeException("Evaluation Error: ", e);
                     }
                 }
+                // This fixes Text${'{'}
+                else if (resolvedValue == null)
+                {
+                    resolvedValue = output;
+                }
 
                 output = resolvedValue;
                 // we found a variable, therefore we are done
@@ -210,6 +232,7 @@ public class VariableResolver
             {
                 output += current;
             }
+            length = i;
         }
 
         // handle missing ending curly brace aka }

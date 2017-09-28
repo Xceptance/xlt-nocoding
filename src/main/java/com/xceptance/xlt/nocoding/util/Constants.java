@@ -79,26 +79,6 @@ public class Constants
     public static final String EXISTS = "Exists";
 
     /**
-     * The separator symbol between parameter name and value.
-     */
-    public static final String PARAMETER_NAME_VALUE_SEPARATOR = "=";
-
-    /**
-     * The separator symbol between two parameters
-     */
-    public static final String PARAMETER_PAIR_SEPARATOR = ";";
-
-    /**
-     * The separator symbol between header name and value.
-     */
-    public static final String HEADER_NAME_VALUE_SEPARATOR = ":";
-
-    /**
-     * The separator symbol between two headers.
-     */
-    public static final String HEADER_PAIR_SEPARATOR = ";";
-
-    /**
      * Type for a general Http Request.
      */
     public static final String TYPE_ACTION = "A";

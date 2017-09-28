@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.junit.Assert;
+import org.openqa.selenium.InvalidArgumentException;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
@@ -12,38 +13,85 @@ import com.xceptance.xlt.nocoding.util.PropertyManager;
 public class RegExpStore extends AbstractResponseStore
 {
 
-    private final int group;
+    private String group;
 
-    private final Pattern pattern;
+    private String pattern;
 
-    public RegExpStore(final String name, final String regExp)
+    public RegExpStore(final String name, final String pattern)
     {
-        this(name, regExp, 1);
+        this(name, pattern, null);
     }
 
-    public RegExpStore(final String name, final String regExp, final int group)
+    public RegExpStore(final String name, final String pattern, final String group)
     {
         super(name);
         this.group = group;
-        pattern = Pattern.compile(regExp);
+        this.pattern = pattern;
     }
 
     @Override
     public void store(final PropertyManager propertyManager, final WebResponse webResponse) throws Exception
     {
-        // TODO check for mode - throw error if not light weigth mode
+        resolveValues(propertyManager);
+        // TODO check for mode - throw error if not lightweight mode
         // if(propertyManager.mode = dom)
         // throw new IllegalStateException("Cannot use a regular expression in dom mode. Please use the lightweight mode.");
         final LightWeightPage page = new LightWeightPage(webResponse, propertyManager.getWebClient().getTimerName());
         final String pageContent = page.getContent();
         String foundContent = null;
-        final Matcher matcher = this.pattern.matcher(pageContent);
+        final Matcher matcher = Pattern.compile(getPattern()).matcher(pageContent);
         if (matcher.find())
         {
-            foundContent = matcher.group(this.group);
+            if (getGroup() != null)
+            {
+                foundContent = matcher.group(Integer.parseInt(getGroup()));
+            }
+            else
+            {
+                foundContent = matcher.group();
+            }
         }
 
         Assert.assertNotNull("Couldn't find anything with the regexp", foundContent);
         propertyManager.getDataStorage().storeVariable(getVariableName(), foundContent);
     }
+
+    /**
+     * Tries to resolve all variables of non-null attributes. Variables are specified with by "${variable}".
+     * 
+     * @param propertyManager
+     *            The propertyManager with the DataStorage to use
+     * @throws InvalidArgumentException
+     */
+    private void resolveValues(final PropertyManager propertyManager)
+    {
+        String resolvedValue = propertyManager.resolveString(getPattern());
+        setPattern(resolvedValue);
+        if (getGroup() != null)
+        {
+            resolvedValue = propertyManager.resolveString(getGroup());
+            setGroup(resolvedValue);
+        }
+    }
+
+    public String getGroup()
+    {
+        return group;
+    }
+
+    public void setGroup(final String group)
+    {
+        this.group = group;
+    }
+
+    public String getPattern()
+    {
+        return pattern;
+    }
+
+    public void setPattern(final String pattern)
+    {
+        this.pattern = pattern;
+    }
+
 }

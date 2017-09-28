@@ -32,6 +32,14 @@ public class VariableResolverTester
     }
 
     @Test
+    public void unfinishedDeclaration()
+    {
+        propertyManager.getDataStorage().storeVariable("test", "t");
+        final String resolved = interpreter.resolveString("${tes${test}", propertyManager);
+        Assert.assertEquals("${test", resolved);
+    }
+
+    @Test
     public void normalParam()
     {
         propertyManager.getDataStorage().storeVariable("host", "https://localhost:8443/posters/");
