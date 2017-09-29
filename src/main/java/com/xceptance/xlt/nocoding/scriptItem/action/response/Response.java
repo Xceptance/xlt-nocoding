@@ -8,13 +8,14 @@ import com.xceptance.xlt.api.validators.HttpResponseCodeValidator;
 import com.xceptance.xlt.engine.LightWeightPageImpl;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.AbstractResponseStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.AbstractValidator;
+import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.PropertyManager;
 
 public class Response
 {
-    public static int DEFAULT_HTTPCODE = 200;
+    public static String DEFAULT_HTTPCODE = "200";
 
-    private final Integer httpcode;
+    private String httpcode;
 
     private final List<AbstractResponseStore> responseStore;
 
@@ -25,7 +26,7 @@ public class Response
         this(null, responseStore, validation);
     }
 
-    public Response(final Integer httpcode, final List<AbstractResponseStore> responseStore, final List<AbstractValidator> validation)
+    public Response(final String httpcode, final List<AbstractResponseStore> responseStore, final List<AbstractValidator> validation)
     {
         this.httpcode = httpcode;
         this.responseStore = responseStore;
@@ -34,7 +35,17 @@ public class Response
 
     public Response()
     {
-        this(DEFAULT_HTTPCODE, null, null);
+        this(null, null, null);
+    }
+
+    public String getHttpcode()
+    {
+        return httpcode;
+    }
+
+    public void setHttpcode(final String httpcode)
+    {
+        this.httpcode = httpcode;
     }
 
     public void execute(final PropertyManager propertyManager, final WebResponse webResponse) throws Exception
@@ -50,13 +61,16 @@ public class Response
 
     private void fillDefaultData(final PropertyManager propertyManager)
     {
-        // TODO Auto-generated method stub
+        if (getHttpcode() == null)
+        {
+            setHttpcode(propertyManager.getDataStorage().getConfigItemByKey(Constants.HTTPCODE));
+        }
 
     }
 
     private void resolveValues(final PropertyManager propertyManager)
     {
-        // TODO Auto-generated method stub
+        setHttpcode(propertyManager.resolveString(httpcode));
 
     }
 
@@ -65,7 +79,10 @@ public class Response
         // TODO Get timer name
         final LightWeightPage page = new LightWeightPageImpl(webResponse, propertyManager.getWebClient().getTimerName(),
                                                              propertyManager.getWebClient());
-        new HttpResponseCodeValidator(httpcode).validate(page);
+        if (page != null && httpcode != null)
+        {
+            new HttpResponseCodeValidator(Integer.parseInt(getHttpcode())).validate(page);
+        }
         // Check the content length, compare delivered content length to the
         // content length that was announced in the HTTP response header.
         // TODO Content Length needn't be specified, check for it then validate

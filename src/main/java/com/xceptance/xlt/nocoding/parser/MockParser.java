@@ -25,7 +25,7 @@ public class MockParser implements Parser
     public List<ScriptItem> parse()
     {
         // TODO Auto-generated method stub
-        return this.parseHard();
+        return this.parseMediumLogin();
     }
 
     /**
@@ -58,7 +58,7 @@ public class MockParser implements Parser
         final List<AbstractResponseStore> responseStore = new ArrayList<AbstractResponseStore>();
         responseStore.add(new RegExpStore("Blub", "<title>(.*?)</title>"));
         // Response
-        final Response response = new Response(200, responseStore, validation);
+        final Response response = new Response("200", responseStore, validation);
 
         /**
          * Subrequest
@@ -164,12 +164,12 @@ public class MockParser implements Parser
         responseStore.add(new HeaderStore("loginRedirectLocation", "Location"));
         // Response
         // final Response response3 = new Response(303, responseStore, null);
-        final Response response3 = new Response(303, responseStore, null);
+        final Response response3 = new Response("303", responseStore, null);
 
         validation = new ArrayList<AbstractValidator>();
         validation.add(new RegExpValidator("Login Greeting", "John"));
         // Response
-        final Response response4 = new Response(303, null, validation);
+        final Response response4 = new Response("200", null, validation);
 
         /**
          * Action
