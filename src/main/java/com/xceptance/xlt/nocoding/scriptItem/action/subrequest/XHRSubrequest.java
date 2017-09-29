@@ -15,6 +15,8 @@ public class XHRSubrequest extends AbstractSubrequest
 
     private final Response response;
 
+    private WebRequest webRequest;
+
     public XHRSubrequest(final String name, final Request request, final Response response)
     {
         this.name = name;
@@ -25,15 +27,13 @@ public class XHRSubrequest extends AbstractSubrequest
     @Override
     public void execute(final PropertyManager propertyManager) throws Throwable
     {
-
+        // TODO
+        webRequest = this.request.buildWebRequest(propertyManager);
     }
 
     @Override
     public WebRequest getWebRequest() throws MalformedURLException
     {
-        // set xhr to true
-        // request.setXhr(true);
-        // return this.request.buildWebRequest(propertyManager);
-        return null;
+        return webRequest;
     }
 }
