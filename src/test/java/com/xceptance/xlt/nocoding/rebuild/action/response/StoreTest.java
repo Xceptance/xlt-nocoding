@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.myUtilTests.action.response;
+package com.xceptance.xlt.nocoding.rebuild.action.response;
 
 import java.net.MalformedURLException;
 import java.net.URL;

@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.myUtilTests.variableResolver;
+package com.xceptance.xlt.nocoding.rebuild.util.variableResolver;
 
 import org.junit.Test;
 

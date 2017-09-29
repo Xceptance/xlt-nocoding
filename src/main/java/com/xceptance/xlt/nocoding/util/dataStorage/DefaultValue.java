@@ -1,8 +1,5 @@
 package com.xceptance.xlt.nocoding.util.dataStorage;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.gargoylesoftware.htmlunit.HttpMethod;
 
 public class DefaultValue
@@ -10,32 +7,21 @@ public class DefaultValue
     /**
      * Request Block
      */
-    public static HttpMethod METHOD = HttpMethod.GET;
+    public static String METHOD = HttpMethod.GET.toString();
 
-    public static Boolean XHR = false;
+    public static String XHR = "false";
 
-    public static Boolean ENCODEPARAMETERS = false;
+    public static String ENCODEPARAMETERS = "false";
 
-    public static Boolean ENCODEBODY = false;
+    public static String ENCODEBODY = "false";
 
     /**
      * Response Block
      */
-    public static Integer HTTPCODE = 200;
+    public static String HTTPCODE = "200";
 
     /**
      * Subrequest Block
      */
-
-    /**
-     * Other default values
-     */
-    public static Map<String, String> defaultValues = new HashMap<String, String>();
-
-    public static Map<String, String> putDefault(final String key, final String value)
-    {
-        defaultValues.put(key, value);
-        return defaultValues;
-    }
 
 }

@@ -1,8 +1,11 @@
-package com.xceptance.xlt.nocoding.scriptItem.storeItem;
+package com.xceptance.xlt.nocoding.scriptItem;
 
-import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.util.PropertyManager;
 
+/**
+ * This is the class for the "Store" command, so if a script item has the form of "- Store: - variable_1 : value_1" this
+ * ScriptItem is conjured.
+ */
 public class StoreItem implements ScriptItem
 {
     private final String variableName;
@@ -18,7 +21,6 @@ public class StoreItem implements ScriptItem
     @Override
     public void execute(final PropertyManager propertyManager) throws Throwable
     {
-        // TODO Auto-generated method stub
         propertyManager.getDataStorage().storeVariable(variableName, value);
     }
 

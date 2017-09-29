@@ -72,7 +72,7 @@ public class VariableResolver
             // Remove ${ and }
             final String resolvedVariable = foundVariable.substring(2, foundVariable.length() - 1);
             // Search in the storage for the variable
-            String resolvedValue = propertyManager.getDataStorage().searchFor(resolvedVariable);
+            String resolvedValue = propertyManager.getDataStorage().getVariableByKey(resolvedVariable);
             // if we didn't find it, let beanshell handle the variable
             if (resolvedValue == null)
             {
@@ -194,7 +194,7 @@ public class VariableResolver
             {
                 // Since we are in this function, we did find a variable sign,
                 length = i;
-                String resolvedValue = propertyManager.getDataStorage().searchFor(output);
+                String resolvedValue = propertyManager.getDataStorage().getVariableByKey(output);
                 // if we didn't find it, let beanshell handle the variable
                 if (resolvedValue == null && !output.equals("{"))
                 {

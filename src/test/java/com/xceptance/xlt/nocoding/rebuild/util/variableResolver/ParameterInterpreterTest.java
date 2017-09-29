@@ -14,7 +14,7 @@
  *  limitations under the License.
  *
  */
-package com.xceptance.xlt.nocoding.myUtilTests.variableResolver;
+package com.xceptance.xlt.nocoding.rebuild.util.variableResolver;
 
 import org.junit.Assert;
 import org.junit.Before;
