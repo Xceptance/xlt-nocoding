@@ -1,5 +1,6 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response.validators;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.junit.Assert;
@@ -16,6 +17,11 @@ public class RegExpValidator extends AbstractValidator
     private String text;
 
     private String group;
+
+    public RegExpValidator(final String validationName, final String pattern)
+    {
+        this(validationName, pattern, null, null);
+    }
 
     public RegExpValidator(final String validationName, final String pattern, final String text)
     {
@@ -63,26 +69,51 @@ public class RegExpValidator extends AbstractValidator
     @Override
     public void validate(final PropertyManager propertyManager, final WebResponse webResponse) throws Exception
     {
+        // Resolve variables
         resolveValues(propertyManager);
+        // Build a page with the content
         final LightWeightPage page = new LightWeightPage(webResponse, propertyManager.getWebClient().getTimerName());
+        // Read the content
         final String pageContent = page.getContent();
-        if (getText() == null)
+        // Create a matcher object, so we can save our found matches
+        final Matcher matcher = Pattern.compile(getPattern()).matcher(pageContent);
+        // Set the matchingString to null
+        String matchingString = null;
+
+        // If we find matches
+        if (matcher.find())
         {
-            Assert.assertTrue("Pattern did not match content", Pattern.compile(getPattern()).matcher(pageContent).find());
+            // and did specify text, we want to verify, that we have that text in a group
+            if (getText() != null)
+            {
+                // If we specified a group, save the match of that group
+                if (group != null)
+                {
+                    matchingString = matcher.group(Integer.parseInt(getGroup()));
+                }
+                // otherwise we simply look at group()
+                else
+                {
+                    matchingString = matcher.group();
+                }
+                // If we did get a match that is not null, verify it equals the text field
+                if (matchingString != null)
+                {
+                    Assert.assertTrue("Found content does not equal matcher", getText().equals(matchingString));
+                }
+                // otherwise throw an error
+                else
+                {
+                    throw new AssertionError("Matched with null");
+                    // if null is matched, then we most likely don't want it to be matched
+                }
+            }
+            // If we didn't specify a text, we don't need to do anything else
         }
+        // If we did not find any matches, throw an error
         else
         {
-            final String matchingString;
-            if (group != null)
-            {
-                matchingString = Pattern.compile(getPattern()).matcher(pageContent).group(Integer.parseInt(getGroup()));
-            }
-            else
-            {
-                matchingString = Pattern.compile(getPattern()).matcher(pageContent).group();
-            }
-            final int solution = getText().compareTo(matchingString);
-            Assert.assertTrue("Found content does not equal matcher", solution == 0);
+            throw new AssertionError("Did not find a match");
         }
     }
 

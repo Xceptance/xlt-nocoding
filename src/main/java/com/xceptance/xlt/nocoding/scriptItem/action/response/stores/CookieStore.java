@@ -33,15 +33,19 @@ public class CookieStore extends AbstractResponseStore
             // Search for the Set-Cookie header
             if (header.getName().equals("Set-Cookie"))
             {
-                // And verify the cookie by
-                // grabbing the name in the beginning
-                final String cookieName = header.getValue().substring(0, cookie.length());
+                // And verify if this is the correct cookie by
+                // grabbing the cookie name
+                final int equalSignPosition = header.getValue().indexOf("=");
+                final String cookieName = header.getValue().substring(0, equalSignPosition);
                 // and comparing it with the input name
                 if (cookieName.equals(cookie))
                 {
                     // If the specified cookie was found, get its content
-                    final String cookieContent = header.getValue().substring(cookie.length());
-                    // And store it in our storage
+                    // by getting the cookie content, that is until the first semicolon
+                    final int semicolonPosition = header.getValue().indexOf(";");
+                    // Content starts after the equal sign (position+1) and ends before the semicolon
+                    final String cookieContent = header.getValue().substring(cookie.length() + 1, semicolonPosition);
+                    // And store the content in our storage
                     propertyManager.getDataStorage().storeVariable(getVariableName(), cookieContent);
 
                     // At last, set throwException to false, so we know, that we found our specified cookie.

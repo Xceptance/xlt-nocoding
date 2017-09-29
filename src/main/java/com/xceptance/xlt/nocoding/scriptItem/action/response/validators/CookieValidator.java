@@ -42,7 +42,7 @@ public class CookieValidator extends AbstractValidator
             // Search for the Set-Cookie header
             if (header.getName().equals("Set-Cookie"))
             {
-                // And verify the cookie by
+                // And verify if this is the correct cookie by
                 // grabbing the cookie name
                 final int equalSignPosition = header.getValue().indexOf("=");
                 final String cookieName = header.getValue().substring(0, equalSignPosition);
@@ -55,7 +55,10 @@ public class CookieValidator extends AbstractValidator
                         // If it is, assert that the cookie content is the same as the text attribute
                         // by getting the cookie content, that is until the first semicolon
                         final int semicolonPosition = header.getValue().indexOf(";");
-                        Assert.assertEquals("Content did not match", header.getValue().substring(cookie.length(), semicolonPosition), text);
+                        // Content starts after the equal sign (position+1) and ends before the semicolon
+                        Assert.assertEquals("Content did not match",
+                                            header.getValue().substring(cookie.length() + 1, semicolonPosition),
+                                            text);
                     }
                     // At last, set throwException to false, so we know, that we found our specified cookie.
                     throwException = false;
@@ -77,7 +80,7 @@ public class CookieValidator extends AbstractValidator
         cookie = resolvedValue;
         if (text != null)
         {
-            resolvedValue = propertyManager.resolveString(cookie);
+            resolvedValue = propertyManager.resolveString(text);
             text = resolvedValue;
         }
 

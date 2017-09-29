@@ -30,6 +30,9 @@ public class ValidatorTest
 
     public AbstractValidator validator;
 
+    /**
+     * Instantiate the fields and set answers to localhost/posters/ and localhost/posters/POST
+     */
     @Before
     public void init()
     {
@@ -43,26 +46,24 @@ public class ValidatorTest
         String value;
         this.propertyManager = new PropertyManager(XltProperties.getInstance(), new DataStorage());
         webConnection = new XltMockWebConnection(propertyManager.getWebClient());
+
         try
-        {
+        { // Set answer to localhost/posters/
             url = new URL("https://localhost:8443/posters/");
-            content = "blub";
-            // content = "<li class=\"userMenuHeader\">Welcome: Guest</li>\n"
-            // + "<li class=\"userMenuContent\"><a href=\"/posters/registration\"\n"
-            // + " class=\"goToRegistration\" title=\"Create new account\"> <span\n"
-            // + " class=\"glyphicon glyphicon-user\"></span> <span class=\"margin_left5\"></span><span\n"
-            // + " class=\"text-primary\">Create new account</span>\n" + "</a></li>\n" + "<li class=\"userMenuContent\"><a\n"
-            // + " href=\"/posters/login\" class=\"goToLogin\"\n" + " title=\"Sign In\"><span\n"
-            // + " class=\"glyphicon glyphicon-log-in\"></span> <span class=\"margin_left5\"></span><span\n"
-            // + " class=\"text-primary\">Sign In</span>\n" + "</a></li>";
+            // content = "blub";
+            content = "<li class=\"userMenuHeader\">Welcome: Guest</li>\n"
+                      + "<li class=\"userMenuContent\"><a href=\"/posters/registration\"\n"
+                      + " class=\"goToRegistration\" title=\"Create new account\"> <span\n"
+                      + " class=\"glyphicon glyphicon-user\"></span> <span class=\"margin_left5\"></span><span\n"
+                      + " class=\"text-primary\">Create new account</span>\n" + "</a></li>\n" + "<li class=\"userMenuContent\"><a\n"
+                      + " href=\"/posters/login\" class=\"goToLogin\"\n" + " title=\"Sign In\"><span\n"
+                      + " class=\"glyphicon glyphicon-log-in\"></span> <span class=\"margin_left5\"></span><span\n"
+                      + " class=\"text-primary\">Sign In</span>\n" + "</a></li>";
             statusCode = 200;
             statusMessage = "A-OK";
             contentType = "text/html";
             headers = new ArrayList<NameValuePair>();
 
-            name = "Content-Encoding";
-            value = "gzip";
-            headers.add(new NameValuePair(name, value));
             name = "Cache-Control";
             value = "no-cache, no-store, max-age=0, must-revalidate";
             headers.add(new NameValuePair(name, value));
@@ -72,6 +73,7 @@ public class ValidatorTest
 
             webConnection.setResponse(url, content, statusCode, statusMessage, contentType, headers);
 
+            // Set answer to localhost/posters/POST
             url = new URL("https://localhost:8443/posters/login/POST");
             content = "blub";
             statusCode = 200;
@@ -93,55 +95,192 @@ public class ValidatorTest
     @Test
     public void HeaderValidatorTest() throws Exception
     {
+        // Build WebRequest with localhost/posters as url
         final URL url = new URL("https://localhost:8443/posters/");
         final WebRequest settings = new WebRequest(url);
+        // Get response from the XltMockWebConnection
         final WebResponse webResponse = webConnection.getResponse(settings);
-        final String header = "Content-Encoding";
-        validator = new HeaderValidator("Standard", header);
+        // Define the header you want to check for
+        final String header = "Cache-Control";
+        // Define the text you want to see in the header
+        final String text = "no-cache, no-store, max-age=0, must-revalidate";
+        // Define the count of occurences of the header
+        final String count = "1";
+        // Build the validator that searches for the header
+        validator = new HeaderValidator("HeaderValidation Standard", header);
+        // Validate
         validator.validate(propertyManager, webResponse);
-        validator = new HeaderValidator("Text", header, Constants.TEXT, "gzip");
+        // Build the validator, that validates the content of the header equals text
+        validator = new HeaderValidator("HeaderValidation Text", header, Constants.TEXT, text);
+        // Validate
         validator.validate(propertyManager, webResponse);
-        validator = new HeaderValidator("Count", header, Constants.COUNT, "1");
+        // Build the validator that validates the number of occurences of the header equals count
+        validator = new HeaderValidator("HeaderValidation Count", header, Constants.COUNT, count);
+        // Validate
         validator.validate(propertyManager, webResponse);
     }
 
     @Test
     public void CookieValidatorTest() throws Exception
     {
+        // Build WebRequest with localhost/posters/login/POST as url
         final URL url = new URL("https://localhost:8443/posters/login/POST");
         final WebRequest settings = new WebRequest(url, HttpMethod.POST);
+        // Add the login parameters
         final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
         parameters.add(new NameValuePair("email", "john@doe.com"));
         parameters.add(new NameValuePair("password", "topsecret"));
         parameters.add(new NameValuePair("btnSignIn", ""));
+        // Set the login parameters as request parameters for the WebRequest - this needn't be done
         settings.setRequestParameters(parameters);
+        // Get response from the XltMockWebConnection
         final WebResponse webResponse = webConnection.getResponse(settings);
+        // Define the cookie you want to search for
         final String cookie = "NINJA_FLASH";
+        // Define the content of the cookie
         final String text = "success=Login+successful.+Have+fun+in+our+shop%21";
-        validator = new CookieValidator("CookieValidationTest", cookie);
+        // Build the validator that searches only for the cookie
+        validator = new CookieValidator("CookieValidation Standard", cookie);
+        // Validate
         validator.validate(propertyManager, webResponse);
-        validator = new CookieValidator("CookieValidationTest", cookie, text);
+        // Build another validator that searches for the cookie and verifies the content equals text
+        validator = new CookieValidator("CookieValidation Text", cookie, text);
+        // Validate
+        validator.validate(propertyManager, webResponse);
     }
 
     @Test
     public void RegExpValidatorTest() throws Exception
     {
+        // Build WebRequest with localhost/posters as url
         final URL url = new URL("https://localhost:8443/posters/");
         final WebRequest settings = new WebRequest(url);
+        // Get response from the XltMockWebConnection
+        final WebResponse webResponse = webConnection.getResponse(settings);
+
+        // Define the pattern you want to search for
+        final String pattern = "(class.*>)";
+        // Define the expected text of the match
+        final String text = "class=\"userMenuHeader\">Welcome: Guest</li>";
+        // Define the group the text should be in
+        final String group = "1";
+
+        // Build a validator, that searches for the pattern
+        validator = new RegExpValidator("RegExpValidation Standard", pattern);
+        // Validate
+        validator.validate(propertyManager, webResponse);
+        // Build a validator, that searches for the pattern and verifies text is the first match
+        validator = new RegExpValidator("RegExpValidation Text", pattern, text);
+        // Validate
+        validator.validate(propertyManager, webResponse);
+        // Build a validator, that searches for the pattern and verifies text is the match in the matching group of group
+        validator = new RegExpValidator("RegExpValidation Text+Group", pattern, text, group);
+        // Validate
+        validator.validate(propertyManager, webResponse);
+    }
+
+    @Test
+    public void HeaderValidatorWithVariables() throws Exception
+    {
+        // Store the header name
+        propertyManager.getDataStorage().storeVariable("header_1", "Cache-Control");
+        // Store some of the content
+        propertyManager.getDataStorage().storeVariable("content_1", "no-cache, no-store, max-");
+        // Store the expected count of headers
+        propertyManager.getDataStorage().storeVariable("count_1", "1");
+        // Build WebRequest with localhost/posters as url
+        final URL url = new URL("https://localhost:8443/posters/");
+        final WebRequest settings = new WebRequest(url);
+        // Get response from the XltMockWebConnection
+        final WebResponse webResponse = webConnection.getResponse(settings);
+        // Define the header you want to check for
+        final String header = "${header_1}";
+        // Define the text you want to see in the header
+        final String text = "${content_1}age=0, must-revalidate";
+        // Define the count of occurences of the header
+        final String count = "${count_1}";
+        // Build the validator that searches for the header
+        validator = new HeaderValidator("HeaderValidationVariable Standard", header);
+        // Validate
+        validator.validate(propertyManager, webResponse);
+        // Build the validator, that validates the content of the header equals text
+        validator = new HeaderValidator("HeaderValidationVariable Text", header, Constants.TEXT, text);
+        // Validate
+        validator.validate(propertyManager, webResponse);
+        // Build the validator that validates the number of occurences of the header equals count
+        validator = new HeaderValidator("HeaderValidationVariable Count", header, Constants.COUNT, count);
+        // Validate
+        validator.validate(propertyManager, webResponse);
+    }
+
+    @Test
+    public void CookieValidatorWithVariables() throws Exception
+    {
+        // Store the cookie name
+        propertyManager.getDataStorage().storeVariable("cookie", "NINJA_FLASH");
+        // Store the first part of the cookie content
+        propertyManager.getDataStorage().storeVariable("cookie_content_name", "success");
+        // Store the second part of the cookie content
+        propertyManager.getDataStorage().storeVariable("cookie_content_value", "Login+successful.+Have+fun+in+our+shop%21");
+        // Build WebRequest with localhost/posters/login/POST as url
+        final URL url = new URL("https://localhost:8443/posters/login/POST");
+        final WebRequest settings = new WebRequest(url, HttpMethod.POST);
+        // Add the login parameters
         final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
         parameters.add(new NameValuePair("email", "john@doe.com"));
         parameters.add(new NameValuePair("password", "topsecret"));
         parameters.add(new NameValuePair("btnSignIn", ""));
+        // Set the login parameters as request parameters for the WebRequest - this needn't be done
         settings.setRequestParameters(parameters);
+        // Get response from the XltMockWebConnection
+        final WebResponse webResponse = webConnection.getResponse(settings);
+        // Define the cookie you want to search for
+        final String cookie = "${cookie}";
+        // Define the content of the cookie
+        final String text = "${cookie_content_name}=${cookie_content_value}";
+        // Build the validator that searches only for the cookie
+        validator = new CookieValidator("CookieValidationVariable Standard", cookie);
+        // Validate
+        validator.validate(propertyManager, webResponse);
+        // Build another validator that searches for the cookie and verifies the content equals text
+        validator = new CookieValidator("CookieValidationVariable Text", cookie, text);
+        // Validate
+        validator.validate(propertyManager, webResponse);
+    }
+
+    @Test
+    public void RegExpValidatorWithVariables() throws Exception
+    {
+        // Store a pattern
+        propertyManager.getDataStorage().storeVariable("pattern", "class.*>");
+        // Store the expected match
+        propertyManager.getDataStorage().storeVariable("text", "class=\"userMenuHeader\">Welcome: Guest</li>");
+        // Store the group the match is in
+        propertyManager.getDataStorage().storeVariable("group", "1");
+        // Build WebRequest with localhost/posters as url
+        final URL url = new URL("https://localhost:8443/posters/");
+        final WebRequest settings = new WebRequest(url);
+        // Get response from the XltMockWebConnection
         final WebResponse webResponse = webConnection.getResponse(settings);
 
-        final String pattern = "class.*>";
-        final String text = "class=\"userMenuHeader\">Welcome: Guest</li>";
-        final String group = "1";
+        // Define the pattern you want to search for
+        final String pattern = "(${pattern})";
+        // Define the expected text of the match
+        final String text = "${text}";
+        // Define the group the text should be in
+        final String group = "${group}";
 
-        validator = new RegExpValidator("CookieValidationTest", pattern, text, group);
+        // Build a validator, that searches for the pattern
+        validator = new RegExpValidator("RegExpValidationVariable Standard", pattern);
+        // Validate
         validator.validate(propertyManager, webResponse);
-        validator = new RegExpValidator("CookieValidationTest", pattern, text);
+        // Build a validator, that searches for the pattern and verifies text is the first match
+        validator = new RegExpValidator("RegExpValidationVariable Text", pattern, text);
+        // Validate
+        validator.validate(propertyManager, webResponse);
+        // Build a validator, that searches for the pattern and verifies text is the match in the matching group of group
+        validator = new RegExpValidator("RegExpValidationVariable Text+Group", pattern, text, group);
+        // Validate
         validator.validate(propertyManager, webResponse);
     }
 

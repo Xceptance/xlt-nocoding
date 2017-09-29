@@ -32,18 +32,24 @@
                 Count : value
             - validation_name_3 :
                 Regex : value
-                Text : value
             - validation_name_4 :
-                Header : value
-            - validation_name_5 :
-                Header : value
+                Regex : value
                 Text : value
+            - validation_name_5 :
+                Regex : value
+                Text : value
+                Group : value     
             - validation_name_6 :
                 Header : value
-                Count : value
             - validation_name_7 :
-                Cookie : value
+                Header : value
+                Text : value
             - validation_name_8 :
+                Header : value
+                Count : value
+            - validation_name_9 :
+                Cookie : value
+            - validation_name_10 :
                 Cookie : value
                 Matches : value
 
