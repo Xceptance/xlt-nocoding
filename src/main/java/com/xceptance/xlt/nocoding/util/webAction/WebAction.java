@@ -9,6 +9,7 @@ import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.common.lang.ReflectionUtils;
 import com.xceptance.xlt.api.actions.AbstractWebAction;
+import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
 import com.xceptance.xlt.nocoding.util.ThrowingConsumer;
 
 public class WebAction extends AbstractWebAction
@@ -21,7 +22,7 @@ public class WebAction extends AbstractWebAction
     /**
      * The requests defined in the subrequests
      */
-    private final List<WebRequest> subrequests;
+    private final List<AbstractSubrequest> subrequests;
 
     /**
      * The responses to the subrequests
@@ -34,10 +35,9 @@ public class WebAction extends AbstractWebAction
 
     private ThrowingConsumer<WebAction> function;
 
-    public WebAction(final String timerName, final WebRequest webRequest, final List<WebRequest> subrequests, final WebClient webClient,
-        final ThrowingConsumer<WebAction> function)
+    public WebAction(final String timerName, final WebRequest webRequest, final List<AbstractSubrequest> subrequests,
+        final WebClient webClient, final ThrowingConsumer<WebAction> function)
     {
-        // TODO Unfortunately we cannot set the webClient before the timer name, so there will be many webClient assigned
         super(timerName);
         this.webRequest = webRequest;
         this.subrequests = subrequests;
@@ -109,7 +109,7 @@ public class WebAction extends AbstractWebAction
         this.webResponse = webResponse;
     }
 
-    public List<WebRequest> getSubrequests()
+    public List<AbstractSubrequest> getSubrequests()
     {
         return subrequests;
     }

@@ -17,6 +17,8 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.RegExpStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.AbstractValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.RegExpValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
+import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
+import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.XHRSubrequest;
 
 public class MockParser implements Parser
 {
@@ -25,7 +27,7 @@ public class MockParser implements Parser
     public List<ScriptItem> parse()
     {
         // TODO Auto-generated method stub
-        return this.parseMediumLogin();
+        return this.parseHardWithSubRequests();
     }
 
     /**
@@ -112,7 +114,6 @@ public class MockParser implements Parser
     private List<ScriptItem> parseHard()
     {
         final List<ScriptItem> itemList = new ArrayList<ScriptItem>();
-        final Map<String, String> variables = new HashMap<String, String>();
         final Request request = new Request("${host}/posters/", "Visit Homepage");
 
         // final Subrequest subrequest = new Subrequest();
@@ -183,6 +184,39 @@ public class MockParser implements Parser
         actionItem = new LightWeigthAction(request3, response3, null);
         itemList.add(actionItem);
         actionItem = new LightWeigthAction(request4, response4, null);
+        itemList.add(actionItem);
+        return itemList;
+    }
+
+    private List<ScriptItem> parseHardWithSubRequests()
+    {
+        final List<ScriptItem> itemList = new ArrayList<ScriptItem>();
+        final Request request = new Request("${host}/posters/topCategory/Dining?categoryId=2", "Visit Category Page");
+
+        final List<AbstractSubrequest> subrequests = new ArrayList<AbstractSubrequest>();
+        // Static Subrequest
+        final List<String> urls = new ArrayList<String>();
+        urls.add("https://www.xceptance.com/css/font-awesome.min.css?1432903128");
+        urls.add("https://www.xceptance.com/images/xceptance-logo-transparent-202px.png");
+        urls.add("https://www.xceptance.com/js/jquery-1.11.1.min.js");
+        subrequests.add(new StaticSubrequest(urls));
+
+        // TODO Meeting
+        // XHRSubrequest
+        // Request
+        final Request requestOfSubrequest = new Request("${host}/posters/getProductOfTopCategory", "Navigate to second product page");
+        requestOfSubrequest.setMethod(HttpMethod.POST.toString());
+        final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+        parameters.add(new NameValuePair("categoryId", "2"));
+        parameters.add(new NameValuePair("page", "2"));
+        requestOfSubrequest.setParameters(parameters);
+        // Response
+        final List<AbstractValidator> validation = new ArrayList<AbstractValidator>();
+        validation.add(new RegExpValidator("blub", "Grilled Salmon with Potato Wedges", "Grilled Salmon with Potato Wedges"));
+        final Response responseOfSubrequest = new Response(null, validation);
+        final XHRSubrequest subrequest = new XHRSubrequest("Navigate to second product page.", requestOfSubrequest, responseOfSubrequest);
+        subrequests.add(subrequest);
+        final ScriptItem actionItem = new LightWeigthAction(request, null, subrequests);
         itemList.add(actionItem);
         return itemList;
     }

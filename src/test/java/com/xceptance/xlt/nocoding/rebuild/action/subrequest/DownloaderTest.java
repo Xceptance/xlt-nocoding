@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.actions;
+package com.xceptance.xlt.nocoding.rebuild.action.subrequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.xceptance.xlt.engine.XltWebClient;
+import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.Downloader;
 
 public class DownloaderTest
 {

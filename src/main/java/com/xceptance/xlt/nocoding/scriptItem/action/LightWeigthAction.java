@@ -1,10 +1,7 @@
 package com.xceptance.xlt.nocoding.scriptItem.action;
 
-import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.List;
 
-import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.engine.Session;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
@@ -38,10 +35,12 @@ public class LightWeigthAction extends Action
     @Override
     public void execute(final PropertyManager propertyManager) throws Throwable
     {
-        // Build a list of WebRequest from the subrequests
-        final List<WebRequest> requestsOfSubrequest = buildWebRequestFromSubrequests(getSubrequests(), propertyManager);
-
-        final WebAction action = new WebAction(getRequest().getName(), getRequest().buildWebRequest(propertyManager), requestsOfSubrequest,
+        for (final AbstractSubrequest subrequest : subrequests)
+        {
+            // TODO Meeting
+            subrequest.setPropertyManager(propertyManager);
+        }
+        final WebAction action = new WebAction(getRequest().getName(), getRequest().buildWebRequest(propertyManager), subrequests,
                                                propertyManager.getWebClient(), (final WebAction webAction) -> doExecute(webAction));
 
         try
@@ -60,14 +59,6 @@ public class LightWeigthAction extends Action
             {
                 new Response().execute(propertyManager, action.getWebResponse());
             }
-
-            // if (getSubrequests() != null || !getSubrequests().isEmpty())
-            // {
-            // for (final AbstractSubrequest abstractSubrequest : subrequests)
-            // {
-            // abstractSubrequest.execute(propertyManager);
-            // }
-            // }
         }
         finally
         {
@@ -80,40 +71,6 @@ public class LightWeigthAction extends Action
                 ;
             }
         }
-    }
-
-    /**
-     * Builds a list of WebRequests from a list of AbstractSubrequests
-     * 
-     * @param subrequests
-     *            The subrequests to be turned into WebRequests
-     * @return The list of WebRequests
-     * @throws MalformedURLException
-     */
-    private List<WebRequest> buildWebRequestFromSubrequests(final List<AbstractSubrequest> subrequests,
-                                                            final PropertyManager propertyManager)
-        throws MalformedURLException
-    {
-        List<WebRequest> webRequests = null;
-        if (subrequests != null)
-        {
-            webRequests = new ArrayList<WebRequest>(subrequests.size());
-            for (final AbstractSubrequest subrequest : subrequests)
-            {
-                webRequests.add(subrequest.getWebRequest(propertyManager));
-            }
-        }
-        return webRequests;
-    }
-
-    public LightWeightPage getLightWeightPage()
-    {
-        return lightWeightPage;
-    }
-
-    public void setLightWeightPage(final LightWeightPage lightWeightPage)
-    {
-        this.lightWeightPage = lightWeightPage;
     }
 
     /**
@@ -145,19 +102,28 @@ public class LightWeigthAction extends Action
 
         if (action.getSubrequests() != null && !action.getSubrequests().isEmpty())
         {
-            for (final WebRequest subrequest : action.getSubrequests())
+            for (final AbstractSubrequest subrequest : action.getSubrequests())
             {
-                if (subrequest.isXHR())
+                try
                 {
-                    action.getSubrequestResponses().add(action.getWebClient().loadWebResponse(subrequest));
+                    subrequest.execute((XltWebClient) action.getWebClient());
                 }
-                // Static subrequest?
-                else
+                catch (final Throwable e)
                 {
-                    action.setWebResponse(action.getWebClient().loadWebResponse(subrequest));
+                    throw new Exception(e);
+                    // e.printStackTrace();
                 }
             }
         }
+    }
 
+    public LightWeightPage getLightWeightPage()
+    {
+        return lightWeightPage;
+    }
+
+    public void setLightWeightPage(final LightWeightPage lightWeightPage)
+    {
+        this.lightWeightPage = lightWeightPage;
     }
 }

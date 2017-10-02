@@ -7,7 +7,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.xceptance.xlt.engine.XltWebClient;
-import com.xceptance.xlt.nocoding.actions.Downloader;
+import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.Downloader;
 
 public class DownloaderTest
 {

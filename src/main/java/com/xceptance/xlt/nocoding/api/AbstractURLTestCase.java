@@ -40,7 +40,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
      * definition file
      */
     @Before
-    protected void initialize()
+    public void initialize()
     {
         // Instantiate storage
         final DataStorage globalStore = new DataStorage();
@@ -63,7 +63,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
      * @throws Throwable
      */
     @Test
-    protected void executeTest() throws Throwable
+    public void executeTest() throws Throwable
     {
         // for each script item, execute it
         for (final ScriptItem item : itemList)
