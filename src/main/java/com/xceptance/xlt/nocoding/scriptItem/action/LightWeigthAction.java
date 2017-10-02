@@ -16,8 +16,14 @@ import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubreques
 import com.xceptance.xlt.nocoding.util.PropertyManager;
 import com.xceptance.xlt.nocoding.util.webAction.WebAction;
 
+/**
+ * The class that describes an action in lightweight mode
+ */
 public class LightWeigthAction extends Action
 {
+    /**
+     * The light weight page that is built by this action
+     */
     private LightWeightPage lightWeightPage;
 
     public LightWeigthAction(final Request request, final Response response, final List<AbstractSubrequest> subrequests)
@@ -25,10 +31,15 @@ public class LightWeigthAction extends Action
         super(request, response, subrequests);
     }
 
+    /**
+     * Executes the light weight action by building a WebAction, running it and then validating the answer. In the end, the
+     * page gets appended to the result browser.
+     */
     @Override
     public void execute(final PropertyManager propertyManager) throws Throwable
     {
-        final List<WebRequest> requestsOfSubrequest = buildWebRequestFromSubrequests(getSubrequests());
+        // Build a list of WebRequest from the subrequests
+        final List<WebRequest> requestsOfSubrequest = buildWebRequestFromSubrequests(getSubrequests(), propertyManager);
 
         final WebAction action = new WebAction(getRequest().getName(), getRequest().buildWebRequest(propertyManager), requestsOfSubrequest,
                                                propertyManager.getWebClient(), (final WebAction webAction) -> doExecute(webAction));
@@ -71,7 +82,17 @@ public class LightWeigthAction extends Action
         }
     }
 
-    private List<WebRequest> buildWebRequestFromSubrequests(final List<AbstractSubrequest> subrequests) throws MalformedURLException
+    /**
+     * Builds a list of WebRequests from a list of AbstractSubrequests
+     * 
+     * @param subrequests
+     *            The subrequests to be turned into WebRequests
+     * @return The list of WebRequests
+     * @throws MalformedURLException
+     */
+    private List<WebRequest> buildWebRequestFromSubrequests(final List<AbstractSubrequest> subrequests,
+                                                            final PropertyManager propertyManager)
+        throws MalformedURLException
     {
         List<WebRequest> webRequests = null;
         if (subrequests != null)
@@ -79,7 +100,7 @@ public class LightWeigthAction extends Action
             webRequests = new ArrayList<WebRequest>(subrequests.size());
             for (final AbstractSubrequest subrequest : subrequests)
             {
-                webRequests.add(subrequest.getWebRequest());
+                webRequests.add(subrequest.getWebRequest(propertyManager));
             }
         }
         return webRequests;
@@ -95,6 +116,13 @@ public class LightWeigthAction extends Action
         this.lightWeightPage = lightWeightPage;
     }
 
+    /**
+     * This method uses an action as parameter and defines how to execute a WebAction. This is used in a lambda method in
+     * the execute-Method.
+     * 
+     * @param action
+     * @throws Exception
+     */
     public void doExecute(final WebAction action) throws Exception
     {
         // TODO Unterscheidung Subrequest als Main Request vs normale Request
@@ -123,6 +151,7 @@ public class LightWeigthAction extends Action
                 {
                     action.getSubrequestResponses().add(action.getWebClient().loadWebResponse(subrequest));
                 }
+                // Static subrequest?
                 else
                 {
                     action.setWebResponse(action.getWebClient().loadWebResponse(subrequest));

@@ -29,27 +29,42 @@ public class Request
     private String urlAsString;
 
     /**
-     * The HttpMethod for the webrequest
+     * The HttpMethod for the webrequest. Defaults to "GET"
      */
     private String method;
 
     /**
-     * Sets the WebRequest as Xhr request
+     * Sets the WebRequest as Xhr request. Defaults to "false"
      */
     private String Xhr;
 
+    /**
+     * Defines if the parameters are encoded. Defaults to "false"
+     */
     private String encodeParameters;
 
+    /**
+     * The list of all parameters
+     */
     private List<NameValuePair> parameters;
 
+    /**
+     * A map that define the headers
+     */
     private Map<String, String> headers;
 
+    /**
+     * The body of the WebRequest
+     */
     private String body;
 
+    /**
+     * Defines if the body is encoded. Defaults to "false"
+     */
     private String encodeBody;
 
     /**
-     * Simple constructor so we do not have to build a variable map when we want to fire basic requests
+     * Creates a class with the minimum of information, that is the URL and the name of the Action
      * 
      * @param url
      *            The URL of the website
@@ -184,7 +199,7 @@ public class Request
     }
 
     /**
-     * Tries to resolve all variables of non-null attributes. Variables are specified with by "${variable}".
+     * Tries to resolve all variables of non-null attributes. Variables are specified by "${variable}".
      * 
      * @param propertyManager
      *            The propertyManager with the DataStorage to use
@@ -352,34 +367,6 @@ public class Request
         // TODO encode body
 
     }
-
-    // private void handleParameters()
-    // {
-    // String parametersAsString = "";
-    // final Iterator<NameValuePair> iterator = parameters.iterator();
-    // NameValuePair next;
-    // while (iterator.hasNext())
-    // {
-    // // TODO nach helpern dafür suchen, die das lösen
-    // next = iterator.next();
-    // if (iterator.hasNext())
-    // {
-    // parametersAsString += next.getName() + "=" + next.getValue() + "&";
-    // }
-    // else
-    // {
-    // parametersAsString += next.getName() + "=" + next.getValue();
-    // }
-    // }
-    // if (this.method == HttpMethod.POST)
-    // {
-    // body = parametersAsString;
-    // }
-    // else
-    // {
-    // this.urlAsString += "?" + parametersAsString;
-    // }
-    // }
 
     private void encodeParameters()
     {

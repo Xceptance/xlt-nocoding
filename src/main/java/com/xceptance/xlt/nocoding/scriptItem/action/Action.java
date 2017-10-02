@@ -27,6 +27,13 @@ public abstract class Action implements ScriptItem
      */
     protected final List<AbstractSubrequest> subrequests;
 
+    /**
+     * Creates an action with the specified request, response and subrequests
+     * 
+     * @param request
+     * @param response
+     * @param subrequests
+     */
     public Action(final Request request, final Response response, final List<AbstractSubrequest> subrequests)
     {
         this.request = request;

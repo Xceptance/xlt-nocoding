@@ -10,6 +10,6 @@ public abstract class AbstractSubrequest
 
     public abstract void execute(PropertyManager propertyManager) throws Throwable;
 
-    public abstract WebRequest getWebRequest() throws MalformedURLException;
+    public abstract WebRequest getWebRequest(PropertyManager propertyManager) throws MalformedURLException;
 
 }

@@ -28,7 +28,7 @@ public class StaticSubrequest extends AbstractSubrequest
     }
 
     @Override
-    public WebRequest getWebRequest() throws MalformedURLException
+    public WebRequest getWebRequest(final PropertyManager propertyManager) throws MalformedURLException
     {
         // TODO Auto-generated method stub
         return null;

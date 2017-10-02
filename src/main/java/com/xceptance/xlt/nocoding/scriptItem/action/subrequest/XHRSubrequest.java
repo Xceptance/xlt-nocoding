@@ -32,8 +32,10 @@ public class XHRSubrequest extends AbstractSubrequest
     }
 
     @Override
-    public WebRequest getWebRequest() throws MalformedURLException
+    public WebRequest getWebRequest(final PropertyManager propertyManager) throws MalformedURLException
     {
+        // TODO set request explicitly to XHR?
+        webRequest = this.request.buildWebRequest(propertyManager);
         return webRequest;
     }
 }
