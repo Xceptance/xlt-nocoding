@@ -168,7 +168,7 @@ public class VariableResolver
             if (current == '\'')
             {
                 // invert the value of ignore
-                ignore = Boolean.logicalXor(ignore, false);
+                ignore = !ignore;
             }
             else if (!ignore && current == '$')
             {
@@ -182,6 +182,12 @@ public class VariableResolver
                     output += resolvedPair.getLeft();
                     // And raise i by the length of the variable name
                     i += resolvedPair.getRight();
+                    // test if we are at the end
+                    if (i >= toResolve.length() - 1)
+                    {
+                        // We are at the end but still expect a variable
+                        output = "${" + output;
+                    }
                 }
                 // happy path
                 else
@@ -190,13 +196,13 @@ public class VariableResolver
                 }
             }
             // We found a possible end
-            else if (current == '}')
+            else if (!ignore && current == '}')
             {
                 // Since we are in this function, we did find a variable sign,
                 length = i;
                 String resolvedValue = propertyManager.getDataStorage().getVariableByKey(output);
                 // if we didn't find it, let beanshell handle the variable
-                if (resolvedValue == null && !output.equals("{"))
+                if (resolvedValue == null && !output.equals("{") && !output.equals("}"))
                 {
                     try
                     {
@@ -215,7 +221,10 @@ public class VariableResolver
                     }
                     catch (final EvalError e)
                     {
-                        throw new RuntimeException("Evaluation Error: ", e);
+                        // throw new RuntimeException("Evaluation Error: ", e);
+                        // We couldn't resolve it, so it was probably some function parameter
+                        output += current;
+                        continue;
                     }
                 }
                 // This fixes Text${'{'}
@@ -227,6 +236,11 @@ public class VariableResolver
                 output = resolvedValue;
                 // we found a variable, therefore we are done
                 break;
+            }
+            else if (i >= toResolve.length() - 1)
+            {
+                // We are at the end and haven't found anything
+                output = "${" + output + current;
             }
             else
             {
