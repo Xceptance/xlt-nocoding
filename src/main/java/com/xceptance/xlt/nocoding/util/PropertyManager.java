@@ -4,7 +4,6 @@ import com.xceptance.xlt.api.data.GeneralDataProvider;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
-import com.xceptance.xlt.nocoding.util.dataStorage.DefaultValue;
 import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
 public class PropertyManager
@@ -24,16 +23,6 @@ public class PropertyManager
         this.webClient = new XltWebClient();
         this.resolver = new VariableResolver(GeneralDataProvider.getInstance());
         // TODO in Config auslagern! -> Damit funktioniert außerdem nicht mehr der EasyTestcase
-        webClient.getOptions().setRedirectEnabled(false);
-    }
-
-    public PropertyManager(final XltProperties properties, final DataStorage dataStorage, final DefaultValue defaultValues)
-    {
-        this.properties = properties;
-        this.dataStorage = dataStorage;
-        this.webClient = new XltWebClient();
-        this.resolver = new VariableResolver(GeneralDataProvider.getInstance());
-        // TODO in Config auslagern!
         webClient.getOptions().setRedirectEnabled(false);
     }
 
