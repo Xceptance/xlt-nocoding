@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.rebuild.action.subrequest;
+package com.xceptance.xlt.nocoding.rebuild.scriptItem.action.subrequest;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.rebuild.action.response;
+package com.xceptance.xlt.nocoding.rebuild.scriptItem.action.response;
 
 import java.net.MalformedURLException;
 import java.net.URL;

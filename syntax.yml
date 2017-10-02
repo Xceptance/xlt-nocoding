@@ -96,6 +96,11 @@
     - p_1 : v_1
     - p_2 : v_2    
 
+- Default-Set :
+    Action :
+        Request :
+            Method : POST
+
 
 #Delete default values
 - Cookies : delete
@@ -105,3 +110,8 @@
 - Url : delete
 - Method : delete
 - Xhr : delete
+
+- Default-Remove :
+    Action :
+        Request :
+            Method : delete

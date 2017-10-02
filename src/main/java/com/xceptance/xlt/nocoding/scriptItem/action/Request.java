@@ -176,6 +176,7 @@ public class Request
     private void fillDefaultData(final PropertyManager propertyManager)
     {
         final DataStorage globalStorage = propertyManager.getDataStorage();
+        // if the name is null, check if it has a default value
         if (this.getMethod() == null)
         {
             setMethod(globalStorage.getConfigItemByKey(Constants.METHOD));
@@ -190,6 +191,40 @@ public class Request
         {
             setEncodeParameters(globalStorage.getConfigItemByKey(Constants.ENCODEPARAMETERS));
             // this.encodeParameters = Boolean.valueOf(encodeParameters);
+        }
+        // TODO Meeting
+        if (this.getParameters() == null || (this.getParameters() != null && this.getParameters().isEmpty()))
+        {
+            // We need to find all default parameters that are for a request
+            // Therefore, we have to specify a format in which parameters are saved
+            // The count we are currently at
+            Integer counter = 0;
+            // The configKey we need to use for the name
+            final String parameterName = "parameter_name_";
+            // The configKey we need to use for the value
+            final String parameterValueName = "parameter_value_";
+            String currentName = globalStorage.getConfigItemByKey(parameterName + counter.toString());
+            String currentValue = globalStorage.getConfigItemByKey(parameterValueName + counter.toString());
+            while (currentName != null && currentValue != null)
+            {
+                // Add the currentName and currentValue to the parameters
+                getParameters().add(new NameValuePair(currentName, currentValue));
+                // Increment our counter
+                counter++;
+                // Set the new currentName
+                currentName = globalStorage.getConfigItemByKey(parameterName + counter.toString());
+                // Set the new currentValue
+                currentValue = globalStorage.getConfigItemByKey(parameterValueName + counter.toString());
+            }
+        }
+
+        if (this.getHeaders() == null || (this.getHeaders() != null && this.getHeaders().isEmpty()))
+        {
+            // Do something with the headers
+        }
+        if (this.getBody() == null)
+        {
+            setBody(globalStorage.getConfigItemByKey(Constants.BODY));
         }
         if (this.getEncodeBody() == null)
         {

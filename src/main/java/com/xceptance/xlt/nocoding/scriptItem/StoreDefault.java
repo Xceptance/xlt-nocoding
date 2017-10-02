@@ -21,6 +21,13 @@ public class StoreDefault implements ScriptItem
     @Override
     public void execute(final PropertyManager propertyManager) throws Throwable
     {
-        propertyManager.getDataStorage().storeConfigItem(variableName, value);
+        if (!value.equals("delete"))
+        {
+            propertyManager.getDataStorage().storeConfigItem(variableName, value);
+        }
+        else
+        {
+            propertyManager.getDataStorage().removeConfigItem(variableName);
+        }
     }
 }
