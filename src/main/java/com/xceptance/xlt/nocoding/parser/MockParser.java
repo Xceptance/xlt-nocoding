@@ -1,9 +1,7 @@
 package com.xceptance.xlt.nocoding.parser;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
@@ -27,7 +25,7 @@ public class MockParser implements Parser
     public List<ScriptItem> parse()
     {
         // TODO Auto-generated method stub
-        return this.parseHardWithSubRequests();
+        return this.parseMediumLogin();
     }
 
     /**
@@ -97,7 +95,6 @@ public class MockParser implements Parser
     private List<ScriptItem> parseMedium()
     {
         final List<ScriptItem> itemList = new ArrayList<ScriptItem>();
-        final Map<String, String> variables = new HashMap<String, String>();
         final Request request = new Request("https://localhost:8443/posters/", "Visit Homepage");
 
         // final Subrequest subrequest = new Subrequest();

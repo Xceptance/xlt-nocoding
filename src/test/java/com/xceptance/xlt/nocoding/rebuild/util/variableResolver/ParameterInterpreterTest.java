@@ -18,7 +18,6 @@ package com.xceptance.xlt.nocoding.rebuild.util.variableResolver;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.xceptance.xlt.api.util.XltProperties;
@@ -99,46 +98,6 @@ public class ParameterInterpreterTest
         final String toResolve = "No ${m = Math.abs(-1)} here and ${m + Math.abs(-2)} here.";
         Assert.assertEquals("No 1 here and 3 here.", interpreter.resolveString(toResolve, propertyManager));
     }
-    //
-    // @Test
-    // public void storeAndEvaluete()
-    // {
-    // try
-    // {
-    // interpreter.set("a", "A");
-    // interpreter.set("b", "B");
-    // }
-    // catch (final EvalError e)
-    // {
-    // // TODO Auto-generated catch block
-    // e.printStackTrace();
-    // }
-    // Assert.assertEquals("A", interpreter.processDynamicData("${a}"));
-    // Assert.assertEquals("B", interpreter.processDynamicData("${b}"));
-    // Assert.assertEquals("AB", interpreter.processDynamicData("${a}${b}"));
-    //
-    // }
-    //
-    // @Test
-    // public void storeNVPAndEvaluete()
-    // {
-    // try
-    // {
-    // final NameValuePair nvpC = new NameValuePair("c", "C");
-    // final NameValuePair nvpD = new NameValuePair("d", "D");
-    // interpreter.set(nvpC);
-    // interpreter.set(nvpD);
-    // }
-    // catch (final EvalError e)
-    // {
-    // // TODO Auto-generated catch block
-    // e.printStackTrace();
-    // }
-    // Assert.assertEquals("C", interpreter.processDynamicData("${c}"));
-    // Assert.assertEquals("D", interpreter.processDynamicData("${d}"));
-    // Assert.assertEquals("CD", interpreter.processDynamicData("${c}${d}"));
-    // Assert.assertEquals("C", interpreter.processDynamicData("${c}"));
-    // }
 
     // ----------------------------------------------------------------------------------------
     /* Error handling */
@@ -239,12 +198,6 @@ public class ParameterInterpreterTest
         Assert.assertNotNull(resolved);
     }
 
-    @Ignore
-    @Test
-    public void testBeanShellData()
-    {
-        final String resolved = interpreter.resolveString("${DATA.getEmail()}", propertyManager);
-        Assert.assertNotNull(resolved);
-    }
+    // TODO rekursions fall host = ${host}
 
 }

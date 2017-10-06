@@ -35,10 +35,13 @@ public class LightWeigthAction extends Action
     @Override
     public void execute(final PropertyManager propertyManager) throws Throwable
     {
-        for (final AbstractSubrequest subrequest : subrequests)
+        if (getSubrequests() != null && !getSubrequests().isEmpty())
         {
-            // TODO Meeting
-            subrequest.setPropertyManager(propertyManager);
+            for (final AbstractSubrequest subrequest : subrequests)
+            {
+                // TODO Meeting
+                subrequest.setPropertyManager(propertyManager);
+            }
         }
         final WebAction action = new WebAction(getRequest().getName(), getRequest().buildWebRequest(propertyManager), subrequests,
                                                propertyManager.getWebClient(), (final WebAction webAction) -> doExecute(webAction));
