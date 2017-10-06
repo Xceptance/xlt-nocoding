@@ -11,7 +11,7 @@ import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.parser.MockParser;
 import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
-import com.xceptance.xlt.nocoding.util.PropertyManager;
+import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 /**
@@ -34,7 +34,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
     /**
      * The property manager, that handles all properties
      */
-    private PropertyManager propertyManager;
+    private Context context;
 
     /**
      * Prepares the test case by: Instantiating the PropertyManager, Loading the default configuration, and Parsing the
@@ -49,10 +49,10 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
         // Store host in it
         globalStore.storeVariable("host", "https://localhost:8443");
         // Instantiate the PropertyManager
-        propertyManager = new PropertyManager(XltProperties.getInstance(), globalStore);
+        context = new Context(XltProperties.getInstance(), globalStore);
         // TODO write in constructor?
         // Load the default configuration
-        propertyManager.getDataStorage().loadDefaultConfig();
+        context.getDataStorage().loadDefaultConfig();
 
         // this.parser = new YamlParser();
         this.parser = new MockParser();
@@ -75,7 +75,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
             {
                 // TODO Log Eintrag!
                 XltLogger.runTimeLogger.info("Starting ScriptItem : " + item.toString());
-                item.execute(propertyManager);
+                item.execute(context);
             }
         }
         else
@@ -96,9 +96,9 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
         return itemList;
     }
 
-    public PropertyManager getPropertyManager()
+    public Context getContext()
     {
-        return propertyManager;
+        return context;
     }
 
 }

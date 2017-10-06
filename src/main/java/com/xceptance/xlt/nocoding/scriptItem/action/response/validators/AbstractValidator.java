@@ -1,7 +1,7 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response.validators;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
-import com.xceptance.xlt.nocoding.util.PropertyManager;
+import com.xceptance.xlt.nocoding.util.Context;
 
 public abstract class AbstractValidator
 {
@@ -12,7 +12,7 @@ public abstract class AbstractValidator
         this.validationName = validationName;
     }
 
-    public abstract void validate(final PropertyManager propertyManager, final WebResponse webResponse) throws Exception;
+    public abstract void validate(final Context context, final WebResponse webResponse) throws Exception;
 
     public String getValidationName()
     {

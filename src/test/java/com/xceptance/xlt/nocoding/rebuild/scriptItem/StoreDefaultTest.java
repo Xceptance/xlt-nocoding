@@ -8,51 +8,51 @@ import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.StoreDefault;
 import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.PropertyManager;
+import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 public class StoreDefaultTest
 {
-    public PropertyManager propertyManager;
+    public Context context;
 
     @Before
     public void init()
     {
-        propertyManager = new PropertyManager(XltProperties.getInstance(), new DataStorage());
+        context = new Context(XltProperties.getInstance(), new DataStorage());
     }
 
     @Test
     public void singleStore() throws Throwable
     {
         final ScriptItem store = new StoreDefault("test", "text");
-        Assert.assertNull(propertyManager.getDataStorage().getConfigItemByKey("test"));
-        store.execute(propertyManager);
-        Assert.assertEquals("text", propertyManager.getDataStorage().getConfigItemByKey("test"));
+        Assert.assertNull(context.getDataStorage().getConfigItemByKey("test"));
+        store.execute(context);
+        Assert.assertEquals("text", context.getDataStorage().getConfigItemByKey("test"));
     }
 
     @Test
     public void deleteStore() throws Throwable
     {
         ScriptItem store = new StoreDefault("test", "text");
-        Assert.assertNull(propertyManager.getDataStorage().getConfigItemByKey("test"));
-        store.execute(propertyManager);
-        Assert.assertEquals("text", propertyManager.getDataStorage().getConfigItemByKey("test"));
+        Assert.assertNull(context.getDataStorage().getConfigItemByKey("test"));
+        store.execute(context);
+        Assert.assertEquals("text", context.getDataStorage().getConfigItemByKey("test"));
         store = new StoreDefault("test", "delete");
-        store.execute(propertyManager);
-        Assert.assertNull(propertyManager.getDataStorage().getConfigItemByKey("test"));
+        store.execute(context);
+        Assert.assertNull(context.getDataStorage().getConfigItemByKey("test"));
     }
 
     @Test
     public void deleteDefault() throws Throwable
     {
-        propertyManager.getDataStorage().loadDefaultConfig();
+        context.getDataStorage().loadDefaultConfig();
         ScriptItem store = new StoreDefault(Constants.METHOD, Constants.METHOD_POST);
-        Assert.assertEquals(Constants.METHOD_GET, propertyManager.getDataStorage().getConfigItemByKey(Constants.METHOD));
-        store.execute(propertyManager);
-        Assert.assertEquals(Constants.METHOD_POST, propertyManager.getDataStorage().getConfigItemByKey(Constants.METHOD));
+        Assert.assertEquals(Constants.METHOD_GET, context.getDataStorage().getConfigItemByKey(Constants.METHOD));
+        store.execute(context);
+        Assert.assertEquals(Constants.METHOD_POST, context.getDataStorage().getConfigItemByKey(Constants.METHOD));
         store = new StoreDefault(Constants.METHOD, "delete");
-        store.execute(propertyManager);
-        Assert.assertEquals(Constants.METHOD_GET, propertyManager.getDataStorage().getConfigItemByKey(Constants.METHOD));
+        store.execute(context);
+        Assert.assertEquals(Constants.METHOD_GET, context.getDataStorage().getConfigItemByKey(Constants.METHOD));
     }
 
 }

@@ -18,7 +18,7 @@ import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.PropertyManager;
+import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 /**
@@ -30,12 +30,12 @@ public class RequestWebRequestBuilder
 
     public WebRequest webRequest;
 
-    public PropertyManager propertyManager;
+    public Context context;
 
     @Before
     public void init()
     {
-        propertyManager = new PropertyManager(XltProperties.getInstance(), new DataStorage());
+        context = new Context(XltProperties.getInstance(), new DataStorage());
     }
 
     @Test
@@ -61,7 +61,7 @@ public class RequestWebRequestBuilder
 
         try
         {
-            webRequest = request.buildWebRequest(propertyManager);
+            webRequest = request.buildWebRequest(context);
             // URL, Method
             final WebRequest expected = new WebRequest(new URL(url), method);
             // Parameters
@@ -108,16 +108,16 @@ public class RequestWebRequestBuilder
         final Map<String, String> headers = new HashMap<String, String>();
         final Boolean xhr = false;
 
-        propertyManager.getDataStorage().storeVariable(Constants.URL, url);
-        propertyManager.getDataStorage().storeVariable(Constants.METHOD, method.toString());
+        context.getDataStorage().storeVariable(Constants.URL, url);
+        context.getDataStorage().storeVariable(Constants.METHOD, method.toString());
         // We need to store individual parameters
         // propertyManager.getDataStorage().storeVariable(Constants.PARAMETERS, parameters);
-        propertyManager.getDataStorage().storeVariable(Constants.BODY, body);
-        propertyManager.getDataStorage().storeVariable(Constants.ENCODEBODY, encodeBody.toString());
-        propertyManager.getDataStorage().storeVariable(Constants.ENCODEPARAMETERS, encodeParameters.toString());
+        context.getDataStorage().storeVariable(Constants.BODY, body);
+        context.getDataStorage().storeVariable(Constants.ENCODEBODY, encodeBody.toString());
+        context.getDataStorage().storeVariable(Constants.ENCODEPARAMETERS, encodeParameters.toString());
         // Store single headers
         // propertyManager.getDataStorage().storeVariable(Constants.ENCODEPARAMETERS, encodeParameters.toString());
-        propertyManager.getDataStorage().storeVariable(Constants.XHR, xhr.toString());
+        context.getDataStorage().storeVariable(Constants.XHR, xhr.toString());
         final String url_var = "${" + Constants.URL + "}";
         final String method_var = "${" + Constants.METHOD + "}";
         final List<NameValuePair> parameters_var = new ArrayList<NameValuePair>();
@@ -131,42 +131,42 @@ public class RequestWebRequestBuilder
         key = "login";
         value = "john@doe.com";
         parameters.add(new NameValuePair(key, value));
-        propertyManager.getDataStorage().storeVariable("param1_key", key);
-        propertyManager.getDataStorage().storeVariable("param1_value", value);
+        context.getDataStorage().storeVariable("param1_key", key);
+        context.getDataStorage().storeVariable("param1_value", value);
         parameters_var.add(new NameValuePair("${param1_key}", "${param1_value}"));
         key = "password";
         value = "topsecret";
         parameters.add(new NameValuePair(key, value));
-        propertyManager.getDataStorage().storeVariable("param2_key", key);
-        propertyManager.getDataStorage().storeVariable("param2_value", value);
+        context.getDataStorage().storeVariable("param2_key", key);
+        context.getDataStorage().storeVariable("param2_value", value);
         parameters_var.add(new NameValuePair("${param2_key}", "${param2_value}"));
         key = "btnSignIn";
         // TODO was wenn das null ist?
         value = "";
         parameters.add(new NameValuePair(key, value));
-        propertyManager.getDataStorage().storeVariable("param3_key", key);
-        propertyManager.getDataStorage().storeVariable("param3_value", value);
+        context.getDataStorage().storeVariable("param3_key", key);
+        context.getDataStorage().storeVariable("param3_value", value);
         parameters_var.add(new NameValuePair("${param3_key}", "${param3_value}"));
 
         // Headers
         key = "login";
         value = "john@doe.com";
         headers.put(key, value);
-        propertyManager.getDataStorage().storeVariable("header1_key", key);
-        propertyManager.getDataStorage().storeVariable("header1_value", value);
+        context.getDataStorage().storeVariable("header1_key", key);
+        context.getDataStorage().storeVariable("header1_value", value);
         headers_var.put("${header1_key}", "${header1_value}");
         key = "password";
         value = "topsecret";
         headers.put(key, value);
-        propertyManager.getDataStorage().storeVariable("header2_key", key);
-        propertyManager.getDataStorage().storeVariable("header2_value", value);
+        context.getDataStorage().storeVariable("header2_key", key);
+        context.getDataStorage().storeVariable("header2_value", value);
         headers_var.put("${header2_key}", "${header2_value}");
         key = "btnSignIn";
         // TODO was wenn das null ist?
         value = "";
         headers.put(key, value);
-        propertyManager.getDataStorage().storeVariable("header3_key", key);
-        propertyManager.getDataStorage().storeVariable("header3_value", value);
+        context.getDataStorage().storeVariable("header3_key", key);
+        context.getDataStorage().storeVariable("header3_value", value);
         headers_var.put("${header3_key}", "${header3_value}");
 
         request = new Request(url_var, "Visit Homepage");
@@ -180,7 +180,7 @@ public class RequestWebRequestBuilder
 
         try
         {
-            webRequest = request.buildWebRequest(propertyManager);
+            webRequest = request.buildWebRequest(context);
             // URL, Method
             final WebRequest expected = new WebRequest(new URL(url), method);
             // Parameters

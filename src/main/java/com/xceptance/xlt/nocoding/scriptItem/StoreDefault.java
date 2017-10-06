@@ -1,6 +1,6 @@
 package com.xceptance.xlt.nocoding.scriptItem;
 
-import com.xceptance.xlt.nocoding.util.PropertyManager;
+import com.xceptance.xlt.nocoding.util.Context;
 
 /**
  * This is the class for simple assignments, so if a script item has the form of "- variable_1: value_1" this ScriptItem
@@ -19,15 +19,15 @@ public class StoreDefault implements ScriptItem
     }
 
     @Override
-    public void execute(final PropertyManager propertyManager) throws Throwable
+    public void execute(final Context context) throws Throwable
     {
         if (!value.equals("delete"))
         {
-            propertyManager.getDataStorage().storeConfigItem(variableName, value);
+            context.getDataStorage().storeConfigItem(variableName, value);
         }
         else
         {
-            propertyManager.getDataStorage().removeConfigItem(variableName);
+            context.getDataStorage().removeConfigItem(variableName);
         }
     }
 }

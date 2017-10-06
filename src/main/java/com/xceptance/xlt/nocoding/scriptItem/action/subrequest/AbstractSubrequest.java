@@ -1,22 +1,22 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.subrequest;
 
 import com.xceptance.xlt.engine.XltWebClient;
-import com.xceptance.xlt.nocoding.util.PropertyManager;
+import com.xceptance.xlt.nocoding.util.Context;
 
 public abstract class AbstractSubrequest
 {
-    protected PropertyManager propertyManager;
+    protected Context context;
 
     public abstract void execute(XltWebClient webClient) throws Throwable;
 
-    public void setPropertyManager(final PropertyManager propertyManager)
+    public void setContext(final Context context)
     {
-        this.propertyManager = propertyManager;
+        this.context = context;
     }
 
-    public PropertyManager getPropertyManager()
+    public Context getContext()
     {
-        return propertyManager;
+        return context;
     }
 
 }

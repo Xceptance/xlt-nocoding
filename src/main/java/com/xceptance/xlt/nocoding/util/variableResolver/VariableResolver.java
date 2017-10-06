@@ -8,7 +8,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.xceptance.xlt.api.data.GeneralDataProvider;
-import com.xceptance.xlt.nocoding.util.PropertyManager;
+import com.xceptance.xlt.nocoding.util.Context;
 
 import bsh.EvalError;
 import bsh.Interpreter;
@@ -44,9 +44,9 @@ public class VariableResolver
         this(GeneralDataProvider.getInstance());
     }
 
-    public String resolveString(final String toResolve, final PropertyManager propertyManager)
+    public String resolveString(final String toResolve, final Context context)
     {
-        return resolveStringInAGoodWayHopefully(toResolve, propertyManager);
+        return resolveStringInAGoodWayHopefully(toResolve, context);
         // return resolveStringNew(toResolve, propertyManager, 0, new Stack<Integer>());
     }
 
@@ -55,12 +55,12 @@ public class VariableResolver
      * 
      * @param toResolve
      *            The String that you want to resolve
-     * @param propertyManager
+     * @param context
      *            The propertyManager with the global data storage inside
      * @return String - The resolved String
      * @throws EvalError
      */
-    public String resolveStringOld(final String toResolve, final PropertyManager propertyManager)
+    public String resolveStringOld(final String toResolve, final Context context)
     {
         // Set replacement to our toResolve string
         String replacement = toResolve;
@@ -72,7 +72,7 @@ public class VariableResolver
             // Remove ${ and }
             final String resolvedVariable = foundVariable.substring(2, foundVariable.length() - 1);
             // Search in the storage for the variable
-            String resolvedValue = propertyManager.getDataStorage().getVariableByKey(resolvedVariable);
+            String resolvedValue = context.getDataStorage().getVariableByKey(resolvedVariable);
             // if we didn't find it, let beanshell handle the variable
             if (resolvedValue == null)
             {
@@ -96,14 +96,14 @@ public class VariableResolver
             {
                 replacement = toResolve.replace(foundVariable, resolvedValue);
                 // Finally resolve other placeholders
-                replacement = resolveString(replacement, propertyManager);
+                replacement = resolveString(replacement, context);
             }
         }
 
         return replacement;
     }
 
-    public String resolveStringInAGoodWayHopefully(final String toResolve, final PropertyManager propertyManager)
+    public String resolveStringInAGoodWayHopefully(final String toResolve, final Context context)
     {
         /**
          * When true, this ignores everything, until another ' apppears
@@ -130,7 +130,7 @@ public class VariableResolver
                     // Raise i by two ( +1 -> {, +2 character after { )
                     i = i + 2;
                     // Search for variable in the new string and resolve it
-                    final Pair<String, Integer> resolvedPair = doRecursion(toResolve.substring(i), propertyManager);
+                    final Pair<String, Integer> resolvedPair = doRecursion(toResolve.substring(i), context);
                     // Add the resolved variable to output
                     output += resolvedPair.getLeft();
                     // And raise i by the length of the variable name
@@ -151,7 +151,7 @@ public class VariableResolver
         return output;
     }
 
-    private Pair<String, Integer> doRecursion(final String toResolve, final PropertyManager propertyManager)
+    private Pair<String, Integer> doRecursion(final String toResolve, final Context context)
     {
         /**
          * When true, this ignores everything, until another ' apppears
@@ -177,7 +177,7 @@ public class VariableResolver
                 {
                     // Raise i by two ( +1 -> {, +2 character after { )
                     i = i + 2;
-                    final Pair<String, Integer> resolvedPair = doRecursion(toResolve.substring(i), propertyManager);
+                    final Pair<String, Integer> resolvedPair = doRecursion(toResolve.substring(i), context);
                     // Add the resolved variable to output
                     output += resolvedPair.getLeft();
                     // And raise i by the length of the variable name
@@ -200,7 +200,7 @@ public class VariableResolver
             {
                 // Since we are in this function, we did find a variable sign,
                 length = i;
-                String resolvedValue = propertyManager.getDataStorage().getVariableByKey(output);
+                String resolvedValue = context.getDataStorage().getVariableByKey(output);
                 // if we didn't find it, let beanshell handle the variable
                 if (resolvedValue == null && !output.equals("{") && !output.equals("}"))
                 {

@@ -9,7 +9,7 @@ import com.xceptance.xlt.engine.LightWeightPageImpl;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.AbstractResponseStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.AbstractValidator;
 import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.PropertyManager;
+import com.xceptance.xlt.nocoding.util.Context;
 
 public class Response
 {
@@ -48,37 +48,37 @@ public class Response
         this.httpcode = httpcode;
     }
 
-    public void execute(final PropertyManager propertyManager, final WebResponse webResponse) throws Exception
+    public void execute(final Context context, final WebResponse webResponse) throws Exception
     {
         // fill everything with data
-        fillDefaultData(propertyManager);
+        fillDefaultData(context);
         // then resolve variables
-        resolveValues(propertyManager);
+        resolveValues(context);
         // build the webRequest
-        validate(propertyManager, webResponse);
-        store(propertyManager, webResponse);
+        validate(context, webResponse);
+        store(context, webResponse);
     }
 
-    private void fillDefaultData(final PropertyManager propertyManager)
+    private void fillDefaultData(final Context context)
     {
         if (getHttpcode() == null)
         {
-            setHttpcode(propertyManager.getDataStorage().getConfigItemByKey(Constants.HTTPCODE));
+            setHttpcode(context.getDataStorage().getConfigItemByKey(Constants.HTTPCODE));
         }
 
     }
 
-    private void resolveValues(final PropertyManager propertyManager)
+    private void resolveValues(final Context context)
     {
-        setHttpcode(propertyManager.resolveString(httpcode));
+        setHttpcode(context.resolveString(httpcode));
 
     }
 
-    public void validate(final PropertyManager propertyManager, final WebResponse webResponse) throws Exception
+    public void validate(final Context context, final WebResponse webResponse) throws Exception
     {
         // TODO Get timer name
-        final LightWeightPage page = new LightWeightPageImpl(webResponse, propertyManager.getWebClient().getTimerName(),
-                                                             propertyManager.getWebClient());
+        final LightWeightPage page = new LightWeightPageImpl(webResponse, context.getWebClient().getTimerName(),
+                                                             context.getWebClient());
         if (page != null && httpcode != null)
         {
             new HttpResponseCodeValidator(Integer.parseInt(getHttpcode())).validate(page);
@@ -92,18 +92,18 @@ public class Response
         {
             for (final AbstractValidator abstractValidator : validation)
             {
-                abstractValidator.validate(propertyManager, webResponse);
+                abstractValidator.validate(context, webResponse);
             }
         }
     }
 
-    public void store(final PropertyManager propertyManager, final WebResponse webResponse) throws Exception
+    public void store(final Context context, final WebResponse webResponse) throws Exception
     {
         if (responseStore != null)
         {
             for (final AbstractResponseStore abstractResponseStore : responseStore)
             {
-                abstractResponseStore.store(propertyManager, webResponse);
+                abstractResponseStore.store(context, webResponse);
             }
         }
     }

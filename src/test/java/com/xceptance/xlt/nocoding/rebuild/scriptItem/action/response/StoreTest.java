@@ -19,12 +19,12 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.AbstractResp
 import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.CookieStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.HeaderStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.RegExpStore;
-import com.xceptance.xlt.nocoding.util.PropertyManager;
+import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 public class StoreTest
 {
-    private PropertyManager propertyManager;
+    private Context context;
 
     private XltMockWebConnection webConnection;
 
@@ -44,8 +44,8 @@ public class StoreTest
         List<NameValuePair> headers;
         String name;
         String value;
-        this.propertyManager = new PropertyManager(XltProperties.getInstance(), new DataStorage());
-        webConnection = new XltMockWebConnection(propertyManager.getWebClient());
+        this.context = new Context(XltProperties.getInstance(), new DataStorage());
+        webConnection = new XltMockWebConnection(context.getWebClient());
 
         try
         { // Set answer to localhost/posters/
@@ -105,9 +105,9 @@ public class StoreTest
         // Build the store unit that searches for the header
         store = new HeaderStore("header", header);
         // Validate
-        store.store(propertyManager, webResponse);
+        store.store(context, webResponse);
 
-        final String actual = propertyManager.resolveString("${header}");
+        final String actual = context.resolveString("${header}");
         Assert.assertEquals("no-cache, no-store, max-age=0, must-revalidate", actual);
 
     }
@@ -133,10 +133,10 @@ public class StoreTest
         // Build the store unit that searches only for the cookie
         store = new CookieStore("cookie", cookie);
         // Validate
-        store.store(propertyManager, webResponse);
+        store.store(context, webResponse);
 
         final String text = "success=Login+successful.+Have+fun+in+our+shop%21";
-        final String actual = propertyManager.resolveString("${cookie}");
+        final String actual = context.resolveString("${cookie}");
         Assert.assertEquals(text, actual);
     }
 
@@ -157,9 +157,9 @@ public class StoreTest
         // Build a validator, that searches for the pattern and verifies text is the first match
         store = new RegExpStore("firstClass", pattern);
         // Validate
-        store.store(propertyManager, webResponse);
+        store.store(context, webResponse);
 
-        String actual = propertyManager.resolveString("${firstClass}");
+        String actual = context.resolveString("${firstClass}");
         Assert.assertEquals(text, actual);
 
         // Define the group the text should be in
@@ -167,9 +167,9 @@ public class StoreTest
         // Build a validator, that searches for the pattern and verifies text is the match in the matching group of group
         store = new RegExpStore("firstClassWithGroup", pattern, group);
         // Validate
-        store.store(propertyManager, webResponse);
+        store.store(context, webResponse);
 
-        actual = propertyManager.resolveString("${firstClassWithGroup}");
+        actual = context.resolveString("${firstClassWithGroup}");
         Assert.assertEquals(text, actual);
     }
 }

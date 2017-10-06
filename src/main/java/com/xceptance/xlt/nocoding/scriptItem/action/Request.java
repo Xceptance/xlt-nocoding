@@ -13,7 +13,7 @@ import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.PropertyManager;
+import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 public class Request
@@ -170,12 +170,12 @@ public class Request
     /**
      * Fills in the default values for certain attributes
      * 
-     * @param propertyManager
+     * @param context
      *            The propertyManager with the DataStorage
      */
-    private void fillDefaultData(final PropertyManager propertyManager)
+    private void fillDefaultData(final Context context)
     {
-        final DataStorage globalStorage = propertyManager.getDataStorage();
+        final DataStorage globalStorage = context.getDataStorage();
         // if the name is null, check if it has a default value
         if (this.getMethod() == null)
         {
@@ -236,22 +236,22 @@ public class Request
     /**
      * Tries to resolve all variables of non-null attributes. Variables are specified by "${variable}".
      * 
-     * @param propertyManager
+     * @param context
      *            The propertyManager with the DataStorage to use
      * @throws InvalidArgumentException
      */
-    private void resolveValues(final PropertyManager propertyManager) throws InvalidArgumentException
+    private void resolveValues(final Context context) throws InvalidArgumentException
     {
         // Resolve name
-        String resolvedValue = propertyManager.resolveString(getName());
+        String resolvedValue = context.resolveString(getName());
         setName(resolvedValue);
 
         // Resolve Url
-        resolvedValue = propertyManager.resolveString(getUrlAsString());
+        resolvedValue = context.resolveString(getUrlAsString());
         setUrlAsString(resolvedValue);
 
         // Resolve Httpmethod
-        resolvedValue = propertyManager.resolveString(getMethod());
+        resolvedValue = context.resolveString(getMethod());
 
         // TODO [MEETING] In alter Suite wird darauf nicht geachtet, siehe auch weiter unten
         if (HttpMethod.valueOf(resolvedValue) != null)
@@ -266,7 +266,7 @@ public class Request
         // Resolve (is)Xhr if it exists
         if (getXhr() != null)
         {
-            resolvedValue = propertyManager.resolveString(getXhr());
+            resolvedValue = context.resolveString(getXhr());
             // confirm that the value is either false or true
             if (resolvedValue.equalsIgnoreCase("false") || resolvedValue.equalsIgnoreCase("true"))
             {
@@ -282,7 +282,7 @@ public class Request
         // Resolve (is)EncodeParameters if it exists
         if (getEncodeParameters() != null)
         {
-            resolvedValue = propertyManager.resolveString(getEncodeParameters());
+            resolvedValue = context.resolveString(getEncodeParameters());
             // confirm that the value is either false or true
             if (resolvedValue.equalsIgnoreCase("false") || resolvedValue.equalsIgnoreCase("true"))
             {
@@ -304,9 +304,9 @@ public class Request
             for (final NameValuePair parameter : parameters)
             {
                 // Resolve the name of the parameter
-                resolvedParameterName = propertyManager.resolveString(parameter.getName());
+                resolvedParameterName = context.resolveString(parameter.getName());
                 // Resolve the value of the parameter
-                resolvedParameterValue = propertyManager.resolveString(parameter.getValue());
+                resolvedParameterValue = context.resolveString(parameter.getValue());
                 // Add the resolved name and resolved value to the new parameter list
                 resolvedParameters.add(new NameValuePair(resolvedParameterName, resolvedParameterValue));
             }
@@ -321,7 +321,7 @@ public class Request
             final Map<String, String> resolvedHeaders = new HashMap<String, String>();
             // And insert the resolved name and key of the old map into the new one
             getHeaders().forEach((final String name, final String key) -> {
-                resolvedHeaders.put(propertyManager.resolveString(name), propertyManager.resolveString(key));
+                resolvedHeaders.put(context.resolveString(name), context.resolveString(key));
             });
             // Reassign the header to its resolved values
             setHeaders(resolvedHeaders);
@@ -330,7 +330,7 @@ public class Request
         // Resolve (is)EncodeBody
         if (getEncodeBody() != null)
         {
-            resolvedValue = propertyManager.resolveString(getEncodeBody());
+            resolvedValue = context.resolveString(getEncodeBody());
             // confirm that the value is either false or true
             if (resolvedValue.equalsIgnoreCase("false") || resolvedValue.equalsIgnoreCase("true"))
             {
@@ -346,7 +346,7 @@ public class Request
         // Resolve Body
         if (getBody() != null)
         {
-            resolvedValue = propertyManager.resolveString(getBody());
+            resolvedValue = context.resolveString(getBody());
             setBody(resolvedValue);
         }
     }
@@ -354,17 +354,17 @@ public class Request
     /**
      * Builds the web request that is specified by this instance
      * 
-     * @param propertyManager
+     * @param context
      *            The property manager that has the data storage
      * @return WebRequest - The WebRequest that is generated based on the instance
      * @throws MalformedURLException
      */
-    public WebRequest buildWebRequest(final PropertyManager propertyManager) throws MalformedURLException, InvalidArgumentException
+    public WebRequest buildWebRequest(final Context context) throws MalformedURLException, InvalidArgumentException
     {
         // fill in the default data if the attribute is not specified
-        fillDefaultData(propertyManager);
+        fillDefaultData(context);
         // Then resolve all variables
-        resolveValues(propertyManager);
+        resolveValues(context);
 
         // Finally build the webRequest
         if (getEncodeBody() != null && Boolean.valueOf(getEncodeBody()))

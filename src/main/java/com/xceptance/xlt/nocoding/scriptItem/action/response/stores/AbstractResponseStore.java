@@ -1,7 +1,7 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response.stores;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
-import com.xceptance.xlt.nocoding.util.PropertyManager;
+import com.xceptance.xlt.nocoding.util.Context;
 
 public abstract class AbstractResponseStore
 {
@@ -12,7 +12,7 @@ public abstract class AbstractResponseStore
         this.variableName = variableName;
     }
 
-    public abstract void store(final PropertyManager propertyManager, final WebResponse webResponse) throws Exception;
+    public abstract void store(final Context context, final WebResponse webResponse) throws Exception;
 
     public String getVariableName()
     {

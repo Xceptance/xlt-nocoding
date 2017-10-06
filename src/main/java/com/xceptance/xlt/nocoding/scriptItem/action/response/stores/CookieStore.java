@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
-import com.xceptance.xlt.nocoding.util.PropertyManager;
+import com.xceptance.xlt.nocoding.util.Context;
 
 public class CookieStore extends AbstractResponseStore
 {
@@ -18,10 +18,10 @@ public class CookieStore extends AbstractResponseStore
     }
 
     @Override
-    public void store(final PropertyManager propertyManager, final WebResponse webResponse) throws Exception
+    public void store(final Context context, final WebResponse webResponse) throws Exception
     {
         // Resolve variables
-        resolveValues(propertyManager);
+        resolveValues(context);
 
         // If true, this throws an Exception if no cookie is found
         boolean throwException = true;
@@ -46,7 +46,7 @@ public class CookieStore extends AbstractResponseStore
                     // Content starts after the equal sign (position+1) and ends before the semicolon
                     final String cookieContent = header.getValue().substring(cookie.length() + 1, semicolonPosition);
                     // And store the content in our storage
-                    propertyManager.getDataStorage().storeVariable(getVariableName(), cookieContent);
+                    context.getDataStorage().storeVariable(getVariableName(), cookieContent);
 
                     // At last, set throwException to false, so we know, that we found our specified cookie.
                     throwException = false;
@@ -63,9 +63,9 @@ public class CookieStore extends AbstractResponseStore
 
     }
 
-    private void resolveValues(final PropertyManager propertyManager)
+    private void resolveValues(final Context context)
     {
-        final String resolvedValue = propertyManager.resolveString(cookie);
+        final String resolvedValue = context.resolveString(cookie);
         cookie = resolvedValue;
     }
 

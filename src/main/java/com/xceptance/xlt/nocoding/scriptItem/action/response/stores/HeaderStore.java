@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
-import com.xceptance.xlt.nocoding.util.PropertyManager;
+import com.xceptance.xlt.nocoding.util.Context;
 
 public class HeaderStore extends AbstractResponseStore
 {
@@ -20,10 +20,10 @@ public class HeaderStore extends AbstractResponseStore
     }
 
     @Override
-    public void store(final PropertyManager propertyManager, final WebResponse webResponse) throws Exception
+    public void store(final Context context, final WebResponse webResponse) throws Exception
     {
         // Resolve variables
-        resolveValues(propertyManager);
+        resolveValues(context);
 
         // If true, this throws an Exception if no cookie is found
         boolean throwException = true;
@@ -36,7 +36,7 @@ public class HeaderStore extends AbstractResponseStore
             if (header.getName().equals(getHeader()))
             {
                 // And store the header
-                propertyManager.getDataStorage().storeVariable(getVariableName(), header.getValue());
+                context.getDataStorage().storeVariable(getVariableName(), header.getValue());
 
                 // At last, set throwException to false, so we know, that we found our specified header.
                 throwException = false;
@@ -52,9 +52,9 @@ public class HeaderStore extends AbstractResponseStore
 
     }
 
-    private void resolveValues(final PropertyManager propertyManager)
+    private void resolveValues(final Context context)
     {
-        final String resolvedValue = propertyManager.resolveString(getHeader());
+        final String resolvedValue = context.resolveString(getHeader());
         setHeader(resolvedValue);
     }
 

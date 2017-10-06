@@ -10,7 +10,7 @@ import com.xceptance.xlt.engine.SessionImpl;
 import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
-import com.xceptance.xlt.nocoding.util.PropertyManager;
+import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.webAction.WebAction;
 
 /**
@@ -33,18 +33,18 @@ public class LightWeigthAction extends Action
      * page gets appended to the result browser.
      */
     @Override
-    public void execute(final PropertyManager propertyManager) throws Throwable
+    public void execute(final Context context) throws Throwable
     {
         if (getSubrequests() != null && !getSubrequests().isEmpty())
         {
             for (final AbstractSubrequest subrequest : subrequests)
             {
                 // TODO Meeting
-                subrequest.setPropertyManager(propertyManager);
+                subrequest.setContext(context);
             }
         }
-        final WebAction action = new WebAction(getRequest().getName(), getRequest().buildWebRequest(propertyManager), subrequests,
-                                               propertyManager.getWebClient(), (final WebAction webAction) -> doExecute(webAction));
+        final WebAction action = new WebAction(getRequest().getName(), getRequest().buildWebRequest(context), subrequests,
+                                               context.getWebClient(), (final WebAction webAction) -> doExecute(webAction));
 
         try
         {
@@ -55,12 +55,12 @@ public class LightWeigthAction extends Action
             // Validate response if it is specified
             if (getResponse() != null)
             {
-                getResponse().execute(propertyManager, action.getWebResponse());
+                getResponse().execute(context, action.getWebResponse());
             }
             // do standard validations
             else
             {
-                new Response().execute(propertyManager, action.getWebResponse());
+                new Response().execute(context, action.getWebResponse());
             }
         }
         finally

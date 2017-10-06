@@ -34,7 +34,7 @@ public class XHRSubrequest extends AbstractSubrequest
             // load the response
             final WebResponse webResponse = webClient.loadWebResponse(webRequest);
             // validate response
-            response.execute(propertyManager, webResponse);
+            response.execute(context, webResponse);
         }
     }
 
@@ -43,7 +43,7 @@ public class XHRSubrequest extends AbstractSubrequest
         // Build WebRequest if not specified
         if (webRequest == null)
         {
-            webRequest = this.request.buildWebRequest(propertyManager);
+            webRequest = this.request.buildWebRequest(context);
         }
         return webRequest;
     }

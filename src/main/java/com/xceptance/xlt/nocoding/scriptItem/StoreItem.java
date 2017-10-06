@@ -1,6 +1,6 @@
 package com.xceptance.xlt.nocoding.scriptItem;
 
-import com.xceptance.xlt.nocoding.util.PropertyManager;
+import com.xceptance.xlt.nocoding.util.Context;
 
 /**
  * This is the class for the "Store" command, so if a script item has the form of "- Store: - variable_1 : value_1" this
@@ -19,9 +19,9 @@ public class StoreItem implements ScriptItem
     }
 
     @Override
-    public void execute(final PropertyManager propertyManager) throws Throwable
+    public void execute(final Context context) throws Throwable
     {
-        propertyManager.getDataStorage().storeVariable(variableName, value);
+        context.getDataStorage().storeVariable(variableName, value);
     }
 
 }

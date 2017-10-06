@@ -6,7 +6,7 @@ import org.junit.Assert;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
-import com.xceptance.xlt.nocoding.util.PropertyManager;
+import com.xceptance.xlt.nocoding.util.Context;
 
 public class CookieValidator extends AbstractValidator
 {
@@ -27,10 +27,10 @@ public class CookieValidator extends AbstractValidator
     }
 
     @Override
-    public void validate(final PropertyManager propertyManager, final WebResponse webResponse) throws Exception
+    public void validate(final Context context, final WebResponse webResponse) throws Exception
     {
         // Resolve variables
-        resolveValues(propertyManager);
+        resolveValues(context);
 
         // If true, this throws an Exception if no cookie is found
         boolean throwException = true;
@@ -74,13 +74,13 @@ public class CookieValidator extends AbstractValidator
 
     }
 
-    private void resolveValues(final PropertyManager propertyManager)
+    private void resolveValues(final Context context)
     {
-        String resolvedValue = propertyManager.resolveString(cookie);
+        String resolvedValue = context.resolveString(cookie);
         cookie = resolvedValue;
         if (text != null)
         {
-            resolvedValue = propertyManager.resolveString(text);
+            resolvedValue = context.resolveString(text);
             text = resolvedValue;
         }
 

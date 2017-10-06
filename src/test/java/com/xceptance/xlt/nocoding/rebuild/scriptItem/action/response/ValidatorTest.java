@@ -19,12 +19,12 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.CookieVa
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.HeaderValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.RegExpValidator;
 import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.PropertyManager;
+import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 public class ValidatorTest
 {
-    private PropertyManager propertyManager;
+    private Context context;
 
     private XltMockWebConnection webConnection;
 
@@ -44,8 +44,8 @@ public class ValidatorTest
         List<NameValuePair> headers;
         String name;
         String value;
-        this.propertyManager = new PropertyManager(XltProperties.getInstance(), new DataStorage());
-        webConnection = new XltMockWebConnection(propertyManager.getWebClient());
+        this.context = new Context(XltProperties.getInstance(), new DataStorage());
+        webConnection = new XltMockWebConnection(context.getWebClient());
 
         try
         { // Set answer to localhost/posters/
@@ -109,15 +109,15 @@ public class ValidatorTest
         // Build the validator that searches for the header
         validator = new HeaderValidator("HeaderValidation Standard", header);
         // Validate
-        validator.validate(propertyManager, webResponse);
+        validator.validate(context, webResponse);
         // Build the validator, that validates the content of the header equals text
         validator = new HeaderValidator("HeaderValidation Text", header, Constants.TEXT, text);
         // Validate
-        validator.validate(propertyManager, webResponse);
+        validator.validate(context, webResponse);
         // Build the validator that validates the number of occurences of the header equals count
         validator = new HeaderValidator("HeaderValidation Count", header, Constants.COUNT, count);
         // Validate
-        validator.validate(propertyManager, webResponse);
+        validator.validate(context, webResponse);
     }
 
     @Test
@@ -142,11 +142,11 @@ public class ValidatorTest
         // Build the validator that searches only for the cookie
         validator = new CookieValidator("CookieValidation Standard", cookie);
         // Validate
-        validator.validate(propertyManager, webResponse);
+        validator.validate(context, webResponse);
         // Build another validator that searches for the cookie and verifies the content equals text
         validator = new CookieValidator("CookieValidation Text", cookie, text);
         // Validate
-        validator.validate(propertyManager, webResponse);
+        validator.validate(context, webResponse);
     }
 
     @Test
@@ -168,26 +168,26 @@ public class ValidatorTest
         // Build a validator, that searches for the pattern
         validator = new RegExpValidator("RegExpValidation Standard", pattern);
         // Validate
-        validator.validate(propertyManager, webResponse);
+        validator.validate(context, webResponse);
         // Build a validator, that searches for the pattern and verifies text is the first match
         validator = new RegExpValidator("RegExpValidation Text", pattern, text);
         // Validate
-        validator.validate(propertyManager, webResponse);
+        validator.validate(context, webResponse);
         // Build a validator, that searches for the pattern and verifies text is the match in the matching group of group
         validator = new RegExpValidator("RegExpValidation Text+Group", pattern, text, group);
         // Validate
-        validator.validate(propertyManager, webResponse);
+        validator.validate(context, webResponse);
     }
 
     @Test
     public void HeaderValidatorWithVariables() throws Exception
     {
         // Store the header name
-        propertyManager.getDataStorage().storeVariable("header_1", "Cache-Control");
+        context.getDataStorage().storeVariable("header_1", "Cache-Control");
         // Store some of the content
-        propertyManager.getDataStorage().storeVariable("content_1", "no-cache, no-store, max-");
+        context.getDataStorage().storeVariable("content_1", "no-cache, no-store, max-");
         // Store the expected count of headers
-        propertyManager.getDataStorage().storeVariable("count_1", "1");
+        context.getDataStorage().storeVariable("count_1", "1");
         // Build WebRequest with localhost/posters as url
         final URL url = new URL("https://localhost:8443/posters/");
         final WebRequest settings = new WebRequest(url);
@@ -202,26 +202,26 @@ public class ValidatorTest
         // Build the validator that searches for the header
         validator = new HeaderValidator("HeaderValidationVariable Standard", header);
         // Validate
-        validator.validate(propertyManager, webResponse);
+        validator.validate(context, webResponse);
         // Build the validator, that validates the content of the header equals text
         validator = new HeaderValidator("HeaderValidationVariable Text", header, Constants.TEXT, text);
         // Validate
-        validator.validate(propertyManager, webResponse);
+        validator.validate(context, webResponse);
         // Build the validator that validates the number of occurences of the header equals count
         validator = new HeaderValidator("HeaderValidationVariable Count", header, Constants.COUNT, count);
         // Validate
-        validator.validate(propertyManager, webResponse);
+        validator.validate(context, webResponse);
     }
 
     @Test
     public void CookieValidatorWithVariables() throws Exception
     {
         // Store the cookie name
-        propertyManager.getDataStorage().storeVariable("cookie", "NINJA_FLASH");
+        context.getDataStorage().storeVariable("cookie", "NINJA_FLASH");
         // Store the first part of the cookie content
-        propertyManager.getDataStorage().storeVariable("cookie_content_name", "success");
+        context.getDataStorage().storeVariable("cookie_content_name", "success");
         // Store the second part of the cookie content
-        propertyManager.getDataStorage().storeVariable("cookie_content_value", "Login+successful.+Have+fun+in+our+shop%21");
+        context.getDataStorage().storeVariable("cookie_content_value", "Login+successful.+Have+fun+in+our+shop%21");
         // Build WebRequest with localhost/posters/login/POST as url
         final URL url = new URL("https://localhost:8443/posters/login/POST");
         final WebRequest settings = new WebRequest(url, HttpMethod.POST);
@@ -241,22 +241,22 @@ public class ValidatorTest
         // Build the validator that searches only for the cookie
         validator = new CookieValidator("CookieValidationVariable Standard", cookie);
         // Validate
-        validator.validate(propertyManager, webResponse);
+        validator.validate(context, webResponse);
         // Build another validator that searches for the cookie and verifies the content equals text
         validator = new CookieValidator("CookieValidationVariable Text", cookie, text);
         // Validate
-        validator.validate(propertyManager, webResponse);
+        validator.validate(context, webResponse);
     }
 
     @Test
     public void RegExpValidatorWithVariables() throws Exception
     {
         // Store a pattern
-        propertyManager.getDataStorage().storeVariable("pattern", "class.*>");
+        context.getDataStorage().storeVariable("pattern", "class.*>");
         // Store the expected match
-        propertyManager.getDataStorage().storeVariable("text", "class=\"userMenuHeader\">Welcome: Guest</li>");
+        context.getDataStorage().storeVariable("text", "class=\"userMenuHeader\">Welcome: Guest</li>");
         // Store the group the match is in
-        propertyManager.getDataStorage().storeVariable("group", "1");
+        context.getDataStorage().storeVariable("group", "1");
         // Build WebRequest with localhost/posters as url
         final URL url = new URL("https://localhost:8443/posters/");
         final WebRequest settings = new WebRequest(url);
@@ -273,15 +273,15 @@ public class ValidatorTest
         // Build a validator, that searches for the pattern
         validator = new RegExpValidator("RegExpValidationVariable Standard", pattern);
         // Validate
-        validator.validate(propertyManager, webResponse);
+        validator.validate(context, webResponse);
         // Build a validator, that searches for the pattern and verifies text is the first match
         validator = new RegExpValidator("RegExpValidationVariable Text", pattern, text);
         // Validate
-        validator.validate(propertyManager, webResponse);
+        validator.validate(context, webResponse);
         // Build a validator, that searches for the pattern and verifies text is the match in the matching group of group
         validator = new RegExpValidator("RegExpValidationVariable Text+Group", pattern, text, group);
         // Validate
-        validator.validate(propertyManager, webResponse);
+        validator.validate(context, webResponse);
     }
 
 }

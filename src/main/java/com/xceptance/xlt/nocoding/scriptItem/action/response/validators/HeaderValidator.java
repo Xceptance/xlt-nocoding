@@ -7,7 +7,7 @@ import org.junit.Assert;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.PropertyManager;
+import com.xceptance.xlt.nocoding.util.Context;
 
 public class HeaderValidator extends AbstractValidator
 {
@@ -75,10 +75,10 @@ public class HeaderValidator extends AbstractValidator
     }
 
     @Override
-    public void validate(final PropertyManager propertyManager, final WebResponse webResponse) throws Exception
+    public void validate(final Context context, final WebResponse webResponse) throws Exception
     {
         // Resolve variables
-        resolveValues(propertyManager);
+        resolveValues(context);
 
         // If true, this throws an Exception if no header is found
         boolean throwException = true;
@@ -116,21 +116,21 @@ public class HeaderValidator extends AbstractValidator
         }
     }
 
-    private void resolveValues(final PropertyManager propertyManager)
+    private void resolveValues(final Context context)
     {
         // Resolve header name
-        String resolvedValue = propertyManager.resolveString(getHeader());
+        String resolvedValue = context.resolveString(getHeader());
         setHeader(resolvedValue);
         // Resolve text if specified
         if (getText() != null)
         {
-            resolvedValue = propertyManager.resolveString(getText());
+            resolvedValue = context.resolveString(getText());
             setText(resolvedValue);
         }
         // Resolve count if specified
         if (getCount() != null)
         {
-            resolvedValue = propertyManager.resolveString(getCount());
+            resolvedValue = context.resolveString(getCount());
             setCount(resolvedValue);
         }
     }

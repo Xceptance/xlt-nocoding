@@ -9,7 +9,7 @@ import com.xceptance.xlt.api.util.XltException;
 import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
-import com.xceptance.xlt.nocoding.util.PropertyManager;
+import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.webAction.WebAction;
 
 public class DomAction extends Action
@@ -24,10 +24,10 @@ public class DomAction extends Action
     }
 
     @Override
-    public void execute(final PropertyManager propertyManager) throws Throwable
+    public void execute(final Context context) throws Throwable
     {
-        final WebAction action = new WebAction(this.getRequest().getName(), this.getRequest().buildWebRequest(propertyManager), subrequests,
-                                               propertyManager.getWebClient(), (final WebAction x) -> doExecute(x));
+        final WebAction action = new WebAction(this.getRequest().getName(), this.getRequest().buildWebRequest(context), subrequests,
+                                               context.getWebClient(), (final WebAction x) -> doExecute(x));
 
         action.run();
     }

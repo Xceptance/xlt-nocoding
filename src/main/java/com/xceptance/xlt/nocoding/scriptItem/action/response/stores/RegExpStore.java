@@ -8,7 +8,7 @@ import org.openqa.selenium.InvalidArgumentException;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
-import com.xceptance.xlt.nocoding.util.PropertyManager;
+import com.xceptance.xlt.nocoding.util.Context;
 
 public class RegExpStore extends AbstractResponseStore
 {
@@ -30,13 +30,13 @@ public class RegExpStore extends AbstractResponseStore
     }
 
     @Override
-    public void store(final PropertyManager propertyManager, final WebResponse webResponse) throws Exception
+    public void store(final Context context, final WebResponse webResponse) throws Exception
     {
-        resolveValues(propertyManager);
+        resolveValues(context);
         // TODO check for mode - throw error if not lightweight mode
         // if(propertyManager.mode = dom)
         // throw new IllegalStateException("Cannot use a regular expression in dom mode. Please use the lightweight mode.");
-        final LightWeightPage page = new LightWeightPage(webResponse, propertyManager.getWebClient().getTimerName());
+        final LightWeightPage page = new LightWeightPage(webResponse, context.getWebClient().getTimerName());
         final String pageContent = page.getContent();
         String foundContent = null;
         final Matcher matcher = Pattern.compile(getPattern()).matcher(pageContent);
@@ -53,23 +53,23 @@ public class RegExpStore extends AbstractResponseStore
         }
 
         Assert.assertNotNull("Couldn't find anything with the regexp", foundContent);
-        propertyManager.getDataStorage().storeVariable(getVariableName(), foundContent);
+        context.getDataStorage().storeVariable(getVariableName(), foundContent);
     }
 
     /**
      * Tries to resolve all variables of non-null attributes. Variables are specified with by "${variable}".
      * 
-     * @param propertyManager
+     * @param context
      *            The propertyManager with the DataStorage to use
      * @throws InvalidArgumentException
      */
-    private void resolveValues(final PropertyManager propertyManager)
+    private void resolveValues(final Context context)
     {
-        String resolvedValue = propertyManager.resolveString(getPattern());
+        String resolvedValue = context.resolveString(getPattern());
         setPattern(resolvedValue);
         if (getGroup() != null)
         {
-            resolvedValue = propertyManager.resolveString(getGroup());
+            resolvedValue = context.resolveString(getGroup());
             setGroup(resolvedValue);
         }
     }

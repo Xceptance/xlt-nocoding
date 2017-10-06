@@ -1,7 +1,7 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response.stores;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
-import com.xceptance.xlt.nocoding.util.PropertyManager;
+import com.xceptance.xlt.nocoding.util.Context;
 
 public class XpathStore extends AbstractResponseStore
 {
@@ -15,7 +15,7 @@ public class XpathStore extends AbstractResponseStore
     }
 
     @Override
-    public void store(final PropertyManager propertyManager, final WebResponse webResponse) throws Exception
+    public void store(final Context context, final WebResponse webResponse) throws Exception
     {
         // TODO check for mode - throw error if not dom mode
         // if(propertyManager.mode = lightweight)

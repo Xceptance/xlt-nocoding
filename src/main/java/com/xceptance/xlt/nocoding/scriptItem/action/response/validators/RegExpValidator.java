@@ -8,7 +8,7 @@ import org.openqa.selenium.InvalidArgumentException;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
-import com.xceptance.xlt.nocoding.util.PropertyManager;
+import com.xceptance.xlt.nocoding.util.Context;
 
 public class RegExpValidator extends AbstractValidator
 {
@@ -67,12 +67,12 @@ public class RegExpValidator extends AbstractValidator
     }
 
     @Override
-    public void validate(final PropertyManager propertyManager, final WebResponse webResponse) throws Exception
+    public void validate(final Context context, final WebResponse webResponse) throws Exception
     {
         // Resolve variables
-        resolveValues(propertyManager);
+        resolveValues(context);
         // Build a page with the content
-        final LightWeightPage page = new LightWeightPage(webResponse, propertyManager.getWebClient().getTimerName());
+        final LightWeightPage page = new LightWeightPage(webResponse, context.getWebClient().getTimerName());
         // Read the content
         final String pageContent = page.getContent();
         // Create a matcher object, so we can save our found matches
@@ -120,27 +120,27 @@ public class RegExpValidator extends AbstractValidator
     /**
      * Tries to resolve all variables of non-null attributes. Variables are specified with by "${variable}".
      * 
-     * @param propertyManager
+     * @param context
      *            The propertyManager with the DataStorage to use
      * @throws InvalidArgumentException
      */
-    private void resolveValues(final PropertyManager propertyManager) throws InvalidArgumentException
+    private void resolveValues(final Context context) throws InvalidArgumentException
     {
         // Resolve name
-        String resolvedValue = propertyManager.resolveString(getPattern());
+        String resolvedValue = context.resolveString(getPattern());
         setPattern(resolvedValue);
 
         // Resolve text
         if (getText() != null)
         {
-            resolvedValue = propertyManager.resolveString(getText());
+            resolvedValue = context.resolveString(getText());
             setText(resolvedValue);
         }
 
         // Resolve count
         if (getGroup() != null)
         {
-            resolvedValue = propertyManager.resolveString(getGroup());
+            resolvedValue = context.resolveString(getGroup());
             setGroup(resolvedValue);
         }
 

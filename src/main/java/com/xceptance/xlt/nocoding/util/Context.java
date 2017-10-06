@@ -6,7 +6,7 @@ import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
-public class PropertyManager
+public class Context
 {
     private final XltProperties properties;
 
@@ -16,7 +16,7 @@ public class PropertyManager
 
     private final VariableResolver resolver;
 
-    public PropertyManager(final XltProperties properties, final DataStorage dataStorage)
+    public Context(final XltProperties properties, final DataStorage dataStorage)
     {
         this.properties = properties;
         this.dataStorage = dataStorage;
