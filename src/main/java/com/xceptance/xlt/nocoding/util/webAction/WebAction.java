@@ -12,6 +12,13 @@ import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.ThrowingConsumer;
 
+/**
+ * The WebAction extends the AbstractWebAction of the xlt framework. Therefore, this is the interface to xlt. A
+ * WebAction fires a main (web) request, and afterwards an arbitrary amount of Request, Response and AbstractSubrequest.
+ * The execution of the main request, etc. can be configured by passing a function to the WebAction.
+ * 
+ * @author ckeiner
+ */
 public class WebAction extends AbstractWebAction
 {
     /**
@@ -36,6 +43,17 @@ public class WebAction extends AbstractWebAction
 
     private ThrowingConsumer<WebAction> function;
 
+    /**
+     * @param timerName
+     *            The name of the action
+     * @param context
+     *            The current {@link Context}
+     * @param request
+     *            The main request
+     * @param actionItems
+     * @param function
+     *            A {@link ThrowingConsumer<{@link WebAction}>}
+     */
     public WebAction(final String timerName, final Context context, final Request request, final List<AbstractActionItem> actionItems,
         final ThrowingConsumer<WebAction> function)
     {
