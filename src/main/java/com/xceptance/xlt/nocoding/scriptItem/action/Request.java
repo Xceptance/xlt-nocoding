@@ -16,7 +16,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
-public class Request
+public class Request extends AbstractActionItem
 {
     /**
      * The name of the WebAction
@@ -62,6 +62,11 @@ public class Request
      * Defines if the body is encoded. Defaults to "false"
      */
     private String encodeBody;
+
+    /**
+     * The webRequest as defined with this request object
+     */
+    private WebRequest webRequest;
 
     /**
      * Creates a class with the minimum of information, that is the URL and the name of the Action
@@ -165,6 +170,16 @@ public class Request
     public void setEncodeBody(final String encodeBody)
     {
         this.encodeBody = encodeBody;
+    }
+
+    public WebRequest getWebRequest()
+    {
+        return webRequest;
+    }
+
+    public void setWebRequest(final WebRequest webRequest)
+    {
+        this.webRequest = webRequest;
     }
 
     /**
@@ -349,6 +364,16 @@ public class Request
             resolvedValue = context.resolveString(getBody());
             setBody(resolvedValue);
         }
+    }
+
+    /**
+     * Builds the webRequest with the given context and stores it locally. Access it with getWebRequest()
+     */
+    @Override
+    public void execute(final Context context) throws InvalidArgumentException, MalformedURLException
+    {
+        setWebRequest(null);
+        setWebRequest(buildWebRequest(context));
     }
 
     /**

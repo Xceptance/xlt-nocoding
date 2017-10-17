@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 
@@ -44,7 +45,16 @@ public class YamlParser implements Parser
             {
                 if (parser.getCurrentName() == "Store")
                 {
-
+                    final JsonToken token = parser.currentToken();
+                    // handleStore();
+                }
+                else if (parser.getCurrentName() == "Action")
+                {
+                    // handleAction();
+                }
+                else
+                {
+                    // handleDefault();
                 }
             }
 

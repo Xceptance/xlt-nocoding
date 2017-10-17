@@ -1,5 +1,6 @@
 package com.xceptance.xlt.nocoding.util;
 
+import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.data.GeneralDataProvider;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.engine.XltWebClient;
@@ -15,6 +16,8 @@ public class Context
     private XltWebClient webClient;
 
     private final VariableResolver resolver;
+
+    private WebResponse webResponse;
 
     public Context(final XltProperties properties, final DataStorage dataStorage)
     {
@@ -48,6 +51,16 @@ public class Context
     public XltWebClient getWebClient()
     {
         return webClient;
+    }
+
+    public WebResponse getWebResponse()
+    {
+        return webResponse;
+    }
+
+    public void setWebResponse(final WebResponse webResponse)
+    {
+        this.webResponse = webResponse;
     }
 
     public String resolveString(final String toResolve)

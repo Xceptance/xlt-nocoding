@@ -2,7 +2,7 @@ package com.xceptance.xlt.nocoding.scriptItem.action.subrequest;
 
 import java.util.List;
 
-import com.xceptance.xlt.engine.XltWebClient;
+import com.xceptance.xlt.nocoding.util.Context;
 
 public class StaticSubrequest extends AbstractSubrequest
 {
@@ -14,10 +14,10 @@ public class StaticSubrequest extends AbstractSubrequest
     }
 
     @Override
-    public void execute(final XltWebClient webClient) throws Exception
+    public void execute(final Context context) throws Exception
     {
         // TODO parallel downloads? how specified
-        final Downloader downloader = new Downloader(webClient);
+        final Downloader downloader = new Downloader(context.getWebClient());
         for (final String url : urls)
         {
             downloader.addRequest(url);

@@ -2,6 +2,7 @@ package com.xceptance.xlt.nocoding.scriptItem.action;
 
 import java.util.List;
 
+import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.engine.Session;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
@@ -43,8 +44,10 @@ public class LightWeigthAction extends Action
                 subrequest.setContext(context);
             }
         }
-        final WebAction action = new WebAction(getRequest().getName(), getRequest().buildWebRequest(context), subrequests,
-                                               context.getWebClient(), (final WebAction webAction) -> doExecute(webAction));
+        getRequest().execute(context);
+        final WebRequest webRequest = getRequest().getWebRequest();
+        final WebAction action = new WebAction(getRequest().getName(), webRequest, subrequests, context.getWebClient(),
+                                               (final WebAction webAction) -> doExecute(webAction));
 
         try
         {

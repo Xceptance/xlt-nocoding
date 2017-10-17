@@ -54,8 +54,8 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
         // Load the default configuration
         context.getDataStorage().loadDefaultConfig();
 
-        // this.parser = new YamlParser();
         this.parser = new MockParser();
+        // this.parser = new YamlParser();
         itemList = parser.parse();
     }
 
