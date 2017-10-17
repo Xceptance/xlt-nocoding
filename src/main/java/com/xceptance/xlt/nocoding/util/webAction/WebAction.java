@@ -1,49 +1,50 @@
 package com.xceptance.xlt.nocoding.util.webAction;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.common.lang.ReflectionUtils;
 import com.xceptance.xlt.api.actions.AbstractWebAction;
-import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
+import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
+import com.xceptance.xlt.nocoding.scriptItem.action.Request;
+import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.ThrowingConsumer;
 
 public class WebAction extends AbstractWebAction
 {
     /**
-     * The request defined in the request block
+     * The context in the current WebAction
      */
-    private final WebRequest webRequest;
+    private final Context context;
 
     /**
-     * The requests defined in the subrequests
+     * The main request in this action
      */
-    private final List<AbstractSubrequest> subrequests;
+    private final Request request;
 
     /**
-     * The responses to the subrequests
+     * The main request in this action
      */
-    private final List<WebResponse> subrequestResponses;
-
-    private WebResponse webResponse;
-
     private WebClient webClient;
+
+    /**
+     * The list of action items
+     */
+    private final List<AbstractActionItem> actionItems;
 
     private ThrowingConsumer<WebAction> function;
 
-    public WebAction(final String timerName, final WebRequest webRequest, final List<AbstractSubrequest> subrequests,
-        final WebClient webClient, final ThrowingConsumer<WebAction> function)
+    public WebAction(final String timerName, final Context context, final Request request, final List<AbstractActionItem> actionItems,
+        final ThrowingConsumer<WebAction> function)
     {
         super(timerName);
-        this.webRequest = webRequest;
-        this.subrequests = subrequests;
-        this.webClient = webClient;
+        this.context = context;
+        this.webClient = context.getWebClient();
+        this.request = request;
+        this.actionItems = actionItems;
         this.function = function;
-        this.subrequestResponses = new ArrayList<WebResponse>();
     }
 
     @Override
@@ -84,11 +85,6 @@ public class WebAction extends AbstractWebAction
         this.webClient = webClient;
     }
 
-    public WebRequest getWebRequest()
-    {
-        return webRequest;
-    }
-
     public ThrowingConsumer<WebAction> getFunction()
     {
         return function;
@@ -99,24 +95,19 @@ public class WebAction extends AbstractWebAction
         this.function = function;
     }
 
-    public WebResponse getWebResponse()
+    public Context getContext()
     {
-        return webResponse;
+        return context;
     }
 
-    public void setWebResponse(final WebResponse webResponse)
+    public List<AbstractActionItem> getActionItems()
     {
-        this.webResponse = webResponse;
+        return actionItems;
     }
 
-    public List<AbstractSubrequest> getSubrequests()
+    public Request getRequest()
     {
-        return subrequests;
-    }
-
-    public List<WebResponse> getSubrequestResponses()
-    {
-        return subrequestResponses;
+        return request;
     }
 
 }

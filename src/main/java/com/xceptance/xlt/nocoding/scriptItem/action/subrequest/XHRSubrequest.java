@@ -1,9 +1,6 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.subrequest;
 
-import java.net.MalformedURLException;
-
 import com.gargoylesoftware.htmlunit.WebRequest;
-import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.util.Context;
@@ -25,28 +22,19 @@ public class XHRSubrequest extends AbstractSubrequest
         this.response = response;
     }
 
+    public XHRSubrequest(final String name, final Request request)
+    {
+        this(name, request, null);
+    }
+
     @Override
     public void execute(final Context context) throws Throwable
     {
-        // Check if we already built the webRequest
-        if (buildWebRequest(context) != null)
-        {
-            // load the response
-            final WebResponse webResponse = context.getWebClient().loadWebResponse(webRequest);
-            // validate response
-            response.execute(context, webResponse);
-        }
-    }
+        final Context localContext = new Context(context);
+        getRequest().execute(localContext);
 
-    private WebRequest buildWebRequest(final Context context) throws MalformedURLException
-    {
-        // Build WebRequest if not specified
-        if (webRequest == null)
-        {
-            getRequest().execute(context);
-            webRequest = getRequest().getWebRequest();
-        }
-        return webRequest;
+        response.execute(localContext);
+
     }
 
     public String getName()

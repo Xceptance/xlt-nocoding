@@ -61,17 +61,6 @@ public class Response extends AbstractActionItem
         store(context, context.getWebResponse());
     }
 
-    public void execute(final Context context, final WebResponse webResponse) throws Exception
-    {
-        // fill everything with data
-        fillDefaultData(context);
-        // then resolve variables
-        resolveValues(context);
-        // build the webRequest
-        validate(context, webResponse);
-        store(context, webResponse);
-    }
-
     private void fillDefaultData(final Context context)
     {
         if (getHttpcode() == null)

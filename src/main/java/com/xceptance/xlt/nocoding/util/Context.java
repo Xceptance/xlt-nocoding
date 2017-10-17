@@ -9,15 +9,15 @@ import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
 public class Context
 {
-    private final XltProperties properties;
+    protected final XltProperties properties;
 
-    private final DataStorage dataStorage;
+    protected final DataStorage dataStorage;
 
-    private XltWebClient webClient;
+    protected XltWebClient webClient;
 
-    private final VariableResolver resolver;
+    protected final VariableResolver resolver;
 
-    private WebResponse webResponse;
+    protected WebResponse webResponse;
 
     public Context(final XltProperties properties, final DataStorage dataStorage)
     {
@@ -25,6 +25,16 @@ public class Context
         this.dataStorage = dataStorage;
         this.webClient = new XltWebClient();
         this.resolver = new VariableResolver(GeneralDataProvider.getInstance());
+        // TODO in Config auslagern! -> Damit funktioniert außerdem nicht mehr der EasyTestcase
+        webClient.getOptions().setRedirectEnabled(false);
+    }
+
+    public Context(final Context context)
+    {
+        this.properties = context.getProperties();
+        this.dataStorage = context.getDataStorage();
+        this.webClient = context.getWebClient();
+        this.resolver = context.getResolver();
         // TODO in Config auslagern! -> Damit funktioniert außerdem nicht mehr der EasyTestcase
         webClient.getOptions().setRedirectEnabled(false);
     }
@@ -61,6 +71,11 @@ public class Context
     public void setWebResponse(final WebResponse webResponse)
     {
         this.webResponse = webResponse;
+    }
+
+    public VariableResolver getResolver()
+    {
+        return resolver;
     }
 
     public String resolveString(final String toResolve)

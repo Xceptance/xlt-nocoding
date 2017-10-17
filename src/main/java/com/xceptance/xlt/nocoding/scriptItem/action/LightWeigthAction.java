@@ -2,15 +2,11 @@ package com.xceptance.xlt.nocoding.scriptItem.action;
 
 import java.util.List;
 
-import com.gargoylesoftware.htmlunit.WebRequest;
-import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.engine.Session;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
+import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.engine.LightWeightPageImpl;
 import com.xceptance.xlt.engine.SessionImpl;
-import com.xceptance.xlt.engine.XltWebClient;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
-import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.webAction.WebAction;
 
@@ -24,9 +20,9 @@ public class LightWeigthAction extends Action
      */
     private LightWeightPage lightWeightPage;
 
-    public LightWeigthAction(final Request request, final Response response, final List<AbstractSubrequest> subrequests)
+    public LightWeigthAction(final Request request, final List<AbstractActionItem> actionItems)
     {
-        super(request, response, subrequests);
+        super(request, actionItems);
     }
 
     /**
@@ -36,44 +32,35 @@ public class LightWeigthAction extends Action
     @Override
     public void execute(final Context context) throws Throwable
     {
-        if (getSubrequests() != null && !getSubrequests().isEmpty())
-        {
-            for (final AbstractSubrequest subrequest : subrequests)
-            {
-                // TODO Meeting
-                subrequest.setContext(context);
-            }
-        }
-        getRequest().execute(context);
-        final WebRequest webRequest = getRequest().getWebRequest();
-        final WebAction action = new WebAction(getRequest().getName(), webRequest, subrequests, context.getWebClient(),
-                                               (final WebAction webAction) -> doExecute(webAction));
+        final WebAction action = new WebAction(getRequest().getName(), context, getRequest(), getActionItems(),
+                                               (final WebAction webAction) -> {
+                                                   try
+                                                   {
+                                                       doExecute(webAction);
+                                                   }
+                                                   catch (final Throwable e)
+                                                   {
+                                                       XltLogger.runTimeLogger.error("Execution Step failed");
+                                                       e.printStackTrace();
+                                                       throw new Exception(e);
+                                                   }
+                                               });
 
         try
         {
-            // Execute the WebRequest in xlt
+            // Execute the requests, responses and subrequests via xlt api
             action.run();
-            setLightWeightPage(new LightWeightPage(action.getWebResponse(), action.getTimerName()));
-
-            // Validate response if it is specified
-            if (getResponse() != null)
-            {
-                getResponse().execute(context, action.getWebResponse());
-            }
-            // do standard validations
-            else
-            {
-                new Response().execute(context, action.getWebResponse());
-            }
+            setLightWeightPage(new LightWeightPage(action.getContext().getWebResponse(), action.getTimerName()));
         }
         finally
         {
             // Append the page to the result browser
-            if (action.getWebResponse() != null)
+            if (action.getContext().getWebResponse() != null)
             {
                 ((SessionImpl) Session.getCurrent()).getRequestHistory()
-                                                    .add(new LightWeightPageImpl(action.getWebResponse(), action.getTimerName(),
-                                                                                 (XltWebClient) action.getWebClient()));
+                                                    .add(new LightWeightPageImpl(action.getContext().getWebResponse(),
+                                                                                 action.getTimerName(),
+                                                                                 action.getContext().getWebClient()));
                 ;
             }
         }
@@ -86,39 +73,17 @@ public class LightWeigthAction extends Action
      * @param action
      * @throws Exception
      */
-    public void doExecute(final WebAction action) throws Exception
+    public void doExecute(final WebAction action) throws Throwable
     {
-        // TODO Unterscheidung Subrequest als Main Request vs normale Request
-        if (action.getWebRequest().isXHR())
-        {
-            action.setWebResponse(action.getWebClient().loadWebResponse(action.getWebRequest()));
-        }
-        else
-        {
-            final WebResponse response = action.getWebClient().loadWebResponse(action.getWebRequest());
-            action.setWebResponse(response);
-            final LightWeightPage page = new LightWeightPage(action.getWebResponse(), action.getTimerName());
-            // TODO Result Browser?
-            // TODO fix this
-            // if (page != null)
-            // {
-            // ((SessionImpl) Session.getCurrent()).getRequestHistory().add(page);
-            // }
-        }
+        final Context context = action.getContext();
+        final List<AbstractActionItem> actionItems = action.getActionItems();
+        action.getRequest().execute(context);
 
-        if (action.getSubrequests() != null && !action.getSubrequests().isEmpty())
+        if (actionItems != null && !actionItems.isEmpty())
         {
-            for (final AbstractSubrequest subrequest : action.getSubrequests())
+            for (final AbstractActionItem actionItem : actionItems)
             {
-                try
-                {
-                    subrequest.execute((XltWebClient) action.getWebClient());
-                }
-                catch (final Throwable e)
-                {
-                    throw new Exception(e);
-                    // e.printStackTrace();
-                }
+                actionItem.execute(context);
             }
         }
     }

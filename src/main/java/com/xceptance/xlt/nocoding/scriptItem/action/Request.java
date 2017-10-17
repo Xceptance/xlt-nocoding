@@ -1,5 +1,6 @@
 package com.xceptance.xlt.nocoding.scriptItem.action;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import org.openqa.selenium.InvalidArgumentException;
 
 import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebRequest;
+import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
@@ -368,12 +370,28 @@ public class Request extends AbstractActionItem
 
     /**
      * Builds the webRequest with the given context and stores it locally. Access it with getWebRequest()
+     * 
+     * @throws {@link
+     *             IOException}
+     * @throws {@link
+     *             InvalidArgumentException}
      */
     @Override
-    public void execute(final Context context) throws InvalidArgumentException, MalformedURLException
+    public void execute(final Context context) throws InvalidArgumentException, IOException
     {
-        setWebRequest(null);
-        setWebRequest(buildWebRequest(context));
+        // fill in the default data if the attribute is not specified
+        fillDefaultData(context);
+        // Then resolve all variables
+        resolveValues(context);
+
+        setWebRequest(buildWebRequest());
+        // Check that we have built the webRequest
+        if (getWebRequest() != null)
+        {
+            // load the response
+            final WebResponse webResponse = context.getWebClient().loadWebResponse(getWebRequest());
+            context.setWebResponse(webResponse);
+        }
     }
 
     /**
@@ -384,12 +402,8 @@ public class Request extends AbstractActionItem
      * @return WebRequest - The WebRequest that is generated based on the instance
      * @throws MalformedURLException
      */
-    public WebRequest buildWebRequest(final Context context) throws MalformedURLException, InvalidArgumentException
+    public WebRequest buildWebRequest() throws MalformedURLException, InvalidArgumentException
     {
-        // fill in the default data if the attribute is not specified
-        fillDefaultData(context);
-        // Then resolve all variables
-        resolveValues(context);
 
         // Finally build the webRequest
         if (getEncodeBody() != null && Boolean.valueOf(getEncodeBody()))

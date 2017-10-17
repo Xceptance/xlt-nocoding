@@ -6,6 +6,7 @@ import java.util.List;
 import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
+import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.LightWeigthAction;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
@@ -35,6 +36,8 @@ public class MockParser implements Parser
      */
     private List<ScriptItem> parseEasy()
     {
+        final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
+
         /**
          * Request
          */
@@ -82,8 +85,13 @@ public class MockParser implements Parser
          * ONE Action
          */
         final List<ScriptItem> itemList = new ArrayList<ScriptItem>();
-        final ScriptItem actionItem = new LightWeigthAction(request, response, subrequests);
-        itemList.add(actionItem);
+        actionItems.add(response);
+        for (final AbstractSubrequest subrequest : subrequests)
+        {
+            actionItems.add(subrequest);
+        }
+        final ScriptItem scriptItem = new LightWeigthAction(request, actionItems);
+        itemList.add(scriptItem);
         return itemList;
     }
 
@@ -94,12 +102,13 @@ public class MockParser implements Parser
      */
     private List<ScriptItem> parseMedium()
     {
+        final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
+
         final List<ScriptItem> itemList = new ArrayList<ScriptItem>();
         final Request request = new Request("https://localhost:8443/posters/", "Visit Homepage");
 
-        // final Subrequest subrequest = new Subrequest();
-        final ScriptItem actionItem = new LightWeigthAction(request, null, null);
-        itemList.add(actionItem);
+        final ScriptItem scriptItem = new LightWeigthAction(request, actionItems);
+        itemList.add(scriptItem);
         return itemList;
     }
 
@@ -110,12 +119,14 @@ public class MockParser implements Parser
      */
     private List<ScriptItem> parseHard()
     {
+        final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
+
         final List<ScriptItem> itemList = new ArrayList<ScriptItem>();
         final Request request = new Request("${host}/posters/", "Visit Homepage");
 
         // final Subrequest subrequest = new Subrequest();
-        final ScriptItem actionItem = new LightWeigthAction(request, null, null);
-        itemList.add(actionItem);
+        final ScriptItem scriptItem = new LightWeigthAction(request, actionItems);
+        itemList.add(scriptItem);
         return itemList;
 
     }
@@ -127,6 +138,7 @@ public class MockParser implements Parser
      */
     private List<ScriptItem> parseMediumLogin()
     {
+        List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
         /**
          * Request
          */
@@ -173,20 +185,30 @@ public class MockParser implements Parser
          * Action
          */
         final List<ScriptItem> itemList = new ArrayList<ScriptItem>();
-        ScriptItem actionItem;
-        actionItem = new LightWeigthAction(request1, response1, null);
-        itemList.add(actionItem);
-        actionItem = new LightWeigthAction(request2, response2, null);
-        itemList.add(actionItem);
-        actionItem = new LightWeigthAction(request3, response3, null);
-        itemList.add(actionItem);
-        actionItem = new LightWeigthAction(request4, response4, null);
-        itemList.add(actionItem);
+        ScriptItem scriptItem;
+        actionItems.add(response1);
+        scriptItem = new LightWeigthAction(request1, actionItems);
+        itemList.add(scriptItem);
+        actionItems = new ArrayList<AbstractActionItem>();
+        actionItems.add(response2);
+        scriptItem = new LightWeigthAction(request2, actionItems);
+        itemList.add(scriptItem);
+        actionItems = new ArrayList<AbstractActionItem>();
+        actionItems.add(response3);
+        scriptItem = new LightWeigthAction(request3, actionItems);
+        itemList.add(scriptItem);
+        actionItems = new ArrayList<AbstractActionItem>();
+        actionItems.add(response4);
+        scriptItem = new LightWeigthAction(request4, actionItems);
+        itemList.add(scriptItem);
+        actionItems = new ArrayList<AbstractActionItem>();
         return itemList;
     }
 
     private List<ScriptItem> parseHardWithSubRequests()
     {
+        final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
+
         final List<ScriptItem> itemList = new ArrayList<ScriptItem>();
         final Request request = new Request("${host}/posters/topCategory/Dining?categoryId=2", "Visit Category Page");
 
@@ -211,9 +233,14 @@ public class MockParser implements Parser
         final List<AbstractValidator> validation = new ArrayList<AbstractValidator>();
         validation.add(new RegExpValidator("blub", "Grilled Salmon with Potato Wedges", "Grilled Salmon with Potato Wedges"));
         final Response responseOfSubrequest = new Response(null, validation);
-        final XHRSubrequest subrequest = new XHRSubrequest("Navigate to second product page.", requestOfSubrequest, responseOfSubrequest);
-        subrequests.add(subrequest);
-        final ScriptItem actionItem = new LightWeigthAction(request, null, subrequests);
+        final XHRSubrequest xhrSubrequest = new XHRSubrequest("Navigate to second product page.", requestOfSubrequest,
+                                                              responseOfSubrequest);
+        subrequests.add(xhrSubrequest);
+        for (final AbstractSubrequest subrequest : subrequests)
+        {
+            actionItems.add(subrequest);
+        }
+        final ScriptItem actionItem = new LightWeigthAction(request, actionItems);
         itemList.add(actionItem);
         return itemList;
     }
