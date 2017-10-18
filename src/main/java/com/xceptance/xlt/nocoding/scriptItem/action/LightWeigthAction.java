@@ -75,12 +75,17 @@ public class LightWeigthAction extends Action
      */
     public void doExecute(final WebAction action) throws Throwable
     {
+        // Extract the context
         final Context context = action.getContext();
+        // Extract the action items
         final List<AbstractActionItem> actionItems = action.getActionItems();
+        // Execute the main request
         action.getRequest().execute(context);
 
+        // If there are actionItems
         if (actionItems != null && !actionItems.isEmpty())
         {
+            // Execute every actionItem, i.e. every validation and every store
             for (final AbstractActionItem actionItem : actionItems)
             {
                 actionItem.execute(context);

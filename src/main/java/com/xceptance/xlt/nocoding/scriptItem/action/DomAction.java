@@ -6,28 +6,39 @@ import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.SgmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.xceptance.xlt.api.util.XltException;
+import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.engine.XltWebClient;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
-import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.webAction.WebAction;
 
+// TODO
 public class DomAction extends Action
 {
     private HtmlPage htmlPage;
 
     private final long waitingTime = 30000;
 
-    public DomAction(final Request request, final Response response, final List<AbstractSubrequest> subrequests)
+    public DomAction(final Request request, final List<AbstractActionItem> actionItems)
     {
-        super(request, response, subrequests);
+        super(request, actionItems);
     }
 
     @Override
     public void execute(final Context context) throws Throwable
     {
-        final WebAction action = new WebAction(this.getRequest().getName(), this.getRequest().buildWebRequest(context), subrequests,
-                                               context.getWebClient(), (final WebAction x) -> doExecute(x));
+        final WebAction action = new WebAction(getRequest().getName(), context, getRequest(), getActionItems(),
+                                               (final WebAction webAction) -> {
+                                                   try
+                                                   {
+                                                       doExecute(webAction);
+                                                   }
+                                                   catch (final Throwable e)
+                                                   {
+                                                       XltLogger.runTimeLogger.error("Execution Step failed");
+                                                       e.printStackTrace();
+                                                       throw new Exception(e);
+                                                   }
+                                               });
 
         action.run();
     }
@@ -77,13 +88,26 @@ public class DomAction extends Action
         return newHtmlPage;
     }
 
-    public void doExecute(final WebAction action) throws Exception
+    /**
+     * This method uses an action as parameter and defines how to execute a WebAction. This is used in a lambda method in
+     * the execute-Method.
+     * 
+     * @param action
+     * @throws Exception
+     */
+    public void doExecute(final WebAction action) throws Throwable
     {
-        // TODO Extract waiting time
-        final long waitingTime = 30000;
-        final Page result = action.getWebClient().getPage(action.getWebRequest());
-        setHtmlPage(waitForPageIsComplete(result, waitingTime));
+        final Context context = action.getContext();
+        final List<AbstractActionItem> actionItems = action.getActionItems();
+        action.getRequest().execute(context);
 
+        if (actionItems != null && !actionItems.isEmpty())
+        {
+            for (final AbstractActionItem actionItem : actionItems)
+            {
+                actionItem.execute(context);
+            }
+        }
     }
 
 }
