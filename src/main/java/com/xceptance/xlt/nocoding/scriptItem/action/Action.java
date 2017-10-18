@@ -3,6 +3,7 @@ package com.xceptance.xlt.nocoding.scriptItem.action;
 import java.util.List;
 
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
+import com.xceptance.xlt.nocoding.util.Context;
 
 /**
  * This is the abstract class each Action ScriptItem has, so if the ScriptItem has the form of "- Action : ...", this
@@ -11,14 +12,14 @@ import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 public abstract class Action implements ScriptItem
 {
     /**
+     * The name of the action
+     */
+    protected String name;
+
+    /**
      * The list of actionItems. An actionItem can be a Request, Response or AbstractSubrequest
      */
     protected final List<AbstractActionItem> actionItems;
-
-    /**
-     * The mandatory request
-     */
-    protected final Request request;
 
     /**
      * Creates an action with the specified request, response and subrequests
@@ -27,9 +28,9 @@ public abstract class Action implements ScriptItem
      * @param response
      * @param subrequests
      */
-    public Action(final Request request, final List<AbstractActionItem> actionItems)
+    public Action(final String name, final List<AbstractActionItem> actionItems)
     {
-        this.request = request;
+        this.name = name;
         this.actionItems = actionItems;
     }
 
@@ -38,9 +39,21 @@ public abstract class Action implements ScriptItem
         return actionItems;
     }
 
-    public Request getRequest()
+    public String getName()
     {
-        return request;
+        return name;
+    }
+
+    public void resolveName(final Context context)
+    {
+        // Resolve name
+        final String resolvedValue = context.resolveString(getName());
+        setName(resolvedValue);
+    }
+
+    public void setName(final String name)
+    {
+        this.name = name;
     }
 
 }

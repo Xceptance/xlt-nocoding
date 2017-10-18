@@ -9,9 +9,14 @@ import com.xceptance.xlt.nocoding.util.Context;
  */
 public class StoreItem implements ScriptItem
 {
-    private final String variableName;
+    private String variableName;
 
-    private final String value;
+    private String value;
+
+    public StoreItem()
+    {
+        this(null, null);
+    }
 
     public StoreItem(final String variableName, final String value)
     {
@@ -24,6 +29,26 @@ public class StoreItem implements ScriptItem
     {
         context.getDataStorage().storeVariable(variableName, value);
         XltLogger.runTimeLogger.info("Added Variable: " + variableName + " : " + value);
+    }
+
+    public String getVariableName()
+    {
+        return variableName;
+    }
+
+    public void setVariableName(final String variableName)
+    {
+        this.variableName = variableName;
+    }
+
+    public String getValue()
+    {
+        return value;
+    }
+
+    public void setValue(final String value)
+    {
+        this.value = value;
     }
 
 }

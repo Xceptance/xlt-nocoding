@@ -41,7 +41,7 @@ public class MockParser implements Parser
         /**
          * Request
          */
-        final Request request = new Request("https://localhost:8443/posters/", "Visit Homepage");
+        final Request request = new Request("https://localhost:8443/posters/");
         request.setMethod(HttpMethod.GET.toString());
         request.setParameters(null);
         request.setBody(null);
@@ -85,12 +85,13 @@ public class MockParser implements Parser
          * ONE Action
          */
         final List<ScriptItem> itemList = new ArrayList<ScriptItem>();
+        actionItems.add(request);
         actionItems.add(response);
         for (final AbstractSubrequest subrequest : subrequests)
         {
             actionItems.add(subrequest);
         }
-        final ScriptItem scriptItem = new LightWeigthAction(request, actionItems);
+        final ScriptItem scriptItem = new LightWeigthAction("Visit Homepage", actionItems);
         itemList.add(scriptItem);
         return itemList;
     }
@@ -105,9 +106,10 @@ public class MockParser implements Parser
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
 
         final List<ScriptItem> itemList = new ArrayList<ScriptItem>();
-        final Request request = new Request("https://localhost:8443/posters/", "Visit Homepage");
+        final Request request = new Request("https://localhost:8443/posters/");
 
-        final ScriptItem scriptItem = new LightWeigthAction(request, actionItems);
+        actionItems.add(request);
+        final ScriptItem scriptItem = new LightWeigthAction("Visit Homepage", actionItems);
         itemList.add(scriptItem);
         return itemList;
     }
@@ -122,10 +124,11 @@ public class MockParser implements Parser
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
 
         final List<ScriptItem> itemList = new ArrayList<ScriptItem>();
-        final Request request = new Request("${host}/posters/", "Visit Homepage");
+        final Request request = new Request("${host}/posters/");
 
         // final Subrequest subrequest = new Subrequest();
-        final ScriptItem scriptItem = new LightWeigthAction(request, actionItems);
+        actionItems.add(request);
+        final ScriptItem scriptItem = new LightWeigthAction("Visit Homepage", actionItems);
         itemList.add(scriptItem);
         return itemList;
 
@@ -143,16 +146,16 @@ public class MockParser implements Parser
          * Request
          */
 
-        final Request request1 = new Request("https://localhost:8443/posters/", "Open Website");
-        final Request request2 = new Request("https://localhost:8443/posters/login", "Go to Login");
-        final Request request3 = new Request("https://localhost:8443/posters/login", "login");
+        final Request request1 = new Request("https://localhost:8443/posters/");
+        final Request request2 = new Request("https://localhost:8443/posters/login");
+        final Request request3 = new Request("https://localhost:8443/posters/login");
         request3.setMethod(HttpMethod.POST.toString());
         final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
         parameters.add(new NameValuePair("email", "john@doe.com"));
         parameters.add(new NameValuePair("password", "topsecret"));
         parameters.add(new NameValuePair("btnSignIn", ""));
         request3.setParameters(parameters);
-        final Request request4 = new Request("https://localhost:8443/posters/", "Login Redirection");
+        final Request request4 = new Request("https://localhost:8443/posters/");
 
         /**
          * Response
@@ -186,20 +189,24 @@ public class MockParser implements Parser
          */
         final List<ScriptItem> itemList = new ArrayList<ScriptItem>();
         ScriptItem scriptItem;
+        actionItems.add(request1);
         actionItems.add(response1);
-        scriptItem = new LightWeigthAction(request1, actionItems);
+        scriptItem = new LightWeigthAction("Open Website", actionItems);
         itemList.add(scriptItem);
         actionItems = new ArrayList<AbstractActionItem>();
+        actionItems.add(request2);
         actionItems.add(response2);
-        scriptItem = new LightWeigthAction(request2, actionItems);
+        scriptItem = new LightWeigthAction("Go to Login", actionItems);
         itemList.add(scriptItem);
         actionItems = new ArrayList<AbstractActionItem>();
+        actionItems.add(request3);
         actionItems.add(response3);
-        scriptItem = new LightWeigthAction(request3, actionItems);
+        scriptItem = new LightWeigthAction("login", actionItems);
         itemList.add(scriptItem);
         actionItems = new ArrayList<AbstractActionItem>();
+        actionItems.add(request4);
         actionItems.add(response4);
-        scriptItem = new LightWeigthAction(request4, actionItems);
+        scriptItem = new LightWeigthAction("Login Redirection", actionItems);
         itemList.add(scriptItem);
         actionItems = new ArrayList<AbstractActionItem>();
         return itemList;
@@ -210,7 +217,7 @@ public class MockParser implements Parser
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
 
         final List<ScriptItem> itemList = new ArrayList<ScriptItem>();
-        final Request request = new Request("${host}/posters/topCategory/Dining?categoryId=2", "Visit Category Page");
+        final Request request = new Request("${host}/posters/topCategory/Dining?categoryId=2");
 
         final List<AbstractSubrequest> subrequests = new ArrayList<AbstractSubrequest>();
         // Static Subrequest
@@ -223,7 +230,7 @@ public class MockParser implements Parser
         // TODO Meeting
         // XHRSubrequest
         // Request
-        final Request requestOfSubrequest = new Request("${host}/posters/getProductOfTopCategory", "Navigate to second product page");
+        final Request requestOfSubrequest = new Request("${host}/posters/getProductOfTopCategory");
         requestOfSubrequest.setMethod(HttpMethod.POST.toString());
         final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
         parameters.add(new NameValuePair("categoryId", "2"));
@@ -236,11 +243,13 @@ public class MockParser implements Parser
         final XHRSubrequest xhrSubrequest = new XHRSubrequest("Navigate to second product page.", requestOfSubrequest,
                                                               responseOfSubrequest);
         subrequests.add(xhrSubrequest);
+
+        actionItems.add(request);
         for (final AbstractSubrequest subrequest : subrequests)
         {
             actionItems.add(subrequest);
         }
-        final ScriptItem actionItem = new LightWeigthAction(request, actionItems);
+        final ScriptItem actionItem = new LightWeigthAction("Visit Category Page", actionItems);
         itemList.add(actionItem);
         return itemList;
     }

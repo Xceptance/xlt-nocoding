@@ -1,5 +1,6 @@
 package com.xceptance.xlt.nocoding.scriptItem.action;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.xceptance.xlt.api.engine.Session;
@@ -20,9 +21,15 @@ public class LightWeigthAction extends Action
      */
     private LightWeightPage lightWeightPage;
 
-    public LightWeigthAction(final Request request, final List<AbstractActionItem> actionItems)
+    public LightWeigthAction(final String name, final List<AbstractActionItem> actionItems)
     {
-        super(request, actionItems);
+        super(name, actionItems);
+    }
+
+    public LightWeigthAction(final String name, final Request request)
+    {
+        this(name, new ArrayList<AbstractActionItem>(1));
+        actionItems.add(request);
     }
 
     /**
@@ -32,19 +39,21 @@ public class LightWeigthAction extends Action
     @Override
     public void execute(final Context context) throws Throwable
     {
-        final WebAction action = new WebAction(getRequest().getName(), context, getRequest(), getActionItems(),
-                                               (final WebAction webAction) -> {
-                                                   try
-                                                   {
-                                                       doExecute(webAction);
-                                                   }
-                                                   catch (final Throwable e)
-                                                   {
-                                                       XltLogger.runTimeLogger.error("Execution Step failed");
-                                                       e.printStackTrace();
-                                                       throw new Exception(e);
-                                                   }
-                                               });
+        // Resolve the name of the action since it could be a variable
+        resolveName(context);
+
+        final WebAction action = new WebAction(name, context, getActionItems(), (final WebAction webAction) -> {
+            try
+            {
+                doExecute(webAction);
+            }
+            catch (final Throwable e)
+            {
+                XltLogger.runTimeLogger.error("Execution Step failed");
+                e.printStackTrace();
+                throw new Exception(e);
+            }
+        });
 
         try
         {
@@ -79,13 +88,11 @@ public class LightWeigthAction extends Action
         final Context context = action.getContext();
         // Extract the action items
         final List<AbstractActionItem> actionItems = action.getActionItems();
-        // Execute the main request
-        action.getRequest().execute(context);
 
         // If there are actionItems
         if (actionItems != null && !actionItems.isEmpty())
         {
-            // Execute every actionItem, i.e. every validation and every store
+            // Execute every actionItem, i.e. main request and validations.
             for (final AbstractActionItem actionItem : actionItems)
             {
                 actionItem.execute(context);

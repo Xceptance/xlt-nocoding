@@ -10,6 +10,8 @@ import java.util.Map;
 
 import org.openqa.selenium.InvalidArgumentException;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.WebResponse;
@@ -21,54 +23,63 @@ import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 public class Request extends AbstractActionItem
 {
     /**
-     * The name of the WebAction
-     */
-    private String name;
-
-    /**
      * The URL of the website as String
      */
-    private String urlAsString;
+    @JsonProperty(Constants.URL)
+    private String url;
 
     /**
      * The HttpMethod for the webrequest. Defaults to "GET"
      */
+    @JsonProperty(Constants.METHOD)
     private String method;
 
     /**
      * Sets the WebRequest as Xhr request. Defaults to "false"
      */
-    private String Xhr;
+    @JsonProperty(Constants.XHR)
+    private String xhr;
 
     /**
      * Defines if the parameters are encoded. Defaults to "false"
      */
+    @JsonProperty(Constants.ENCODEPARAMETERS)
     private String encodeParameters;
 
     /**
      * The list of all parameters
      */
+    @JsonProperty(Constants.PARAMETERS)
     private List<NameValuePair> parameters;
 
     /**
      * A map that define the headers
      */
+    @JsonProperty(Constants.HEADERS)
     private Map<String, String> headers;
 
     /**
      * The body of the WebRequest
      */
+    @JsonProperty(Constants.BODY)
     private String body;
 
     /**
      * Defines if the body is encoded. Defaults to "false"
      */
+    @JsonProperty(Constants.ENCODEBODY)
     private String encodeBody;
 
     /**
      * The webRequest as defined with this request object
      */
+    @JsonIgnore
     private WebRequest webRequest;
+
+    public Request()
+    {
+
+    }
 
     /**
      * Creates a class with the minimum of information, that is the URL and the name of the Action
@@ -78,30 +89,19 @@ public class Request extends AbstractActionItem
      * @param name
      *            The name of the action
      */
-    public Request(final String url, final String name)
+    public Request(final String url)
     {
-        this.name = name;
-        this.urlAsString = url;
+        this.url = url;
     }
 
-    public String getName()
+    public String getUrl()
     {
-        return name;
+        return url;
     }
 
-    public void setName(final String name)
+    public void setUrl(final String url)
     {
-        this.name = name;
-    }
-
-    public String getUrlAsString()
-    {
-        return urlAsString;
-    }
-
-    public void setUrlAsString(final String urlAsString)
-    {
-        this.urlAsString = urlAsString;
+        this.url = url;
     }
 
     public String getMethod()
@@ -116,12 +116,12 @@ public class Request extends AbstractActionItem
 
     public String getXhr()
     {
-        return Xhr;
+        return xhr;
     }
 
     public void setXhr(final String xhr)
     {
-        Xhr = xhr;
+        this.xhr = xhr;
     }
 
     public String getEncodeParameters()
@@ -259,13 +259,11 @@ public class Request extends AbstractActionItem
      */
     private void resolveValues(final Context context) throws InvalidArgumentException
     {
-        // Resolve name
-        String resolvedValue = context.resolveString(getName());
-        setName(resolvedValue);
+        String resolvedValue;
 
         // Resolve Url
-        resolvedValue = context.resolveString(getUrlAsString());
-        setUrlAsString(resolvedValue);
+        resolvedValue = context.resolveString(getUrl());
+        setUrl(resolvedValue);
 
         // Resolve Httpmethod
         resolvedValue = context.resolveString(getMethod());
@@ -416,7 +414,7 @@ public class Request extends AbstractActionItem
             encodeParameters();
         }
 
-        final URL url = new URL(this.urlAsString);
+        final URL url = new URL(this.url);
         final WebRequest webRequest = new WebRequest(url, HttpMethod.valueOf(getMethod()));
 
         if (getXhr() != null && Boolean.valueOf(getXhr()))

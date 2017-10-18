@@ -8,7 +8,6 @@ import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.common.lang.ReflectionUtils;
 import com.xceptance.xlt.api.actions.AbstractWebAction;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
-import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.ThrowingConsumer;
 
@@ -25,11 +24,6 @@ public class WebAction extends AbstractWebAction
      * The context in the current WebAction
      */
     private final Context context;
-
-    /**
-     * The main request in this action
-     */
-    private final Request request;
 
     /**
      * The main request in this action
@@ -54,13 +48,12 @@ public class WebAction extends AbstractWebAction
      * @param function
      *            A {@link ThrowingConsumer<{@link WebAction}>}
      */
-    public WebAction(final String timerName, final Context context, final Request request, final List<AbstractActionItem> actionItems,
+    public WebAction(final String timerName, final Context context, final List<AbstractActionItem> actionItems,
         final ThrowingConsumer<WebAction> function)
     {
         super(timerName);
         this.context = context;
         this.webClient = context.getWebClient();
-        this.request = request;
         this.actionItems = actionItems;
         this.function = function;
     }
@@ -121,11 +114,6 @@ public class WebAction extends AbstractWebAction
     public List<AbstractActionItem> getActionItems()
     {
         return actionItems;
-    }
-
-    public Request getRequest()
-    {
-        return request;
     }
 
 }
