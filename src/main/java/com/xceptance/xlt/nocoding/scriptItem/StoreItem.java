@@ -1,5 +1,6 @@
 package com.xceptance.xlt.nocoding.scriptItem;
 
+import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.util.Context;
 
 /**
@@ -22,6 +23,7 @@ public class StoreItem implements ScriptItem
     public void execute(final Context context) throws Throwable
     {
         context.getDataStorage().storeVariable(variableName, value);
+        XltLogger.runTimeLogger.info("Added Variable: " + variableName + " : " + value);
     }
 
 }

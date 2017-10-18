@@ -8,8 +8,8 @@ import org.junit.Test;
 import com.xceptance.xlt.api.tests.AbstractTestCase;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.api.util.XltProperties;
-import com.xceptance.xlt.nocoding.parser.MockParser;
 import com.xceptance.xlt.nocoding.parser.Parser;
+import com.xceptance.xlt.nocoding.parser.YamlParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
@@ -54,8 +54,8 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
         // Load the default configuration
         context.getDataStorage().loadDefaultConfig();
 
-        this.parser = new MockParser();
-        // this.parser = new YamlParser();
+        // this.parser = new MockParser();
+        this.parser = new YamlParser();
         itemList = parser.parse();
     }
 
