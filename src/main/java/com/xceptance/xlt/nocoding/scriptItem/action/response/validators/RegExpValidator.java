@@ -94,7 +94,7 @@ public class RegExpValidator extends AbstractValidator
                 // otherwise we simply look at group()
                 else
                 {
-                    matchingString = matcher.group();
+                    matchingString = matcher.group(0);
                 }
                 // If we did get a match that is not null, verify it equals the text field
                 if (matchingString != null)
