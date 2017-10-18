@@ -76,11 +76,6 @@ public class Request extends AbstractActionItem
     @JsonIgnore
     private WebRequest webRequest;
 
-    public Request()
-    {
-
-    }
-
     /**
      * Creates a class with the minimum of information, that is the URL and the name of the Action
      * 
