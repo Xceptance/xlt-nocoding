@@ -332,7 +332,8 @@ public class YamlParser implements Parser
             switch (fieldName)
             {
                 case Constants.HTTPCODE:
-                    httpcode = node.get(fieldName).textValue();
+                    // we have to use toString here
+                    httpcode = node.get(fieldName).toString();
                     XltLogger.runTimeLogger.debug("Added Httpcode " + httpcode);
                     break;
 
