@@ -8,6 +8,7 @@ import org.openqa.selenium.InvalidArgumentException;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
+import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.util.Context;
 
 public class RegExpValidator extends AbstractValidator
@@ -69,6 +70,7 @@ public class RegExpValidator extends AbstractValidator
     @Override
     public void validate(final Context context, final WebResponse webResponse) throws Exception
     {
+        XltLogger.runTimeLogger.debug("Starting Validation of " + getValidationName());
         // Resolve variables
         resolveValues(context);
         // Build a page with the content
@@ -104,7 +106,7 @@ public class RegExpValidator extends AbstractValidator
                 // otherwise throw an error
                 else
                 {
-                    throw new AssertionError("Matched with null");
+                    throw new AssertionError("Matched with null at " + getValidationName());
                     // if null is matched, then we most likely don't want it to be matched
                 }
             }
@@ -113,8 +115,10 @@ public class RegExpValidator extends AbstractValidator
         // If we did not find any matches, throw an error
         else
         {
-            throw new AssertionError("Did not find a match");
+            throw new AssertionError("Did not find a match at " + getValidationName());
         }
+
+        XltLogger.runTimeLogger.debug("Finished Validation of " + getValidationName());
     }
 
     /**

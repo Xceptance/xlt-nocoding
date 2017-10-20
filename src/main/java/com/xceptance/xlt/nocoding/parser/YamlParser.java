@@ -4,11 +4,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.api.util.XltLogger;
@@ -24,6 +29,9 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.HeaderStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.RegExpStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.XpathStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.AbstractValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.CookieValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.HeaderValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.RegExpValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
 import com.xceptance.xlt.nocoding.util.Constants;
 
@@ -57,85 +65,65 @@ public class YamlParser implements Parser
         final File file = new File("./config/data/default/TLLogin.yml");
         final YAMLFactory factory = new YAMLFactory();
         final JsonParser parser = factory.createParser(file);
-        int i = 0;
-        String wholeContent = "";
+
+        int numberObject = 0;
 
         while (parser.nextToken() != null)
         {
-            i++;
-            final String currentName = parser.getText();
-            if (currentName != null)
+            if (Constants.isPermittedListItem(parser.getText()))
             {
-                if (Constants.isPermittedListItem(currentName))
+                numberObject++;
+                XltLogger.runTimeLogger.info(numberObject + ".th ScriptItem: " + parser.getText());
+
+                if (parser.getText().equals(Constants.STORE))
                 {
-                    if (currentName.equals(Constants.STORE))
-                    {
-                        scriptItems.addAll(handleStore(parser));
-                    }
-                    else if (currentName.equals(Constants.ACTION))
-                    {
-                        // final JsonToken token = parser.currentToken();
-                        scriptItems.addAll(handleAction(parser));
-                    }
-                    else
-                    {
-                        // final JsonToken token = parser.currentToken();
-                        scriptItems.addAll(handleDefault(parser));
-                    }
+                    scriptItems.addAll(handleStore(parser));
+                }
+                else if (parser.getText().equals(Constants.ACTION))
+                {
+                    // TODO Don't use a map here, instead take here next token and then build a map again when neccessary
+                    // System.out.println("Action element: " + map.get(Constants.ACTION));
+                    // final String jsonString = new com.google.gson.Gson().toJson(map);
+                    // final JSONObject json = new JSONObject(jsonString);
+                    // System.out.println("Json Object: " + json.toString());
+
+                    scriptItems.addAll(handleAction(parser));
                 }
                 else
                 {
-                    // TODO uncomment when done
-                    // XltLogger.runTimeLogger.error("Unknown List Item");
-                    // throw new IllegalArgumentException();
+                    final ObjectMapper mapper = new ObjectMapper();
+                    final Map<String, Object> map = mapper.readValue(parser, new TypeReference<Map<String, Object>>()
+                    {
+                    });
+                    System.out.println("Other element found: " + map.keySet());
                 }
             }
-            wholeContent += currentName;
-            if (i != 1 && i % 2 == 1)
-            {
-                XltLogger.runTimeLogger.debug(i / 2 + ".th Item: " + currentName);
-            }
+
         }
-        XltLogger.runTimeLogger.debug(wholeContent);
+
         return scriptItems;
     }
 
     private List<ScriptItem> handleStore(final JsonParser parser) throws IOException
     {
+        // transform current parser to the content of the current node
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
-        // Increments with { and decrements with } thus when reaching 0 we are done
-        // And since an item starts with a {, we initialize with 1
-        int state = 1;
-        // Iterate over the next tokens
-        while (parser.nextToken() != null)
-        {
-            final String currentName = parser.getText();
-            if (currentName != null)
-            {
-                // If we find {, increment state
-                if (currentName.equals("{"))
-                {
-                    state++;
-                }
-                // If we find }, decrement state
-                else if (currentName.equals("}"))
-                {
-                    state--;
-                    if (state == 0)
-                    {
-                        break;
-                    }
-                }
+        final ObjectMapper mapper = new ObjectMapper();
+        final ObjectNode objectNode = mapper.readTree(parser);
+        final JsonNode jsonNode = objectNode.get(Constants.STORE);
+        final Iterator<JsonNode> iterator = jsonNode.elements();
 
-                /*
-                 * A parsed store has multiple '{', '[', '}' in it while variables don't have any of these thus, if we reach a
-                 * character, we know it must be a variable and directly after it stands the value
-                 */
-                else if (!(currentName.equals("{") || currentName.equals("}") || currentName.equals("[") || currentName.equals("]")))
-                {
-                    final StoreItem storeItem = new StoreItem(currentName, parser.nextTextValue());
-                    scriptItems.add(storeItem);
-                }
+        while (iterator.hasNext())
+        {
+            final JsonNode current = iterator.next();
+            final Iterator<String> fieldName = current.fieldNames();
+
+            while (fieldName.hasNext())
+            {
+                final String field = fieldName.next();
+                final String textValue = current.get(field).textValue();
+                scriptItems.add(new StoreItem(field, textValue));
+                XltLogger.runTimeLogger.debug("Added " + field + "=" + textValue + " to parameters");
             }
         }
         return scriptItems;
@@ -144,148 +132,121 @@ public class YamlParser implements Parser
 
     private List<ScriptItem> handleAction(final JsonParser parser) throws IOException
     {
-        // Increments with { and decrements with } thus when reaching 0 we are done
-        // And since an item starts with a {, we initialize with 1
-        int state = 1;
-
         // Initialize variables
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
-        String name = "";
+        String name = null;
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
 
-        // Go through every element
-        while (parser.nextToken() != null)
+        final ObjectMapper mapper = new ObjectMapper();
+        final ObjectNode objectNode = mapper.readTree(parser);
+        final Iterator<JsonNode> iterator = objectNode.elements();
+
+        while (iterator.hasNext())
         {
-            final String currentName = parser.getText();
-            if (currentName != null)
+            final JsonNode node = iterator.next();
+            final Iterator<String> fieldNames = node.fieldNames();
+
+            while (fieldNames.hasNext())
             {
-                // If we find {, increment state
-                if (currentName.equals("{"))
+                final String fieldName = fieldNames.next();
+
+                switch (fieldName)
                 {
-                    state++;
-                }
-                // If we find }, decrement state
-                else if (currentName.equals("}"))
-                {
-                    state--;
-                    if (state == 0)
-                    {
+                    case Constants.NAME:
+                        name = node.get(fieldName).textValue();
+                        System.out.println("Actionname: " + name);
                         break;
-                    }
-                }
-                // if it is an action item
-                else if (Constants.isPermittedActionItem(currentName))
-                {
-                    if (currentName.equals(Constants.NAME))
-                    {
-                        name = parser.nextTextValue();
-                    }
-                    else if (currentName.equals(Constants.REQUEST))
-                    {
-                        actionItems.add(handleRequest(parser));
-                    }
-                    else if (currentName.equals(Constants.RESPONSE))
-                    {
-                        actionItems.add(handleResponse(parser));
-                    }
-                    else if (currentName.equals(Constants.SUBREQUESTS))
-                    {
-                        actionItems.add(handleSubrequest(parser));
-                    }
-                }
-                // if we find a list item, we are at the end
-                else if (Constants.isPermittedListItem(currentName))
-                {
-                    break;
+
+                    case Constants.REQUEST:
+                        System.out.println("Request: " + node.get(fieldName).toString());
+                        actionItems.add(handleRequest(node.get(fieldName)));
+                        break;
+
+                    case Constants.RESPONSE:
+                        System.out.println("Response: " + node.get(fieldName).toString());
+                        actionItems.add(handleResponse(node.get(fieldName)));
+                        break;
+
+                    case Constants.SUBREQUESTS:
+                        System.out.println("Subrequests: " + node.get(fieldName).toString());
+                        break;
+
+                    default:
+                        break;
                 }
             }
         }
+
         final ScriptItem scriptItem = new LightWeigthAction(name, actionItems);
         scriptItems.add(scriptItem);
         return scriptItems;
 
     }
 
-    private Request handleRequest(final JsonParser parser) throws IOException
+    private Request handleRequest(final JsonNode node) throws IOException
     {
-        // parser.nextToken();
-        // parser.nextToken();
-        // final ObjectMapper mapper = new ObjectMapper();
-        // final Request request = mapper.readValue(parser, Request.class);
-
-        // Increments with { and decrements with } thus when reaching 0 we are done
-        // And since an item starts with a {, we initialize with 1
-        int state = 1;
 
         String url = "";
         String method = null;
         String xhr = null;
         String encodeParameters = null;
-        List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-        Map<String, String> headers = new HashMap<String, String>();
+        final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+        final Map<String, String> headers = new HashMap<String, String>();
         String body = null;
         String encodeBody = null;
-        // Go through every element
-        while (parser.nextToken() != null)
+
+        final Iterator<String> fieldNames = node.fieldNames();
+
+        while (fieldNames.hasNext())
         {
-            final String currentName = parser.getText();
-            if (currentName != null)
+            final String fieldName = fieldNames.next();
+
+            switch (fieldName)
             {
-                // If we find {, increment state
-                if (currentName.equals("{"))
-                {
-                    state++;
-                }
-                // If we find }, decrement state
-                else if (currentName.equals("}"))
-                {
-                    state--;
-                    if (state == 0)
-                    {
-                        break;
-                    }
-                }
-                // if it is an action item
-                if (currentName.equals(Constants.URL))
-                {
-                    url = parser.nextTextValue();
-                }
-                else if (currentName.equals(Constants.METHOD))
-                {
-                    method = parser.nextTextValue();
-                }
-                else if (currentName.equals(Constants.XHR))
-                {
-                    xhr = parser.nextTextValue();
-                }
-                else if (currentName.equals(Constants.ENCODEPARAMETERS))
-                {
-                    encodeParameters = parser.nextTextValue();
-                }
-                else if (currentName.equals(Constants.PARAMETERS))
-                {
-                    parameters = handleParameters(parser);
-                }
-                else if (currentName.equals(Constants.HEADERS))
-                {
-                    headers = handleHeaders(parser);
-                }
-                else if (currentName.equals(Constants.BODY))
-                {
-                    body = parser.nextTextValue();
-                }
-                else if (currentName.equals(Constants.ENCODEBODY))
-                {
-                    encodeBody = parser.nextTextValue();
-                }
-                // if we find anything else than an action item,
-                else if (!(currentName.equals("{") || currentName.equals("}") || currentName.equals("[")))
-                {
-                    if (!Constants.isPermittedActionItem(currentName))
-                        break;
-                }
+                case Constants.URL:
+                    url = node.get(fieldName).textValue();
+                    // XltLogger.runTimeLogger.debug("URL: " + url);
+                    break;
+
+                case Constants.METHOD:
+                    method = node.get(fieldName).textValue();
+                    // XltLogger.runTimeLogger.debug("Method: " + method);
+                    break;
+
+                case Constants.XHR:
+                    xhr = node.get(fieldName).textValue();
+                    // XltLogger.runTimeLogger.debug("Xhr: " + xhr);
+                    break;
+
+                case Constants.ENCODEPARAMETERS:
+                    encodeParameters = node.get(fieldName).textValue();
+                    // XltLogger.runTimeLogger.debug("EncodeParameters: " + encodeParameters);
+                    break;
+
+                case Constants.PARAMETERS:
+                    // Parameter Magic
+                    parameters.addAll(handleParameters(node.get(fieldName)));
+                    break;
+
+                case Constants.HEADERS:
+                    headers.putAll(handleHeaders(node.get(fieldName)));
+                    break;
+
+                case Constants.BODY:
+                    body = node.get(fieldName).textValue();
+                    // XltLogger.runTimeLogger.debug("Body: " + body);
+                    break;
+
+                case Constants.ENCODEBODY:
+                    encodeBody = node.get(fieldName).textValue();
+                    // XltLogger.runTimeLogger.debug("EncodeBody: " + encodeBody);
+                    break;
+
+                default:
+                    break;
             }
         }
+
         final Request request = new Request(url);
         request.setMethod(method);
         request.setXhr(xhr);
@@ -295,93 +256,98 @@ public class YamlParser implements Parser
         request.setBody(body);
         request.setEncodeBody(encodeBody);
 
+        XltLogger.runTimeLogger.info(request.toSimpleDebugString());
+
         return request;
     }
 
-    private Map<String, String> handleHeaders(final JsonParser parser)
+    private Map<String, String> handleHeaders(final JsonNode node) throws IOException
     {
-        // TODO Auto-generated method stub
-        return null;
-    }
+        // headers are transformed to a JSONArray
 
-    private List<NameValuePair> handleParameters(final JsonParser parser) throws IOException
-    {
-        // Increments with { and decrements with } thus when reaching 0 we are done
-        // And since an item starts with a {, we initialize with 1
-        int state = 1;
+        final Map<String, String> headers = new HashMap<String, String>();
 
-        final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-        // Go through every element
-        while (parser.nextToken() != null)
+        final Iterator<JsonNode> iterator = node.elements();
+
+        while (iterator.hasNext())
         {
-            final String currentName = parser.getText();
-            if (currentName != null)
+            final JsonNode current = iterator.next();
+            final Iterator<String> fieldName = current.fieldNames();
+
+            while (fieldName.hasNext())
             {
-                // If we find {, increment state
-                if (currentName.equals("{"))
-                {
-                    state++;
-                }
-                // If we find }, decrement state
-                else if (currentName.equals("}"))
-                {
-                    state--;
-                    if (state == 0)
-                    {
-                        break;
-                    }
-                }
-                // It's a string
-                else if (!(currentName.equals("{") || currentName.equals("}") || currentName.equals("[") || currentName.equals("]")))
-                {
-                    parameters.add(new NameValuePair(parser.getText(), parser.getValueAsString()));
-                }
+                final String field = fieldName.next();
+                final String textValue = current.get(field).textValue();
+                headers.put(field, textValue);
+                XltLogger.runTimeLogger.debug("Added " + field + "=" + headers.get(field) + " to parameters");
             }
         }
+
+        return headers;
+    }
+
+    private List<NameValuePair> handleParameters(final JsonNode node) throws IOException
+    {
+        // parameters are transformed to a JSONArray, thus we cannot directly use the fieldname iterator
+
+        final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+
+        final Iterator<JsonNode> iterator = node.elements();
+
+        while (iterator.hasNext())
+        {
+            final JsonNode current = iterator.next();
+            final Iterator<String> fieldName = current.fieldNames();
+
+            while (fieldName.hasNext())
+            {
+                final String field = fieldName.next();
+                String textValue = current.get(field).textValue();
+                // TODO talk about this
+                // Since parameters might be empty and the parser writes "null" we check for it and then remove it
+                if (textValue == null || textValue.equals("null"))
+                {
+                    textValue = "";
+                }
+                parameters.add(new NameValuePair(field, textValue));
+                XltLogger.runTimeLogger.debug("Added " + field + "=" + textValue + " to parameters");
+            }
+        }
+
         return parameters;
     }
 
-    private Response handleResponse(final JsonParser parser) throws IOException
+    private Response handleResponse(final JsonNode node) throws IOException
     {
-        // Increments with { and decrements with } thus when reaching 0 we are done
-        // And since an item starts with a {, we initialize with 1
-        int state = 1;
 
         String httpcode = null;
         final List<AbstractValidator> validators = new ArrayList<AbstractValidator>();
         final List<AbstractResponseStore> responseStore = new ArrayList<AbstractResponseStore>();
-        // Go through every element
-        while (parser.nextToken() != null)
+
+        final Iterator<String> fieldNames = node.fieldNames();
+
+        while (fieldNames.hasNext())
         {
-            final String currentName = parser.getText();
-            if (currentName != null)
+            final String fieldName = fieldNames.next();
+            switch (fieldName)
             {
-                // If we find {, increment state
-                if (currentName.equals("{"))
-                {
-                    state++;
-                }
-                // If we find }, decrement state
-                else if (currentName.equals("}"))
-                {
-                    state--;
-                    if (state == 0)
-                    {
-                        break;
-                    }
-                }
-                else if (currentName.equals(Constants.HTTPCODE))
-                {
-                    httpcode = parser.getValueAsString();
-                }
-                else if (currentName.equals(Constants.VALIDATION))
-                {
-                    validators.add(handleValidation(parser));
-                }
-                else if (currentName.equals(Constants.STORE))
-                {
-                    responseStore.add(handleResponseStore(parser));
-                }
+                case Constants.HTTPCODE:
+                    httpcode = node.get(fieldName).textValue();
+                    XltLogger.runTimeLogger.debug("Added Httpcode " + httpcode);
+                    break;
+
+                case Constants.VALIDATION:
+                    validators.addAll(handleValidation(node.get(fieldName)));
+                    XltLogger.runTimeLogger.debug("Added Validation");
+                    break;
+
+                case Constants.STORE:
+                    responseStore.addAll(handleResponseStore(node.get(fieldName)));
+                    XltLogger.runTimeLogger.debug("Added Validation");
+                    break;
+
+                default:
+                    break;
             }
         }
 
@@ -389,73 +355,154 @@ public class YamlParser implements Parser
         return response;
     }
 
-    private AbstractResponseStore handleResponseStore(final JsonParser parser) throws IOException
+    private List<AbstractResponseStore> handleResponseStore(final JsonNode node) throws IOException
     {
-        // Increments with { and decrements with } thus when reaching 0 we are done
-        // And since an item starts with a {, we initialize with 1
-        int state = 1;
 
         String variableName = null;
-        AbstractResponseStore responseStore = null;
+        final List<AbstractResponseStore> responseStore = new ArrayList<AbstractResponseStore>();
         // Go through every element
-        while (parser.nextToken() != null)
+        final Iterator<JsonNode> iterator = node.elements();
+
+        while (iterator.hasNext())
         {
-            final String currentName = parser.getText();
-            if (currentName != null)
+            final JsonNode current = iterator.next();
+            final Iterator<String> fieldName = current.fieldNames();
+
+            while (fieldName.hasNext())
             {
-                // If we find {, increment state
-                if (currentName.equals("{"))
+                // Name of the variable
+                variableName = fieldName.next();
+                // The substructure
+                final JsonNode storeContent = current.get(variableName);
+                final Iterator<String> name = storeContent.fieldNames();
+                // Iterate over the content
+                while (name.hasNext())
                 {
-                    state++;
-                }
-                // If we find }, decrement state
-                else if (currentName.equals("}"))
-                {
-                    state--;
-                    if (state == 0)
+                    final String leftHandExpression = name.next();
+                    switch (leftHandExpression)
                     {
-                        break;
+                        case Constants.XPATH:
+                            // Xpath Magic
+                            responseStore.add(new XpathStore(variableName, storeContent.get(leftHandExpression).textValue()));
+                            break;
+
+                        case Constants.REGEXP:
+                            final String pattern = storeContent.get(leftHandExpression).textValue();
+                            String group = null;
+                            // if we have another fieldName, this means the optional group is specified
+                            if (name.hasNext())
+                            {
+                                group = storeContent.get(name.next()).textValue();
+                            }
+                            responseStore.add(new RegExpStore(variableName, pattern, group));
+                            break;
+
+                        case Constants.HEADER:
+                            responseStore.add(new HeaderStore(variableName, storeContent.get(leftHandExpression).textValue()));
+                            break;
+
+                        case Constants.COOKIE:
+                            responseStore.add(new CookieStore(variableName, storeContent.get(leftHandExpression).textValue()));
+                            break;
+
+                        default:
+                            break;
                     }
                 }
-                // It's a string
-                else if (!(currentName.equals("{") || currentName.equals("}") || currentName.equals("[") || currentName.equals("]")))
-                {
-                    variableName = parser.getText();
-                    while (parser.nextToken() != null)
-                    {
-                        final String curName = parser.getText();
-                        if (curName.equals(Constants.REGEXP))
-                        {
-                            // TODO optional group
-                            responseStore = new RegExpStore(variableName, parser.getValueAsString());
-                            break;
-                        }
-                        else if (curName.equals(Constants.XPATH))
-                        {
-                            responseStore = new XpathStore(variableName, parser.getValueAsString());
-                            break;
-                        }
-                        else if (curName.equals(Constants.HEADER))
-                        {
-                            responseStore = new HeaderStore(variableName, parser.getValueAsString());
-                            break;
-                        }
-                        else if (curName.equals(Constants.COOKIE))
-                        {
-                            responseStore = new CookieStore(variableName, parser.getValueAsString());
-                            break;
-                        }
-                    }
-                }
+
+                XltLogger.runTimeLogger.debug("Added " + variableName + " to ResponseStore");
             }
         }
+
         return responseStore;
     }
 
-    private AbstractValidator handleValidation(final JsonParser parser)
+    private List<AbstractValidator> handleValidation(final JsonNode node) throws IOException
     {
-        // TODO Auto-generated method stub
-        return null;
+        // Increments with { and decrements with } thus when reaching 0 we are done
+        // And since an item starts with a {, we initialize with 1
+        final int state = 1;
+
+        final List<AbstractValidator> validator = new ArrayList<AbstractValidator>();
+        String validationName = null;
+
+        final Iterator<JsonNode> iterator = node.elements();
+
+        while (iterator.hasNext())
+        {
+            final JsonNode current = iterator.next();
+            final Iterator<String> fieldName = current.fieldNames();
+
+            while (fieldName.hasNext())
+            {
+                validationName = fieldName.next();
+                // The substructure
+                final JsonNode storeContent = current.get(validationName);
+                final Iterator<String> name = storeContent.fieldNames();
+                // Iterate over the content
+                while (name.hasNext())
+                {
+                    final String leftHandExpression = name.next();
+                    switch (leftHandExpression)
+                    {
+                        case Constants.XPATH:
+                            // Xpath Magic
+
+                            break;
+
+                        case Constants.REGEXP:
+                            final String pattern = storeContent.get(leftHandExpression).textValue();
+                            String group = null;
+                            String text = null;
+                            // if we have another name, this means the optional text is specified
+                            if (name.hasNext())
+                            {
+                                text = storeContent.get(name.next()).textValue();
+                                // if we have yet another name, this is the optional group
+                                if (name.hasNext())
+                                {
+                                    group = storeContent.get(name.next()).textValue();
+                                }
+                            }
+
+                            validator.add(new RegExpValidator(validationName, pattern, text, group));
+                            break;
+
+                        case Constants.HEADER:
+                            final String header = storeContent.get(leftHandExpression).textValue();
+                            String textOrCountDecider = null;
+                            String textOrCount = null;
+                            if (name.hasNext())
+                            {
+                                textOrCountDecider = name.next();
+                                textOrCount = storeContent.get(textOrCountDecider).textValue();
+                            }
+                            validator.add(new HeaderValidator(validationName, header, textOrCountDecider, textOrCount));
+                            break;
+
+                        case Constants.COOKIE:
+                            final String cookieName = storeContent.get(leftHandExpression).textValue();
+                            String cookieContent = null;
+
+                            // If we have another name, it is the optional "matches" field
+                            if (name.hasNext())
+                            {
+                                cookieContent = storeContent.get(name.next()).textValue();
+                            }
+
+                            validator.add(new CookieValidator(validationName, cookieName, cookieContent));
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+
+                XltLogger.runTimeLogger.debug("Added " + validationName + " to Validations");
+            }
+        }
+        // return new ArrayList<AbstractValidator>();
+        return validator;
     }
 
     private AbstractSubrequest handleSubrequest(final JsonParser parser)

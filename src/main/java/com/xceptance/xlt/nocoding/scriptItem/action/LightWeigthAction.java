@@ -49,7 +49,7 @@ public class LightWeigthAction extends Action
             }
             catch (final Throwable e)
             {
-                XltLogger.runTimeLogger.error("Execution Step failed");
+                XltLogger.runTimeLogger.error("Execution Step failed : " + getName());
                 e.printStackTrace();
                 throw new Exception(e);
             }
@@ -88,6 +88,8 @@ public class LightWeigthAction extends Action
         final Context context = action.getContext();
         // Extract the action items
         final List<AbstractActionItem> actionItems = action.getActionItems();
+
+        // TODO check first instance of request
 
         // If there are actionItems
         if (actionItems != null && !actionItems.isEmpty())

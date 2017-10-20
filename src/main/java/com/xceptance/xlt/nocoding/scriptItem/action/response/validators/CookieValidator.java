@@ -57,8 +57,8 @@ public class CookieValidator extends AbstractValidator
                         final int semicolonPosition = header.getValue().indexOf(";");
                         // Content starts after the equal sign (position+1) and ends before the semicolon
                         Assert.assertEquals("Content did not match",
-                                            header.getValue().substring(cookie.length() + 1, semicolonPosition),
-                                            text);
+                                            text,
+                                            header.getValue().substring(cookie.length() + 1, semicolonPosition));
                     }
                     // At last, set throwException to false, so we know, that we found our specified cookie.
                     throwException = false;

@@ -443,4 +443,14 @@ public class Request extends AbstractActionItem
         // URL newUrl = new URL(urlString);
     }
 
+    /*
+     * Provides the url and method used
+     */
+    public String toSimpleDebugString()
+    {
+        final String output = "Request-URL: " + url + " with Method." + method;
+
+        return output;
+    }
+
 }
