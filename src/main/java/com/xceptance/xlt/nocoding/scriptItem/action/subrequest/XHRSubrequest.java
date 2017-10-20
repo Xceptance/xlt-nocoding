@@ -9,6 +9,7 @@ public class XHRSubrequest extends AbstractSubrequest
 {
     private final String name;
 
+    // TODO talk about whether or not this should become a List<AbstractActionItem>
     private final Request request;
 
     private final Response response;
@@ -31,6 +32,8 @@ public class XHRSubrequest extends AbstractSubrequest
     public void execute(final Context context) throws Throwable
     {
         final Context localContext = new Context(context);
+        // Set xhr to be true
+        getRequest().setXhr("true");
         getRequest().execute(localContext);
 
         response.execute(localContext);

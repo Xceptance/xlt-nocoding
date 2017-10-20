@@ -33,10 +33,18 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.CookieVa
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.HeaderValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.RegExpValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
+import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 public class YamlParser implements Parser
 {
+
+    final String pathToFile;
+
+    public YamlParser(final String pathToFile)
+    {
+        this.pathToFile = pathToFile;
+    }
 
     @Override
     public List<ScriptItem> parse()
@@ -62,7 +70,7 @@ public class YamlParser implements Parser
     public List<ScriptItem> parseThis() throws JsonParseException, IOException
     {
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
-        final File file = new File("./config/data/default/TLLogin.yml");
+        final File file = new File(pathToFile);
         final YAMLFactory factory = new YAMLFactory();
         final JsonParser parser = factory.createParser(file);
 
@@ -81,12 +89,6 @@ public class YamlParser implements Parser
                 }
                 else if (parser.getText().equals(Constants.ACTION))
                 {
-                    // TODO Don't use a map here, instead take here next token and then build a map again when neccessary
-                    // System.out.println("Action element: " + map.get(Constants.ACTION));
-                    // final String jsonString = new com.google.gson.Gson().toJson(map);
-                    // final JSONObject json = new JSONObject(jsonString);
-                    // System.out.println("Json Object: " + json.toString());
-
                     scriptItems.addAll(handleAction(parser));
                 }
                 else
@@ -169,6 +171,7 @@ public class YamlParser implements Parser
 
                     case Constants.SUBREQUESTS:
                         System.out.println("Subrequests: " + node.get(fieldName).toString());
+                        actionItems.addAll(handleSubrequest(node.get(fieldName)));
                         break;
 
                     default:
@@ -307,7 +310,13 @@ public class YamlParser implements Parser
                 // Since parameters might be empty and the parser writes "null" we check for it and then remove it
                 if (textValue == null || textValue.equals("null"))
                 {
-                    textValue = "";
+                    // numbers wont get read with "textValue" so we have to first figure out if it is a number
+                    textValue = current.get(field).toString();
+                    // if we still have null, the field really was null
+                    if (textValue == null || textValue.equals("null"))
+                    {
+                        textValue = "";
+                    }
                 }
                 parameters.add(new NameValuePair(field, textValue));
                 XltLogger.runTimeLogger.debug("Added " + field + "=" + textValue + " to parameters");
@@ -503,10 +512,51 @@ public class YamlParser implements Parser
         return validator;
     }
 
-    private AbstractSubrequest handleSubrequest(final JsonParser parser)
+    private List<AbstractSubrequest> handleSubrequest(final JsonNode node)
     {
         // TODO Auto-generated method stub
-        final AbstractSubrequest subrequest = null;
+        final List<AbstractSubrequest> subrequest = new ArrayList<AbstractSubrequest>();
+
+        final Iterator<JsonNode> iterator = node.elements();
+
+        while (iterator.hasNext())
+        {
+            final JsonNode current = iterator.next();
+            final Iterator<String> fieldName = current.fieldNames();
+
+            // the type of subrequest
+            while (fieldName.hasNext())
+            {
+                final String name = fieldName.next();
+                switch (name)
+                {
+                    case Constants.XHR:
+                        // Do normal action stuff that isn't action stuff
+                        break;
+
+                    case Constants.STATIC:
+                        // System.out.println(current.get(name));
+                        final List<String> urls = new ArrayList<String>();
+                        final JsonNode staticUrls = current.get(name);
+
+                        final Iterator<JsonNode> staticUrlsIterator = staticUrls.elements();
+                        while (staticUrlsIterator.hasNext())
+                        {
+                            final String url = staticUrlsIterator.next().textValue();
+                            urls.add(url);
+                        }
+
+                        subrequest.add(new StaticSubrequest(urls));
+                        break;
+
+                    default:
+                        break;
+                }
+
+            }
+
+        }
+
         return subrequest;
     }
 
