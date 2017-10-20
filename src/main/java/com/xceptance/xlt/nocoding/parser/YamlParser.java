@@ -10,7 +10,6 @@ import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -18,6 +17,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
+import com.xceptance.xlt.nocoding.scriptItem.StoreDefault;
 import com.xceptance.xlt.nocoding.scriptItem.StoreItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.LightWeigthAction;
@@ -34,6 +34,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.HeaderVa
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.RegExpValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
+import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.XHRSubrequest;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 public class YamlParser implements Parser
@@ -93,11 +94,7 @@ public class YamlParser implements Parser
                 }
                 else
                 {
-                    final ObjectMapper mapper = new ObjectMapper();
-                    final Map<String, Object> map = mapper.readValue(parser, new TypeReference<Map<String, Object>>()
-                    {
-                    });
-                    System.out.println("Other element found: " + map.keySet());
+                    scriptItems.addAll(handleDefault(parser));
                 }
             }
 
@@ -512,7 +509,7 @@ public class YamlParser implements Parser
         return validator;
     }
 
-    private List<AbstractSubrequest> handleSubrequest(final JsonNode node)
+    private List<AbstractSubrequest> handleSubrequest(final JsonNode node) throws IOException
     {
         // TODO Auto-generated method stub
         final List<AbstractSubrequest> subrequest = new ArrayList<AbstractSubrequest>();
@@ -531,7 +528,7 @@ public class YamlParser implements Parser
                 switch (name)
                 {
                     case Constants.XHR:
-                        // Do normal action stuff that isn't action stuff
+                        subrequest.add(handleXhrSubrequest(current.get(name)));
                         break;
 
                     case Constants.STATIC:
@@ -560,11 +557,58 @@ public class YamlParser implements Parser
         return subrequest;
     }
 
-    private List<ScriptItem> handleDefault(final JsonParser parser)
+    private AbstractSubrequest handleXhrSubrequest(final JsonNode node) throws IOException
     {
+        final Iterator<String> fieldNames = node.fieldNames();
+        String name = null;
+        Request request = null;
+        Response response = null;
+
+        while (fieldNames.hasNext())
+        {
+            final String fieldName = fieldNames.next();
+
+            switch (fieldName)
+            {
+                case Constants.NAME:
+                    name = node.get(fieldName).textValue();
+                    System.out.println("Actionname: " + name);
+                    break;
+
+                case Constants.REQUEST:
+                    System.out.println("Request: " + node.get(fieldName).toString());
+                    request = handleRequest(node.get(fieldName));
+                    break;
+
+                case Constants.RESPONSE:
+                    System.out.println("Response: " + node.get(fieldName).toString());
+                    response = handleResponse(node.get(fieldName));
+                    break;
+
+                // case Constants.SUBREQUESTS:
+                // System.out.println("Subrequests: " + node.get(fieldName).toString());
+                // actionItems.addAll(handleSubrequest(node.get(fieldName)));
+                // break;
+
+                default:
+                    break;
+            }
+        }
+
+        final AbstractSubrequest subrequest = new XHRSubrequest(name, request, response);
+        return subrequest;
+    }
+
+    private List<ScriptItem> handleDefault(final JsonParser parser) throws IOException
+    {
+        // TODO handle parameter and other structures
+
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
+        final String variableName = parser.getText();
+        final String value = parser.nextTextValue();
+
+        scriptItems.add(new StoreDefault(variableName, value));
         return scriptItems;
-        // TODO Auto-generated method stub
 
     }
 

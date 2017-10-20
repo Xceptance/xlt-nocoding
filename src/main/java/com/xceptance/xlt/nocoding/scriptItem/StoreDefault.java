@@ -1,5 +1,6 @@
 package com.xceptance.xlt.nocoding.scriptItem;
 
+import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.util.Context;
 
 /**
@@ -24,10 +25,12 @@ public class StoreDefault implements ScriptItem
         if (!value.equals("delete"))
         {
             context.getDataStorage().storeConfigItem(variableName, value);
+            XltLogger.runTimeLogger.debug("Added " + variableName + "=" + value + " to default storage");
         }
         else
         {
             context.getDataStorage().removeConfigItem(variableName);
+            XltLogger.runTimeLogger.debug("Removed " + variableName + " from default storage");
         }
     }
 }

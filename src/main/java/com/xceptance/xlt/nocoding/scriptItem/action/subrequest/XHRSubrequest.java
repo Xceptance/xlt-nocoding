@@ -36,7 +36,10 @@ public class XHRSubrequest extends AbstractSubrequest
         getRequest().setXhr("true");
         getRequest().execute(localContext);
 
-        response.execute(localContext);
+        if (getResponse() != null)
+        {
+            getResponse().execute(localContext);
+        }
 
     }
 
