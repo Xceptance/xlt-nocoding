@@ -20,6 +20,10 @@ public class VariableResolver
      */
     private final static Pattern PARAMETER_PATTERN = Pattern.compile("\\$\\{[^\\{\\}]*\\}");
 
+    // The maximum amount you can re-resolve a value (so if variables reference another variable, we only resolve this many
+    // times)
+    private final int resolveDepth = 2;
+
     public Interpreter interpreter;
 
     public VariableResolver(final GeneralDataProvider dataProvider)
@@ -131,8 +135,25 @@ public class VariableResolver
                     i = i + 2;
                     // Search for variable in the new string and resolve it
                     final Pair<String, Integer> resolvedPair = doRecursion(toResolve.substring(i), context);
-                    // Add the resolved variable to output
-                    output += resolvedPair.getLeft();
+
+                    // TODO added, talk about this
+                    if (resolvedPair.getLeft().startsWith("$"))
+                    {
+                        Pair<String, Integer> twiceResolvedPair = doRecursion(resolvedPair.getLeft(), context);
+                        int numberRetries = 1;
+                        while (resolvedPair.getLeft().startsWith("$") && numberRetries <= this.resolveDepth)
+                        {
+                            twiceResolvedPair = doRecursion(resolvedPair.getLeft(), context);
+                            numberRetries++;
+                        }
+                        output += twiceResolvedPair.getLeft().substring(2);
+
+                    }
+                    else
+                    {
+                        // Add the resolved variable to output
+                        output += resolvedPair.getLeft();
+                    }
                     // And raise i by the length of the variable name
                     i += resolvedPair.getRight();
 
@@ -211,6 +232,11 @@ public class VariableResolver
                         if (beanShellEval != null)
                         {
                             resolvedValue = beanShellEval.toString();
+                            // TODO added
+                            // if we define a variable as ${RANDOM.String(8)} we only want to resolve it once. Thus we need to save
+                            // variables in our dataStorage afterwards
+                            context.getDataStorage().storeVariable(toResolve.substring(0, toResolve.length() - 1), resolvedValue);
+
                         }
                         // BeanSheall doesn't know the variable, therefore we want the plain text
                         else

@@ -419,9 +419,6 @@ public class YamlParser implements Parser
 
     private List<AbstractValidator> handleValidation(final JsonNode node) throws IOException
     {
-        // Increments with { and decrements with } thus when reaching 0 we are done
-        // And since an item starts with a {, we initialize with 1
-        final int state = 1;
 
         final List<AbstractValidator> validator = new ArrayList<AbstractValidator>();
         String validationName = null;
