@@ -37,9 +37,17 @@ import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.XHRSubrequest;
 import com.xceptance.xlt.nocoding.util.Constants;
 
+/**
+ * Reads a yaml file, provided per constructor, and generates a testsuite out of the yaml file.
+ * 
+ * @author ckeiner
+ */
 public class YamlParser implements Parser
 {
 
+    /**
+     * The path to the yaml file
+     */
     final String pathToFile;
 
     public YamlParser(final String pathToFile)
@@ -50,20 +58,19 @@ public class YamlParser implements Parser
     @Override
     public List<ScriptItem> parse()
     {
-        // TODO Auto-generated method stub
         try
         {
             return parseThis();
         }
         catch (final JsonParseException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            XltLogger.runTimeLogger.warn("File couldn't be parsed", e);
+            // e.printStackTrace();
         }
         catch (final IOException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            XltLogger.runTimeLogger.warn("File couldn't be parsed", e);
+            // e.printStackTrace();
         }
         return null;
     }
@@ -578,6 +585,8 @@ public class YamlParser implements Parser
                 case Constants.REQUEST:
                     System.out.println("Request: " + node.get(fieldName).toString());
                     request = handleRequest(node.get(fieldName));
+                    // Set Xhr to true
+                    request.setXhr("true");
                     break;
 
                 case Constants.RESPONSE:

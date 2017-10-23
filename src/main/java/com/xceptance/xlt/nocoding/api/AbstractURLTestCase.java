@@ -55,12 +55,12 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
         context.getDataStorage().loadDefaultConfig();
 
         // this.parser = new MockParser();
-        this.parser = new YamlParser("./config/data/TLLogin.yml");
+        // this.parser = new YamlParser("./config/data/TLLogin.yml");
         // TODO ask why 404
         // this.parser = new YamlParser("./config/data/hellosuite.yml");
         // this.parser = new YamlParser("./config/data/TLExampleSubSelection.yml");
         // this.parser = new YamlParser("./config/data/TLRegister.yml");
-        // this.parser = new YamlParser("./config/data/TLOrder.yml");
+        this.parser = new YamlParser("./config/data/TLOrder.yml");
         itemList = parser.parse();
     }
 
