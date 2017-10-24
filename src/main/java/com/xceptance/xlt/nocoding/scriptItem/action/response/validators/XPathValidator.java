@@ -10,24 +10,14 @@ public class XPathValidator extends AbstractValidator
 
     private final String text;
 
-    private final Integer count;
+    private final String count;
 
     public XPathValidator(final String validationName, final String xPathExpression)
     {
         this(validationName, xPathExpression, null, null);
     }
 
-    public XPathValidator(final String validationName, final String xPathExpression, final String text)
-    {
-        this(validationName, xPathExpression, text, null);
-    }
-
-    public XPathValidator(final String validationName, final String xPathExpression, final Integer count)
-    {
-        this(validationName, xPathExpression, null, count);
-    }
-
-    private XPathValidator(final String validationName, final String xPathExpression, final String text, final Integer count)
+    public XPathValidator(final String validationName, final String xPathExpression, final String text, final String count)
     {
         super(validationName);
         this.xPathExpression = xPathExpression;

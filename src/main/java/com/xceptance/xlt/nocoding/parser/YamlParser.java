@@ -33,6 +33,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.Abstract
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.CookieValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.HeaderValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.RegExpValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.XPathValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.XHRSubrequest;
@@ -78,17 +79,25 @@ public class YamlParser implements Parser
                 numberObject++;
                 XltLogger.runTimeLogger.info(numberObject + ".th ScriptItem: " + parser.getText());
 
-                if (parser.getText().equals(Constants.STORE))
+                try
                 {
-                    scriptItems.addAll(handleStore(parser));
+                    if (parser.getText().equals(Constants.STORE))
+                    {
+                        scriptItems.addAll(handleStore(parser));
+                    }
+                    else if (parser.getText().equals(Constants.ACTION))
+                    {
+                        scriptItems.addAll(handleAction(parser));
+                    }
+                    else
+                    {
+                        scriptItems.addAll(handleDefault(parser));
+                    }
                 }
-                else if (parser.getText().equals(Constants.ACTION))
+                // If the parser fails at any point, print the current position
+                catch (final Exception e)
                 {
-                    scriptItems.addAll(handleAction(parser));
-                }
-                else
-                {
-                    scriptItems.addAll(handleDefault(parser));
+                    throw new JsonParseException(e.getMessage() + parser.getText(), parser.getCurrentLocation(), e);
                 }
 
                 System.out.println(parser.getTextOffset());
@@ -177,7 +186,9 @@ public class YamlParser implements Parser
                         break;
 
                     default:
-                        break;
+                        // We iterate over the field names, so there is no way we have an Array/Object Start
+                        throw new JsonParseException("No permitted action item: " + node.get(fieldName).textValue(),
+                                                     parser.getCurrentLocation());
                 }
             }
         }
@@ -185,7 +196,6 @@ public class YamlParser implements Parser
         final ScriptItem scriptItem = new LightWeigthAction(name, actionItems);
         scriptItems.add(scriptItem);
         return scriptItems;
-
     }
 
     private Request handleRequest(final JsonNode node) throws IOException
@@ -247,7 +257,7 @@ public class YamlParser implements Parser
                     break;
 
                 default:
-                    break;
+                    throw new IOException("No permitted request item: " + fieldName);
             }
         }
 
@@ -358,7 +368,7 @@ public class YamlParser implements Parser
                     break;
 
                 default:
-                    break;
+                    throw new IOException("No permitted response item: " + fieldName);
             }
         }
 
@@ -417,7 +427,7 @@ public class YamlParser implements Parser
                             break;
 
                         default:
-                            break;
+                            throw new IOException("No permitted response store item: " + leftHandExpression);
                     }
                 }
 
@@ -454,7 +464,23 @@ public class YamlParser implements Parser
                     switch (leftHandExpression)
                     {
                         case Constants.XPATH:
-                            // Xpath Magic
+                            final String xPathExpression = storeContent.get(leftHandExpression).textValue();
+                            String matches = null;
+                            String count = null;
+                            // if we have another name, this means the optional text is specified
+                            if (name.hasNext())
+                            {
+                                final String left = name.next();
+                                if (left.equals(Constants.MATCHES))
+                                {
+                                    matches = storeContent.get(left).textValue();
+                                }
+                                else if (left.equals(Constants.COUNT))
+                                {
+                                    count = storeContent.get(left).textValue();
+                                }
+                            }
+                            validator.add(new XPathValidator(validationName, xPathExpression, matches, count));
 
                             break;
 
@@ -502,7 +528,7 @@ public class YamlParser implements Parser
                             break;
 
                         default:
-                            break;
+                            throw new IOException("No permitted validation item: " + leftHandExpression);
                     }
                 }
 
@@ -551,7 +577,7 @@ public class YamlParser implements Parser
                         break;
 
                     default:
-                        break;
+                        throw new IOException("No permitted subrequest item: " + name);
                 }
 
             }
@@ -597,7 +623,7 @@ public class YamlParser implements Parser
                 // break;
 
                 default:
-                    break;
+                    throw new IOException("No permitted xhr subrequest item: " + fieldName);
             }
         }
 
