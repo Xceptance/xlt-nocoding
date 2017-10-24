@@ -100,7 +100,7 @@ public class YamlParser implements Parser
                     throw new JsonParseException(e.getMessage() + parser.getText(), parser.getCurrentLocation(), e);
                 }
 
-                System.out.println(parser.getTextOffset());
+                // TODO lass kommentare zu
                 // parser.configure(Feature., state)
             }
             else if (parser.getCurrentToken() != null && parser.getCurrentToken().equals(JsonToken.FIELD_NAME))
@@ -167,21 +167,21 @@ public class YamlParser implements Parser
                 {
                     case Constants.NAME:
                         name = node.get(fieldName).textValue();
-                        System.out.println("Actionname: " + name);
+                        XltLogger.runTimeLogger.debug("Actionname: " + name);
                         break;
 
                     case Constants.REQUEST:
-                        System.out.println("Request: " + node.get(fieldName).toString());
+                        XltLogger.runTimeLogger.debug("Request: " + node.get(fieldName).toString());
                         actionItems.add(handleRequest(node.get(fieldName)));
                         break;
 
                     case Constants.RESPONSE:
-                        System.out.println("Response: " + node.get(fieldName).toString());
+                        XltLogger.runTimeLogger.debug("Response: " + node.get(fieldName).toString());
                         actionItems.add(handleResponse(node.get(fieldName)));
                         break;
 
                     case Constants.SUBREQUESTS:
-                        System.out.println("Subrequests: " + node.get(fieldName).toString());
+                        XltLogger.runTimeLogger.debug("Subrequests: " + node.get(fieldName).toString());
                         actionItems.addAll(handleSubrequest(node.get(fieldName)));
                         break;
 
@@ -602,23 +602,23 @@ public class YamlParser implements Parser
             {
                 case Constants.NAME:
                     name = node.get(fieldName).textValue();
-                    System.out.println("Actionname: " + name);
+                    XltLogger.runTimeLogger.debug("Actionname: " + name);
                     break;
 
                 case Constants.REQUEST:
-                    System.out.println("Request: " + node.get(fieldName).toString());
+                    XltLogger.runTimeLogger.debug("Request: " + node.get(fieldName).toString());
                     request = handleRequest(node.get(fieldName));
                     // Set Xhr to true
                     request.setXhr("true");
                     break;
 
                 case Constants.RESPONSE:
-                    System.out.println("Response: " + node.get(fieldName).toString());
+                    XltLogger.runTimeLogger.debug("Response: " + node.get(fieldName).toString());
                     response = handleResponse(node.get(fieldName));
                     break;
 
                 // case Constants.SUBREQUESTS:
-                // System.out.println("Subrequests: " + node.get(fieldName).toString());
+                // XltLogger.runTimeLogger.debug("Subrequests: " + node.get(fieldName).toString());
                 // actionItems.addAll(handleSubrequest(node.get(fieldName)));
                 // break;
 
