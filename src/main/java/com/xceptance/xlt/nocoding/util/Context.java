@@ -9,7 +9,7 @@ import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
 public class Context
 {
-    protected final XltProperties properties;
+    protected final XltProperties xltProperties;
 
     protected final DataStorage dataStorage;
 
@@ -19,9 +19,9 @@ public class Context
 
     protected WebResponse webResponse;
 
-    public Context(final XltProperties properties, final DataStorage dataStorage)
+    public Context(final XltProperties xltProperties, final DataStorage dataStorage)
     {
-        this.properties = properties;
+        this.xltProperties = xltProperties;
         this.dataStorage = dataStorage;
         this.webClient = new XltWebClient();
         this.resolver = new VariableResolver(GeneralDataProvider.getInstance());
@@ -31,7 +31,7 @@ public class Context
 
     public Context(final Context context)
     {
-        this.properties = context.getProperties();
+        this.xltProperties = context.getProperties();
         this.dataStorage = context.getDataStorage();
         this.webClient = context.getWebClient();
         this.resolver = context.getResolver();
@@ -41,7 +41,7 @@ public class Context
 
     public XltProperties getProperties()
     {
-        return properties;
+        return xltProperties;
     }
 
     public DataStorage getDataStorage()
@@ -86,6 +86,36 @@ public class Context
             resolvedString = resolver.resolveString(toResolve, this);
         }
         return resolvedString;
+    }
+
+    public String getPropertyByKey(final String key)
+    {
+        return xltProperties.getProperty(key);
+    }
+
+    public String getPropertyByKey(final String key, final String defaultValue)
+    {
+        return xltProperties.getProperty(key, defaultValue);
+    }
+
+    public int getPropertyByKey(final String key, final int defaultValue)
+    {
+        return xltProperties.getProperty(key, defaultValue);
+    }
+
+    public boolean getPropertyByKey(final String key, final boolean defaultValue)
+    {
+        return xltProperties.getProperty(key, defaultValue);
+    }
+
+    public long getPropertyByKey(final String key, final long defaultValue)
+    {
+        return xltProperties.getProperty(key, defaultValue);
+    }
+
+    public void configureWebClient()
+    {
+        new WebClientConfigurator(xltProperties).configWebClient(webClient);
     }
 
 }

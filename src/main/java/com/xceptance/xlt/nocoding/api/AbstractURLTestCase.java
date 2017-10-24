@@ -1,5 +1,6 @@
 package com.xceptance.xlt.nocoding.api;
 
+import java.io.File;
 import java.util.List;
 
 import org.junit.Before;
@@ -11,6 +12,7 @@ import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.WebClientConfigurator;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 /**
@@ -20,6 +22,7 @@ import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
  */
 public abstract class AbstractURLTestCase extends AbstractTestCase
 {
+
     /**
      * The parser we use
      */
@@ -31,13 +34,13 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
     private List<ScriptItem> itemList;
 
     /**
-     * The property manager, that handles all properties
+     * The Context of all ScriptItems. Handles Properties, Storage, etc.
      */
     private Context context;
 
     /**
-     * Prepares the test case by: Instantiating the PropertyManager, Loading the default configuration, and Parsing the
-     * definition file
+     * Prepares the test case by: Instantiating the Context, loading the default configuration, and parsing the definition
+     * file
      */
     @Before
     public void initialize() throws Exception
@@ -53,6 +56,14 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
         // Load the default configuration
         context.getDataStorage().loadDefaultConfig();
 
+        // Configure the webclient so it uses javascript, etc.
+        context.configureWebClient();
+
+        final String dataDirectory = context.getPropertyByKey(WebClientConfigurator.DIRECTORY);
+        final String fileName = context.getPropertyByKey(WebClientConfigurator.FILENAME);
+        final String pathToFile = dataDirectory + File.separatorChar + fileName;
+        System.out.println(pathToFile);
+
         // this.parser = new MockParser();
         // this.parser = new YamlParser("./config/data/TLLogin.yml");
         // TODO ask why 404
@@ -60,7 +71,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
         // this.parser = new YamlParser("./config/data/TLExampleSubSelection.yml");
         // this.parser = new YamlParser("./config/data/TLRegister.yml");
         // this.parser = new com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser("./config/data/TLOrder.yml");
-        this.parser = new com.xceptance.xlt.nocoding.parser.YamlParser("./config/data/TLOrder.yml");
+        this.parser = new com.xceptance.xlt.nocoding.parser.YamlParser(pathToFile);
         itemList = parser.parse();
     }
 
