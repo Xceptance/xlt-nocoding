@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.parser;
+package com.xceptance.xlt.nocoding.parser.yamlParser;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,8 +8,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.core.JsonLocation;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +19,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.api.util.XltLogger;
+import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.StoreDefault;
 import com.xceptance.xlt.nocoding.scriptItem.StoreItem;
@@ -59,15 +62,15 @@ public class YamlParser implements Parser
     @Override
     public List<ScriptItem> parse() throws Exception
     {
-        return parseThis();
-    }
-
-    public List<ScriptItem> parseThis() throws JsonParseException, IOException
-    {
-        final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
         final File file = new File(pathToFile);
         final YAMLFactory factory = new YAMLFactory();
         final JsonParser parser = factory.createParser(file);
+        return parseThis(parser);
+    }
+
+    public List<ScriptItem> parseThis(final JsonParser parser) throws JsonParseException, IOException
+    {
+        final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
 
         int numberObject = 0;
 
@@ -76,7 +79,7 @@ public class YamlParser implements Parser
             if (Constants.isPermittedListItem(parser.getText()))
             {
                 numberObject++;
-                XltLogger.runTimeLogger.info(numberObject + ".th ScriptItem: " + parser.getText());
+                XltLogger.runTimeLogger.info(numberObject + ".th ScriptItem: " + parser.getText() + logLineColumn(parser));
 
                 if (parser.getText().equals(Constants.STORE))
                 {
@@ -110,26 +113,14 @@ public class YamlParser implements Parser
 
     private List<ScriptItem> handleStore(final JsonParser parser) throws IOException
     {
-        // transform current parser to the content of the current node
+
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
-        final ObjectMapper mapper = new ObjectMapper();
-        final ObjectNode objectNode = mapper.readTree(parser);
-        final JsonNode jsonNode = objectNode.get(Constants.STORE);
-        final Iterator<JsonNode> iterator = jsonNode.elements();
-
-        while (iterator.hasNext())
-        {
-            final JsonNode current = iterator.next();
-            final Iterator<String> fieldName = current.fieldNames();
-
-            while (fieldName.hasNext())
-            {
-                final String field = fieldName.next();
-                final String textValue = current.get(field).textValue();
-                scriptItems.add(new StoreItem(field, textValue));
-                XltLogger.runTimeLogger.debug("Added " + field + "=" + textValue + " to parameters");
-            }
-        }
+        // Grab all variables with their values
+        final Map<String, String> storeItems = parseArrayObjectToMap(parser, Constants.STORE);
+        // and build a StoreItem out of it
+        storeItems.forEach((key, value) -> {
+            scriptItems.add(new StoreItem(key, value));
+        });
         return scriptItems;
 
     }
@@ -616,6 +607,68 @@ public class YamlParser implements Parser
         scriptItems.add(new StoreDefault(variableName, value));
         return scriptItems;
 
+    }
+
+    private Map<String, String> parseArrayObjectToMap(final JsonParser parser, final String arrayName)
+        throws JsonProcessingException, IOException
+    {
+        final Map<String, String> listItems = new HashMap<String, String>();
+        // transform current parser to the content of the current node
+        final ObjectMapper mapper = new ObjectMapper();
+        final ObjectNode objectNode = mapper.readTree(parser);
+        final JsonNode jsonNode = objectNode.get(arrayName);
+        final Iterator<JsonNode> iterator = jsonNode.elements();
+
+        while (iterator.hasNext())
+        {
+            final JsonNode current = iterator.next();
+            final Iterator<String> fieldName = current.fieldNames();
+
+            while (fieldName.hasNext())
+            {
+                final String field = fieldName.next();
+                final String textValue = current.get(field).textValue();
+                listItems.put(field, textValue);
+                XltLogger.runTimeLogger.debug("Added " + field + "=" + textValue + " to parameters");
+            }
+        }
+        // return new StoreItemParser().parse(parser);
+        return listItems;
+    }
+
+    private Map<String, String> parseObjectToMap(final JsonParser parser, final String arrayName)
+        throws JsonProcessingException, IOException
+    {
+        final Map<String, String> objectItems = new HashMap<String, String>();
+        // transform current parser to the content of the current node
+        final ObjectMapper mapper = new ObjectMapper();
+        final ObjectNode objectNode = mapper.readTree(parser);
+        // TODO
+        final JsonNode jsonNode = objectNode.get(arrayName);
+
+        final Iterator<String> fieldNames = jsonNode.fieldNames();
+
+        while (fieldNames.hasNext())
+        {
+            final String fieldName = fieldNames.next();
+            if (!jsonNode.get(fieldName).isArray() || !jsonNode.get(fieldName).isObject())
+            {
+                objectItems.put(fieldName, jsonNode.get(fieldName).textValue());
+            }
+            else
+            {
+                // TODO i dont think this works...
+                parseArrayObjectToMap(parser, fieldName);
+            }
+        }
+
+        return objectItems;
+    }
+
+    private String logLineColumn(final JsonParser parser)
+    {
+        final JsonLocation location = parser.getCurrentLocation();
+        return "; line " + location.getLineNr() + ", " + location.getColumnNr();
     }
 
 }

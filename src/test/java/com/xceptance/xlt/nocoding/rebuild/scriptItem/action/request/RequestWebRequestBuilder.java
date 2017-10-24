@@ -1,5 +1,6 @@
 package com.xceptance.xlt.nocoding.rebuild.scriptItem.action.request;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class RequestWebRequestBuilder
         final Map<String, String> headers = new HashMap<String, String>();
         final Boolean xhr = false;
 
-        request = new Request(url, "Visit Homepage");
+        request = new Request(url);
         request.setMethod(method.toString());
         request.setParameters(parameters);
         request.setBody(body);
@@ -61,7 +62,7 @@ public class RequestWebRequestBuilder
 
         try
         {
-            webRequest = request.buildWebRequest(context);
+            webRequest = request.buildWebRequest();
             // URL, Method
             final WebRequest expected = new WebRequest(new URL(url), method);
             // Parameters
@@ -89,7 +90,6 @@ public class RequestWebRequestBuilder
         }
         catch (InvalidArgumentException | MalformedURLException e)
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -169,7 +169,7 @@ public class RequestWebRequestBuilder
         context.getDataStorage().storeVariable("header3_value", value);
         headers_var.put("${header3_key}", "${header3_value}");
 
-        request = new Request(url_var, "Visit Homepage");
+        request = new Request(url_var);
         request.setMethod(method_var);
         request.setParameters(parameters_var);
         request.setBody(body_var);
@@ -180,7 +180,9 @@ public class RequestWebRequestBuilder
 
         try
         {
-            webRequest = request.buildWebRequest(context);
+            request.testResolveVariable(context);
+
+            webRequest = request.buildWebRequest();
             // URL, Method
             final WebRequest expected = new WebRequest(new URL(url), method);
             // Parameters
@@ -206,12 +208,17 @@ public class RequestWebRequestBuilder
             Assert.assertEquals(expected.toString(), webRequest.toString());
 
         }
-        catch (InvalidArgumentException | MalformedURLException e)
+        catch (InvalidArgumentException | IOException e)
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
     }
 
+    @Test(expected = NullPointerException.class)
+    public void testInvalidDeclaration() throws InvalidArgumentException, MalformedURLException
+    {
+        final Request request = new Request(null);
+        request.testResolveVariable(context);
+    }
 }

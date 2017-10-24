@@ -90,6 +90,10 @@ public class LightWeigthAction extends Action
         final List<AbstractActionItem> actionItems = action.getActionItems();
 
         // TODO check first instance of request
+        if (!(actionItems.iterator().next() instanceof Request))
+        {
+            throw new Exception();
+        }
 
         // If there are actionItems
         if (actionItems != null && !actionItems.isEmpty())

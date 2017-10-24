@@ -453,4 +453,12 @@ public class Request extends AbstractActionItem
         return output;
     }
 
+    /**
+     * Resolves the variable
+     */
+    public void testResolveVariable(final Context context)
+    {
+        this.resolveValues(context);
+    }
+
 }

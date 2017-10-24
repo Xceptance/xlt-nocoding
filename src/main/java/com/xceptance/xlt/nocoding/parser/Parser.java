@@ -15,6 +15,7 @@ public interface Parser
      * Interface method, that should search for the correct file and parse the content as a list of ScriptItems
      * 
      * @return The list of ScriptItems that are to be executed in that exact order
+     * @throws Exception
      */
-    public List<ScriptItem> parse();
+    public List<ScriptItem> parse() throws Exception;
 }

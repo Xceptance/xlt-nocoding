@@ -9,7 +9,6 @@ import com.xceptance.xlt.api.tests.AbstractTestCase;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.parser.Parser;
-import com.xceptance.xlt.nocoding.parser.YamlParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
@@ -41,7 +40,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
      * definition file
      */
     @Before
-    public void initialize()
+    public void initialize() throws Exception
     {
         // Instantiate storage
         final DataStorage globalStore = new DataStorage();
@@ -60,7 +59,8 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
         // this.parser = new YamlParser("./config/data/hellosuite.yml");
         // this.parser = new YamlParser("./config/data/TLExampleSubSelection.yml");
         // this.parser = new YamlParser("./config/data/TLRegister.yml");
-        this.parser = new YamlParser("./config/data/TLOrder.yml");
+        // this.parser = new com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser("./config/data/TLOrder.yml");
+        this.parser = new com.xceptance.xlt.nocoding.parser.YamlParser("./config/data/TLOrder.yml");
         itemList = parser.parse();
     }
 
