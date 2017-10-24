@@ -72,6 +72,8 @@ public class YamlParser implements Parser
 
         int numberObject = 0;
 
+        parser.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS, true);
+
         while (parser.nextToken() != null)
         {
             if (Constants.isPermittedListItem(parser.getText()))
@@ -99,9 +101,6 @@ public class YamlParser implements Parser
                 {
                     throw new JsonParseException(e.getMessage() + parser.getText(), parser.getCurrentLocation(), e);
                 }
-
-                // TODO lass kommentare zu
-                // parser.configure(Feature., state)
             }
             else if (parser.getCurrentToken() != null && parser.getCurrentToken().equals(JsonToken.FIELD_NAME))
             {
@@ -637,7 +636,19 @@ public class YamlParser implements Parser
 
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
         final String variableName = parser.getText();
-        final String value = parser.nextTextValue();
+        String value = null;
+        if (variableName.equals(Constants.HEADERS))
+        {
+            // TODO handle default headers
+        }
+        else if (variableName.equals(Constants.PARAMETERS))
+        {
+            // TODO handle default parameters
+        }
+        else
+        {
+            value = parser.nextTextValue();
+        }
 
         scriptItems.add(new StoreDefault(variableName, value));
         return scriptItems;
