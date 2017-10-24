@@ -8,9 +8,14 @@ import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.engine.XltWebClient;
 
-public class WebClientConfigurator
+/**
+ * Handles all properties related matters
+ * 
+ * @author ckeiner
+ */
+public class NoCodingPropertyAdmin
 {
-    final private XltProperties xltProperties;
+    private final XltProperties xltProperties;
 
     public static final String JAVASCRIPTENABLED = "com.xceptance.xlt.javaScriptEnabled";
 
@@ -36,7 +41,7 @@ public class WebClientConfigurator
 
     public static final String TLSVERSION = "com.xceptance.xlt.nocoding.TLSVersion";
 
-    public WebClientConfigurator(final XltProperties xltProperties)
+    public NoCodingPropertyAdmin(final XltProperties xltProperties)
     {
         this.xltProperties = xltProperties;
     }

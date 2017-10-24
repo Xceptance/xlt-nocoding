@@ -7,10 +7,14 @@ import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
+/**
+ * The context for the execution. Thus, the context has methods for handling the data storage, web client, resolving
+ * variables, storing the current WebResponse and managing properties
+ * 
+ * @author ckeiner
+ */
 public class Context
 {
-    protected final XltProperties xltProperties;
-
     protected final DataStorage dataStorage;
 
     protected XltWebClient webClient;
@@ -19,29 +23,28 @@ public class Context
 
     protected WebResponse webResponse;
 
+    protected NoCodingPropertyAdmin propertyAdmin;
+
     public Context(final XltProperties xltProperties, final DataStorage dataStorage)
     {
-        this.xltProperties = xltProperties;
+        this.propertyAdmin = new NoCodingPropertyAdmin(xltProperties);
         this.dataStorage = dataStorage;
         this.webClient = new XltWebClient();
         this.resolver = new VariableResolver(GeneralDataProvider.getInstance());
-        // TODO in Config auslagern! -> Damit funktioniert außerdem nicht mehr der EasyTestcase
-        webClient.getOptions().setRedirectEnabled(false);
     }
 
+    /**
+     * Creates a new context out of the old context
+     * 
+     * @param context
+     */
     public Context(final Context context)
     {
-        this.xltProperties = context.getProperties();
         this.dataStorage = context.getDataStorage();
         this.webClient = context.getWebClient();
         this.resolver = context.getResolver();
-        // TODO in Config auslagern! -> Damit funktioniert außerdem nicht mehr der EasyTestcase
-        webClient.getOptions().setRedirectEnabled(false);
-    }
-
-    public XltProperties getProperties()
-    {
-        return xltProperties;
+        this.webResponse = context.getWebResponse();
+        this.propertyAdmin = context.getPropertyAdmin();
     }
 
     public DataStorage getDataStorage()
@@ -78,6 +81,73 @@ public class Context
         return resolver;
     }
 
+    public NoCodingPropertyAdmin getPropertyAdmin()
+    {
+        return propertyAdmin;
+    }
+
+    /**
+     * Stores the key value pair as variable in the data storage
+     * 
+     * @param key
+     *            The variable name/key with which one accesses the value
+     * @param value
+     *            The value of the variable
+     */
+    public void storeVariable(final String key, final String value)
+    {
+        getDataStorage().storeVariable(key, value);
+    }
+
+    /**
+     * Stores a key value pair as configItem, thus as "default" item.
+     * 
+     * @param key
+     *            The variable name/key with which one accesses the value
+     * @param value
+     *            The value of the variable
+     */
+    public void storeConfigItem(final String key, final String value)
+    {
+        getDataStorage().storeConfigItem(key, value);
+    }
+
+    /**
+     * Stores a key value pair as configItem, thus as "default" item. If the configItem gets deleted, the fallback value is
+     * the set for the configItem
+     * 
+     * @param key
+     *            The variable name/key with which one accesses the value
+     * @param value
+     *            The value of the variable
+     * @param fallback
+     *            The value that is used when the key gets deleted
+     */
+    public void storeConfigItem(final String key, final String value, final String fallback)
+    {
+        getDataStorage().storeConfigItem(key, value, fallback);
+    }
+
+    /**
+     * Removes a key value pair from the configItems. If a fallback value was specified for the configItem, it is going to
+     * be used from then on
+     * 
+     * @param key
+     *            The variable name/key to the corresponding value
+     */
+    public void removeConfigItem(final String key)
+    {
+        getDataStorage().removeConfigItem(key);
+    }
+
+    /**
+     * Resolves every variable of a specified string. If a variable is specified and no value for it can be found, the
+     * variable doesn't get resolved
+     * 
+     * @param toResolve
+     *            The string which might have variables
+     * @return A string with the resolved variables
+     */
     public String resolveString(final String toResolve)
     {
         String resolvedString = null;
@@ -90,32 +160,35 @@ public class Context
 
     public String getPropertyByKey(final String key)
     {
-        return xltProperties.getProperty(key);
+        return getPropertyAdmin().getPropertyByKey(key);
     }
 
     public String getPropertyByKey(final String key, final String defaultValue)
     {
-        return xltProperties.getProperty(key, defaultValue);
+        return getPropertyAdmin().getPropertyByKey(key, defaultValue);
     }
 
     public int getPropertyByKey(final String key, final int defaultValue)
     {
-        return xltProperties.getProperty(key, defaultValue);
+        return getPropertyAdmin().getPropertyByKey(key, defaultValue);
     }
 
     public boolean getPropertyByKey(final String key, final boolean defaultValue)
     {
-        return xltProperties.getProperty(key, defaultValue);
+        return getPropertyAdmin().getPropertyByKey(key, defaultValue);
     }
 
     public long getPropertyByKey(final String key, final long defaultValue)
     {
-        return xltProperties.getProperty(key, defaultValue);
+        return getPropertyAdmin().getPropertyByKey(key, defaultValue);
     }
 
+    /**
+     * Configures the webClient as specified in the config, thus dis/enabling javascript, css, etc.
+     */
     public void configureWebClient()
     {
-        new WebClientConfigurator(xltProperties).configWebClient(webClient);
+        getPropertyAdmin().configWebClient(webClient);
     }
 
 }

@@ -24,12 +24,12 @@ public class StoreDefault implements ScriptItem
     {
         if (!value.equals("delete"))
         {
-            context.getDataStorage().storeConfigItem(variableName, value);
+            context.storeConfigItem(variableName, value);
             XltLogger.runTimeLogger.debug("Added " + variableName + "=" + value + " to default storage");
         }
         else
         {
-            context.getDataStorage().removeConfigItem(variableName);
+            context.removeConfigItem(variableName);
             XltLogger.runTimeLogger.debug("Removed " + variableName + " from default storage");
         }
     }

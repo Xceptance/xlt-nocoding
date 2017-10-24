@@ -12,7 +12,7 @@ import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.util.Context;
-import com.xceptance.xlt.nocoding.util.WebClientConfigurator;
+import com.xceptance.xlt.nocoding.util.NoCodingPropertyAdmin;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 /**
@@ -59,8 +59,8 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
         // Configure the webclient so it uses javascript, etc.
         context.configureWebClient();
 
-        final String dataDirectory = context.getPropertyByKey(WebClientConfigurator.DIRECTORY);
-        final String fileName = context.getPropertyByKey(WebClientConfigurator.FILENAME);
+        final String dataDirectory = context.getPropertyByKey(NoCodingPropertyAdmin.DIRECTORY);
+        final String fileName = context.getPropertyByKey(NoCodingPropertyAdmin.FILENAME);
         final String pathToFile = dataDirectory + File.separatorChar + fileName;
         System.out.println(pathToFile);
 

@@ -13,11 +13,6 @@ public class StoreItem implements ScriptItem
 
     private String value;
 
-    public StoreItem()
-    {
-        this(null, null);
-    }
-
     public StoreItem(final String variableName, final String value)
     {
         this.variableName = variableName;
@@ -27,7 +22,7 @@ public class StoreItem implements ScriptItem
     @Override
     public void execute(final Context context) throws Throwable
     {
-        context.getDataStorage().storeVariable(variableName, value);
+        context.storeVariable(variableName, value);
         XltLogger.runTimeLogger.info("Added Variable: " + variableName + " : " + value);
     }
 
