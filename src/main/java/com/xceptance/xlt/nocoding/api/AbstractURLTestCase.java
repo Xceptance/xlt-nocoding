@@ -52,25 +52,8 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
         globalStore.storeVariable("host", "https://localhost:8443");
         // Instantiate the PropertyManager
         context = new Context(XltProperties.getInstance(), globalStore);
-        // TODO write in constructor?
-        // Load the default configuration
-        context.getDataStorage().loadDefaultConfig();
+        final String pathToFile = getFilePath();
 
-        // Configure the webclient so it uses javascript, etc.
-        context.configureWebClient();
-
-        final String dataDirectory = context.getPropertyByKey(NoCodingPropertyAdmin.DIRECTORY);
-        final String fileName = context.getPropertyByKey(NoCodingPropertyAdmin.FILENAME);
-        final String pathToFile = dataDirectory + File.separatorChar + fileName;
-        System.out.println(pathToFile);
-
-        // this.parser = new MockParser();
-        // this.parser = new YamlParser("./config/data/TLLogin.yml");
-        // TODO ask why 404
-        // this.parser = new YamlParser("./config/data/hellosuite.yml");
-        // this.parser = new YamlParser("./config/data/TLExampleSubSelection.yml");
-        // this.parser = new YamlParser("./config/data/TLRegister.yml");
-        // this.parser = new com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser("./config/data/TLOrder.yml");
         this.parser = new com.xceptance.xlt.nocoding.parser.YamlParser(pathToFile);
         itemList = parser.parse();
     }
@@ -89,7 +72,6 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
         {
             for (final ScriptItem item : itemList)
             {
-                // TODO Log Eintrag!
                 XltLogger.runTimeLogger.info("Starting ScriptItem : " + item.toString());
                 item.execute(context);
             }
@@ -115,6 +97,18 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
     public Context getContext()
     {
         return context;
+    }
+
+    /**
+     * Gets the path to the file as string
+     * 
+     * @return The path to the file
+     */
+    protected String getFilePath()
+    {
+        final String dataDirectory = context.getPropertyByKey(NoCodingPropertyAdmin.DIRECTORY);
+        final String fileName = context.getPropertyByKey(NoCodingPropertyAdmin.FILENAME);
+        return dataDirectory + File.separatorChar + fileName;
     }
 
 }

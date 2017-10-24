@@ -25,12 +25,22 @@ public class Context
 
     protected NoCodingPropertyAdmin propertyAdmin;
 
+    /**
+     * Creates a new context, sets default Values in the dataStorage and configures the webClient according to the
+     * xltProperties
+     * 
+     * @param xltProperties
+     *            The properties to use - normally XltProperties.getInstance()
+     * @param dataStorage
+     *            The data storage to use
+     */
     public Context(final XltProperties xltProperties, final DataStorage dataStorage)
     {
         this.propertyAdmin = new NoCodingPropertyAdmin(xltProperties);
         this.dataStorage = dataStorage;
         this.webClient = new XltWebClient();
         this.resolver = new VariableResolver(GeneralDataProvider.getInstance());
+        initialize();
     }
 
     /**
@@ -45,6 +55,12 @@ public class Context
         this.resolver = context.getResolver();
         this.webResponse = context.getWebResponse();
         this.propertyAdmin = context.getPropertyAdmin();
+    }
+
+    public void initialize()
+    {
+        getDataStorage().loadDefaultConfig();
+        configureWebClient();
     }
 
     public DataStorage getDataStorage()
@@ -186,7 +202,7 @@ public class Context
     /**
      * Configures the webClient as specified in the config, thus dis/enabling javascript, css, etc.
      */
-    public void configureWebClient()
+    private void configureWebClient()
     {
         getPropertyAdmin().configWebClient(webClient);
     }
