@@ -52,12 +52,12 @@ public class ResponseParser extends AbstractActionItemParser
                     break;
 
                 case Constants.VALIDATION:
-                    validators.addAll(handleValidation(node.get(fieldName)));
+                    validators.addAll(new ValidationParser().parse(node.get(fieldName)));
                     XltLogger.runTimeLogger.debug("Added Validation");
                     break;
 
                 case Constants.STORE:
-                    responseStore.addAll(handleResponseStore(node.get(fieldName)));
+                    responseStore.addAll(new ResponseStoreParser().parse(node.get(fieldName)));
                     XltLogger.runTimeLogger.debug("Added Validation");
                     break;
 

@@ -5,6 +5,9 @@ import java.util.Iterator;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.xceptance.xlt.api.util.XltLogger;
+import com.xceptance.xlt.nocoding.parser.yamlParser.actionItems.request.RequestParser;
+import com.xceptance.xlt.nocoding.parser.yamlParser.actionItems.response.ResponseParser;
+import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
@@ -22,7 +25,7 @@ public class XhrSubrequestParser
      * @return The XhrSubrequest
      * @throws IOException
      */
-    private AbstractSubrequest handleXhrSubrequest(final JsonNode node) throws IOException
+    public AbstractSubrequest parse(final JsonNode node) throws IOException
     {
         final Iterator<String> fieldNames = node.fieldNames();
         String name = null;
@@ -42,14 +45,29 @@ public class XhrSubrequestParser
 
                 case Constants.REQUEST:
                     XltLogger.runTimeLogger.debug("Request: " + node.get(fieldName).toString());
-                    request = handleRequest(node.get(fieldName));
-                    // Set Xhr to true
-                    request.setXhr("true");
+                    final AbstractActionItem actionItem = new RequestParser().parse(node.get(fieldName)).get(0);
+                    if (actionItem instanceof Request)
+                    {
+                        request = (Request) actionItem;
+                        request.setXhr("true");
+                    }
+                    else
+                    {
+                        throw new IOException("Could not convert Request Item to Request Object: " + fieldName);
+                    }
                     break;
 
                 case Constants.RESPONSE:
                     XltLogger.runTimeLogger.debug("Response: " + node.get(fieldName).toString());
-                    response = handleResponse(node.get(fieldName));
+                    final AbstractActionItem responseItem = new ResponseParser().parse(node.get(fieldName)).get(0);
+                    if (responseItem instanceof Response)
+                    {
+                        response = (Response) responseItem;
+                    }
+                    else
+                    {
+                        throw new IOException("Could not convert Respose Item to Response Object: " + fieldName);
+                    }
                     break;
 
                 // case Constants.SUBREQUESTS:

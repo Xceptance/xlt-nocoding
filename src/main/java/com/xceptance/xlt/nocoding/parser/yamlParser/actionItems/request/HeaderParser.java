@@ -19,7 +19,7 @@ public class HeaderParser
      * @return A Map containing the headers
      * @throws IOException
      */
-    public Map<String, String> parseHeaders(final JsonNode node) throws IOException
+    public Map<String, String> parse(final JsonNode node) throws IOException
     {
         // headers are transformed to a JSONArray
 

@@ -1,6 +1,9 @@
 package com.xceptance.xlt.nocoding.parser.yamlParser;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -14,16 +17,74 @@ import com.gargoylesoftware.htmlunit.util.NameValuePair;
 public class ParserUtil
 {
 
-    public static Map<String, String> getAsMap(final JsonNode node)
+    /**
+     * Converts an ArrayNode consisting of ObjectNodes with simple Key/Value-Pairs to a Map
+     * 
+     * @param jsonNode
+     *            The ArrayNode consisting of ObjectNodes
+     * @return
+     */
+    public static Map<String, String> getArrayNodeAsMap(final JsonNode jsonNode)
     {
-        // TODO Auto-generated method stub
-        return null;
+        final Map<String, String> map = new HashMap<String, String>();
+        // Get iterator for all elements of the ArrayNode
+        final Iterator<JsonNode> iterator = jsonNode.elements();
+
+        // while we have elements in the array
+        while (iterator.hasNext())
+        {
+            // Get the next node
+            final JsonNode current = iterator.next();
+            // The array consists of objects, so an ArrayNode has ObjectNodes. Therefore, we iterate over the fieldNames
+            final Iterator<String> fieldNames = current.fieldNames();
+
+            // While we have field names
+            while (fieldNames.hasNext())
+            {
+                // Get the next field name (which is also the name of the variable we want to store)
+                final String fieldName = fieldNames.next();
+                // And extract the value (which is the value of the variable)
+                final String textValue = current.get(fieldName).textValue();
+                // Construct the StoreItem with the fieldName and the textValue
+                map.put(fieldName, textValue);
+            }
+        }
+        return map;
     }
 
-    public static List<NameValuePair> getAsNameValuePair(final JsonNode node)
+    /**
+     * Converts an ArrayNode consisting of ObjectNodes with simple Key/Value-Pairs to a List<NameValuePair>
+     * 
+     * @param jsonNode
+     *            The ArrayNode consisting of ObjectNodes
+     * @return
+     */
+    public static List<NameValuePair> getArrayNodeAsNameValuePair(final JsonNode jsonNode)
     {
-        // TODO Auto-generated method stub
-        return null;
+        final List<NameValuePair> nvp = new ArrayList<NameValuePair>();
+        // Get iterator for all elements of the ArrayNode
+        final Iterator<JsonNode> iterator = jsonNode.elements();
+
+        // while we have elements in the array
+        while (iterator.hasNext())
+        {
+            // Get the next node
+            final JsonNode current = iterator.next();
+            // The array consists of objects, so an ArrayNode has ObjectNodes. Therefore, we iterate over the fieldNames
+            final Iterator<String> fieldNames = current.fieldNames();
+
+            // While we have field names
+            while (fieldNames.hasNext())
+            {
+                // Get the next field name (which is also the name of the variable we want to store)
+                final String fieldName = fieldNames.next();
+                // And extract the value (which is the value of the variable)
+                final String textValue = current.get(fieldName).textValue();
+                // Construct the StoreItem with the fieldName and the textValue
+                nvp.add(new NameValuePair(fieldName, textValue));
+            }
+        }
+        return nvp;
     }
 
     /**

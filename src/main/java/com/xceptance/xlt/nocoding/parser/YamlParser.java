@@ -45,6 +45,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
  * 
  * @author ckeiner
  */
+@Deprecated
 public class YamlParser implements Parser
 {
 

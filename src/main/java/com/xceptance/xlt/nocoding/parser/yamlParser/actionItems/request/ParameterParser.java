@@ -20,7 +20,7 @@ public class ParameterParser
      * @return A List containing the parameters
      * @throws IOException
      */
-    private List<NameValuePair> handleParameters(final JsonNode node) throws IOException
+    public List<NameValuePair> parse(final JsonNode node) throws IOException
     {
         // parameters are transformed to a JSONArray, thus we cannot directly use the fieldname iterator
 

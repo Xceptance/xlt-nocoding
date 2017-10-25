@@ -2,8 +2,8 @@ package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -23,29 +23,14 @@ public class StoreItemParser extends AbstractScriptItemParser
 
         final JsonNode jsonNode = ParserUtil.getNodeAt(Constants.STORE, parser);
 
-        // Since a store item is parsed to an array, get the iterator over the elements
-        final Iterator<JsonNode> iterator = jsonNode.elements();
+        final Map<String, String> storeItems = ParserUtil.getArrayNodeAsMap(jsonNode);
 
-        // while we have elements in the array
-        while (iterator.hasNext())
+        for (final Map.Entry<String, String> storeItem : storeItems.entrySet())
         {
-            // Get the next node
-            final JsonNode current = iterator.next();
-            // The array consists of objects, so an ArrayNode has ObjectNodes. Therefore, extract the fieldNames iterator
-            final Iterator<String> fieldNames = current.fieldNames();
-
-            // While we have field names
-            while (fieldNames.hasNext())
-            {
-                // Get the next field name (which is also the name of the variable we want to store)
-                final String fieldName = fieldNames.next();
-                // And extract the value (which is the value of the variable)
-                final String textValue = current.get(fieldName).textValue();
-                // Construct the StoreItem with the fieldName and the textValue
-                scriptItems.add(new StoreItem(fieldName, textValue));
-                XltLogger.runTimeLogger.debug("Added " + fieldName + "=" + textValue + " to parameters");
-            }
+            scriptItems.add(new StoreItem(storeItem.getKey(), storeItem.getValue()));
+            XltLogger.runTimeLogger.debug("Added " + storeItem.getKey() + "=" + storeItem.getValue() + " to parameters");
         }
+
         // Return all StoreItems
         return scriptItems;
 

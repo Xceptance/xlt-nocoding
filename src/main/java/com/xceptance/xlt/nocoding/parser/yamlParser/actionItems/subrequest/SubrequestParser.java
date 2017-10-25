@@ -43,7 +43,7 @@ public class SubrequestParser extends AbstractActionItemParser
                 switch (fieldName)
                 {
                     case Constants.XHR:
-                        subrequest.add(handleXhrSubrequest(current.get(fieldName)));
+                        subrequest.add(new XhrSubrequestParser().parse(current.get(fieldName)));
                         break;
 
                     case Constants.STATIC:
@@ -68,8 +68,9 @@ public class SubrequestParser extends AbstractActionItemParser
             }
 
         }
-
-        return subrequest;
+        final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
+        actionItems.addAll(subrequest);
+        return actionItems;
     }
 
 }

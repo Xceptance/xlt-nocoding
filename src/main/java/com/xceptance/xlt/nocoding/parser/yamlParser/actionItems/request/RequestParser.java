@@ -61,11 +61,11 @@ public class RequestParser extends AbstractActionItemParser
 
                 case Constants.PARAMETERS:
                     // Parameter Magic
-                    parameters.addAll(handleParameters(node.get(fieldName)));
+                    parameters.addAll(new ParameterParser().parse(node.get(fieldName)));
                     break;
 
                 case Constants.HEADERS:
-                    headers.putAll(handleHeaders(node.get(fieldName)));
+                    headers.putAll(new HeaderParser().parse(node.get(fieldName)));
                     break;
 
                 case Constants.BODY:

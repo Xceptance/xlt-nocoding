@@ -25,7 +25,7 @@ public class ValidationParser
      * @return
      * @throws IOException
      */
-    public List<AbstractValidator> handleValidation(final JsonNode node) throws IOException
+    public List<AbstractValidator> parse(final JsonNode node) throws IOException
     {
 
         final List<AbstractValidator> validator = new ArrayList<AbstractValidator>();
