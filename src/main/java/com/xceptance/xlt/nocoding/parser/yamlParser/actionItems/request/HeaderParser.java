@@ -1,12 +1,10 @@
 package com.xceptance.xlt.nocoding.parser.yamlParser.actionItems.request;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.xceptance.xlt.api.util.XltLogger;
+import com.xceptance.xlt.nocoding.util.ParserUtil;
 
 public class HeaderParser
 {
@@ -21,26 +19,7 @@ public class HeaderParser
      */
     public Map<String, String> parse(final JsonNode node) throws IOException
     {
-        // headers are transformed to a JSONArray
-
-        final Map<String, String> headers = new HashMap<String, String>();
-
-        final Iterator<JsonNode> iterator = node.elements();
-
-        while (iterator.hasNext())
-        {
-            final JsonNode current = iterator.next();
-            final Iterator<String> fieldName = current.fieldNames();
-
-            while (fieldName.hasNext())
-            {
-                final String field = fieldName.next();
-                final String textValue = current.get(field).textValue();
-                headers.put(field, textValue);
-                XltLogger.runTimeLogger.debug("Added " + field + "=" + headers.get(field) + " to parameters");
-            }
-        }
-
+        final Map<String, String> headers = ParserUtil.getArrayNodeAsMap(node);
         return headers;
     }
 
