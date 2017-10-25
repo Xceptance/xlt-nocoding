@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.xceptance.xlt.nocoding.util.ParserUtil;
+import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 public class HeaderParser
 {
@@ -19,7 +19,7 @@ public class HeaderParser
      */
     public Map<String, String> parse(final JsonNode node) throws IOException
     {
-        final Map<String, String> headers = ParserUtil.getArrayNodeAsMap(node);
+        final Map<String, String> headers = ParserUtils.getArrayNodeAsMap(node);
         return headers;
     }
 

@@ -14,6 +14,7 @@ import com.xceptance.xlt.nocoding.parser.yamlParser.actionItems.AbstractActionIt
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.util.Constants;
+import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 public class RequestParser extends AbstractActionItemParser
 {
@@ -50,12 +51,13 @@ public class RequestParser extends AbstractActionItemParser
                     break;
 
                 case Constants.XHR:
-                    xhr = node.get(fieldName).textValue();
+                    xhr = ParserUtils.readExpectedBooleanValue(node, fieldName);
+                    // final String xhr2 = node.get(fieldName).textValue();
                     // XltLogger.runTimeLogger.debug("Xhr: " + xhr);
                     break;
 
                 case Constants.ENCODEPARAMETERS:
-                    encodeParameters = node.get(fieldName).textValue();
+                    encodeParameters = ParserUtils.readExpectedBooleanValue(node, fieldName);
                     // XltLogger.runTimeLogger.debug("EncodeParameters: " + encodeParameters);
                     break;
 
@@ -74,7 +76,7 @@ public class RequestParser extends AbstractActionItemParser
                     break;
 
                 case Constants.ENCODEBODY:
-                    encodeBody = node.get(fieldName).textValue();
+                    encodeBody = ParserUtils.readExpectedBooleanValue(node, fieldName);
                     // XltLogger.runTimeLogger.debug("EncodeBody: " + encodeBody);
                     break;
 

@@ -109,4 +109,14 @@ public class Response extends AbstractActionItem
         }
     }
 
+    public List<AbstractResponseStore> getResponseStore()
+    {
+        return responseStore;
+    }
+
+    public List<AbstractValidator> getValidation()
+    {
+        return validation;
+    }
+
 }

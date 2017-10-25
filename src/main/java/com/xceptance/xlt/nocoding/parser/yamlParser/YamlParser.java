@@ -102,7 +102,7 @@ public class YamlParser implements Parser
 
         }
 
-        // Finally return all scriptItems
+        // Return all scriptItems
         return scriptItems;
     }
 

@@ -13,6 +13,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.HeaderVa
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.RegExpValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.XPathValidator;
 import com.xceptance.xlt.nocoding.util.Constants;
+import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 public class ValidationParser
 {
@@ -64,7 +65,8 @@ public class ValidationParser
                                 }
                                 else if (left.equals(Constants.COUNT))
                                 {
-                                    count = storeContent.get(left).textValue();
+                                    count = ParserUtils.readExpectedIntegerValue(storeContent, left);
+                                    // count = storeContent.get(left).textValue();
                                 }
                             }
                             validator.add(new XPathValidator(validationName, xPathExpression, matches, count));
@@ -82,7 +84,8 @@ public class ValidationParser
                                 // if we have yet another name, this is the optional group
                                 if (name.hasNext())
                                 {
-                                    group = storeContent.get(name.next()).textValue();
+                                    group = ParserUtils.readExpectedIntegerValue(storeContent, name.next());
+                                    // group = storeContent.get(name.next()).textValue();
                                 }
                             }
 
@@ -96,7 +99,14 @@ public class ValidationParser
                             if (name.hasNext())
                             {
                                 textOrCountDecider = name.next();
-                                textOrCount = storeContent.get(textOrCountDecider).textValue();
+                                if (textOrCountDecider.equals(Constants.COUNT))
+                                {
+                                    textOrCount = ParserUtils.readExpectedIntegerValue(storeContent, textOrCountDecider);
+                                }
+                                else
+                                {
+                                    textOrCount = storeContent.get(textOrCountDecider).textValue();
+                                }
                             }
                             validator.add(new HeaderValidator(validationName, header, textOrCountDecider, textOrCount));
                             break;

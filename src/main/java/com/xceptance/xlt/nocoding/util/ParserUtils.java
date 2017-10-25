@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 
-public class ParserUtil
+public class ParserUtils
 {
 
     /**
@@ -110,7 +110,7 @@ public class ParserUtil
     }
 
     /**
-     * Gets the JsonNode with the specified nodeName in the JsonParser parser
+     * Gets the ObjectNode in the JsonParser parser
      * 
      * @param nodeName
      *            The name of the node
@@ -142,6 +142,67 @@ public class ParserUtil
         final ObjectMapper mapper = new ObjectMapper();
         final ObjectNode objectNode = mapper.readTree(parser);
         return objectNode.get(fieldName);
+    }
+
+    /**
+     * Parses an expected boolean value at node with the field name fieldName
+     * 
+     * @param node
+     * @param fieldName
+     * @return
+     */
+    public static String readExpectedBooleanValue(final JsonNode node, final String fieldName)
+    {
+        String value = node.get(fieldName).textValue();
+
+        if (value == null)
+        {
+            // We didn't get a variable
+            value = Boolean.toString(node.get(fieldName).asBoolean());
+        }
+        return value;
+    }
+
+    /**
+     * Parses an expected integer value at node with the field name fieldName
+     * 
+     * @param node
+     * @param fieldName
+     * @return
+     */
+    public static String readExpectedIntegerValue(final JsonNode node, final String fieldName)
+    {
+        String value = node.get(fieldName).textValue();
+
+        if (value == null)
+        {
+            // We didn't get a variable
+            value = Integer.toString(node.get(fieldName).asInt());
+        }
+        return value;
+    }
+
+    /**
+     * Parses an expected string value at node with the field name fieldName. However, if we get null, we try to parse it as
+     * boolean and then as integer
+     * 
+     * @param node
+     * @param fieldName
+     * @return
+     */
+    public static String readExpectedStringValue(final JsonNode node, final String fieldName)
+    {
+        String value = node.get(fieldName).textValue();
+
+        if (value == null)
+        {
+            value = readExpectedBooleanValue(node, fieldName);
+            if (value == null)
+            {
+                value = readExpectedIntegerValue(node, fieldName);
+            }
+        }
+        return value;
     }
 
 }

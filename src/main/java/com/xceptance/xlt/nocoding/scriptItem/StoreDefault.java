@@ -33,4 +33,15 @@ public class StoreDefault implements ScriptItem
             XltLogger.runTimeLogger.debug("Removed " + variableName + " from default storage");
         }
     }
+
+    public String getVariableName()
+    {
+        return variableName;
+    }
+
+    public String getValue()
+    {
+        return value;
+    }
+
 }

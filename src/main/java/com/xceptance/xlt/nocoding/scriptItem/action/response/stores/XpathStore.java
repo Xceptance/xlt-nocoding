@@ -24,4 +24,9 @@ public class XpathStore extends AbstractResponseStore
         // TODO xPath Magic
     }
 
+    public String getxPathExpression()
+    {
+        return xpath;
+    }
+
 }

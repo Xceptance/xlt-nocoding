@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
-import com.xceptance.xlt.nocoding.util.ParserUtil;
+import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 public class ParameterParser
 {
@@ -20,7 +20,7 @@ public class ParameterParser
      */
     public List<NameValuePair> parse(final JsonNode node) throws IOException
     {
-        final List<NameValuePair> parameters = ParserUtil.getArrayNodeAsNameValuePair(node);
+        final List<NameValuePair> parameters = ParserUtils.getArrayNodeAsNameValuePair(node);
         return parameters;
     }
 

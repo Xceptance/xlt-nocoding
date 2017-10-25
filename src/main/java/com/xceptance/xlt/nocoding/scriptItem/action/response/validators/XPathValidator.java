@@ -32,4 +32,19 @@ public class XPathValidator extends AbstractValidator
 
     }
 
+    public String getxPathExpression()
+    {
+        return xPathExpression;
+    }
+
+    public String getText()
+    {
+        return text;
+    }
+
+    public String getCount()
+    {
+        return count;
+    }
+
 }

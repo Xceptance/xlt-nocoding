@@ -13,6 +13,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.AbstractResponseStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.AbstractValidator;
 import com.xceptance.xlt.nocoding.util.Constants;
+import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 public class ResponseParser extends AbstractActionItemParser
 {
@@ -46,8 +47,7 @@ public class ResponseParser extends AbstractActionItemParser
             switch (fieldName)
             {
                 case Constants.HTTPCODE:
-                    // we have to use toString here
-                    httpcode = node.get(fieldName).toString();
+                    httpcode = ParserUtils.readExpectedIntegerValue(node, fieldName);
                     XltLogger.runTimeLogger.debug("Added Httpcode " + httpcode);
                     break;
 

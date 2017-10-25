@@ -13,7 +13,7 @@ import com.xceptance.xlt.nocoding.parser.yamlParser.actionItems.request.Paramete
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.StoreDefault;
 import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.ParserUtil;
+import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 public class DefaultItemParser extends AbstractScriptItemParser
 {
@@ -26,7 +26,7 @@ public class DefaultItemParser extends AbstractScriptItemParser
         String value = null;
         if (variableName.equals(Constants.HEADERS))
         {
-            final JsonNode jsonNode = ParserUtil.getNodeAt(Constants.HEADERS, parser);
+            final JsonNode jsonNode = ParserUtils.getNodeAt(Constants.HEADERS, parser);
             final Map<String, String> headers = new HeaderParser().parse(jsonNode);
             Integer counter = 0;
             for (final Map.Entry<String, String> header : headers.entrySet())
@@ -43,7 +43,7 @@ public class DefaultItemParser extends AbstractScriptItemParser
         }
         else if (variableName.equals(Constants.PARAMETERS))
         {
-            final JsonNode jsonNode = ParserUtil.getNodeAt(Constants.PARAMETERS, parser);
+            final JsonNode jsonNode = ParserUtils.getNodeAt(Constants.PARAMETERS, parser);
             final List<NameValuePair> parameters = new ParameterParser().parse(jsonNode);
             Integer counter = 0;
             for (final NameValuePair parameter : parameters)

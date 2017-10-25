@@ -13,6 +13,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.HeaderStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.RegExpStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.XpathStore;
 import com.xceptance.xlt.nocoding.util.Constants;
+import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 public class ResponseStoreParser
 {
@@ -62,7 +63,8 @@ public class ResponseStoreParser
                             // if we have another fieldName, this means the optional group is specified
                             if (name.hasNext())
                             {
-                                group = storeContent.get(name.next()).textValue();
+                                group = ParserUtils.readExpectedIntegerValue(storeContent, name.next());
+                                // group = storeContent.get(name.next()).textValue();
                             }
                             responseStore.add(new RegExpStore(variableName, pattern, group));
                             break;
