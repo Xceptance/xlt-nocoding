@@ -54,7 +54,8 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
         context = new Context(XltProperties.getInstance(), globalStore);
         final String pathToFile = getFilePath();
 
-        this.parser = new com.xceptance.xlt.nocoding.parser.YamlParser(pathToFile);
+        // this.parser = new com.xceptance.xlt.nocoding.parser.YamlParser(pathToFile);
+        this.parser = new com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser(pathToFile);
         itemList = parser.parse();
     }
 

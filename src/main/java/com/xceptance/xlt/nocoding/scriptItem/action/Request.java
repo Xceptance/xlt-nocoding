@@ -212,11 +212,12 @@ public class Request extends AbstractActionItem
             // The count we are currently at
             Integer counter = 0;
             // The configKey we need to use for the name
-            final String parameterName = "parameter_name_";
+            final String parameterName = Constants.PARAMETER_KEY_NAME;
             // The configKey we need to use for the value
-            final String parameterValueName = "parameter_value_";
+            final String parameterValueName = Constants.PARAMETER_VALUE_NAME;
             String currentName = globalStorage.getConfigItemByKey(parameterName + counter.toString());
             String currentValue = globalStorage.getConfigItemByKey(parameterValueName + counter.toString());
+            // As long as we find headers
             while (currentName != null && currentValue != null)
             {
                 // Add the currentName and currentValue to the parameters
@@ -232,7 +233,27 @@ public class Request extends AbstractActionItem
 
         if (this.getHeaders() == null || (this.getHeaders() != null && this.getHeaders().isEmpty()))
         {
-            // Do something with the headers
+            // We need to find all default parameters that are for a request
+            // Therefore, we have to specify a format in which parameters are saved
+            // The count we are currently at
+            Integer counter = 0;
+            // The configKey we need to use for the name
+            final String headerName = Constants.HEADER_KEY_NAME;
+            // The configKey we need to use for the value
+            final String headerValueName = Constants.HEADER_VALUE_NAME;
+            String currentName = globalStorage.getConfigItemByKey(headerName + counter.toString());
+            String currentValue = globalStorage.getConfigItemByKey(headerValueName + counter.toString());
+            while (currentName != null && currentValue != null)
+            {
+                // Add the currentName and currentValue to headers
+                getHeaders().put(currentName, currentValue);
+                // Increment our counter
+                counter++;
+                // Set the new currentName
+                currentName = globalStorage.getConfigItemByKey(headerName + counter.toString());
+                // Set the new currentValue
+                currentValue = globalStorage.getConfigItemByKey(headerValueName + counter.toString());
+            }
         }
         if (this.getBody() == null)
         {

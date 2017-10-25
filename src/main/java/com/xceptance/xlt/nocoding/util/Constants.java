@@ -3,6 +3,11 @@ package com.xceptance.xlt.nocoding.util;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Has all important constants, that are used throughout parsing and executing.
+ * 
+ * @author ckeiner
+ */
 public class Constants
 {
 
@@ -77,6 +82,24 @@ public class Constants
     public static final String COUNT = "Count";
 
     public static final String EXISTS = "Exists";
+
+    /*
+     * TODO Added by me
+     * 
+     */
+
+    public static final String PARAMETER_KEY_NAME = "parameter_name_";
+
+    public static final String PARAMETER_VALUE_NAME = "parameter_value_";
+
+    public static final String HEADER_KEY_NAME = "header_name_";
+
+    public static final String HEADER_VALUE_NAME = "header_value_";
+
+    /*
+     * TODO Not added by me
+     * 
+     */
 
     /**
      * Type for a general Http Request.

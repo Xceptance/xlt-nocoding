@@ -10,6 +10,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -66,15 +67,18 @@ public class YamlParser implements Parser
     public List<ScriptItem> parseThis() throws JsonParseException, IOException
     {
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
+        // Build the parser
         final YAMLFactory factory = new YAMLFactory();
         final JsonParser parser = factory.createParser(file);
+        // Allow comments in the parser, so we have the correct line numbers
+        parser.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS, true);
 
         int numberObject = 0;
 
-        parser.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS, true);
-
+        // Iterate over all tokens
         while (parser.nextToken() != null)
         {
+            // Check if we have a permitted list item
             if (Constants.isPermittedListItem(parser.getText()))
             {
                 numberObject++;
@@ -82,25 +86,30 @@ public class YamlParser implements Parser
 
                 try
                 {
+                    // Differentiate between Store, Action and default definition
                     if (parser.getText().equals(Constants.STORE))
                     {
+                        // Add store items to scriptItems
                         scriptItems.addAll(handleStore(parser));
                     }
                     else if (parser.getText().equals(Constants.ACTION))
                     {
+                        // Add action items to scriptItems
                         scriptItems.addAll(handleAction(parser));
                     }
                     else
                     {
+                        // Add default items to scriptItems
                         scriptItems.addAll(handleDefault(parser));
                     }
                 }
-                // If the parser fails at any point, print the current position
+                // Catch any exception while parsing, so we can print the current line/column number with the error
                 catch (final Exception e)
                 {
-                    throw new JsonParseException(e.getMessage() + parser.getText(), parser.getCurrentLocation(), e);
+                    throw new JsonParseException(e.getMessage(), parser.getCurrentLocation(), e);
                 }
             }
+            // If we don't have a list item, check if it is really a field name. If it is, throw an error
             else if (parser.getCurrentToken() != null && parser.getCurrentToken().equals(JsonToken.FIELD_NAME))
             {
                 // XltLogger.runTimeLogger.warn("No permitted list item: " + parser.getText() + logLineColumn(parser));
@@ -109,9 +118,12 @@ public class YamlParser implements Parser
                 // TODO the other methods dont work - NoSuchMethodError -> Dependency Issue but Pom says we use jackson-core 2.9.0
                 throw new JsonParseException("No permitted list item: " + parser.getText(), parser.getCurrentLocation());
             }
+            // If we don't have a list item and it's not a field name, we have found null or an Array Entry/Exit or an Object
+            // Entry/Exit.
 
         }
 
+        // Finally return all scriptItems
         return scriptItems;
     }
 
@@ -125,26 +137,35 @@ public class YamlParser implements Parser
      */
     private List<ScriptItem> handleStore(final JsonParser parser) throws IOException
     {
-        // transform current parser to the content of the current node
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
-        final ObjectMapper mapper = new ObjectMapper();
-        final ObjectNode objectNode = mapper.readTree(parser);
+        // Get the current JsonNode from the parser where the Store item is located
+        final ObjectNode objectNode = getNodeAt(parser);
         final JsonNode jsonNode = objectNode.get(Constants.STORE);
+
+        // Since a store item is parsed to an array, get the iterator over the elements
         final Iterator<JsonNode> iterator = jsonNode.elements();
 
+        // while we have elements in the array
         while (iterator.hasNext())
         {
+            // Get the next node
             final JsonNode current = iterator.next();
-            final Iterator<String> fieldName = current.fieldNames();
+            // The array consists of objects, so an ArrayNode has ObjectNodes. Therefore, extract the fieldNames iterator
+            final Iterator<String> fieldNames = current.fieldNames();
 
-            while (fieldName.hasNext())
+            // While we have field names
+            while (fieldNames.hasNext())
             {
-                final String field = fieldName.next();
-                final String textValue = current.get(field).textValue();
-                scriptItems.add(new StoreItem(field, textValue));
-                XltLogger.runTimeLogger.debug("Added " + field + "=" + textValue + " to parameters");
+                // Get the next field name (which is also the name of the variable we want to store)
+                final String fieldName = fieldNames.next();
+                // And extract the value (which is the value of the variable)
+                final String textValue = current.get(fieldName).textValue();
+                // Construct the StoreItem with the fieldName and the textValue
+                scriptItems.add(new StoreItem(fieldName, textValue));
+                XltLogger.runTimeLogger.debug("Added " + fieldName + "=" + textValue + " to parameters");
             }
         }
+        // Return all StoreItems
         return scriptItems;
 
     }
@@ -159,25 +180,50 @@ public class YamlParser implements Parser
      */
     private List<ScriptItem> handleDefault(final JsonParser parser) throws IOException
     {
-        // TODO handle parameter and other structures
-
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
-        final String variableName = parser.getText();
+        String variableName = parser.getText();
         String value = null;
         if (variableName.equals(Constants.HEADERS))
         {
-            // TODO handle default headers
+            final ObjectNode objectNode = getNodeAt(parser);
+            final JsonNode jsonNode = objectNode.get(Constants.HEADERS);
+            final Map<String, String> headers = handleHeaders(jsonNode);
+            Integer counter = 0;
+            for (final Map.Entry<String, String> header : headers.entrySet())
+            {
+                variableName = Constants.HEADER_KEY_NAME + counter.toString();
+                value = header.getKey();
+                scriptItems.add(new StoreDefault(variableName, value));
+
+                variableName = Constants.HEADER_VALUE_NAME + counter.toString();
+                value = header.getValue();
+                scriptItems.add(new StoreDefault(variableName, value));
+                counter++;
+            }
         }
         else if (variableName.equals(Constants.PARAMETERS))
         {
-            // TODO handle default parameters
+            final ObjectNode objectNode = getNodeAt(parser);
+            final JsonNode jsonNode = objectNode.get(Constants.PARAMETERS);
+            final List<NameValuePair> parameters = handleParameters(jsonNode);
+            Integer counter = 0;
+            for (final NameValuePair parameter : parameters)
+            {
+                variableName = Constants.PARAMETER_KEY_NAME + counter.toString();
+                value = parameter.getName();
+                scriptItems.add(new StoreDefault(variableName, value));
+                variableName = Constants.PARAMETER_VALUE_NAME + counter.toString();
+                value = parameter.getValue();
+                scriptItems.add(new StoreDefault(variableName, value));
+                counter++;
+            }
         }
         else
         {
             value = parser.nextTextValue();
+            scriptItems.add(new StoreDefault(variableName, value));
         }
 
-        scriptItems.add(new StoreDefault(variableName, value));
         return scriptItems;
 
     }
@@ -197,13 +243,14 @@ public class YamlParser implements Parser
         String name = null;
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
 
-        final ObjectMapper mapper = new ObjectMapper();
-        final ObjectNode objectNode = mapper.readTree(parser);
+        // Create a jsonNode iterator so we can iterate over the ArrayNode
+        final ObjectNode objectNode = getNodeAt(parser);
         final Iterator<JsonNode> iterator = objectNode.elements();
 
         while (iterator.hasNext())
         {
             final JsonNode node = iterator.next();
+            // Get the fieldName of the objects in the array node
             final Iterator<String> fieldNames = node.fieldNames();
 
             while (fieldNames.hasNext())
@@ -739,6 +786,23 @@ public class YamlParser implements Parser
 
         final AbstractSubrequest subrequest = new XHRSubrequest(name, request, response);
         return subrequest;
+    }
+
+    /**
+     * Gets the JsonNode with the specified nodeName in the JsonParser parser
+     * 
+     * @param nodeName
+     *            The name of the node
+     * @param parser
+     *            The parser in which to look for the node
+     * @return The JsonNode with the specified name
+     * @throws JsonProcessingException
+     * @throws IOException
+     */
+    private ObjectNode getNodeAt(final JsonParser parser) throws JsonProcessingException, IOException
+    {
+        final ObjectMapper mapper = new ObjectMapper();
+        return mapper.readTree(parser);
     }
 
 }
