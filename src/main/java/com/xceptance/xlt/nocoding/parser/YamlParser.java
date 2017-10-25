@@ -48,13 +48,13 @@ public class YamlParser implements Parser
 {
 
     /**
-     * The path to the yaml file
+     * The yaml file
      */
-    final String pathToFile;
+    final File file;
 
     public YamlParser(final String pathToFile)
     {
-        this.pathToFile = pathToFile;
+        this.file = new File(pathToFile);
     }
 
     @Override
@@ -66,7 +66,6 @@ public class YamlParser implements Parser
     public List<ScriptItem> parseThis() throws JsonParseException, IOException
     {
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
-        final File file = new File(pathToFile);
         final YAMLFactory factory = new YAMLFactory();
         final JsonParser parser = factory.createParser(file);
 
@@ -116,6 +115,14 @@ public class YamlParser implements Parser
         return scriptItems;
     }
 
+    /**
+     * Parses the Store-ScriptItem (not the Response-Store-Item!)
+     * 
+     * @param parser
+     *            Where the current parser is
+     * @return A list of all Store-ScriptItems under the parsed store command
+     * @throws IOException
+     */
     private List<ScriptItem> handleStore(final JsonParser parser) throws IOException
     {
         // transform current parser to the content of the current node
@@ -142,6 +149,47 @@ public class YamlParser implements Parser
 
     }
 
+    /**
+     * Parses default definitions to StoreDefault.
+     * 
+     * @param parser
+     *            Where the current parser is
+     * @return A list of all StoreDefault ScriptItems under the parsed default command
+     * @throws IOException
+     */
+    private List<ScriptItem> handleDefault(final JsonParser parser) throws IOException
+    {
+        // TODO handle parameter and other structures
+
+        final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
+        final String variableName = parser.getText();
+        String value = null;
+        if (variableName.equals(Constants.HEADERS))
+        {
+            // TODO handle default headers
+        }
+        else if (variableName.equals(Constants.PARAMETERS))
+        {
+            // TODO handle default parameters
+        }
+        else
+        {
+            value = parser.nextTextValue();
+        }
+
+        scriptItems.add(new StoreDefault(variableName, value));
+        return scriptItems;
+
+    }
+
+    /**
+     * Parses an Action ScriptItem.
+     * 
+     * @param parser
+     *            Where the current parser is
+     * @return A list of LightWeightActions containing a single action.
+     * @throws IOException
+     */
     private List<ScriptItem> handleAction(final JsonParser parser) throws IOException
     {
         // Initialize variables
@@ -186,8 +234,7 @@ public class YamlParser implements Parser
 
                     default:
                         // We iterate over the field names, so there is no way we have an Array/Object Start
-                        throw new JsonParseException("No permitted action item: " + node.get(fieldName).textValue(),
-                                                     parser.getCurrentLocation());
+                        throw new JsonParseException("No permitted action item: " + fieldName, parser.getCurrentLocation());
                 }
             }
         }
@@ -197,6 +244,14 @@ public class YamlParser implements Parser
         return scriptItems;
     }
 
+    /**
+     * Parses request definitions to a Request Object
+     * 
+     * @param node
+     *            The node the item starts at
+     * @return A request with the specified values
+     * @throws IOException
+     */
     private Request handleRequest(final JsonNode node) throws IOException
     {
         String url = "";
@@ -274,6 +329,14 @@ public class YamlParser implements Parser
         return request;
     }
 
+    /**
+     * Parses the header item to a Map<String, String>
+     * 
+     * @param node
+     *            The node the item starts at
+     * @return A Map containing the headers
+     * @throws IOException
+     */
     private Map<String, String> handleHeaders(final JsonNode node) throws IOException
     {
         // headers are transformed to a JSONArray
@@ -299,6 +362,14 @@ public class YamlParser implements Parser
         return headers;
     }
 
+    /**
+     * Parses the parameter item to a List<NameValuePair>
+     * 
+     * @param node
+     *            The node the item starts at
+     * @return A List containing the parameters
+     * @throws IOException
+     */
     private List<NameValuePair> handleParameters(final JsonNode node) throws IOException
     {
         // parameters are transformed to a JSONArray, thus we cannot directly use the fieldname iterator
@@ -336,6 +407,14 @@ public class YamlParser implements Parser
         return parameters;
     }
 
+    /**
+     * Parses the response item to the Response object
+     * 
+     * @param node
+     *            The node the item starts at
+     * @return The response with the specified values
+     * @throws IOException
+     */
     private Response handleResponse(final JsonNode node) throws IOException
     {
 
@@ -375,6 +454,14 @@ public class YamlParser implements Parser
         return response;
     }
 
+    /**
+     * Parses the store item in the response block to List<AbstractResponseStore>
+     * 
+     * @param node
+     *            The node the item starts at
+     * @return A list of the specified store items
+     * @throws IOException
+     */
     private List<AbstractResponseStore> handleResponseStore(final JsonNode node) throws IOException
     {
 
@@ -437,6 +524,14 @@ public class YamlParser implements Parser
         return responseStore;
     }
 
+    /**
+     * Parses the validation items in the response block to List<AbstractValidator>
+     * 
+     * @param node
+     *            The node the item starts at
+     * @return
+     * @throws IOException
+     */
     private List<AbstractValidator> handleValidation(final JsonNode node) throws IOException
     {
 
@@ -538,6 +633,14 @@ public class YamlParser implements Parser
         return validator;
     }
 
+    /**
+     * Parses the subrequest item in the action block to List<AbstractSubrequest>
+     * 
+     * @param node
+     *            The node the item starts at
+     * @return A list with all specified subrequest under that subrequest block
+     * @throws IOException
+     */
     private List<AbstractSubrequest> handleSubrequest(final JsonNode node) throws IOException
     {
         // TODO Auto-generated method stub
@@ -548,22 +651,22 @@ public class YamlParser implements Parser
         while (iterator.hasNext())
         {
             final JsonNode current = iterator.next();
-            final Iterator<String> fieldName = current.fieldNames();
+            final Iterator<String> fieldNames = current.fieldNames();
 
             // the type of subrequest
-            while (fieldName.hasNext())
+            while (fieldNames.hasNext())
             {
-                final String name = fieldName.next();
-                switch (name)
+                final String fieldName = fieldNames.next();
+                switch (fieldName)
                 {
                     case Constants.XHR:
-                        subrequest.add(handleXhrSubrequest(current.get(name)));
+                        subrequest.add(handleXhrSubrequest(current.get(fieldName)));
                         break;
 
                     case Constants.STATIC:
                         // System.out.println(current.get(name));
                         final List<String> urls = new ArrayList<String>();
-                        final JsonNode staticUrls = current.get(name);
+                        final JsonNode staticUrls = current.get(fieldName);
 
                         final Iterator<JsonNode> staticUrlsIterator = staticUrls.elements();
                         while (staticUrlsIterator.hasNext())
@@ -576,7 +679,7 @@ public class YamlParser implements Parser
                         break;
 
                     default:
-                        throw new IOException("No permitted subrequest item: " + name);
+                        throw new IOException("No permitted subrequest item: " + fieldName);
                 }
 
             }
@@ -586,6 +689,14 @@ public class YamlParser implements Parser
         return subrequest;
     }
 
+    /**
+     * Parses a XhrSubrequest to a XhrSubrequest Object
+     * 
+     * @param node
+     *            The node the item starts at
+     * @return The XhrSubrequest
+     * @throws IOException
+     */
     private AbstractSubrequest handleXhrSubrequest(final JsonNode node) throws IOException
     {
         final Iterator<String> fieldNames = node.fieldNames();
@@ -628,31 +739,6 @@ public class YamlParser implements Parser
 
         final AbstractSubrequest subrequest = new XHRSubrequest(name, request, response);
         return subrequest;
-    }
-
-    private List<ScriptItem> handleDefault(final JsonParser parser) throws IOException
-    {
-        // TODO handle parameter and other structures
-
-        final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
-        final String variableName = parser.getText();
-        String value = null;
-        if (variableName.equals(Constants.HEADERS))
-        {
-            // TODO handle default headers
-        }
-        else if (variableName.equals(Constants.PARAMETERS))
-        {
-            // TODO handle default parameters
-        }
-        else
-        {
-            value = parser.nextTextValue();
-        }
-
-        scriptItems.add(new StoreDefault(variableName, value));
-        return scriptItems;
-
     }
 
 }
