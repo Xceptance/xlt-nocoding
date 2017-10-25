@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.parser.yamlParser;
+package com.xceptance.xlt.nocoding.util;
 
 import java.io.IOException;
 import java.util.ArrayList;

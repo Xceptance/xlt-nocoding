@@ -8,12 +8,12 @@ import java.util.Map;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
-import com.xceptance.xlt.nocoding.parser.yamlParser.ParserUtil;
 import com.xceptance.xlt.nocoding.parser.yamlParser.actionItems.request.HeaderParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.actionItems.request.ParameterParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.StoreDefault;
 import com.xceptance.xlt.nocoding.util.Constants;
+import com.xceptance.xlt.nocoding.util.ParserUtil;
 
 public class DefaultItemParser extends AbstractScriptItemParser
 {
