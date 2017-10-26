@@ -1,16 +1,24 @@
 package com.xceptance.xlt.nocoding.util.dataStorage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 public class DataStorage
 {
     private final Map<String, String> variables;
 
-    // TODO this probably needs to be changed depending on meeting at September 14th
     private final Map<String, String> configItem;
+
+    private final List<NameValuePair> headers;
+
+    private final List<NameValuePair> parameters;
+
+    private final List<String> staticUrls;
 
     private final Map<String, String> fallback;
 
@@ -29,6 +37,9 @@ public class DataStorage
         this.variables = variables;
         this.configItem = configItem;
         this.fallback = fallback;
+        this.headers = new ArrayList<NameValuePair>();
+        this.parameters = new ArrayList<NameValuePair>();
+        this.staticUrls = new ArrayList<String>();
     }
 
     /**
@@ -185,6 +196,54 @@ public class DataStorage
     public String removeConfigItem(final String key)
     {
         return getConfigItem().remove(key);
+    }
+
+    public List<NameValuePair> getHeaders()
+    {
+        return headers;
+    }
+
+    public List<NameValuePair> getParameters()
+    {
+        return parameters;
+    }
+
+    public List<String> getStaticUrls()
+    {
+        return staticUrls;
+    }
+
+    /**
+     * Adds a header to the default headers
+     * 
+     * @param header
+     *            The header as {@link NameValuePair}
+     */
+    public void addDefaultHeader(final NameValuePair header)
+    {
+        getHeaders().add(header);
+    }
+
+    /**
+     * Adds a parameter to the default parameters
+     * 
+     * @param parameter
+     *            The parameter as {@link NameValuePair}
+     */
+    public void addDefaultParameter(final NameValuePair parameter)
+    {
+        getParameters().add(parameter);
+    }
+
+    /**
+     * Adds a url to the default static urls
+     * 
+     * @param url
+     *            The url as {@link String}
+     */
+    public void addDefaultStatic(final String url)
+    {
+        getStaticUrls().add(url);
     }
 
 }

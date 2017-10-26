@@ -31,10 +31,12 @@ public class DefaultItemParser extends AbstractScriptItemParser
             Integer counter = 0;
             for (final Map.Entry<String, String> header : headers.entrySet())
             {
+                // Store header name in Constants.HEADER_KEY_NAME + "0", etc
                 variableName = Constants.HEADER_KEY_NAME + counter.toString();
                 value = header.getKey();
                 scriptItems.add(new StoreDefault(variableName, value));
 
+                // Store header value in Constants.HEADER_VALUE_NAME + "0", etc
                 variableName = Constants.HEADER_VALUE_NAME + counter.toString();
                 value = header.getValue();
                 scriptItems.add(new StoreDefault(variableName, value));
@@ -48,17 +50,50 @@ public class DefaultItemParser extends AbstractScriptItemParser
             Integer counter = 0;
             for (final NameValuePair parameter : parameters)
             {
+                // Store parameter name in Constants.PARAMETER_KEY_NAME + "0", etc
                 variableName = Constants.PARAMETER_KEY_NAME + counter.toString();
                 value = parameter.getName();
                 scriptItems.add(new StoreDefault(variableName, value));
+                // Store parameter value in Constants.PARAMETER_VALUE_NAME + "0", etc
                 variableName = Constants.PARAMETER_VALUE_NAME + counter.toString();
                 value = parameter.getValue();
                 scriptItems.add(new StoreDefault(variableName, value));
                 counter++;
             }
         }
+        else if (variableName.equals(Constants.STATIC))
+        {
+            final JsonNode jsonNode = ParserUtils.getNodeAt(Constants.STATIC, parser);
+            final List<NameValuePair> parameters = new ParameterParser().parse(jsonNode);
+            Integer counter = 0;
+            for (final NameValuePair parameter : parameters)
+            {
+                // Store static URLs as "Static0=url"
+                variableName = Constants.STATIC + counter.toString();
+                value = parameter.getValue();
+                scriptItems.add(new StoreDefault(variableName, value));
+                counter++;
+            }
+        }
+        else if (variableName.equals(Constants.STORE))
+        {
+            final JsonNode jsonNode = ParserUtils.getNodeAt(Constants.STORE, parser);
+            final List<NameValuePair> parameters = new ParameterParser().parse(jsonNode);
+            Integer counter = 0;
+            for (final NameValuePair parameter : parameters)
+            {
+                // Store static URLs as "Static0=url"
+                variableName = Constants.STORE + counter.toString();
+                value = parameter.getValue();
+                // scriptItems.add(new StoreDefault(variableName, value));
+                counter++;
+            }
+        }
         else
         {
+            // final JsonNode node = ParserUtils.getNodeAt(variableName, parser);
+            // value = ParserUtils.readExpectedStringValue(node, variableName);
+            // scriptItems.add(new StoreDefault(variableName, value));
             value = parser.nextTextValue();
             scriptItems.add(new StoreDefault(variableName, value));
         }

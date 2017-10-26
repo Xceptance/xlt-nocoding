@@ -13,6 +13,13 @@ import com.xceptance.xlt.nocoding.util.Context;
 import bsh.EvalError;
 import bsh.Interpreter;
 
+/**
+ * TODO Tries to resolve variables. A variable is specified as "${(.)*}". Resolves values from the inside to the outside
+ * by first looking into the dataStorage, then tries resolving it via beanshell and lastly it looks into the property
+ * files.
+ * 
+ * @author ckeiner
+ */
 public class VariableResolver
 {
     /**
@@ -241,8 +248,14 @@ public class VariableResolver
                         // BeanSheall doesn't know the variable, therefore we want the plain text
                         else
                         {
-                            // So we simply add ${ and } again.
-                            resolvedValue = "${" + output + "}";
+                            // Try to find it in the properties
+                            resolvedValue = context.getPropertyByKey(output);
+                            // If it still cannot be found, it isn't resolvable anymore
+                            if (resolvedValue == null)
+                            {
+                                // So we simply add ${ and } again.
+                                resolvedValue = "${" + output + "}";
+                            }
                         }
                     }
                     catch (final EvalError e)

@@ -1,6 +1,5 @@
 package com.xceptance.xlt.nocoding.rebuild.parser.yamlParser.scriptItems;
 
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,8 +10,8 @@ import org.junit.Test;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser;
+import com.xceptance.xlt.nocoding.rebuild.parser.ParserTest;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
-import com.xceptance.xlt.nocoding.scriptItem.StoreDefault;
 import com.xceptance.xlt.nocoding.scriptItem.action.LightWeigthAction;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
@@ -23,43 +22,10 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.Abstract
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.RegExpValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.XPathValidator;
 
-public class ActionItemParserTest
+public class ActionItemParserTest extends ParserTest
 {
-    private final String path = "./target/test-classes/test-scripts/";
 
-    private final String fileTmp = path + "tmp.yml";
-
-    private final String fileXhrSubrequests = path + "xhrSubrequests.yml";
-
-    private final String fileTestData = path + "testData.yml";
-
-    private final String fileEmptyFile = path + "emptyFile.yml";
-
-    private final String fileNotExistingFile = path + "notExistingFile.yml";
-
-    private final String fileSingleActionNoDefaultsData = path + "SAND.yml";
-
-    private final String fileStaticSubrequests = path + "staticSubrequests.yml";
-
-    private final String fileComplexTestCase = path + "complexTestCase.yml";
-
-    private final String fileSyntaxErrorRoot = path + "syntaxErrorRoot.yml";
-
-    private final String fileSyntaxErrorAction = path + "syntaxErrorAction.yml";
-
-    private final String fileSyntaxErrorRequest = path + "syntaxErrorRequest.yml";
-
-    private final String fileSyntaxErrorResponse = path + "syntaxErrorResponse.yml";
-
-    private final String fileSyntaxErrorSubrequests = path + "syntaxErrorSubrequests.yml";
-
-    private final String fileSyntaxErrorXhr = path + "syntaxErrorXhr.yml";
-
-    private final String fileSyntaxErrorStatic = path + "syntaxErrorStatic.yml";
-
-    private final String fileSyntaxErrorActionNameNull = path + "syntaxErrorActionNameNull.yml";
-
-    private final String fileSyntaxErrorUrlNull = path + "syntaxErrorUrlNull.yml";
+    protected final String fileSingleActionNoDefaultsData = path + "SAND.yml";
 
     @Test
     public void testSingleActionNoDefaults() throws Exception
@@ -121,43 +87,6 @@ public class ActionItemParserTest
         final RegExpStore regExpStore = (RegExpStore) store;
         Assert.assertEquals("variable_2", regExpStore.getVariableName());
         Assert.assertEquals("xpath_2", regExpStore.getPattern());
-    }
-
-    @Test
-    public void testFileTmp() throws Exception
-    {
-        final Parser parser = new YamlParser(fileTmp);
-        final List<ScriptItem> scriptItems = parser.parse();
-
-        Assert.assertEquals(2, scriptItems.size());
-
-        // Assert it's an action
-        Assert.assertTrue(scriptItems.get(0) instanceof StoreDefault);
-        final StoreDefault first = (StoreDefault) scriptItems.get(0);
-        Assert.assertEquals("Name", first.getVariableName());
-        Assert.assertEquals("name", first.getValue());
-
-        final StoreDefault second = (StoreDefault) scriptItems.get(1);
-        Assert.assertEquals("Url", second.getVariableName());
-        Assert.assertEquals("url", second.getValue());
-
-    }
-
-    @Test
-    public void testEmptyFile() throws Exception
-    {
-        final Parser parser = new YamlParser(fileEmptyFile);
-        final List<ScriptItem> scriptItems = parser.parse();
-
-        Assert.assertTrue(scriptItems.isEmpty());
-    }
-
-    @Test(expected = FileNotFoundException.class)
-    public void testNotExistingFile() throws Exception
-    {
-        final Parser parser = new YamlParser(fileNotExistingFile);
-        final List<ScriptItem> scriptItems = parser.parse();
-        Assert.assertTrue(scriptItems.isEmpty());
     }
 
 }

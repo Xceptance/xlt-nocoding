@@ -172,6 +172,8 @@ public class ParserUtils
      */
     public static String readExpectedIntegerValue(final JsonNode node, final String fieldName)
     {
+        // get node type!
+        // node.getNodeType()
         String value = node.get(fieldName).textValue();
 
         if (value == null)

@@ -2,6 +2,11 @@ package com.xceptance.xlt.nocoding.util.dataStorage;
 
 import com.gargoylesoftware.htmlunit.HttpMethod;
 
+/**
+ * The definitions of the normal default values.
+ * 
+ * @author ckeiner
+ */
 public class DefaultValue
 {
     /**

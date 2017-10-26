@@ -47,9 +47,6 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
     {
         // Instantiate storage
         final DataStorage globalStore = new DataStorage();
-        // TODO Remove this
-        // Store host in it
-        globalStore.storeVariable("host", "https://localhost:8443");
         // Instantiate the PropertyManager
         context = new Context(XltProperties.getInstance(), globalStore);
         final String pathToFile = getFilePath();
