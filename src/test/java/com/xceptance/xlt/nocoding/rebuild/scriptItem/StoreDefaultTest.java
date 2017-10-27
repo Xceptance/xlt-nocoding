@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
-import com.xceptance.xlt.nocoding.scriptItem.StoreDefault;
+import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefault;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;

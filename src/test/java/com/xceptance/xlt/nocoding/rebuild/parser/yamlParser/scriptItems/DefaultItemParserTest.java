@@ -11,7 +11,7 @@ import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser;
 import com.xceptance.xlt.nocoding.rebuild.parser.ParserTest;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
-import com.xceptance.xlt.nocoding.scriptItem.StoreDefault;
+import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefault;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 public class DefaultItemParserTest extends ParserTest

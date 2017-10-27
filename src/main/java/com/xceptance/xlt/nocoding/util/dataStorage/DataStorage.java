@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
+import com.xceptance.xlt.nocoding.scriptItem.StoreItem;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 public class DataStorage
@@ -14,9 +15,11 @@ public class DataStorage
 
     private final Map<String, String> configItem;
 
-    private final List<NameValuePair> headers;
+    private final Map<String, String> headers;
 
-    private final List<NameValuePair> parameters;
+    private final Map<String, String> parameters;
+
+    private final List<StoreItem> storeItems;
 
     private final List<String> staticUrls;
 
@@ -37,9 +40,10 @@ public class DataStorage
         this.variables = variables;
         this.configItem = configItem;
         this.fallback = fallback;
-        this.headers = new ArrayList<NameValuePair>();
-        this.parameters = new ArrayList<NameValuePair>();
+        this.headers = new HashMap<String, String>();
+        this.parameters = new HashMap<String, String>();
         this.staticUrls = new ArrayList<String>();
+        this.storeItems = new ArrayList<StoreItem>();
     }
 
     /**
@@ -186,6 +190,26 @@ public class DataStorage
         return fallback;
     }
 
+    public Map<String, String> getHeaders()
+    {
+        return headers;
+    }
+
+    public Map<String, String> getParameters()
+    {
+        return parameters;
+    }
+
+    public List<String> getStaticUrls()
+    {
+        return staticUrls;
+    }
+
+    public List<StoreItem> getStoreItems()
+    {
+        return storeItems;
+    }
+
     /**
      * Removes the specified config item and returns it
      * 
@@ -198,30 +222,15 @@ public class DataStorage
         return getConfigItem().remove(key);
     }
 
-    public List<NameValuePair> getHeaders()
-    {
-        return headers;
-    }
-
-    public List<NameValuePair> getParameters()
-    {
-        return parameters;
-    }
-
-    public List<String> getStaticUrls()
-    {
-        return staticUrls;
-    }
-
     /**
      * Adds a header to the default headers
      * 
      * @param header
      *            The header as {@link NameValuePair}
      */
-    public void addDefaultHeader(final NameValuePair header)
+    public void addDefaultHeader(final String key, final String value)
     {
-        getHeaders().add(header);
+        getHeaders().put(key, value);
     }
 
     /**
@@ -230,9 +239,9 @@ public class DataStorage
      * @param parameter
      *            The parameter as {@link NameValuePair}
      */
-    public void addDefaultParameter(final NameValuePair parameter)
+    public void addDefaultParameter(final String key, final String value)
     {
-        getParameters().add(parameter);
+        getParameters().put(key, value);
     }
 
     /**
@@ -244,6 +253,94 @@ public class DataStorage
     public void addDefaultStatic(final String url)
     {
         getStaticUrls().add(url);
+    }
+
+    /**
+     * Adds a {@link StoreItem} to the default {@link StoreItem}-List
+     * 
+     * @param variableName
+     *            The name of the variable
+     * @param value
+     *            The value of the variable
+     */
+    public void addDefaultStoreItem(final String variableName, final String value)
+    {
+        getStoreItems().add(new StoreItem(variableName, value));
+    }
+
+    /**
+     * Deletes all default headers
+     */
+    public void deleteDefaultHeader()
+    {
+        getHeaders().clear();
+    }
+
+    /**
+     * Deletes all default parameters
+     */
+    public void deleteDefaultParameter()
+    {
+        getParameters().clear();
+    }
+
+    /**
+     * Deletes all default static request urls
+     */
+    public void deleteDefaultStatic()
+    {
+        getStaticUrls().clear();
+    }
+
+    /**
+     * Deletes all default {@link StoreItem}
+     */
+    public void deleteDefaultStoreItem()
+    {
+        getStoreItems().clear();
+    }
+
+    /**
+     * Deletes a single default headers
+     */
+    public void deleteDefaultHeader(final String header)
+    {
+        getHeaders().remove(header);
+    }
+
+    /**
+     * Deletes a single default parameters
+     */
+    public void deleteDefaultParameter(final String parameter)
+    {
+        getParameters().remove(parameter);
+    }
+
+    /**
+     * Deletes a single default static request urls
+     */
+    public void deleteDefaultStatic(final String url)
+    {
+        getStaticUrls().remove(getStaticUrls().indexOf(url));
+    }
+
+    /**
+     * Deletes a single default {@link StoreItem}
+     */
+    public void deleteDefaultStoreItem(final String variableName)
+    {
+        StoreItem toRemove = null;
+        for (final StoreItem storeItem : getStoreItems())
+        {
+            if (storeItem.getVariableName().equals(variableName))
+            {
+                toRemove = storeItem;
+            }
+        }
+        if (toRemove != null)
+        {
+            getStoreItems().remove(getStoreItems().indexOf(toRemove));
+        }
     }
 
 }
