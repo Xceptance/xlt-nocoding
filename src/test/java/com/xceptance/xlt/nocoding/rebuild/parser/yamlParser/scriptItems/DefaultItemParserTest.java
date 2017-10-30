@@ -11,6 +11,7 @@ import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser;
 import com.xceptance.xlt.nocoding.rebuild.parser.ParserTest;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
+import com.xceptance.xlt.nocoding.scriptItem.StoreItem;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefault;
 import com.xceptance.xlt.nocoding.util.Constants;
 
@@ -37,21 +38,20 @@ public class DefaultItemParserTest extends ParserTest
         listOfDefaults.add(new NameValuePair("Xhr", "false"));
         listOfDefaults.add(new NameValuePair("Encode-Parameters", "true"));
         listOfDefaults.add(new NameValuePair("Encode-Body", "true"));
-        listOfDefaults.add(new NameValuePair(Constants.HEADER_KEY_NAME + "0", "header_1"));
-        listOfDefaults.add(new NameValuePair(Constants.HEADER_VALUE_NAME + "0", "value"));
-        listOfDefaults.add(new NameValuePair(Constants.HEADER_KEY_NAME + "1", "header_2"));
-        listOfDefaults.add(new NameValuePair(Constants.HEADER_VALUE_NAME + "1", "value"));
-        listOfDefaults.add(new NameValuePair(Constants.HEADER_KEY_NAME + "2", "header_2"));
-        listOfDefaults.add(new NameValuePair(Constants.HEADER_VALUE_NAME + "2", "value"));
-        listOfDefaults.add(new NameValuePair(Constants.PARAMETER_KEY_NAME + "0", "p_1"));
-        listOfDefaults.add(new NameValuePair(Constants.PARAMETER_VALUE_NAME + "0", "v_1"));
-        listOfDefaults.add(new NameValuePair(Constants.PARAMETER_KEY_NAME + "1", "p_2"));
-        listOfDefaults.add(new NameValuePair(Constants.PARAMETER_VALUE_NAME + "1", "v_2"));
-        listOfDefaults.add(new NameValuePair(Constants.STATIC + "0", "http://www.xceptance.com"));
-        listOfDefaults.add(new NameValuePair(Constants.STATIC + "1", "http://www.xceptance.com"));
-        listOfDefaults.add(new NameValuePair(Constants.STATIC + "2", "http://www.xceptance.com"));
+        listOfDefaults.add(new NameValuePair("header_1", "value"));
+        listOfDefaults.add(new NameValuePair("header_2", "value"));
+        listOfDefaults.add(new NameValuePair("header_3", "value"));
+        listOfDefaults.add(new NameValuePair("p_1", "v_1"));
+        listOfDefaults.add(new NameValuePair("p_2", "v_2"));
+        listOfDefaults.add(new NameValuePair(Constants.STATIC, "http://www.xceptance.com"));
+        listOfDefaults.add(new NameValuePair(Constants.STATIC, "http://www.xceptance.com"));
+        listOfDefaults.add(new NameValuePair(Constants.STATIC, "http://www.xceptance.com"));
 
         // Skip Store Modules
+
+        // This a store item
+        listOfDefaults.add(new NameValuePair("variable_1", "value_1"));
+        listOfDefaults.add(new NameValuePair("variable_2", "value_2"));
 
         listOfDefaults.add(new NameValuePair("Name", "delete"));
         listOfDefaults.add(new NameValuePair("Url", "delete"));
@@ -67,11 +67,24 @@ public class DefaultItemParserTest extends ParserTest
 
         for (int i = 0; i < scriptItems.size(); i++)
         {
-            Assert.assertTrue(scriptItems.get(i) instanceof StoreDefault);
-            final StoreDefault storeDefault = (StoreDefault) scriptItems.get(i);
-            final String errorMessage = "Did not match at " + i + " - " + listOfDefaults.get(i).getName();
-            Assert.assertEquals(errorMessage, listOfDefaults.get(i).getName(), storeDefault.getVariableName());
-            Assert.assertEquals(errorMessage, listOfDefaults.get(i).getValue(), storeDefault.getValue());
+            if (scriptItems.get(i) instanceof StoreDefault)
+            {
+                final StoreDefault storeDefault = (StoreDefault) scriptItems.get(i);
+                final String errorMessage = "Did not match at " + i + " - " + listOfDefaults.get(i).getName();
+                Assert.assertEquals(errorMessage, listOfDefaults.get(i).getName(), storeDefault.getVariableName());
+                Assert.assertEquals(errorMessage, listOfDefaults.get(i).getValue(), storeDefault.getValue());
+            }
+            else if (scriptItems.get(i) instanceof StoreItem)
+            {
+                final StoreItem storeDefault = (StoreItem) scriptItems.get(i);
+                final String errorMessage = "Did not match at " + i + " - " + listOfDefaults.get(i).getName();
+                Assert.assertEquals(errorMessage, listOfDefaults.get(i).getName(), storeDefault.getVariableName());
+                Assert.assertEquals(errorMessage, listOfDefaults.get(i).getValue(), storeDefault.getValue());
+            }
+            else
+            {
+                Assert.assertFalse("Neither StoreDefault nor StoreItem.", true);
+            }
         }
 
     }

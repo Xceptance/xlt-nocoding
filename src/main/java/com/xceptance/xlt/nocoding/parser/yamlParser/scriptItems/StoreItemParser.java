@@ -28,7 +28,7 @@ public class StoreItemParser extends AbstractScriptItemParser
         for (final Map.Entry<String, String> storeItem : storeItems.entrySet())
         {
             scriptItems.add(new StoreItem(storeItem.getKey(), storeItem.getValue()));
-            XltLogger.runTimeLogger.debug("Added " + storeItem.getKey() + "=" + storeItem.getValue() + " to parameters");
+            XltLogger.runTimeLogger.debug("Added " + storeItem.getKey() + "=" + storeItem.getValue() + " to StoreItems");
         }
 
         // Return all StoreItems

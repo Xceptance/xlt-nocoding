@@ -109,7 +109,7 @@ public class DataStorage
      * 
      * @param key
      *            The key you want to search for
-     * @return String - The value of the key; Null if the key is neither in the default values nor in configItems
+     * @return The value of the key; Null if the key is neither in the default values nor in configItems
      */
     public String getConfigItemByKey(final String key)
     {

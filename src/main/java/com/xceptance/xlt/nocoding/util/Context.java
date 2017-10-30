@@ -1,5 +1,8 @@
 package com.xceptance.xlt.nocoding.util;
 
+import java.util.List;
+import java.util.Map;
+
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.data.GeneralDataProvider;
 import com.xceptance.xlt.api.util.XltLogger;
@@ -259,7 +262,7 @@ public class Context
     }
 
     /**
-     * Removes a url out of the default static requests
+     * Remov es a url out of the default static requests
      * 
      * @param url
      *            The url of the static request as {@link String}
@@ -313,6 +316,49 @@ public class Context
     public void deleteDefaultStoreItem()
     {
         getDataStorage().deleteDefaultStoreItem();
+    }
+
+    /*
+     * Data Storage Getter
+     */
+
+    /**
+     * Returns the config item with the specified key. If the key cannot be found, the method checks if a fallback is
+     * provided. If it still cannot be found, the method returns null.
+     * 
+     * @param key
+     *            The key you want to search for
+     * @return String - The value of the key; Null if the key is neither in the default values nor in configItems
+     */
+    public String getConfigItemByKey(final String key)
+    {
+        return getDataStorage().getConfigItemByKey(key);
+    }
+
+    public Map<String, String> getDefaultHeaders()
+    {
+        return getDataStorage().getHeaders();
+    }
+
+    public Map<String, String> getDefaultParameters()
+    {
+        return getDataStorage().getParameters();
+    }
+
+    /**
+     * Deletes all static requests
+     */
+    public List<String> getDefaultStatic()
+    {
+        return getDataStorage().getStaticUrls();
+    }
+
+    /**
+     * Deletes all default {@link StoreItem}
+     */
+    public List<StoreItem> getDefaultStoreItem()
+    {
+        return getDataStorage().getStoreItems();
     }
 
     /*

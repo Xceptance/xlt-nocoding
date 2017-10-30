@@ -18,7 +18,6 @@ import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
-import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 public class Request extends AbstractActionItem
 {
@@ -187,82 +186,58 @@ public class Request extends AbstractActionItem
      */
     private void fillDefaultData(final Context context)
     {
-        final DataStorage globalStorage = context.getDataStorage();
         // if the name is null, check if it has a default value
         if (this.getMethod() == null)
         {
-            setMethod(globalStorage.getConfigItemByKey(Constants.METHOD));
+            setMethod(context.getConfigItemByKey(Constants.METHOD));
             // this.httpmethod = HttpMethod.valueOf(method);
         }
         if (this.getXhr() == null)
         {
-            setXhr(globalStorage.getConfigItemByKey(Constants.XHR));
+            setXhr(context.getConfigItemByKey(Constants.XHR));
             // this.isXhr = Boolean.valueOf(isXhr);
         }
         if (this.getEncodeParameters() == null)
         {
-            setEncodeParameters(globalStorage.getConfigItemByKey(Constants.ENCODEPARAMETERS));
+            setEncodeParameters(context.getConfigItemByKey(Constants.ENCODEPARAMETERS));
             // this.encodeParameters = Boolean.valueOf(encodeParameters);
         }
-        // TODO Meeting
-        if (this.getParameters() == null || (this.getParameters() != null && this.getParameters().isEmpty()))
-        {
-            // We need to find all default parameters that are for a request
-            // Therefore, we have to specify a format in which parameters are saved
-            // The count we are currently at
-            Integer counter = 0;
-            // The configKey we need to use for the name
-            final String parameterName = Constants.PARAMETER_KEY_NAME;
-            // The configKey we need to use for the value
-            final String parameterValueName = Constants.PARAMETER_VALUE_NAME;
-            String currentName = globalStorage.getConfigItemByKey(parameterName + counter.toString());
-            String currentValue = globalStorage.getConfigItemByKey(parameterValueName + counter.toString());
-            // As long as we find headers
-            while (currentName != null && currentValue != null)
-            {
-                // Add the currentName and currentValue to the parameters
-                getParameters().add(new NameValuePair(currentName, currentValue));
-                // Increment our counter
-                counter++;
-                // Set the new currentName
-                currentName = globalStorage.getConfigItemByKey(parameterName + counter.toString());
-                // Set the new currentValue
-                currentValue = globalStorage.getConfigItemByKey(parameterValueName + counter.toString());
-            }
-        }
 
-        if (this.getHeaders() == null || (this.getHeaders() != null && this.getHeaders().isEmpty()))
+        /*
+         * Set default parameters
+         */
+
+        // Get default parameters
+        final Map<String, String> defaultParameters = context.getDefaultParameters();
+        // Overwrite the default values with the current ones and/or add the current ones
+        for (final NameValuePair parameters : getParameters())
         {
-            // We need to find all default parameters that are for a request
-            // Therefore, we have to specify a format in which parameters are saved
-            // The count we are currently at
-            Integer counter = 0;
-            // The configKey we need to use for the name
-            final String headerName = Constants.HEADER_KEY_NAME;
-            // The configKey we need to use for the value
-            final String headerValueName = Constants.HEADER_VALUE_NAME;
-            String currentName = globalStorage.getConfigItemByKey(headerName + counter.toString());
-            String currentValue = globalStorage.getConfigItemByKey(headerValueName + counter.toString());
-            while (currentName != null && currentValue != null)
-            {
-                // Add the currentName and currentValue to headers
-                getHeaders().put(currentName, currentValue);
-                // Increment our counter
-                counter++;
-                // Set the new currentName
-                currentName = globalStorage.getConfigItemByKey(headerName + counter.toString());
-                // Set the new currentValue
-                currentValue = globalStorage.getConfigItemByKey(headerValueName + counter.toString());
-            }
+            defaultParameters.put(parameters.getName(), parameters.getValue());
         }
+        // Create new list in which we store the all parameters
+        final List<NameValuePair> newParameters = new ArrayList<NameValuePair>(defaultParameters.size());
+        defaultParameters.forEach((key, value) -> {
+            newParameters.add(new NameValuePair(key, value));
+        });
+        // Assign newParameters to the parameters for this request
+        setParameters(newParameters);
+
+        /*
+         * Set default headers
+         */
+
+        // Get the default headers
+        final Map<String, String> defaultHeaders = context.getDefaultHeaders();
+        // Overwrite the default values with the current ones and/or add the current ones
+        defaultHeaders.putAll(getHeaders());
+
         if (this.getBody() == null)
         {
-            setBody(globalStorage.getConfigItemByKey(Constants.BODY));
+            setBody(context.getConfigItemByKey(Constants.BODY));
         }
         if (this.getEncodeBody() == null)
         {
-            setEncodeBody(globalStorage.getConfigItemByKey(Constants.ENCODEBODY));
-            // this.encodeBody = Boolean.valueOf(encodeBody);
+            setEncodeBody(context.getConfigItemByKey(Constants.ENCODEBODY));
         }
     }
 

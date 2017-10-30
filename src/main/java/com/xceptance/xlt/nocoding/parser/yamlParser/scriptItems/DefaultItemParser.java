@@ -15,7 +15,6 @@ import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultHeader;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultItem;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultParameter;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultStatic;
-import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultStoreItem;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
@@ -56,21 +55,10 @@ public class DefaultItemParser extends AbstractScriptItemParser
             final List<NameValuePair> parameters = new ParameterParser().parse(jsonNode);
             for (final NameValuePair parameter : parameters)
             {
-                // TODO variableName isn't used
+                // TODO variableName isn't used, but we set it to "Static" to remain the meaning
                 variableName = Constants.STATIC;
                 value = parameter.getValue();
                 scriptItems.add(new StoreDefaultStatic(variableName, value));
-            }
-        }
-        else if (variableName.equals(Constants.STORE))
-        {
-            final JsonNode jsonNode = ParserUtils.getNodeAt(Constants.STORE, parser);
-            final List<NameValuePair> parameters = new ParameterParser().parse(jsonNode);
-            for (final NameValuePair parameter : parameters)
-            {
-                variableName = parameter.getName();
-                value = parameter.getName();
-                scriptItems.add(new StoreDefaultStoreItem(variableName, value));
             }
         }
         else
