@@ -7,6 +7,7 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser;
@@ -27,8 +28,27 @@ public class ActionItemParserTest extends ParserTest
 
     protected final String fileSingleActionNoDefaultsData = path + "SAND.yml";
 
+    protected final String fileSyntaxErrorAction = path + "syntaxErrorAction.yml";
+
+    protected final String fileSyntaxErrorRequest = path + "syntaxErrorRequest.yml";
+
+    protected final String fileSyntaxErrorResponse = path + "syntaxErrorResponse.yml";
+
+    protected final String fileSyntaxErrorSubrequests = path + "syntaxErrorSubrequests.yml";
+
+    protected final String fileSyntaxErrorXhr = path + "syntaxErrorXhr.yml";
+
+    protected final String fileSyntaxErrorStatic = path + "syntaxErrorStatic.yml";
+
+    // TODO ok to only "parse" these 3 and not check the values specifically?
+    protected final String fileXhrSubrequests = path + "xhrSubrequests.yml";
+
+    protected final String fileStaticSubrequests = path + "staticSubrequests.yml";
+
+    protected final String fileComplexTestCase = path + "complexTestCase.yml";
+
     @Test
-    public void testSingleActionNoDefaults() throws Exception
+    public void testSingleActionNoDefaultsParsing() throws Exception
     {
         final Parser parser = new YamlParser(fileSingleActionNoDefaultsData);
         final List<ScriptItem> scriptItems = parser.parse();
@@ -87,6 +107,78 @@ public class ActionItemParserTest extends ParserTest
         final RegExpStore regExpStore = (RegExpStore) store;
         Assert.assertEquals("variable_2", regExpStore.getVariableName());
         Assert.assertEquals("xpath_2", regExpStore.getPattern());
+    }
+
+    @Test(expected = JsonParseException.class)
+    public void testSyntaxErrorActionParsing() throws Exception
+    {
+        final Parser parser = new YamlParser(fileSyntaxErrorAction);
+        @SuppressWarnings("unused")
+        final List<ScriptItem> scriptItems = parser.parse();
+    }
+
+    @Test(expected = JsonParseException.class)
+    public void testSyntaxErrorRequestParsing() throws Exception
+    {
+        final Parser parser = new YamlParser(fileSyntaxErrorRequest);
+        @SuppressWarnings("unused")
+        final List<ScriptItem> scriptItems = parser.parse();
+    }
+
+    @Test(expected = JsonParseException.class)
+    public void testSyntaxErrorResponseParsing() throws Exception
+    {
+        final Parser parser = new YamlParser(fileSyntaxErrorResponse);
+        @SuppressWarnings("unused")
+        final List<ScriptItem> scriptItems = parser.parse();
+    }
+
+    @Test(expected = JsonParseException.class)
+    public void testSyntaxErrorSubrequestsParsing() throws Exception
+    {
+        final Parser parser = new YamlParser(fileSyntaxErrorSubrequests);
+        @SuppressWarnings("unused")
+        final List<ScriptItem> scriptItems = parser.parse();
+    }
+
+    @Test(expected = JsonParseException.class)
+    public void testSyntaxErrorXhrParsing() throws Exception
+    {
+        final Parser parser = new YamlParser(fileSyntaxErrorXhr);
+        @SuppressWarnings("unused")
+        final List<ScriptItem> scriptItems = parser.parse();
+    }
+
+    @Test(expected = JsonParseException.class)
+    public void testSyntaxErrorStaticParsing() throws Exception
+    {
+        final Parser parser = new YamlParser(fileSyntaxErrorStatic);
+        @SuppressWarnings("unused")
+        final List<ScriptItem> scriptItems = parser.parse();
+    }
+
+    @Test
+    public void testXhrSubrequestsParsing() throws Exception
+    {
+        final Parser parser = new YamlParser(fileXhrSubrequests);
+        @SuppressWarnings("unused")
+        final List<ScriptItem> scriptItems = parser.parse();
+    }
+
+    @Test
+    public void testStaticSubrequestsParsing() throws Exception
+    {
+        final Parser parser = new YamlParser(fileStaticSubrequests);
+        @SuppressWarnings("unused")
+        final List<ScriptItem> scriptItems = parser.parse();
+    }
+
+    @Test
+    public void testComplexTestCaseParsing() throws Exception
+    {
+        final Parser parser = new YamlParser(fileComplexTestCase);
+        @SuppressWarnings("unused")
+        final List<ScriptItem> scriptItems = parser.parse();
     }
 
 }

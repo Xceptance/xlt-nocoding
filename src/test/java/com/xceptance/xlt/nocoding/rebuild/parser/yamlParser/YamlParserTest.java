@@ -6,6 +6,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser;
 import com.xceptance.xlt.nocoding.rebuild.parser.ParserTest;
@@ -17,8 +18,10 @@ public class YamlParserTest extends ParserTest
 
     protected final String fileNotExistingFile = path + "notExistingFile.yml";
 
+    protected final String fileSyntaxErrorRoot = path + "syntaxErrorRoot.yml";
+
     @Test
-    public void testEmptyFile() throws Exception
+    public void testEmptyFileParsing() throws Exception
     {
         final Parser parser = new YamlParser(fileEmptyFile);
         final List<ScriptItem> scriptItems = parser.parse();
@@ -27,11 +30,19 @@ public class YamlParserTest extends ParserTest
     }
 
     @Test(expected = FileNotFoundException.class)
-    public void testNotExistingFile() throws Exception
+    public void testNotExistingFileParsing() throws Exception
     {
         final Parser parser = new YamlParser(fileNotExistingFile);
         final List<ScriptItem> scriptItems = parser.parse();
         Assert.assertTrue(scriptItems.isEmpty());
+    }
+
+    @Test(expected = JsonParseException.class)
+    public void testSyntaxErrorRootParsing() throws Exception
+    {
+        final Parser parser = new YamlParser(fileSyntaxErrorRoot);
+        @SuppressWarnings("unused")
+        final List<ScriptItem> scriptItems = parser.parse();
     }
 
 }

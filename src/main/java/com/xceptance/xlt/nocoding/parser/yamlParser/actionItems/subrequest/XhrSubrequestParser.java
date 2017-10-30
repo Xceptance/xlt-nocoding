@@ -31,6 +31,7 @@ public class XhrSubrequestParser
         String name = null;
         Request request = null;
         Response response = null;
+        AbstractSubrequest abstractSubrequest = null;
 
         while (fieldNames.hasNext())
         {
@@ -70,17 +71,21 @@ public class XhrSubrequestParser
                     }
                     break;
 
-                // case Constants.SUBREQUESTS:
-                // XltLogger.runTimeLogger.debug("Subrequests: " + node.get(fieldName).toString());
-                // actionItems.addAll(handleSubrequest(node.get(fieldName)));
-                // break;
+                case Constants.SUBREQUESTS:
+                    XltLogger.runTimeLogger.debug("Subrequests: " + node.get(fieldName).toString());
+                    final AbstractActionItem subrequestItem = new SubrequestParser().parse(node.get(fieldName)).get(0);
+                    if (subrequestItem instanceof AbstractSubrequest)
+                    {
+                        abstractSubrequest = (AbstractSubrequest) subrequestItem;
+                    }
+                    break;
 
                 default:
                     throw new IOException("No permitted xhr subrequest item: " + fieldName);
             }
         }
 
-        final AbstractSubrequest subrequest = new XHRSubrequest(name, request, response);
+        final AbstractSubrequest subrequest = new XHRSubrequest(name, request, response, abstractSubrequest);
         return subrequest;
     }
 

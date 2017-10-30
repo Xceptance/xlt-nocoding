@@ -57,6 +57,11 @@ public class SubrequestParser extends AbstractActionItemParser
                             final String url = staticUrlsIterator.next().textValue();
                             urls.add(url);
                         }
+                        // Catch empty url list
+                        if (urls.isEmpty())
+                        {
+                            throw new IOException("No urls found");
+                        }
 
                         subrequest.add(new StaticSubrequest(urls));
                         break;

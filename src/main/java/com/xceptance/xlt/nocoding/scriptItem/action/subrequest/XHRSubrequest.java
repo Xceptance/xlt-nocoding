@@ -14,18 +14,26 @@ public class XHRSubrequest extends AbstractSubrequest
 
     private final Response response;
 
+    private final AbstractSubrequest subrequest;
+
     private WebRequest webRequest;
 
-    public XHRSubrequest(final String name, final Request request, final Response response)
+    public XHRSubrequest(final String name, final Request request, final Response response, final AbstractSubrequest subrequest)
     {
         this.name = name;
         this.request = request;
         this.response = response;
+        this.subrequest = subrequest;
+    }
+
+    public XHRSubrequest(final String name, final Request request, final Response response)
+    {
+        this(name, request, response, null);
     }
 
     public XHRSubrequest(final String name, final Request request)
     {
-        this(name, request, null);
+        this(name, request, null, null);
     }
 
     @Override
@@ -40,7 +48,10 @@ public class XHRSubrequest extends AbstractSubrequest
         {
             getResponse().execute(localContext);
         }
-
+        if (getSubrequest() != null)
+        {
+            getSubrequest().execute(localContext);
+        }
     }
 
     public String getName()
@@ -61,6 +72,11 @@ public class XHRSubrequest extends AbstractSubrequest
     public Response getResponse()
     {
         return response;
+    }
+
+    public AbstractSubrequest getSubrequest()
+    {
+        return subrequest;
     }
 
 }

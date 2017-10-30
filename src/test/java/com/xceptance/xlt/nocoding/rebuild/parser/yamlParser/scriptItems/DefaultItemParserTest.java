@@ -23,8 +23,30 @@ public class DefaultItemParserTest extends ParserTest
 
     protected final String fileTestData = path + "testData.yml";
 
+    protected final String fileTmp = path + "tmp.yml";
+
     @Test
-    public void testTestData() throws Exception
+    public void testFileTmpParsing() throws Exception
+    {
+        final Parser parser = new YamlParser(fileTmp);
+        final List<ScriptItem> scriptItems = parser.parse();
+
+        Assert.assertEquals(2, scriptItems.size());
+
+        // Assert it's an action
+        Assert.assertTrue(scriptItems.get(0) instanceof StoreDefault);
+        final StoreDefault first = (StoreDefault) scriptItems.get(0);
+        Assert.assertEquals("Name", first.getVariableName());
+        Assert.assertEquals("name", first.getValue());
+
+        final StoreDefault second = (StoreDefault) scriptItems.get(1);
+        Assert.assertEquals("Url", second.getVariableName());
+        Assert.assertEquals("url", second.getValue());
+
+    }
+
+    @Test
+    public void testTestDataParsing() throws Exception
     {
         final Parser parser = new YamlParser(fileTestData);
         final List<ScriptItem> scriptItems = parser.parse();
