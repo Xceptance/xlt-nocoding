@@ -8,6 +8,7 @@ import com.xceptance.xlt.api.htmlunit.LightWeightPage;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.engine.LightWeightPageImpl;
 import com.xceptance.xlt.engine.SessionImpl;
+import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.webAction.WebAction;
 
@@ -54,6 +55,12 @@ public class LightWeigthAction extends Action
                 throw new Exception(e);
             }
         });
+
+        // Add default static requests
+        if (context.getDefaultStatic() != null && !context.getDefaultStatic().isEmpty())
+        {
+            getActionItems().add(new StaticSubrequest(context.getDefaultStatic()));
+        }
 
         try
         {

@@ -63,6 +63,7 @@ public class SubrequestParser extends AbstractActionItemParser
                             throw new IOException("No urls found");
                         }
 
+                        // Add all request to the static subrequests
                         subrequest.add(new StaticSubrequest(urls));
                         break;
 

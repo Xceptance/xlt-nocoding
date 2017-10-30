@@ -14,7 +14,6 @@ import com.xceptance.xlt.nocoding.util.Context;
 
 public class Response extends AbstractActionItem
 {
-    public static String DEFAULT_HTTPCODE = "200";
 
     private String httpcode;
 
@@ -78,7 +77,6 @@ public class Response extends AbstractActionItem
 
     public void validate(final Context context, final WebResponse webResponse) throws Exception
     {
-        // TODO Get timer name
         final LightWeightPage page = new LightWeightPageImpl(webResponse, context.getWebClient().getTimerName(), context.getWebClient());
         if (page != null && httpcode != null)
         {
