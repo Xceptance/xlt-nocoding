@@ -85,6 +85,11 @@ public class RequestParser extends AbstractActionItemParser
             }
         }
 
+        if (url.equals(null) || url.equals(""))
+        {
+            throw new IOException("Url not specified");
+        }
+
         final Request request = new Request(url);
         request.setMethod(method);
         request.setXhr(xhr);
