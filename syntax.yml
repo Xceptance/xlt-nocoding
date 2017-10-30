@@ -96,10 +96,12 @@
     - p_1 : v_1
     - p_2 : v_2    
 
+#Not yet implemented
 - Default-Set :
     Action :
         Request :
             Method : POST
+    #...
 
 
 #Delete default values
@@ -111,7 +113,9 @@
 - Method : delete
 - Xhr : delete
 
+#Not yet implemented
 - Default-Remove :
     Action :
         Request :
             Method : delete
+    #...
