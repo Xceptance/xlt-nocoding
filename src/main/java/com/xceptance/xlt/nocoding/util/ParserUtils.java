@@ -11,8 +11,10 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeType;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
+import com.google.gson.JsonParseException;
 
 public class ParserUtils
 {
@@ -203,6 +205,76 @@ public class ParserUtils
             {
                 value = readExpectedIntegerValue(node, fieldName);
             }
+        }
+        return value;
+    }
+
+    /**
+     * Parses an expected string value at node with the field name fieldName. However, if we get null, we try to parse it as
+     * boolean and then as integer
+     * 
+     * @param node
+     * @param fieldName
+     * @return
+     */
+    public static String readValue(final JsonNode node, final String fieldName)
+    {
+        String value = null;
+        final JsonNodeType type = node.get(fieldName).getNodeType();
+        if (type.equals(JsonNodeType.BOOLEAN))
+        {
+            value = Boolean.toString(node.get(fieldName).asBoolean());
+        }
+        else if (type.equals(JsonNodeType.NUMBER))
+        {
+            value = Integer.toString(node.get(fieldName).asInt());
+        }
+        else if (type.equals(JsonNodeType.STRING))
+        {
+            node.get(fieldName).textValue();
+        }
+        else if (type.equals(JsonNodeType.NULL))
+        {
+            value = null;
+        }
+        else
+        {
+            throw new JsonParseException("Unknown node type");
+        }
+        return value;
+    }
+
+    /**
+     * Parses an expected string value at node with the field name fieldName. However, if we get null, we try to parse it as
+     * boolean and then as integer
+     * 
+     * @param node
+     * @param fieldName
+     * @return
+     */
+    public static String readSingleValue(final JsonNode node)
+    {
+        String value = null;
+        final JsonNodeType type = node.getNodeType();
+        if (type.equals(JsonNodeType.BOOLEAN))
+        {
+            value = Boolean.toString(node.asBoolean());
+        }
+        else if (type.equals(JsonNodeType.NUMBER))
+        {
+            value = Integer.toString(node.asInt());
+        }
+        else if (type.equals(JsonNodeType.STRING))
+        {
+            value = node.textValue();
+        }
+        else if (type.equals(JsonNodeType.NULL))
+        {
+            value = null;
+        }
+        else
+        {
+            throw new JsonParseException("Unknown node type");
         }
         return value;
     }

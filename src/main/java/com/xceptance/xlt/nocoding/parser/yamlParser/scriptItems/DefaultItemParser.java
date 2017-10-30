@@ -2,6 +2,7 @@ package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -30,40 +31,70 @@ public class DefaultItemParser extends AbstractScriptItemParser
         if (variableName.equals(Constants.HEADERS))
         {
             final JsonNode jsonNode = ParserUtils.getNodeAt(Constants.HEADERS, parser);
-            final Map<String, String> headers = new HeaderParser().parse(jsonNode);
-            for (final Map.Entry<String, String> header : headers.entrySet())
+            if (jsonNode.isTextual() && jsonNode.textValue().equals(Constants.DELETE))
             {
-                variableName = header.getKey();
-                value = header.getValue();
+                variableName = Constants.HEADERS;
+                value = Constants.DELETE;
                 scriptItems.add(new StoreDefaultHeader(variableName, value));
+            }
+            else
+            {
+                final Map<String, String> headers = new HeaderParser().parse(jsonNode);
+                for (final Map.Entry<String, String> header : headers.entrySet())
+                {
+                    variableName = header.getKey();
+                    value = header.getValue();
+                    scriptItems.add(new StoreDefaultHeader(variableName, value));
+                }
             }
         }
         else if (variableName.equals(Constants.PARAMETERS))
         {
             final JsonNode jsonNode = ParserUtils.getNodeAt(Constants.PARAMETERS, parser);
             final List<NameValuePair> parameters = new ParameterParser().parse(jsonNode);
-            for (final NameValuePair parameter : parameters)
+            if (jsonNode.isTextual() && jsonNode.textValue().equals(Constants.DELETE))
             {
-                variableName = parameter.getName();
-                value = parameter.getValue();
-                scriptItems.add(new StoreDefaultParameter(variableName, value));
+                variableName = Constants.PARAMETERS;
+                value = Constants.DELETE;
+                scriptItems.add(new StoreDefaultHeader(variableName, value));
+            }
+            else
+            {
+                for (final NameValuePair parameter : parameters)
+                {
+                    variableName = parameter.getName();
+                    value = parameter.getValue();
+                    scriptItems.add(new StoreDefaultParameter(variableName, value));
+                }
             }
         }
         else if (variableName.equals(Constants.STATIC))
         {
             final JsonNode jsonNode = ParserUtils.getNodeAt(Constants.STATIC, parser);
-            final List<NameValuePair> parameters = new ParameterParser().parse(jsonNode);
-            for (final NameValuePair parameter : parameters)
+            if (jsonNode.isTextual() && jsonNode.textValue().equals(Constants.DELETE))
             {
-                // TODO variableName isn't used, but we set it to "Static" to remain the meaning
                 variableName = Constants.STATIC;
-                value = parameter.getValue();
-                scriptItems.add(new StoreDefaultStatic(variableName, value));
+                value = Constants.DELETE;
+                scriptItems.add(new StoreDefaultHeader(variableName, value));
+            }
+            else
+            {
+                final Iterator<JsonNode> elementIterator = jsonNode.elements();
+                while (elementIterator.hasNext())
+                {
+                    final JsonNode nextNode = elementIterator.next();
+                    // TODO variableName isn't used, but we set it to "Static" to remain the meaning
+                    variableName = Constants.STATIC;
+                    value = ParserUtils.readSingleValue(nextNode);
+                    scriptItems.add(new StoreDefaultStatic(variableName, value));
+                }
             }
         }
         else
         {
-            value = parser.nextTextValue();
+            // We get simple name value pairs, as such we simply want to read
+            final JsonNode jsonNode = ParserUtils.getNodeAt(variableName, parser);
+            value = ParserUtils.readSingleValue(jsonNode);
             scriptItems.add(new StoreDefaultItem(variableName, value));
         }
 
