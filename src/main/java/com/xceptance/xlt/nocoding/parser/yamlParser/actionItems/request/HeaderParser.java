@@ -19,7 +19,9 @@ public class HeaderParser
      */
     public Map<String, String> parse(final JsonNode node) throws IOException
     {
+        // Transform the JsonNode to a Map
         final Map<String, String> headers = ParserUtils.getArrayNodeAsMap(node);
+        // Return headers
         return headers;
     }
 

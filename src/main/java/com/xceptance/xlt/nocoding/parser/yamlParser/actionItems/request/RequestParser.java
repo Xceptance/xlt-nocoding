@@ -19,9 +19,17 @@ import com.xceptance.xlt.nocoding.util.ParserUtils;
 public class RequestParser extends AbstractActionItemParser
 {
 
+    /**
+     * Parses a JsonNode to a request object
+     * 
+     * @param node
+     *            The node of the Request
+     * @return A list of all {@link AbstractActionItem}s.
+     */
     @Override
     public List<AbstractActionItem> parse(final JsonNode node) throws IOException
     {
+        // Initialize variables
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
         String url = "";
         String method = null;
@@ -32,21 +40,25 @@ public class RequestParser extends AbstractActionItemParser
         String body = null;
         String encodeBody = null;
 
+        // Get an iterator over the fieldNames
         final Iterator<String> fieldNames = node.fieldNames();
 
+        // As long as we have a fieldName
         while (fieldNames.hasNext())
         {
+            // Get it
             final String fieldName = fieldNames.next();
 
+            // Depending on the fieldName, we want to generally do the same thing but assign it to different variables
             switch (fieldName)
             {
                 case Constants.URL:
-                    url = node.get(fieldName).textValue();
+                    url = ParserUtils.readValue(node, fieldName);
                     // XltLogger.runTimeLogger.debug("URL: " + url);
                     break;
 
                 case Constants.METHOD:
-                    method = node.get(fieldName).textValue();
+                    method = ParserUtils.readValue(node, fieldName);
                     // XltLogger.runTimeLogger.debug("Method: " + method);
                     break;
 
@@ -62,16 +74,17 @@ public class RequestParser extends AbstractActionItemParser
                     break;
 
                 case Constants.PARAMETERS:
-                    // Parameter Magic
+                    // Create a new ParameterParser that parses parameters
                     parameters.addAll(new ParameterParser().parse(node.get(fieldName)));
                     break;
 
                 case Constants.HEADERS:
+                    // Create a new HeaderParser that parses headers
                     headers.putAll(new HeaderParser().parse(node.get(fieldName)));
                     break;
 
                 case Constants.BODY:
-                    body = node.get(fieldName).textValue();
+                    body = ParserUtils.readValue(node, fieldName);
                     // XltLogger.runTimeLogger.debug("Body: " + body);
                     break;
 
@@ -81,15 +94,18 @@ public class RequestParser extends AbstractActionItemParser
                     break;
 
                 default:
+                    // If there is an unknown field, throw an Exception
                     throw new IOException("No permitted request item: " + fieldName);
             }
         }
 
+        // If we do not have a url, throw an Exception
         if (url.equals(null) || url.equals(""))
         {
             throw new IOException("Url not specified");
         }
 
+        // Create request out of the data
         final Request request = new Request(url);
         request.setMethod(method);
         request.setXhr(xhr);
@@ -99,9 +115,12 @@ public class RequestParser extends AbstractActionItemParser
         request.setBody(body);
         request.setEncodeBody(encodeBody);
 
+        // Print a simple debug string, so you can see what was parsed
         XltLogger.runTimeLogger.info(request.toSimpleDebugString());
 
+        // Add the request to the actionItems
         actionItems.add(request);
+        // Return the actionItem list
         return actionItems;
     }
 
