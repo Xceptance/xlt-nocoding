@@ -11,7 +11,6 @@ import java.util.Map;
 import org.openqa.selenium.InvalidArgumentException;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.WebResponse;
@@ -24,49 +23,41 @@ public class Request extends AbstractActionItem
     /**
      * The URL of the website as String
      */
-    @JsonProperty(Constants.URL)
     private String url;
 
     /**
      * The HttpMethod for the webrequest. Defaults to "GET"
      */
-    @JsonProperty(Constants.METHOD)
     private String method;
 
     /**
      * Sets the WebRequest as Xhr request. Defaults to "false"
      */
-    @JsonProperty(Constants.XHR)
     private String xhr;
 
     /**
      * Defines if the parameters are encoded. Defaults to "false"
      */
-    @JsonProperty(Constants.ENCODEPARAMETERS)
     private String encodeParameters;
 
     /**
      * The list of all parameters
      */
-    @JsonProperty(Constants.PARAMETERS)
     private List<NameValuePair> parameters;
 
     /**
      * A map that define the headers
      */
-    @JsonProperty(Constants.HEADERS)
     private Map<String, String> headers;
 
     /**
      * The body of the WebRequest
      */
-    @JsonProperty(Constants.BODY)
     private String body;
 
     /**
      * Defines if the body is encoded. Defaults to "false"
      */
-    @JsonProperty(Constants.ENCODEBODY)
     private String encodeBody;
 
     /**
