@@ -14,17 +14,21 @@ public class StoreDefaultParameter extends StoreDefault
     @Override
     public void execute(final Context context) throws Throwable
     {
+        // If the value is not "delete"
         if (!value.equals("delete"))
         {
+            // Store the default parameter
             context.storeDefaultParameter(variableName, value);
             XltLogger.runTimeLogger.debug("Added " + variableName + "=" + value + " to default parameter storage");
         }
         else
         {
+            // If the variableName is Constants.PARAMETERS, then we delete all default parameters
             if (variableName.equals(Constants.PARAMETERS))
             {
                 context.deleteDefaultParameter();
             }
+            // else we simply delete the specified parameters
             else
             {
                 context.deleteDefaultParameter(variableName);

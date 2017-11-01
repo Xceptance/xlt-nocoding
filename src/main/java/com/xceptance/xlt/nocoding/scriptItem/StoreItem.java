@@ -22,6 +22,7 @@ public class StoreItem implements ScriptItem
     @Override
     public void execute(final Context context) throws Throwable
     {
+        // Store the variable
         context.storeVariable(variableName, value);
         XltLogger.runTimeLogger.info("Added Variable: " + variableName + " : " + value);
     }

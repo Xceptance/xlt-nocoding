@@ -9,19 +9,21 @@ public class StoreDefaultItem extends StoreDefault
     public StoreDefaultItem(final String variableName, final String value)
     {
         super(variableName, value);
-        // TODO Auto-generated constructor stub
     }
 
     @Override
     public void execute(final Context context) throws Throwable
     {
+        // If the value is not "delete"
         if (!value.equals("delete"))
         {
+            // Store the item in ConfigItems
             context.storeConfigItem(variableName, value);
             XltLogger.runTimeLogger.debug("Added " + variableName + "=" + value + " to default storage");
         }
         else
         {
+            // Delete the speicifed ConfigItem
             context.deleteConfigItem(variableName);
             XltLogger.runTimeLogger.debug("Removed " + variableName + " from default storage");
         }

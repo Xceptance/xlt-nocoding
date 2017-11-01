@@ -20,17 +20,21 @@ public class StoreDefaultStatic extends StoreDefault
     @Override
     public void execute(final Context context) throws Throwable
     {
+        // If the value is not "delete"
         if (!value.equals("delete"))
         {
+            // Store the url
             context.storeDefaultStatic(value);
             XltLogger.runTimeLogger.debug("Added " + variableName + "=" + value + " to default static request storage");
         }
         else
         {
+            // If the variableName is Constants.STATIC, then we delete all default static request urls
             if (variableName.equals(Constants.STATIC))
             {
                 context.deleteDefaultStatic();
             }
+            // else we simply delete the specified parameters
             else
             {
                 context.deleteDefaultStatic(variableName);
