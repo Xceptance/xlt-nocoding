@@ -198,29 +198,43 @@ public class Request extends AbstractActionItem
          * Set default parameters
          */
 
-        // Get default parameters
-        final Map<String, String> defaultParameters = context.getDefaultParameters();
-        // Overwrite the default values with the current ones and/or add the current ones
-        for (final NameValuePair parameters : getParameters())
+        if (context.getDefaultParameters() != null)
         {
-            defaultParameters.put(parameters.getName(), parameters.getValue());
+            // Get default parameters
+            final Map<String, String> defaultParameters = context.getDefaultParameters();
+            // Overwrite the default values with the current ones and/or add the current ones
+            if (getParameters() != null)
+            {
+                for (final NameValuePair parameters : getParameters())
+                {
+                    defaultParameters.put(parameters.getName(), parameters.getValue());
+                }
+            }
+            // Create new list in which we store the all parameters
+            final List<NameValuePair> newParameters = new ArrayList<NameValuePair>(defaultParameters.size());
+            defaultParameters.forEach((key, value) -> {
+                newParameters.add(new NameValuePair(key, value));
+            });
+            // Assign newParameters to the parameters for this request
+            setParameters(newParameters);
         }
-        // Create new list in which we store the all parameters
-        final List<NameValuePair> newParameters = new ArrayList<NameValuePair>(defaultParameters.size());
-        defaultParameters.forEach((key, value) -> {
-            newParameters.add(new NameValuePair(key, value));
-        });
-        // Assign newParameters to the parameters for this request
-        setParameters(newParameters);
 
         /*
          * Set default headers
          */
 
-        // Get the default headers
-        final Map<String, String> defaultHeaders = context.getDefaultHeaders();
-        // Overwrite the default values with the current ones and/or add the current ones
-        defaultHeaders.putAll(getHeaders());
+        if (context.getDefaultHeaders() != null)
+        {
+            // Get the default headers
+            final Map<String, String> defaultHeaders = context.getDefaultHeaders();
+            // Overwrite the default values with the current ones and/or add the current ones
+            if (getHeaders() != null)
+            {
+                defaultHeaders.putAll(getHeaders());
+            }
+            // Assign default headers as headers for this request
+            setHeaders(defaultHeaders);
+        }
 
         if (this.getBody() == null)
         {
@@ -230,6 +244,7 @@ public class Request extends AbstractActionItem
         {
             setEncodeBody(context.getConfigItemByKey(Constants.ENCODEBODY));
         }
+
     }
 
     /**
@@ -438,14 +453,6 @@ public class Request extends AbstractActionItem
         final String output = "Request-URL: " + url + " with Method." + method;
 
         return output;
-    }
-
-    /**
-     * Resolves the variable
-     */
-    public void testResolveVariable(final Context context)
-    {
-        this.resolveValues(context);
     }
 
 }

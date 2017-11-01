@@ -1,6 +1,7 @@
 package com.xceptance.xlt.nocoding.rebuild.scriptItem.action;
 
-import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import org.openqa.selenium.InvalidArgumentException;
 import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
+import com.xceptance.common.lang.ReflectionUtils;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.util.Constants;
@@ -33,6 +35,8 @@ public class RequestTest
 
     public Context context;
 
+    private final String url = "https://localhost:8443/posters/";
+
     @Before
     public void init()
     {
@@ -40,9 +44,8 @@ public class RequestTest
     }
 
     @Test
-    public void buildWebRequest()
+    public void buildWebRequest() throws InvalidArgumentException, MalformedURLException
     {
-        final String url = "https://localhost:8443/posters/";
         final HttpMethod method = HttpMethod.GET;
         final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
         final String body = null;
@@ -59,47 +62,38 @@ public class RequestTest
         request.setEncodeParameters(encodeParameters.toString());
         request.setHeaders(headers);
         request.setXhr(xhr.toString());
-
-        try
+        webRequest = request.buildWebRequest();
+        // URL, Method
+        final WebRequest expected = new WebRequest(new URL(url), method);
+        // Parameters
+        expected.setRequestParameters(parameters);
+        // Headers
+        expected.setAdditionalHeaders(headers);
+        if (xhr)
         {
-            webRequest = request.buildWebRequest();
-            // URL, Method
-            final WebRequest expected = new WebRequest(new URL(url), method);
-            // Parameters
-            expected.setRequestParameters(parameters);
-            // Headers
-            expected.setAdditionalHeaders(headers);
-            if (xhr)
-            {
-                expected.setXHR();
-            }
-            if (expected.getHttpMethod() == HttpMethod.POST || expected.getHttpMethod() == HttpMethod.PUT
-                || expected.getHttpMethod() == HttpMethod.PATCH)
-            {
-                expected.setRequestBody(body);
-            }
-
-            Assert.assertEquals(expected.getRequestBody(), webRequest.getRequestBody());
-            Assert.assertEquals(expected.getRequestParameters(), webRequest.getRequestParameters());
-            Assert.assertEquals(expected.getAdditionalHeaders(), webRequest.getAdditionalHeaders());
-            Assert.assertEquals(expected.getHttpMethod(), webRequest.getHttpMethod());
-            Assert.assertEquals(expected.getUrl(), webRequest.getUrl());
-            Assert.assertEquals(expected.isXHR(), webRequest.isXHR());
-            Assert.assertEquals(expected.toString(), webRequest.toString());
-
+            expected.setXHR();
         }
-        catch (InvalidArgumentException | MalformedURLException e)
+        if (expected.getHttpMethod() == HttpMethod.POST || expected.getHttpMethod() == HttpMethod.PUT
+            || expected.getHttpMethod() == HttpMethod.PATCH)
         {
-            e.printStackTrace();
+            expected.setRequestBody(body);
         }
+
+        Assert.assertEquals(expected.getRequestBody(), webRequest.getRequestBody());
+        Assert.assertEquals(expected.getRequestParameters(), webRequest.getRequestParameters());
+        Assert.assertEquals(expected.getAdditionalHeaders(), webRequest.getAdditionalHeaders());
+        Assert.assertEquals(expected.getHttpMethod(), webRequest.getHttpMethod());
+        Assert.assertEquals(expected.getUrl(), webRequest.getUrl());
+        Assert.assertEquals(expected.isXHR(), webRequest.isXHR());
+        Assert.assertEquals(expected.toString(), webRequest.toString());
 
     }
 
     @Test
     public void buildWebRequestWithVariables()
+        throws InvalidArgumentException, MalformedURLException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
     {
         String key, value;
-        final String url = "https://localhost:8443/posters/";
         final HttpMethod method = HttpMethod.GET;
         final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
         final String body = null;
@@ -178,47 +172,69 @@ public class RequestTest
         request.setHeaders(headers_var);
         request.setXhr(xhr_var);
 
-        try
+        resolveValues(request, context);
+
+        webRequest = request.buildWebRequest();
+        // URL, Method
+        final WebRequest expected = new WebRequest(new URL(url), method);
+        // Parameters
+        expected.setRequestParameters(parameters);
+        // Headers
+        expected.setAdditionalHeaders(headers);
+        if (xhr)
         {
-            request.testResolveVariable(context);
-
-            webRequest = request.buildWebRequest();
-            // URL, Method
-            final WebRequest expected = new WebRequest(new URL(url), method);
-            // Parameters
-            expected.setRequestParameters(parameters);
-            // Headers
-            expected.setAdditionalHeaders(headers);
-            if (xhr)
-            {
-                expected.setXHR();
-            }
-            if (expected.getHttpMethod() == HttpMethod.POST || expected.getHttpMethod() == HttpMethod.PUT
-                || expected.getHttpMethod() == HttpMethod.PATCH)
-            {
-                expected.setRequestBody(body);
-            }
-
-            Assert.assertEquals(expected.getRequestBody(), webRequest.getRequestBody());
-            Assert.assertEquals(expected.getRequestParameters(), webRequest.getRequestParameters());
-            Assert.assertEquals(expected.getAdditionalHeaders(), webRequest.getAdditionalHeaders());
-            Assert.assertEquals(expected.getHttpMethod(), webRequest.getHttpMethod());
-            Assert.assertEquals(expected.getUrl(), webRequest.getUrl());
-            Assert.assertEquals(expected.isXHR(), webRequest.isXHR());
-            Assert.assertEquals(expected.toString(), webRequest.toString());
-
+            expected.setXHR();
         }
-        catch (InvalidArgumentException | IOException e)
+        if (expected.getHttpMethod() == HttpMethod.POST || expected.getHttpMethod() == HttpMethod.PUT
+            || expected.getHttpMethod() == HttpMethod.PATCH)
         {
-            e.printStackTrace();
+            expected.setRequestBody(body);
         }
+
+        Assert.assertEquals(expected.getRequestBody(), webRequest.getRequestBody());
+        Assert.assertEquals(expected.getRequestParameters(), webRequest.getRequestParameters());
+        Assert.assertEquals(expected.getAdditionalHeaders(), webRequest.getAdditionalHeaders());
+        Assert.assertEquals(expected.getHttpMethod(), webRequest.getHttpMethod());
+        Assert.assertEquals(expected.getUrl(), webRequest.getUrl());
+        Assert.assertEquals(expected.isXHR(), webRequest.isXHR());
+        Assert.assertEquals(expected.toString(), webRequest.toString());
 
     }
 
     @Test(expected = NullPointerException.class)
-    public void testInvalidDeclaration() throws InvalidArgumentException, MalformedURLException
+    public void testInvalidDeclaration()
+        throws InvalidArgumentException, MalformedURLException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
     {
-        final Request request = new Request(null);
-        request.testResolveVariable(context);
+        request = new Request(null);
+        resolveValues(request, context);
+    }
+
+    @Test
+    public void testDefaultData()
+        throws InvalidArgumentException, MalformedURLException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
+    {
+        request = new Request(url);
+        fillDefaultData(request, context);
+        webRequest = request.buildWebRequest();
+
+        // Normally, Method, Xhr, Encode-Parameters, and Encode-Body are set
+        Assert.assertEquals(HttpMethod.GET, webRequest.getHttpMethod());
+        Assert.assertFalse(webRequest.isXHR());
+        Assert.assertFalse(Boolean.getBoolean(request.getEncodeParameters()));
+        Assert.assertFalse(Boolean.getBoolean(request.getEncodeParameters()));
+    }
+
+    private void resolveValues(final Request request, final Context context)
+        throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
+    {
+        final Method method = ReflectionUtils.getMethod(request.getClass(), "resolveValues", Context.class);
+        method.invoke(request, context);
+    }
+
+    private void fillDefaultData(final Request request, final Context context)
+        throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
+    {
+        final Method method = ReflectionUtils.getMethod(request.getClass(), "fillDefaultData", Context.class);
+        method.invoke(request, context);
     }
 }

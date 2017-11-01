@@ -67,7 +67,7 @@ public class Context
      */
     public void initialize()
     {
-        getDataStorage().loadDefaultConfig();
+        loadDefaultConfig();
         configureWebClient();
     }
 
@@ -418,6 +418,14 @@ public class Context
     private void configureWebClient()
     {
         getPropertyAdmin().configWebClient(webClient);
+    }
+
+    /**
+     * Loads the default definitions
+     */
+    private void loadDefaultConfig()
+    {
+        getDataStorage().loadDefaultConfig();
     }
 
 }
