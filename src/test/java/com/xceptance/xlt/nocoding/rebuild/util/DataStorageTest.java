@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.rebuild.util.context;
+package com.xceptance.xlt.nocoding.rebuild.util;
 
 import org.junit.Assert;
 import org.junit.Before;

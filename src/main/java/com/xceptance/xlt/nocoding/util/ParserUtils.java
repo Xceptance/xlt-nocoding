@@ -233,6 +233,7 @@ public class ParserUtils
         {
             node.get(fieldName).textValue();
         }
+        // TODO Null or Missing?
         else if (type.equals(JsonNodeType.NULL))
         {
             value = null;
@@ -268,6 +269,7 @@ public class ParserUtils
         {
             value = node.textValue();
         }
+        // TODO Null or Missing?
         else if (type.equals(JsonNodeType.NULL))
         {
             value = null;
