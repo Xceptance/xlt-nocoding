@@ -133,29 +133,7 @@ public class ParserUtils
      */
     public static String readValue(final JsonNode node, final String fieldName)
     {
-        String value = null;
-        final JsonNodeType type = node.get(fieldName).getNodeType();
-        if (type.equals(JsonNodeType.BOOLEAN))
-        {
-            value = Boolean.toString(node.get(fieldName).asBoolean());
-        }
-        else if (type.equals(JsonNodeType.NUMBER))
-        {
-            value = Integer.toString(node.get(fieldName).asInt());
-        }
-        else if (type.equals(JsonNodeType.STRING))
-        {
-            value = node.get(fieldName).textValue();
-        }
-        else if (type.equals(JsonNodeType.NULL))
-        {
-            value = null;
-        }
-        else
-        {
-            throw new JsonParseException("Unknown node type");
-        }
-        return value;
+        return ParserUtils.readSingleValue(node.get(fieldName));
     }
 
     /**
