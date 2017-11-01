@@ -20,8 +20,9 @@ public class HeaderStore extends AbstractResponseStore
     }
 
     @Override
-    public void store(final Context context, final WebResponse webResponse) throws Exception
+    public void execute(final Context context) throws Exception
     {
+        final WebResponse webResponse = context.getWebResponse();
         // Resolve variables
         resolveValues(context);
 
@@ -36,7 +37,7 @@ public class HeaderStore extends AbstractResponseStore
             if (header.getName().equals(getHeader()))
             {
                 // And store the header
-                context.getDataStorage().storeVariable(getVariableName(), header.getValue());
+                context.storeVariable(getVariableName(), header.getValue());
 
                 // At last, set throwException to false, so we know, that we found our specified header.
                 throwException = false;

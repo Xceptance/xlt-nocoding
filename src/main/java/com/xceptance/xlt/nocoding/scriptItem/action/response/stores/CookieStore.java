@@ -18,8 +18,9 @@ public class CookieStore extends AbstractResponseStore
     }
 
     @Override
-    public void store(final Context context, final WebResponse webResponse) throws Exception
+    public void execute(final Context context) throws Exception
     {
+        final WebResponse webResponse = context.getWebResponse();
         // Resolve variables
         resolveValues(context);
 
@@ -46,7 +47,7 @@ public class CookieStore extends AbstractResponseStore
                     // Content starts after the equal sign (position+1) and ends before the semicolon
                     final String cookieContent = header.getValue().substring(cookie.length() + 1, semicolonPosition);
                     // And store the content in our storage
-                    context.getDataStorage().storeVariable(getVariableName(), cookieContent);
+                    context.storeVariable(getVariableName(), cookieContent);
 
                     // At last, set throwException to false, so we know, that we found our specified cookie.
                     throwException = false;

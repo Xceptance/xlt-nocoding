@@ -27,8 +27,9 @@ public class CookieValidator extends AbstractValidator
     }
 
     @Override
-    public void validate(final Context context, final WebResponse webResponse) throws Exception
+    public void execute(final Context context) throws Exception
     {
+        final WebResponse webResponse = context.getWebResponse();
         // Resolve variables
         resolveValues(context);
 

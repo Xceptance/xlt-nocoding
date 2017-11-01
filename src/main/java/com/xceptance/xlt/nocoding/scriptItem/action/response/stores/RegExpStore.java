@@ -30,30 +30,38 @@ public class RegExpStore extends AbstractResponseStore
     }
 
     @Override
-    public void store(final Context context, final WebResponse webResponse) throws Exception
+    public void execute(final Context context) throws Exception
     {
+        final WebResponse webResponse = context.getWebResponse();
+        // Resolve values
         resolveValues(context);
-        // TODO check for mode - throw error if not lightweight mode
-        // if(propertyManager.mode = dom)
-        // throw new IllegalStateException("Cannot use a regular expression in dom mode. Please use the lightweight mode.");
+
+        // Create a lightWeightPage so we can get the content
         final LightWeightPage page = new LightWeightPage(webResponse, context.getWebClient().getTimerName());
+        // Get the content
         final String pageContent = page.getContent();
         String foundContent = null;
+        // Compile the pattern and match it
         final Matcher matcher = Pattern.compile(getPattern()).matcher(pageContent);
+        // If we found something
         if (matcher.find())
         {
+            // If we have a group specified
             if (getGroup() != null)
             {
+                // Extract the match
                 foundContent = matcher.group(Integer.parseInt(getGroup()));
             }
             else
             {
+                // Extract the match
                 foundContent = matcher.group();
             }
         }
-
-        Assert.assertNotNull("Couldn't find anything with the regexp", foundContent);
-        context.getDataStorage().storeVariable(getVariableName(), foundContent);
+        // Assert that we found a match
+        Assert.assertNotNull("Couldn't find anything with the pattern: " + getPattern(), foundContent);
+        // And store the match as variable
+        context.storeVariable(getVariableName(), foundContent);
     }
 
     /**

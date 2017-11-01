@@ -1,6 +1,5 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response.validators;
 
-import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.nocoding.util.Context;
 
 public class XPathValidator extends AbstractValidator
@@ -26,7 +25,7 @@ public class XPathValidator extends AbstractValidator
     }
 
     @Override
-    public void validate(final Context context, final WebResponse webResponse) throws Exception
+    public void execute(final Context context) throws Exception
     {
         // TODO Auto-generated method stub
 

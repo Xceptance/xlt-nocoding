@@ -68,8 +68,9 @@ public class RegExpValidator extends AbstractValidator
     }
 
     @Override
-    public void validate(final Context context, final WebResponse webResponse) throws Exception
+    public void execute(final Context context) throws Exception
     {
+        final WebResponse webResponse = context.getWebResponse();
         XltLogger.runTimeLogger.debug("Starting Validation of " + getValidationName());
         // Resolve variables
         resolveValues(context);

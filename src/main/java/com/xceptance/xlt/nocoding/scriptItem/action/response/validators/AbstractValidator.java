@@ -1,9 +1,8 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response.validators;
 
-import com.gargoylesoftware.htmlunit.WebResponse;
-import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseItem;
 
-public abstract class AbstractValidator
+public abstract class AbstractValidator implements AbstractResponseItem
 {
     protected final String validationName;
 
@@ -11,8 +10,6 @@ public abstract class AbstractValidator
     {
         this.validationName = validationName;
     }
-
-    public abstract void validate(final Context context, final WebResponse webResponse) throws Exception;
 
     public String getValidationName()
     {

@@ -9,9 +9,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.parser.yamlParser.actionItems.AbstractActionItemParser;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.AbstractResponseStore;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.AbstractValidator;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
@@ -32,8 +31,7 @@ public class ResponseParser extends AbstractActionItemParser
         // Initialize variables
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
         String httpcode = null;
-        final List<AbstractValidator> validators = new ArrayList<AbstractValidator>();
-        final List<AbstractResponseStore> responseStore = new ArrayList<AbstractResponseStore>();
+        final List<AbstractResponseItem> responseItems = new ArrayList<AbstractResponseItem>();
 
         // Get an iterator over the fieldNames
         final Iterator<String> fieldNames = node.fieldNames();
@@ -51,12 +49,12 @@ public class ResponseParser extends AbstractActionItemParser
                     break;
 
                 case Constants.VALIDATION:
-                    validators.addAll(new ValidationParser().parse(node.get(fieldName)));
+                    responseItems.addAll(new ValidationParser().parse(node.get(fieldName)));
                     XltLogger.runTimeLogger.debug("Added Validation");
                     break;
 
                 case Constants.STORE:
-                    responseStore.addAll(new ResponseStoreParser().parse(node.get(fieldName)));
+                    responseItems.addAll(new ResponseStoreParser().parse(node.get(fieldName)));
                     XltLogger.runTimeLogger.debug("Added Validation");
                     break;
 
@@ -65,7 +63,7 @@ public class ResponseParser extends AbstractActionItemParser
             }
         }
 
-        actionItems.add(new Response(httpcode, responseStore, validators));
+        actionItems.add(new Response(httpcode, responseItems));
         return actionItems;
     }
 
