@@ -65,7 +65,7 @@ public class ValidationParser
                                 }
                                 else if (left.equals(Constants.COUNT))
                                 {
-                                    count = ParserUtils.readExpectedIntegerValue(storeContent, left);
+                                    count = ParserUtils.readValue(storeContent, left);
                                     // count = storeContent.get(left).textValue();
                                 }
                             }
@@ -84,7 +84,7 @@ public class ValidationParser
                                 // if we have yet another name, this is the optional group
                                 if (name.hasNext())
                                 {
-                                    group = ParserUtils.readExpectedIntegerValue(storeContent, name.next());
+                                    group = ParserUtils.readValue(storeContent, name.next());
                                     // group = storeContent.get(name.next()).textValue();
                                 }
                             }
@@ -101,7 +101,7 @@ public class ValidationParser
                                 textOrCountDecider = name.next();
                                 if (textOrCountDecider.equals(Constants.COUNT))
                                 {
-                                    textOrCount = ParserUtils.readExpectedIntegerValue(storeContent, textOrCountDecider);
+                                    textOrCount = ParserUtils.readValue(storeContent, textOrCountDecider);
                                 }
                                 else
                                 {

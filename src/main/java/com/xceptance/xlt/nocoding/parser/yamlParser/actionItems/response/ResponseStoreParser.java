@@ -63,7 +63,7 @@ public class ResponseStoreParser
                             // if we have another fieldName, this means the optional group is specified
                             if (name.hasNext())
                             {
-                                group = ParserUtils.readExpectedIntegerValue(storeContent, name.next());
+                                group = ParserUtils.readValue(storeContent, name.next());
                                 // group = storeContent.get(name.next()).textValue();
                             }
                             responseStore.add(new RegExpStore(variableName, pattern, group));

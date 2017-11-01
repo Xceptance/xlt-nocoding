@@ -51,13 +51,13 @@ public class RequestParser extends AbstractActionItemParser
                     break;
 
                 case Constants.XHR:
-                    xhr = ParserUtils.readExpectedBooleanValue(node, fieldName);
+                    xhr = ParserUtils.readValue(node, fieldName);
                     // final String xhr2 = node.get(fieldName).textValue();
                     // XltLogger.runTimeLogger.debug("Xhr: " + xhr);
                     break;
 
                 case Constants.ENCODEPARAMETERS:
-                    encodeParameters = ParserUtils.readExpectedBooleanValue(node, fieldName);
+                    encodeParameters = ParserUtils.readValue(node, fieldName);
                     // XltLogger.runTimeLogger.debug("EncodeParameters: " + encodeParameters);
                     break;
 
@@ -76,7 +76,7 @@ public class RequestParser extends AbstractActionItemParser
                     break;
 
                 case Constants.ENCODEBODY:
-                    encodeBody = ParserUtils.readExpectedBooleanValue(node, fieldName);
+                    encodeBody = ParserUtils.readValue(node, fieldName);
                     // XltLogger.runTimeLogger.debug("EncodeBody: " + encodeBody);
                     break;
 

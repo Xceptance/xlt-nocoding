@@ -124,75 +124,12 @@ public class ParserUtils
     }
 
     /**
-     * Parses an expected boolean value at node with the field name fieldName
-     * 
-     * @param node
-     * @param fieldName
-     * @return
-     */
-    public static String readExpectedBooleanValue(final JsonNode node, final String fieldName)
-    {
-        String value = node.get(fieldName).textValue();
-
-        if (value == null)
-        {
-            // We didn't get a variable
-            value = Boolean.toString(node.get(fieldName).asBoolean());
-        }
-        return value;
-    }
-
-    /**
-     * Parses an expected integer value at node with the field name fieldName
-     * 
-     * @param node
-     * @param fieldName
-     * @return
-     */
-    public static String readExpectedIntegerValue(final JsonNode node, final String fieldName)
-    {
-        // get node type!
-        // node.getNodeType()
-        String value = node.get(fieldName).textValue();
-
-        if (value == null)
-        {
-            // We didn't get a variable
-            value = Integer.toString(node.get(fieldName).asInt());
-        }
-        return value;
-    }
-
-    /**
      * Parses an expected string value at node with the field name fieldName. However, if we get null, we try to parse it as
      * boolean and then as integer
      * 
      * @param node
      * @param fieldName
-     * @return
-     */
-    public static String readExpectedStringValue(final JsonNode node, final String fieldName)
-    {
-        String value = node.get(fieldName).textValue();
-
-        if (value == null)
-        {
-            value = readExpectedBooleanValue(node, fieldName);
-            if (value == null)
-            {
-                value = readExpectedIntegerValue(node, fieldName);
-            }
-        }
-        return value;
-    }
-
-    /**
-     * Parses an expected string value at node with the field name fieldName. However, if we get null, we try to parse it as
-     * boolean and then as integer
-     * 
-     * @param node
-     * @param fieldName
-     * @return
+     * @return The value as {@link String}
      */
     public static String readValue(final JsonNode node, final String fieldName)
     {
@@ -208,9 +145,8 @@ public class ParserUtils
         }
         else if (type.equals(JsonNodeType.STRING))
         {
-            node.get(fieldName).textValue();
+            value = node.get(fieldName).textValue();
         }
-        // TODO Null or Missing?
         else if (type.equals(JsonNodeType.NULL))
         {
             value = null;
@@ -228,7 +164,7 @@ public class ParserUtils
      * 
      * @param node
      * @param fieldName
-     * @return
+     * @return The value as {@link String}
      */
     public static String readSingleValue(final JsonNode node)
     {
@@ -246,10 +182,9 @@ public class ParserUtils
         {
             value = node.textValue();
         }
-        // TODO Null or Missing?
         else if (type.equals(JsonNodeType.NULL))
         {
-            value = null;
+            value = "";
         }
         else
         {

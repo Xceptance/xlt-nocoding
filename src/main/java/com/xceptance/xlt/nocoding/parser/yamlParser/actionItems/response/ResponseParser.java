@@ -47,7 +47,7 @@ public class ResponseParser extends AbstractActionItemParser
             switch (fieldName)
             {
                 case Constants.HTTPCODE:
-                    httpcode = ParserUtils.readExpectedIntegerValue(node, fieldName);
+                    httpcode = ParserUtils.readValue(node, fieldName);
                     XltLogger.runTimeLogger.debug("Added Httpcode " + httpcode);
                     break;
 
