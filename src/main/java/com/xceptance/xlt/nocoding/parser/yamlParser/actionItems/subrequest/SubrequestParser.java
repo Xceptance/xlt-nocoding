@@ -11,6 +11,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
 import com.xceptance.xlt.nocoding.util.Constants;
+import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 public class SubrequestParser extends AbstractActionItemParser
 {
@@ -26,41 +27,50 @@ public class SubrequestParser extends AbstractActionItemParser
     @Override
     public List<AbstractActionItem> parse(final JsonNode node) throws IOException
     {
-        // TODO Auto-generated method stub
+        // Initialize Variables
         final List<AbstractSubrequest> subrequest = new ArrayList<AbstractSubrequest>();
 
+        // Get an iterator over the elements
         final Iterator<JsonNode> iterator = node.elements();
 
+        // Iterate over the elements
         while (iterator.hasNext())
         {
+            // Get the current node
             final JsonNode current = iterator.next();
+            // Get the fieldNames of the current node
             final Iterator<String> fieldNames = current.fieldNames();
 
-            // the type of subrequest
+            // Iterate over the fieldNames
             while (fieldNames.hasNext())
             {
+                // Extract the first fieldName, which specifies which kind of subrequest this is
                 final String fieldName = fieldNames.next();
                 switch (fieldName)
                 {
                     case Constants.XHR:
+                        // Create an XhrSubrequestParser and parse it
                         subrequest.add(new XhrSubrequestParser().parse(current.get(fieldName)));
                         break;
 
                     case Constants.STATIC:
-                        // System.out.println(current.get(name));
+                        // Create a list of urls
                         final List<String> urls = new ArrayList<String>();
+                        // Get the node with the urls
                         final JsonNode staticUrls = current.get(fieldName);
-
+                        // Create an iterator over the elements
                         final Iterator<JsonNode> staticUrlsIterator = staticUrls.elements();
                         while (staticUrlsIterator.hasNext())
                         {
-                            final String url = staticUrlsIterator.next().textValue();
+                            // Read the url
+                            final String url = ParserUtils.readSingleValue(staticUrlsIterator.next());
+                            // Add it to the list
                             urls.add(url);
                         }
                         // Catch empty url list
                         if (urls.isEmpty())
                         {
-                            throw new IOException("No urls found");
+                            throw new IllegalArgumentException("No urls found");
                         }
 
                         // Add all request to the static subrequests
