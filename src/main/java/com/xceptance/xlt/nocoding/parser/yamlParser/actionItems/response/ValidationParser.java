@@ -95,7 +95,8 @@ public class ValidationParser
                             if (name.hasNext())
                             {
                                 String nextName = name.next();
-                                if (nextName.equals(Constants.TEXT))
+                                // TODO Text vs Matches
+                                if (nextName.equals(Constants.TEXT) || nextName.equals(Constants.MATCHES))
                                 {
                                     text = ParserUtils.readValue(storeContent, nextName);
                                     // if we have yet another fieldName, the optional group is specified

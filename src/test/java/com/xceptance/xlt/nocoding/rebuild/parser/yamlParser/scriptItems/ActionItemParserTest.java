@@ -96,24 +96,28 @@ public class ActionItemParserTest extends ParserTest
         final Response response = (Response) action.getActionItems().get(1);
         Assert.assertEquals("400", response.getHttpcode());
         // Assert validator
-        AbstractValidator validation = response.getValidation().get(0);
+        Assert.assertTrue(response.getResponseItems().get(0) instanceof AbstractValidator);
+        AbstractValidator validation = (AbstractValidator) response.getResponseItems().get(0);
         Assert.assertTrue(validation instanceof XPathValidator);
         final XPathValidator xpathVal = (XPathValidator) validation;
         Assert.assertEquals("validation_name_1", xpathVal.getValidationName());
         Assert.assertEquals("xpath_value_1", xpathVal.getxPathExpression());
-        validation = response.getValidation().get(1);
+        Assert.assertTrue(response.getResponseItems().get(1) instanceof AbstractValidator);
+        validation = (AbstractValidator) response.getResponseItems().get(1);
         Assert.assertTrue(validation instanceof RegExpValidator);
         final RegExpValidator regExpVal = (RegExpValidator) validation;
         Assert.assertEquals("validation_name_2", regExpVal.getValidationName());
         Assert.assertEquals("regexp_value_2", regExpVal.getPattern());
         Assert.assertEquals("matches_value_2", regExpVal.getText());
         // Assert store
-        AbstractResponseStore store = response.getResponseStore().get(0);
+        Assert.assertTrue(response.getResponseItems().get(2) instanceof AbstractResponseStore);
+        AbstractResponseStore store = (AbstractResponseStore) response.getResponseItems().get(2);
         Assert.assertTrue(store instanceof XpathStore);
         final XpathStore xpathStore = (XpathStore) store;
         Assert.assertEquals("variable_1", xpathStore.getVariableName());
         Assert.assertEquals("xpath_1", xpathStore.getxPathExpression());
-        store = response.getResponseStore().get(1);
+        Assert.assertTrue(response.getResponseItems().get(3) instanceof AbstractResponseStore);
+        store = (AbstractResponseStore) response.getResponseItems().get(3);
         Assert.assertTrue(store instanceof RegExpStore);
         final RegExpStore regExpStore = (RegExpStore) store;
         Assert.assertEquals("variable_2", regExpStore.getVariableName());

@@ -104,8 +104,10 @@ public class StoreTest
         final String header = "Cache-Control";
         // Build the store unit that searches for the header
         store = new HeaderStore("header", header);
-        // Validate
-        store.store(context, webResponse);
+
+        context.setWebResponse(webResponse);
+        // Execute
+        store.execute(context);
 
         final String actual = context.resolveString("${header}");
         Assert.assertEquals("no-cache, no-store, max-age=0, must-revalidate", actual);
@@ -132,8 +134,9 @@ public class StoreTest
         // Define the content of the cookie
         // Build the store unit that searches only for the cookie
         store = new CookieStore("cookie", cookie);
-        // Validate
-        store.store(context, webResponse);
+        context.setWebResponse(webResponse);
+        // Execute
+        store.execute(context);
 
         final String text = "success=Login+successful.+Have+fun+in+our+shop%21";
         final String actual = context.resolveString("${cookie}");
@@ -156,8 +159,9 @@ public class StoreTest
 
         // Build a validator, that searches for the pattern and verifies text is the first match
         store = new RegExpStore("firstClass", pattern);
-        // Validate
-        store.store(context, webResponse);
+        context.setWebResponse(webResponse);
+        // Execute
+        store.execute(context);
 
         String actual = context.resolveString("${firstClass}");
         Assert.assertEquals(text, actual);
@@ -166,8 +170,9 @@ public class StoreTest
         final String group = "1";
         // Build a validator, that searches for the pattern and verifies text is the match in the matching group of group
         store = new RegExpStore("firstClassWithGroup", pattern, group);
-        // Validate
-        store.store(context, webResponse);
+        context.setWebResponse(webResponse);
+        // Execute
+        store.execute(context);
 
         actual = context.resolveString("${firstClassWithGroup}");
         Assert.assertEquals(text, actual);

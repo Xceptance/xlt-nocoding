@@ -108,16 +108,19 @@ public class ValidatorTest
         final String count = "1";
         // Build the validator that searches for the header
         validator = new HeaderValidator("HeaderValidation Standard", header);
-        // Validate
-        validator.validate(context, webResponse);
+        context.setWebResponse(webResponse);
+        // Execute
+        validator.execute(context);
         // Build the validator, that validates the content of the header equals text
         validator = new HeaderValidator("HeaderValidation Text", header, Constants.TEXT, text);
-        // Validate
-        validator.validate(context, webResponse);
+        context.setWebResponse(webResponse);
+        // Execute
+        validator.execute(context);
         // Build the validator that validates the number of occurences of the header equals count
         validator = new HeaderValidator("HeaderValidation Count", header, Constants.COUNT, count);
-        // Validate
-        validator.validate(context, webResponse);
+        context.setWebResponse(webResponse);
+        // Execute
+        validator.execute(context);
     }
 
     @Test
@@ -141,12 +144,14 @@ public class ValidatorTest
         final String text = "success=Login+successful.+Have+fun+in+our+shop%21";
         // Build the validator that searches only for the cookie
         validator = new CookieValidator("CookieValidation Standard", cookie);
-        // Validate
-        validator.validate(context, webResponse);
+        context.setWebResponse(webResponse);
+        // Execute
+        validator.execute(context);
         // Build another validator that searches for the cookie and verifies the content equals text
         validator = new CookieValidator("CookieValidation Text", cookie, text);
-        // Validate
-        validator.validate(context, webResponse);
+        context.setWebResponse(webResponse);
+        // Execute
+        validator.execute(context);
     }
 
     @Test
@@ -167,16 +172,20 @@ public class ValidatorTest
 
         // Build a validator, that searches for the pattern
         validator = new RegExpValidator("RegExpValidation Standard", pattern);
-        // Validate
-        validator.validate(context, webResponse);
+        context.setWebResponse(webResponse);
+        // Execute
+        validator.execute(context);
         // Build a validator, that searches for the pattern and verifies text is the first match
         validator = new RegExpValidator("RegExpValidation Text", pattern, text);
-        // Validate
-        validator.validate(context, webResponse);
+        context.setWebResponse(webResponse);
+        // Execute
+        validator.execute(context);
+        ;
         // Build a validator, that searches for the pattern and verifies text is the match in the matching group of group
         validator = new RegExpValidator("RegExpValidation Text+Group", pattern, text, group);
-        // Validate
-        validator.validate(context, webResponse);
+        context.setWebResponse(webResponse);
+        // Execute
+        validator.execute(context);
     }
 
     @Test
@@ -201,16 +210,19 @@ public class ValidatorTest
         final String count = "${count_1}";
         // Build the validator that searches for the header
         validator = new HeaderValidator("HeaderValidationVariable Standard", header);
-        // Validate
-        validator.validate(context, webResponse);
+        context.setWebResponse(webResponse);
+        // Execute
+        validator.execute(context);
         // Build the validator, that validates the content of the header equals text
         validator = new HeaderValidator("HeaderValidationVariable Text", header, Constants.TEXT, text);
-        // Validate
-        validator.validate(context, webResponse);
+        context.setWebResponse(webResponse);
+        // Execute
+        validator.execute(context);
         // Build the validator that validates the number of occurences of the header equals count
         validator = new HeaderValidator("HeaderValidationVariable Count", header, Constants.COUNT, count);
-        // Validate
-        validator.validate(context, webResponse);
+        context.setWebResponse(webResponse);
+        // Execute
+        validator.execute(context);
     }
 
     @Test
@@ -240,12 +252,14 @@ public class ValidatorTest
         final String text = "${cookie_content_name}=${cookie_content_value}";
         // Build the validator that searches only for the cookie
         validator = new CookieValidator("CookieValidationVariable Standard", cookie);
-        // Validate
-        validator.validate(context, webResponse);
+        context.setWebResponse(webResponse);
+        // Execute
+        validator.execute(context);
         // Build another validator that searches for the cookie and verifies the content equals text
         validator = new CookieValidator("CookieValidationVariable Text", cookie, text);
-        // Validate
-        validator.validate(context, webResponse);
+        context.setWebResponse(webResponse);
+        // Execute
+        validator.execute(context);
     }
 
     @Test
@@ -272,16 +286,19 @@ public class ValidatorTest
 
         // Build a validator, that searches for the pattern
         validator = new RegExpValidator("RegExpValidationVariable Standard", pattern);
-        // Validate
-        validator.validate(context, webResponse);
+        context.setWebResponse(webResponse);
+        // Execute
+        validator.execute(context);
         // Build a validator, that searches for the pattern and verifies text is the first match
         validator = new RegExpValidator("RegExpValidationVariable Text", pattern, text);
-        // Validate
-        validator.validate(context, webResponse);
+        context.setWebResponse(webResponse);
+        // Execute
+        validator.execute(context);
         // Build a validator, that searches for the pattern and verifies text is the match in the matching group of group
         validator = new RegExpValidator("RegExpValidationVariable Text+Group", pattern, text, group);
-        // Validate
-        validator.validate(context, webResponse);
+        context.setWebResponse(webResponse);
+        // Execute
+        validator.execute(context);
     }
 
 }
