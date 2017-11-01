@@ -1,57 +1,42 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.subrequest;
 
+import java.util.List;
+
 import com.gargoylesoftware.htmlunit.WebRequest;
+import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.util.Context;
 
 public class XHRSubrequest extends AbstractSubrequest
 {
     private final String name;
 
-    // TODO talk about whether or not this should become a List<AbstractActionItem>
-    private final Request request;
-
-    private final Response response;
-
-    private final AbstractSubrequest subrequest;
+    private final List<AbstractActionItem> actionItems;
 
     @SuppressWarnings("unused")
     private WebRequest webRequest;
 
-    public XHRSubrequest(final String name, final Request request, final Response response, final AbstractSubrequest subrequest)
+    public XHRSubrequest(final String name, final List<AbstractActionItem> actionItems)
     {
         this.name = name;
-        this.request = request;
-        this.response = response;
-        this.subrequest = subrequest;
-    }
-
-    public XHRSubrequest(final String name, final Request request, final Response response)
-    {
-        this(name, request, response, null);
-    }
-
-    public XHRSubrequest(final String name, final Request request)
-    {
-        this(name, request, null, null);
+        this.actionItems = actionItems;
     }
 
     @Override
     public void execute(final Context context) throws Throwable
     {
         final Context localContext = new Context(context);
-        // Set xhr to be true
-        getRequest().setXhr("true");
-        getRequest().execute(localContext);
 
-        if (getResponse() != null)
+        // TODO Does the first ActionItem have to be a Request?
+        for (final AbstractActionItem actionItem : actionItems)
         {
-            getResponse().execute(localContext);
-        }
-        if (getSubrequest() != null)
-        {
-            getSubrequest().execute(localContext);
+            // If this is a request
+            if (actionItem instanceof Request)
+            {
+                // Set Xhr to true
+                ((Request) actionItem).setXhr("true");
+            }
+            actionItem.execute(localContext);
         }
     }
 
@@ -63,21 +48,6 @@ public class XHRSubrequest extends AbstractSubrequest
     public void setWebRequest(final WebRequest webRequest)
     {
         this.webRequest = webRequest;
-    }
-
-    public Request getRequest()
-    {
-        return request;
-    }
-
-    public Response getResponse()
-    {
-        return response;
-    }
-
-    public AbstractSubrequest getSubrequest()
-    {
-        return subrequest;
     }
 
 }

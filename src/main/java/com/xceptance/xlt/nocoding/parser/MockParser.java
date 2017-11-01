@@ -238,8 +238,10 @@ public class MockParser implements Parser
         final List<AbstractResponseItem> responseItem = new ArrayList<AbstractResponseItem>();
         responseItem.add(new RegExpValidator("blub", "Grilled Salmon with Potato Wedges", "Grilled Salmon with Potato Wedges"));
         final Response responseOfSubrequest = new Response(null, responseItem);
-        final XHRSubrequest xhrSubrequest = new XHRSubrequest("Navigate to second product page.", requestOfSubrequest,
-                                                              responseOfSubrequest);
+        final List<AbstractActionItem> subrequestItems = new ArrayList<AbstractActionItem>();
+        subrequestItems.add(requestOfSubrequest);
+        subrequestItems.add(responseOfSubrequest);
+        final XHRSubrequest xhrSubrequest = new XHRSubrequest("Navigate to second product page.", subrequestItems);
         subrequests.add(xhrSubrequest);
 
         actionItems.add(request);
