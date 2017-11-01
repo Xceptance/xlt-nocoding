@@ -28,99 +28,146 @@ public class ValidationParser
      */
     public List<AbstractValidator> parse(final JsonNode node) throws IOException
     {
-
+        // Initialize variables
         final List<AbstractValidator> validator = new ArrayList<AbstractValidator>();
         String validationName = null;
 
+        // Get an iterator over the elements
         final Iterator<JsonNode> iterator = node.elements();
 
+        // Iterate over the elements
         while (iterator.hasNext())
         {
             final JsonNode current = iterator.next();
+            // Get the fieldNames
             final Iterator<String> fieldName = current.fieldNames();
 
+            // Iterate over the fieldNames
             while (fieldName.hasNext())
             {
+                // The current fieldName ist the name of the validation
                 validationName = fieldName.next();
-                // The substructure
+                // Get the substructure (which is an Object)
                 final JsonNode storeContent = current.get(validationName);
+                // And get an iterator over the fieldNames
                 final Iterator<String> name = storeContent.fieldNames();
-                // Iterate over the content
+                // Iterate over the fieldNames of the substructure
                 while (name.hasNext())
                 {
+                    // Get the left hand expression
                     final String leftHandExpression = name.next();
                     switch (leftHandExpression)
                     {
                         case Constants.XPATH:
-                            final String xPathExpression = storeContent.get(leftHandExpression).textValue();
+                            // Get the xPath Expression
+                            final String xPathExpression = ParserUtils.readValue(storeContent, leftHandExpression);
                             String matches = null;
                             String count = null;
-                            // if we have another name, this means the optional text is specified
+                            // if we have another fieldName, an optional attribute is specified
                             if (name.hasNext())
                             {
+                                // Get the left hand expression of the second fieldName
                                 final String left = name.next();
                                 if (left.equals(Constants.MATCHES))
                                 {
-                                    matches = storeContent.get(left).textValue();
+                                    matches = ParserUtils.readValue(storeContent, left);
                                 }
                                 else if (left.equals(Constants.COUNT))
                                 {
                                     count = ParserUtils.readValue(storeContent, left);
-                                    // count = storeContent.get(left).textValue();
+                                }
+                                else
+                                {
+                                    throw new IllegalArgumentException("Unknown validation item: " + left);
                                 }
                             }
+                            // Add the validator to the validations
                             validator.add(new XPathValidator(validationName, xPathExpression, matches, count));
 
                             break;
 
                         case Constants.REGEXP:
-                            final String pattern = storeContent.get(leftHandExpression).textValue();
+                            // Extract the RegExp pattern
+                            final String pattern = ParserUtils.readValue(storeContent, leftHandExpression);
                             String group = null;
                             String text = null;
-                            // if we have another name, this means the optional text is specified
+                            // if we have another fieldName, the optional text is specified
                             if (name.hasNext())
                             {
-                                text = storeContent.get(name.next()).textValue();
-                                // if we have yet another name, this is the optional group
-                                if (name.hasNext())
+                                String nextName = name.next();
+                                if (nextName.equals(Constants.TEXT))
                                 {
-                                    group = ParserUtils.readValue(storeContent, name.next());
-                                    // group = storeContent.get(name.next()).textValue();
+                                    text = ParserUtils.readValue(storeContent, nextName);
+                                    // if we have yet another fieldName, the optional group is specified
+                                    if (name.hasNext())
+                                    {
+                                        nextName = name.next();
+                                        if (nextName.equals(Constants.GROUP))
+                                        {
+                                            group = ParserUtils.readValue(storeContent, nextName);
+                                        }
+                                        else
+                                        {
+                                            throw new IllegalArgumentException("Unknown validation item: " + nextName);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    throw new IllegalArgumentException("Unknown validation item: " + nextName);
                                 }
                             }
 
+                            // Add the validator to the validations
                             validator.add(new RegExpValidator(validationName, pattern, text, group));
                             break;
 
                         case Constants.HEADER:
-                            final String header = storeContent.get(leftHandExpression).textValue();
-                            String textOrCountDecider = null;
-                            String textOrCount = null;
+                            // Extract the name of the header
+                            final String header = ParserUtils.readValue(storeContent, leftHandExpression);
+                            String headerText = null;
+                            String headerCount = null;
+                            // If we have another fieldName, an optional attribute is specified
                             if (name.hasNext())
                             {
-                                textOrCountDecider = name.next();
-                                if (textOrCountDecider.equals(Constants.COUNT))
+                                final String textOrCount = name.next();
+                                if (textOrCount.equals(Constants.TEXT))
                                 {
-                                    textOrCount = ParserUtils.readValue(storeContent, textOrCountDecider);
+                                    headerText = ParserUtils.readValue(storeContent, textOrCount);
+                                }
+                                else if (textOrCount.equals(Constants.COUNT))
+                                {
+                                    headerCount = ParserUtils.readValue(storeContent, textOrCount);
                                 }
                                 else
                                 {
-                                    textOrCount = storeContent.get(textOrCountDecider).textValue();
+                                    throw new IllegalArgumentException("Unknown validation item: " + textOrCount);
                                 }
                             }
-                            validator.add(new HeaderValidator(validationName, header, textOrCountDecider, textOrCount));
+                            // Add the validator to the validations
+                            validator.add(new HeaderValidator(validationName, header, headerText, headerCount));
                             break;
 
                         case Constants.COOKIE:
-                            final String cookieName = storeContent.get(leftHandExpression).textValue();
+                            final String cookieName = ParserUtils.readValue(storeContent, leftHandExpression);
                             String cookieContent = null;
 
-                            // If we have another name, it is the optional "matches" field
+                            // If we have another name, the optional "matches" field is specified
                             if (name.hasNext())
                             {
-                                cookieContent = storeContent.get(name.next()).textValue();
+                                final String nextCookieContent = name.next();
+                                // TODO Which is the correct one? Specification vs Examples
+                                if (nextCookieContent.equals(Constants.MATCHES) || nextCookieContent.equals(Constants.TEXT))
+                                {
+                                    cookieContent = ParserUtils.readValue(storeContent, nextCookieContent);
+                                }
+                                else
+                                {
+                                    throw new IllegalArgumentException("Unknown validation item: " + nextCookieContent);
+                                }
                             }
 
+                            // Add the validator to the validations
                             validator.add(new CookieValidator(validationName, cookieName, cookieContent));
                             break;
 
@@ -132,7 +179,7 @@ public class ValidationParser
                 XltLogger.runTimeLogger.debug("Added " + validationName + " to Validations");
             }
         }
-        // return new ArrayList<AbstractValidator>();
+        // Return all validations
         return validator;
     }
 

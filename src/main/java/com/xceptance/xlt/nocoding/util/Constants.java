@@ -73,6 +73,8 @@ public class Constants
 
     public static final String TEXT = "Text";
 
+    public static final String GROUP = "Group";
+
     public static final String HEADER = "Header";
 
     public static final String COOKIE = "Cookie";

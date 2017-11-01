@@ -18,11 +18,6 @@ import com.xceptance.xlt.nocoding.util.ParserUtils;
 public class ResponseParser extends AbstractActionItemParser
 {
 
-    public ResponseParser()
-    {
-        // TODO Auto-generated constructor stub
-    }
-
     /**
      * Parses the response item to the Response object
      * 
@@ -34,15 +29,19 @@ public class ResponseParser extends AbstractActionItemParser
     @Override
     public List<AbstractActionItem> parse(final JsonNode node) throws IOException
     {
+        // Initialize variables
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
         String httpcode = null;
         final List<AbstractValidator> validators = new ArrayList<AbstractValidator>();
         final List<AbstractResponseStore> responseStore = new ArrayList<AbstractResponseStore>();
 
+        // Get an iterator over the fieldNames
         final Iterator<String> fieldNames = node.fieldNames();
 
+        // As long as we have a fieldName
         while (fieldNames.hasNext())
         {
+            // Get it
             final String fieldName = fieldNames.next();
             switch (fieldName)
             {

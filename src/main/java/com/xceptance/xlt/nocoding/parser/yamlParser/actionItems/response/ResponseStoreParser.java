@@ -28,65 +28,85 @@ public class ResponseStoreParser
      */
     public List<AbstractResponseStore> parse(final JsonNode node) throws IOException
     {
-
+        // Initialize variables
         String variableName = null;
-        final List<AbstractResponseStore> responseStore = new ArrayList<AbstractResponseStore>();
-        // Go through every element
+        final List<AbstractResponseStore> responseStores = new ArrayList<AbstractResponseStore>();
+        // Get an iterator over the elements
         final Iterator<JsonNode> iterator = node.elements();
 
+        // As long as we have another element
         while (iterator.hasNext())
         {
+            // Get it
             final JsonNode current = iterator.next();
+            // Get an iterator over the fieldNames
             final Iterator<String> fieldName = current.fieldNames();
 
+            // As long as we have another fieldName
             while (fieldName.hasNext())
             {
-                // Name of the variable
+                // Extract the fieldName as the name of the variable
                 variableName = fieldName.next();
-                // The substructure
+                // Get the substructure (which is an Object)
                 final JsonNode storeContent = current.get(variableName);
+                // Get the fieldNames of the substructure
                 final Iterator<String> name = storeContent.fieldNames();
                 // Iterate over the content
                 while (name.hasNext())
                 {
+                    // Get the left hand expression
                     final String leftHandExpression = name.next();
                     switch (leftHandExpression)
                     {
                         case Constants.XPATH:
-                            // Xpath Magic
-                            responseStore.add(new XpathStore(variableName, storeContent.get(leftHandExpression).textValue()));
+                            // Create a new XpathStore and add it to all responseStores
+                            responseStores.add(new XpathStore(variableName, ParserUtils.readValue(storeContent, leftHandExpression)));
                             break;
 
                         case Constants.REGEXP:
-                            final String pattern = storeContent.get(leftHandExpression).textValue();
+                            // Extract the pattern
+                            final String pattern = ParserUtils.readValue(storeContent, leftHandExpression);
                             String group = null;
-                            // if we have another fieldName, this means the optional group is specified
+                            // If we have another name, this means the optional group is specified
                             if (name.hasNext())
                             {
-                                group = ParserUtils.readValue(storeContent, name.next());
-                                // group = storeContent.get(name.next()).textValue();
+                                final String nextName = name.next();
+                                if (nextName.equals(Constants.GROUP))
+                                {
+                                    group = ParserUtils.readValue(storeContent, name.next());
+                                }
+                                else
+                                {
+                                    throw new IllegalArgumentException("Unknown response store item: " + nextName);
+                                }
                             }
-                            responseStore.add(new RegExpStore(variableName, pattern, group));
+                            // Add a new RegExpStore to all responseStores
+                            responseStores.add(new RegExpStore(variableName, pattern, group));
                             break;
 
                         case Constants.HEADER:
-                            responseStore.add(new HeaderStore(variableName, storeContent.get(leftHandExpression).textValue()));
+                            // Create a new HeaderStore and add it to all responseStores
+                            responseStores.add(new HeaderStore(variableName, ParserUtils.readValue(storeContent, leftHandExpression)));
                             break;
 
                         case Constants.COOKIE:
-                            responseStore.add(new CookieStore(variableName, storeContent.get(leftHandExpression).textValue()));
+                            // Create a new CookieStore and add it to all responseStores
+                            responseStores.add(new CookieStore(variableName, ParserUtils.readValue(storeContent, leftHandExpression)));
                             break;
 
                         default:
+                            // If we find an unknown item, throw an Exception
                             throw new IOException("No permitted response store item: " + leftHandExpression);
                     }
                 }
 
+                // Log the variableName
                 XltLogger.runTimeLogger.debug("Added " + variableName + " to ResponseStore");
             }
         }
 
-        return responseStore;
+        // Return all responseStores
+        return responseStores;
     }
 
 }

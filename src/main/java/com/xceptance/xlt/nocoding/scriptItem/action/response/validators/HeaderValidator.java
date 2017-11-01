@@ -6,7 +6,6 @@ import org.junit.Assert;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
-import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 
 public class HeaderValidator extends AbstractValidator
@@ -47,31 +46,17 @@ public class HeaderValidator extends AbstractValidator
      *            The name of the variable you want to store the header in
      * @param header
      *            The header you want to verify
-     * @param isTextOrCount
-     *            Decides if we have count or text as final argument, needed for text and count to be mutually exclusive
-     * @param textOrCount
-     *            The value of the text attribute OR the count attribute
+     * @param text
+     *            The text the header is supposed to have
+     * @param count
+     *            The amount of times the header is in the response
      */
-    public HeaderValidator(final String validationName, final String header, final String isTextOrCount, final String textOrCount)
+    public HeaderValidator(final String validationName, final String header, final String text, final String count)
     {
         super(validationName);
         this.header = header;
-        if (isTextOrCount == null)
-        {
-            // We don't want to do anything here
-        }
-        else if (isTextOrCount.equals(Constants.COUNT))
-        {
-            this.count = textOrCount;
-        }
-        else if (isTextOrCount.equals(Constants.TEXT))
-        {
-            this.text = textOrCount;
-        }
-        else
-        {
-            throw new IllegalArgumentException("Third argument must be Constant.Count or Constants.Text");
-        }
+        this.text = text;
+        this.count = count;
     }
 
     @Override
