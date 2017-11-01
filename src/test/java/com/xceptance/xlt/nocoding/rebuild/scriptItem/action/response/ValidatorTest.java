@@ -18,7 +18,6 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.Abstract
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.CookieValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.HeaderValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.RegExpValidator;
-import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
@@ -112,12 +111,12 @@ public class ValidatorTest
         // Execute
         validator.execute(context);
         // Build the validator, that validates the content of the header equals text
-        validator = new HeaderValidator("HeaderValidation Text", header, Constants.TEXT, text);
+        validator = new HeaderValidator("HeaderValidation Text", header, text, null);
         context.setWebResponse(webResponse);
         // Execute
         validator.execute(context);
         // Build the validator that validates the number of occurences of the header equals count
-        validator = new HeaderValidator("HeaderValidation Count", header, Constants.COUNT, count);
+        validator = new HeaderValidator("HeaderValidation Count", header, null, count);
         context.setWebResponse(webResponse);
         // Execute
         validator.execute(context);
@@ -214,12 +213,12 @@ public class ValidatorTest
         // Execute
         validator.execute(context);
         // Build the validator, that validates the content of the header equals text
-        validator = new HeaderValidator("HeaderValidationVariable Text", header, Constants.TEXT, text);
+        validator = new HeaderValidator("HeaderValidationVariable Text", header, text, null);
         context.setWebResponse(webResponse);
         // Execute
         validator.execute(context);
         // Build the validator that validates the number of occurences of the header equals count
-        validator = new HeaderValidator("HeaderValidationVariable Count", header, Constants.COUNT, count);
+        validator = new HeaderValidator("HeaderValidationVariable Count", header, null, count);
         context.setWebResponse(webResponse);
         // Execute
         validator.execute(context);

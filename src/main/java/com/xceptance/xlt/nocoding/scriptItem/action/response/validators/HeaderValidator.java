@@ -83,7 +83,7 @@ public class HeaderValidator extends AbstractValidator
                 // If the header is found, verify the value if specified
                 if (getText() != null)
                 {
-                    Assert.assertEquals("Value of header does not match expected value", header.getValue(), getText());
+                    Assert.assertEquals("Value of header does not match expected value", getText(), header.getValue());
                 }
                 // At last, set throwException to false, so we know, that we found our specified header.
                 throwException = false;
