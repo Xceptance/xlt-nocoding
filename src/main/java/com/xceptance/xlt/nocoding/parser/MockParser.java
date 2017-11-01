@@ -9,11 +9,10 @@ import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.LightWeigthAction;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.AbstractResponseStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.HeaderStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.RegExpStore;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.AbstractValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.RegExpValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
@@ -55,13 +54,12 @@ public class MockParser implements Parser
          */
 
         // Validator
-        final List<AbstractValidator> validation = new ArrayList<AbstractValidator>();
-        validation.add(new RegExpValidator("Title", "<title>Posters\\s-\\sThe\\sUltimate\\sOnline\\sShop</title>"));
+        final List<AbstractResponseItem> responseItem = new ArrayList<AbstractResponseItem>();
+        responseItem.add(new RegExpValidator("Title", "<title>Posters\\s-\\sThe\\sUltimate\\sOnline\\sShop</title>"));
         // Store
-        final List<AbstractResponseStore> responseStore = new ArrayList<AbstractResponseStore>();
-        responseStore.add(new RegExpStore("Blub", "<title>(.*?)</title>"));
+        responseItem.add(new RegExpStore("Blub", "<title>(.*?)</title>"));
         // Response
-        final Response response = new Response("200", responseStore, validation);
+        final Response response = new Response("200", responseItem);
 
         /**
          * Subrequest
@@ -162,27 +160,27 @@ public class MockParser implements Parser
          */
 
         // Validator
-        List<AbstractValidator> validation = new ArrayList<AbstractValidator>();
-        validation.add(new RegExpValidator("Title", "<title>Posters\\s-\\sThe\\sUltimate\\sOnline\\sShop</title>"));
+        List<AbstractResponseItem> responseItem = new ArrayList<AbstractResponseItem>();
+        responseItem.add(new RegExpValidator("Title", "<title>Posters\\s-\\sThe\\sUltimate\\sOnline\\sShop</title>"));
         // Response
-        final Response response1 = new Response(null, validation);
+        final Response response1 = new Response(null, responseItem);
 
-        validation = new ArrayList<AbstractValidator>();
-        validation.add(new RegExpValidator("login-form Existance", "<form\\sid=\"formLogin\"[\\s\\S]+?>"));
+        responseItem = new ArrayList<AbstractResponseItem>();
+        responseItem.add(new RegExpValidator("login-form Existance", "<form\\sid=\"formLogin\"[\\s\\S]+?>"));
         // Response
-        final Response response2 = new Response(null, validation);
+        final Response response2 = new Response(null, responseItem);
 
         // Store
-        final List<AbstractResponseStore> responseStore = new ArrayList<AbstractResponseStore>();
-        responseStore.add(new HeaderStore("loginRedirectLocation", "Location"));
+        responseItem = new ArrayList<AbstractResponseItem>();
+        responseItem.add(new HeaderStore("loginRedirectLocation", "Location"));
         // Response
         // final Response response3 = new Response(303, responseStore, null);
-        final Response response3 = new Response("303", responseStore, null);
+        final Response response3 = new Response("303", responseItem);
 
-        validation = new ArrayList<AbstractValidator>();
-        validation.add(new RegExpValidator("Login Greeting", "John"));
+        responseItem = new ArrayList<AbstractResponseItem>();
+        responseItem.add(new RegExpValidator("Login Greeting", "John"));
         // Response
-        final Response response4 = new Response("200", null, validation);
+        final Response response4 = new Response("200", responseItem);
 
         /**
          * Action
@@ -237,9 +235,9 @@ public class MockParser implements Parser
         parameters.add(new NameValuePair("page", "2"));
         requestOfSubrequest.setParameters(parameters);
         // Response
-        final List<AbstractValidator> validation = new ArrayList<AbstractValidator>();
-        validation.add(new RegExpValidator("blub", "Grilled Salmon with Potato Wedges", "Grilled Salmon with Potato Wedges"));
-        final Response responseOfSubrequest = new Response(null, validation);
+        final List<AbstractResponseItem> responseItem = new ArrayList<AbstractResponseItem>();
+        responseItem.add(new RegExpValidator("blub", "Grilled Salmon with Potato Wedges", "Grilled Salmon with Potato Wedges"));
+        final Response responseOfSubrequest = new Response(null, responseItem);
         final XHRSubrequest xhrSubrequest = new XHRSubrequest("Navigate to second product page.", requestOfSubrequest,
                                                               responseOfSubrequest);
         subrequests.add(xhrSubrequest);

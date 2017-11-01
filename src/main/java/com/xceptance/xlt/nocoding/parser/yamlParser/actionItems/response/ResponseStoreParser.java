@@ -73,7 +73,7 @@ public class ResponseStoreParser
                                 final String nextName = name.next();
                                 if (nextName.equals(Constants.GROUP))
                                 {
-                                    group = ParserUtils.readValue(storeContent, name.next());
+                                    group = ParserUtils.readValue(storeContent, nextName);
                                 }
                                 else
                                 {
