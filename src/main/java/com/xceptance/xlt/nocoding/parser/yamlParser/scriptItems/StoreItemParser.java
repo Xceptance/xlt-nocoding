@@ -19,15 +19,19 @@ public class StoreItemParser extends AbstractScriptItemParser
     public List<ScriptItem> parse(final JsonParser parser) throws IOException
     {
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
-        // Get the current JsonNode from the parser where the Store item is located
 
+        // Get the current JsonNode from the parser where the Store item is located
         final JsonNode jsonNode = ParserUtils.getNodeAt(Constants.STORE, parser);
 
+        // Convert the node to a Map
         final Map<String, String> storeItems = ParserUtils.getArrayNodeAsMap(jsonNode);
 
+        // For each Map Entry
         for (final Map.Entry<String, String> storeItem : storeItems.entrySet())
         {
+            // Add a new StoreItem to the scriptItems
             scriptItems.add(new StoreItem(storeItem.getKey(), storeItem.getValue()));
+            // Log the added item
             XltLogger.runTimeLogger.debug("Added " + storeItem.getKey() + "=" + storeItem.getValue() + " to StoreItems");
         }
 

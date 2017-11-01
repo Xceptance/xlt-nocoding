@@ -61,7 +61,7 @@ public class YamlParser implements Parser
 
                 try
                 {
-                    // Differentiate between Store, Action and default definition
+                    // Differentiate between Store, Action and default definitions
                     AbstractScriptItemParser scriptItemParser = null;
                     if (parser.getText().equals(Constants.STORE))
                     {
