@@ -10,7 +10,7 @@ import com.xceptance.xlt.api.util.XltException;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.util.Context;
-import com.xceptance.xlt.nocoding.util.webAction.WebAction;
+import com.xceptance.xlt.nocoding.util.WebAction;
 
 // TODO
 public class DomAction extends Action

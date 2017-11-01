@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.rebuild.scriptItem.action.request;
+package com.xceptance.xlt.nocoding.rebuild.scriptItem.action;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -25,7 +25,7 @@ import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 /**
  * Tests the functionality of buildWebRequest() of the Request class
  */
-public class RequestWebRequestBuilder
+public class RequestTest
 {
     public Request request;
 

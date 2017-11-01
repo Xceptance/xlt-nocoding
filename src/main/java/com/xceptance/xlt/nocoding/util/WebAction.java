@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.util.webAction;
+package com.xceptance.xlt.nocoding.util;
 
 import java.util.List;
 import java.util.Map;
@@ -8,8 +8,6 @@ import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.common.lang.ReflectionUtils;
 import com.xceptance.xlt.api.actions.AbstractWebAction;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
-import com.xceptance.xlt.nocoding.util.Context;
-import com.xceptance.xlt.nocoding.util.ThrowingConsumer;
 
 /**
  * The WebAction extends the AbstractWebAction of the xlt framework. Therefore, this is the interface to xlt. A

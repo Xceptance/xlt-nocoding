@@ -1,25 +1,14 @@
-package com.xceptance.xlt.nocoding.rebuild.scriptItem;
+package com.xceptance.xlt.nocoding.rebuild.scriptItem.storeDefault;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
-import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultItem;
 import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.Context;
-import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
-public class StoreDefaultTest
+public class StoreDefaultItemTest extends StoreDefaultTest
 {
-    public Context context;
-
-    @Before
-    public void init()
-    {
-        context = new Context(XltProperties.getInstance(), new DataStorage());
-    }
 
     @Test
     public void singleStore() throws Throwable

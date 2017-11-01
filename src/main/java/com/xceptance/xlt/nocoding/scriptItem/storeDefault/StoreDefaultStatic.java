@@ -22,7 +22,7 @@ public class StoreDefaultStatic extends StoreDefault
     {
         if (!value.equals("delete"))
         {
-            context.deleteDefaultStatic(value);
+            context.storeDefaultStatic(value);
             XltLogger.runTimeLogger.debug("Added " + variableName + "=" + value + " to default static request storage");
         }
         else
