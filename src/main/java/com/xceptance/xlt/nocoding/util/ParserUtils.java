@@ -46,16 +46,7 @@ public class ParserUtils
                 // Get the next field name (which is also the name of the variable we want to store)
                 final String fieldName = fieldNames.next();
                 // And extract the value (which is the value of the variable)
-                String textValue = current.get(fieldName).textValue();
-                if (textValue == null || textValue.equals("null"))
-                {
-                    textValue = current.get(fieldName).toString();
-                    if (textValue == null || textValue.equals("null"))
-                    {
-                        textValue = "";
-                    }
-                }
-                // Construct the StoreItem with the fieldName and the textValue
+                final String textValue = ParserUtils.readSingleValue(current.get(fieldName));
                 map.put(fieldName, textValue);
             }
         }
@@ -89,21 +80,7 @@ public class ParserUtils
                 // Get the next field name (which is also the name of the variable we want to store)
                 final String fieldName = fieldNames.next();
                 // And extract the value (which is the value of the variable)
-                String textValue = current.get(fieldName).textValue();
-                // TODO
-                /*
-                 * For some reason, a single digit cannot be parsed with textValue(), but multiple can. However, multiple digits cannot
-                 * be parsed with toString() So we need to do both of these methods, to find out if we really have null or simply a
-                 * single/multiple digit
-                 */
-                if (textValue == null || textValue.equals("null"))
-                {
-                    textValue = current.get(fieldName).toString();
-                    if (textValue == null || textValue.equals("null"))
-                    {
-                        textValue = "";
-                    }
-                }
+                final String textValue = ParserUtils.readSingleValue(current.get(fieldName));
                 // Construct the StoreItem with the fieldName and the textValue
                 nvp.add(new NameValuePair(fieldName, textValue));
             }

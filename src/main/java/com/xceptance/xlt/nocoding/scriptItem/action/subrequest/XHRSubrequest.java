@@ -16,6 +16,7 @@ public class XHRSubrequest extends AbstractSubrequest
 
     private final AbstractSubrequest subrequest;
 
+    @SuppressWarnings("unused")
     private WebRequest webRequest;
 
     public XHRSubrequest(final String name, final Request request, final Response response, final AbstractSubrequest subrequest)
