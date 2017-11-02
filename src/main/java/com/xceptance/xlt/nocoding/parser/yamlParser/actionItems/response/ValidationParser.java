@@ -95,7 +95,7 @@ public class ValidationParser
                             if (name.hasNext())
                             {
                                 String nextName = name.next();
-                                // TODO Text vs Matches
+                                // TODO [Meeting] Text vs Matches
                                 if (nextName.equals(Constants.TEXT) || nextName.equals(Constants.MATCHES))
                                 {
                                     text = ParserUtils.readValue(storeContent, nextName);
@@ -157,7 +157,7 @@ public class ValidationParser
                             if (name.hasNext())
                             {
                                 final String nextCookieContent = name.next();
-                                // TODO Which is the correct one? Specification vs Examples
+                                // TODO [Meeting] Which is the correct one? Specification vs Examples
                                 if (nextCookieContent.equals(Constants.MATCHES) || nextCookieContent.equals(Constants.TEXT))
                                 {
                                     cookieContent = ParserUtils.readValue(storeContent, nextCookieContent);

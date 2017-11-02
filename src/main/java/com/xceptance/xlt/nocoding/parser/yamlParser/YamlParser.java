@@ -94,7 +94,8 @@ public class YamlParser implements Parser
                 // XltLogger.runTimeLogger.warn("No permitted list item: " + parser.getText() + logLineColumn(parser));
                 // throw new com.google.gson.JsonParseException("No permitted list item: " + parser.getText() + logLineColumn(parser));
 
-                // TODO the other methods dont work - NoSuchMethodError -> Dependency Issue but Pom says we use jackson-core 2.9.0
+                // TODO [Meeting] the other methods dont work - NoSuchMethodError -> Dependency Issue but Pom says we use jackson-core
+                // 2.9.0
                 throw new JsonParseException("No permitted list item: " + parser.getText(), parser.getCurrentLocation());
             }
             // If we don't have a list item and it's not a field name, we have found null or an Array Entry/Exit or an Object

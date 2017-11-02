@@ -45,7 +45,6 @@ public class VariableResolver
         }
         catch (final EvalError e)
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -57,7 +56,8 @@ public class VariableResolver
 
     public String resolveString(final String toResolve, final Context context)
     {
-        return resolveStringInAGoodWayHopefully(toResolve, context);
+        return resolveStringTakeThree(toResolve, context);
+        // return resolveStringInAGoodWayHopefully(toResolve, context);
         // return resolveStringNew(toResolve, propertyManager, 0, new Stack<Integer>());
     }
 
@@ -296,6 +296,169 @@ public class VariableResolver
 
         final Pair<String, Integer> resolvedPair = new ImmutablePair<String, Integer>(output, length);
         return resolvedPair;
+    }
+
+    public String resolveStringTakeThree(final String toResolve, final Context context)
+    {
+        String output = "";
+        char current;
+
+        // Main iteration over the string
+        for (int index = 0; index < toResolve.length(); index++)
+        {
+            current = toResolve.charAt(index);
+
+            switch (current)
+            {
+                // Add next char
+                case '\\':
+                    output += toResolve.charAt(++index);
+                    break;
+                // Check for variable definition
+                case '$':
+                    // If we have a full definition of a variable
+                    if (toResolve.charAt(index + 1) == '{' && toResolve.substring(index).contains("}"))
+                    {
+                        // doRecursion
+                        final String variableName = resolveVariableName(toResolve.substring(index + 2), context);
+                        // TODO resolve the variable, then fix the index, so the length of variableName+3 is added.
+                        // but what about the original String and multiple resolutions?
+                    }
+                    // Otherwise, simply add the current char
+                    else
+                    {
+                        output += current;
+                    }
+                    break;
+                // Add current char
+                default:
+                    output += current;
+                    break;
+            }
+
+        }
+
+        return output;
+    }
+
+    /**
+     * Resolves the variable name when encountering a variable definiton
+     * 
+     * @param toResolve
+     * @param context
+     * @return
+     */
+    private String resolveVariableName(final String toResolve, final Context context)
+    {
+        String output = "";
+        char current;
+        boolean ignoreNextChars = false;
+
+        // Main iteration over the string
+        for (int index = 0; index < toResolve.length(); index++)
+        {
+            current = toResolve.charAt(index);
+            // Ignore next char
+            if (current == '\\')
+            {
+                output += toResolve.charAt(++index);
+            }
+            // Ignore every character that is following
+            else if (current == '\'' && toResolve.substring(index).contains("\'"))
+            {
+                ignoreNextChars = true;
+            }
+            // Stop ignoring every character that is following
+            else if (current == '\'' && ignoreNextChars)
+            {
+                ignoreNextChars = false;
+            }
+            // We are at the end of our variable definition
+            else if (current == '}' && !ignoreNextChars)
+            {
+                break;
+            }
+            // We found another variable
+            else if (current == '$')
+            {
+                // If we have a full definition of a variable
+                if (toResolve.charAt(index + 1) == '{' && toResolve.substring(index).contains("}"))
+                {
+                    // doRecursion
+                    final String variableName = resolveVariableName(toResolve.substring(index + 2), context);
+                    // TODO resolve the variable, then fix the index, so the length of variableName+3 is added.
+                    // but what about the original String and multiple resolutions?
+                }
+                // Otherwise, simply add the current char
+                else
+                {
+                    output += current;
+                }
+            }
+
+            else
+            {
+                output += current;
+            }
+        }
+
+        return output;
+    }
+
+    /**
+     * Asks dataStorage etc for the value of the variable
+     * 
+     * @param variableName
+     * @param context
+     * @return
+     */
+    private String resolveVariable(final String variableName, final Context context)
+    {
+        // Try to resolve it in the dataStorage
+        String resolvedValue = context.getDataStorage().getVariableByKey(variableName);
+        // If we didn't find it, let beanshell handle the variable
+        if (resolvedValue == null && !variableName.equals("{") && !variableName.equals("}"))
+        {
+            try
+            {
+                final Object beanShellEval = interpreter.eval(variableName);
+                // if beanshell found something, we save it as a string
+                if (beanShellEval != null)
+                {
+                    resolvedValue = beanShellEval.toString();
+                    // TODO added
+                    // if we define a variable as ${RANDOM.String(8)} we only want to resolve it once. Thus we need to save
+                    // variables in our dataStorage afterwards
+                    context.getDataStorage().storeVariable(variableName, resolvedValue);
+
+                }
+                // BeanSheall doesn't know the variable, therefore we want the plain text
+                else
+                {
+                    // Try to find it in the properties
+                    resolvedValue = context.getPropertyByKey(variableName);
+                    // If it still cannot be found, it isn't resolvable anymore
+                    if (resolvedValue == null)
+                    {
+                        // So we simply add ${ and } again.
+                        resolvedValue = "${" + variableName + "}";
+                    }
+                }
+            }
+            catch (final EvalError e)
+            {
+                // throw new RuntimeException("Evaluation Error: ", e);
+                // We couldn't resolve it, therefore we simply can ignore it
+            }
+        }
+        // This fixes Text${'{'}
+        else if (resolvedValue == null)
+        {
+            resolvedValue = variableName;
+        }
+
+        // we found a variable, therefore we are done
+        return resolvedValue;
     }
 
 }
