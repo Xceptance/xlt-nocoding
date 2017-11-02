@@ -117,7 +117,6 @@ public class ParameterInterpreterTest
     @Test
     public void invalidMoreCurlyBraces()
     {
-        // TODO '{' soll als String interpretiert werden
         Assert.assertEquals("Text{", interpreter.resolveString("Text${'{'}", context));
         Assert.assertEquals("Text}", interpreter.resolveString("Text${'}'}", context));
         Assert.assertEquals("TTe2t-TA12000",
@@ -198,6 +197,12 @@ public class ParameterInterpreterTest
         Assert.assertNotNull(resolved);
     }
 
-    // TODO rekursions fall host = ${host}
+    @Test
+    public void testEndlessRecursion()
+    {
+        context.storeVariable("host", "${host}");
+        final String resolved = interpreter.resolveString("${host}", context);
+        Assert.assertEquals("${host}", resolved);
+    }
 
 }

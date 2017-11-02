@@ -27,7 +27,7 @@ public class XhrSubrequest extends AbstractSubrequest
     {
         final Context localContext = new Context(context);
 
-        // TODO Does the first ActionItem have to be a Request?
+        // TODO [Meeting] First item request?
         for (final AbstractActionItem actionItem : actionItems)
         {
             // If this is a request

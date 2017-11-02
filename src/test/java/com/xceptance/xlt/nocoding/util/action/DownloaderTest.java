@@ -53,7 +53,6 @@ public class DownloaderTest
         }
         catch (final Exception e)
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

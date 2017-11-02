@@ -24,7 +24,6 @@ public class MockParser implements Parser
     @Override
     public List<ScriptItem> parse()
     {
-        // TODO Auto-generated method stub
         return this.parseMediumLogin();
     }
 
@@ -225,7 +224,6 @@ public class MockParser implements Parser
         urls.add("https://www.xceptance.com/js/jquery-1.11.1.min.js");
         subrequests.add(new StaticSubrequest(urls));
 
-        // TODO Meeting
         // XHRSubrequest
         // Request
         final Request requestOfSubrequest = new Request("${host}/posters/getProductOfTopCategory");

@@ -135,7 +135,6 @@ public class RequestTest
         context.getDataStorage().storeVariable("param2_value", value);
         parameters_var.add(new NameValuePair("${param2_key}", "${param2_value}"));
         key = "btnSignIn";
-        // TODO was wenn das null ist?
         value = "";
         parameters.add(new NameValuePair(key, value));
         context.getDataStorage().storeVariable("param3_key", key);
@@ -156,7 +155,6 @@ public class RequestTest
         context.getDataStorage().storeVariable("header2_value", value);
         headers_var.put("${header2_key}", "${header2_value}");
         key = "btnSignIn";
-        // TODO was wenn das null ist?
         value = "";
         headers.put(key, value);
         context.getDataStorage().storeVariable("header3_key", key);
@@ -201,7 +199,7 @@ public class RequestTest
 
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = InvocationTargetException.class)
     public void testInvalidDeclaration()
         throws InvalidArgumentException, MalformedURLException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
     {

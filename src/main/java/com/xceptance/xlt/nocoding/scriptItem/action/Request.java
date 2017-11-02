@@ -265,7 +265,8 @@ public class Request extends AbstractActionItem
         // Resolve Httpmethod
         resolvedValue = context.resolveString(getMethod());
 
-        // TODO [MEETING] In alter Suite wird darauf nicht geachtet, siehe auch weiter unten
+        // TODO [Meeting] In alter Suite wird darauf nicht geachtet, siehe auch weiter unten
+        // So throw error?
         if (HttpMethod.valueOf(resolvedValue) != null)
         {
             setMethod(resolvedValue);

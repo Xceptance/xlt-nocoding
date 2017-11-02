@@ -14,8 +14,8 @@ import bsh.EvalError;
 import bsh.Interpreter;
 
 /**
- * TODO Tries to resolve variables. A variable is specified as "${(.)*}". Resolves values from the inside to the outside
- * by first looking into the dataStorage, then tries resolving it via beanshell and lastly it looks into the property
+ * Tries to resolve variables. A variable is specified as "${(.)*}". Resolves values from the inside to the outside by
+ * first looking into the dataStorage, then tries resolving it via beanshell and lastly it looks into the property
  * files.
  * 
  * @author ckeiner
@@ -143,7 +143,7 @@ public class VariableResolver
                     // Search for variable in the new string and resolve it
                     final Pair<String, Integer> resolvedPair = doRecursion(toResolve.substring(i), context);
 
-                    // TODO added, talk about this
+                    // TODO Start recursiveness here
                     if (resolvedPair.getLeft().startsWith("$"))
                     {
                         Pair<String, Integer> twiceResolvedPair = doRecursion(resolvedPair.getLeft(), context);

@@ -16,7 +16,7 @@ public class XpathStore extends AbstractResponseStore
     @Override
     public void execute(final Context context) throws Exception
     {
-        // TODO check for mode - throw error if not dom mode
+        // TODO Fill execute
         // if(propertyManager.mode = lightweight)
         // throw new IllegalStateException("Cannot use an xpath expression in the lightweight mode. Please use the dom mode.");
 

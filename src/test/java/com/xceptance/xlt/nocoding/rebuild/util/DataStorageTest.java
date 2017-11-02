@@ -101,7 +101,6 @@ public class DataStorageTest
     @Test
     public void deleteConfigItem()
     {
-        // TODO set a new default value, then delete it, forcing it to be the default value
         final String key = "test";
         final String value = "t";
 

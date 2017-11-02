@@ -32,9 +32,11 @@ public class StoreTest
 
     /**
      * Instantiate the fields and set answers to localhost/posters/ and localhost/posters/POST
+     * 
+     * @throws MalformedURLException
      */
     @Before
-    public void init()
+    public void init() throws MalformedURLException
     {
         URL url;
         String content;
@@ -46,50 +48,41 @@ public class StoreTest
         String value;
         this.context = new Context(XltProperties.getInstance(), new DataStorage());
         webConnection = new XltMockWebConnection(context.getWebClient());
+        // Set answer to localhost/posters/
+        url = new URL("https://localhost:8443/posters/");
+        // content = "blub";
+        content = "<li class=\"userMenuHeader\">Welcome: Guest</li>\n" + "<li class=\"userMenuContent\"><a href=\"/posters/registration\"\n"
+                  + " class=\"goToRegistration\" title=\"Create new account\"> <span\n"
+                  + " class=\"glyphicon glyphicon-user\"></span> <span class=\"margin_left5\"></span><span\n"
+                  + " class=\"text-primary\">Create new account</span>\n" + "</a></li>\n" + "<li class=\"userMenuContent\"><a\n"
+                  + " href=\"/posters/login\" class=\"goToLogin\"\n" + " title=\"Sign In\"><span\n"
+                  + " class=\"glyphicon glyphicon-log-in\"></span> <span class=\"margin_left5\"></span><span\n"
+                  + " class=\"text-primary\">Sign In</span>\n" + "</a></li>";
+        statusCode = 200;
+        statusMessage = "A-OK";
+        contentType = "text/html";
+        headers = new ArrayList<NameValuePair>();
 
-        try
-        { // Set answer to localhost/posters/
-            url = new URL("https://localhost:8443/posters/");
-            // content = "blub";
-            content = "<li class=\"userMenuHeader\">Welcome: Guest</li>\n"
-                      + "<li class=\"userMenuContent\"><a href=\"/posters/registration\"\n"
-                      + " class=\"goToRegistration\" title=\"Create new account\"> <span\n"
-                      + " class=\"glyphicon glyphicon-user\"></span> <span class=\"margin_left5\"></span><span\n"
-                      + " class=\"text-primary\">Create new account</span>\n" + "</a></li>\n" + "<li class=\"userMenuContent\"><a\n"
-                      + " href=\"/posters/login\" class=\"goToLogin\"\n" + " title=\"Sign In\"><span\n"
-                      + " class=\"glyphicon glyphicon-log-in\"></span> <span class=\"margin_left5\"></span><span\n"
-                      + " class=\"text-primary\">Sign In</span>\n" + "</a></li>";
-            statusCode = 200;
-            statusMessage = "A-OK";
-            contentType = "text/html";
-            headers = new ArrayList<NameValuePair>();
+        name = "Cache-Control";
+        value = "no-cache, no-store, max-age=0, must-revalidate";
+        headers.add(new NameValuePair(name, value));
+        name = "Set-Cookie";
+        value = "NINJA_SESSION=13df523184375d64180d6adf4194f5a250229afe-___TS=1506611416747&cart=5163fb7b-08bf-4dbd-bf98-4145039eddb2;Path=/;Expires=Thu, 28-Sep-2017 16:10:16 GMT;Max-Age=3600;HttpOnly";
+        headers.add(new NameValuePair(name, value));
 
-            name = "Cache-Control";
-            value = "no-cache, no-store, max-age=0, must-revalidate";
-            headers.add(new NameValuePair(name, value));
-            name = "Set-Cookie";
-            value = "NINJA_SESSION=13df523184375d64180d6adf4194f5a250229afe-___TS=1506611416747&cart=5163fb7b-08bf-4dbd-bf98-4145039eddb2;Path=/;Expires=Thu, 28-Sep-2017 16:10:16 GMT;Max-Age=3600;HttpOnly";
-            headers.add(new NameValuePair(name, value));
+        webConnection.setResponse(url, content, statusCode, statusMessage, contentType, headers);
 
-            webConnection.setResponse(url, content, statusCode, statusMessage, contentType, headers);
-
-            // Set answer to localhost/posters/POST
-            url = new URL("https://localhost:8443/posters/login/POST");
-            content = "blub";
-            statusCode = 200;
-            statusMessage = "A-OK";
-            contentType = "text/html";
-            headers = new ArrayList<NameValuePair>();
-            name = "Set-Cookie";
-            value = "NINJA_FLASH=success=Login+successful.+Have+fun+in+our+shop%21;Path=/";
-            headers.add(new NameValuePair(name, value));
-            webConnection.setResponse(url, content, statusCode, statusMessage, contentType, headers);
-        }
-        catch (final MalformedURLException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        // Set answer to localhost/posters/POST
+        url = new URL("https://localhost:8443/posters/login/POST");
+        content = "blub";
+        statusCode = 200;
+        statusMessage = "A-OK";
+        contentType = "text/html";
+        headers = new ArrayList<NameValuePair>();
+        name = "Set-Cookie";
+        value = "NINJA_FLASH=success=Login+successful.+Have+fun+in+our+shop%21;Path=/";
+        headers.add(new NameValuePair(name, value));
+        webConnection.setResponse(url, content, statusCode, statusMessage, contentType, headers);
     }
 
     @Test

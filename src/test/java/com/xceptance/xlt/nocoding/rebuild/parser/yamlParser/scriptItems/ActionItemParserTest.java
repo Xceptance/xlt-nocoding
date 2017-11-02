@@ -51,7 +51,7 @@ public class ActionItemParserTest extends ParserTest
 
     protected final String fileSingleActionNoDefaultsData = path + "SAND.yml";
 
-    // TODO ok to only "parse" these 3 and not check the values specifically?
+    // TODO [Meeting] I only "parse" these 3 and do not confirm the result?
     protected final String fileXhrSubrequests = path + "xhrSubrequests.yml";
 
     protected final String fileStaticSubrequests = path + "staticSubrequests.yml";

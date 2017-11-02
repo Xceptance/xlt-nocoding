@@ -83,7 +83,7 @@ public class DefaultItemParser extends AbstractScriptItemParser
                 while (elementIterator.hasNext())
                 {
                     final JsonNode nextNode = elementIterator.next();
-                    // TODO variableName isn't used, but we set it to "Static" to remain the meaning
+                    // TODO [Meeting] variableName isn't used, but we set it to "Static" to remain the meaning
                     variableName = Constants.STATIC;
                     value = ParserUtils.readSingleValue(nextNode);
                     scriptItems.add(new StoreDefaultStatic(variableName, value));
