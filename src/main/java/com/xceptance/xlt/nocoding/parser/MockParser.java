@@ -16,7 +16,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.RegExpStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.RegExpValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
-import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.XHRSubrequest;
+import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.XhrSubrequest;
 
 public class MockParser implements Parser
 {
@@ -241,7 +241,7 @@ public class MockParser implements Parser
         final List<AbstractActionItem> subrequestItems = new ArrayList<AbstractActionItem>();
         subrequestItems.add(requestOfSubrequest);
         subrequestItems.add(responseOfSubrequest);
-        final XHRSubrequest xhrSubrequest = new XHRSubrequest("Navigate to second product page.", subrequestItems);
+        final XhrSubrequest xhrSubrequest = new XhrSubrequest("Navigate to second product page.", subrequestItems);
         subrequests.add(xhrSubrequest);
 
         actionItems.add(request);

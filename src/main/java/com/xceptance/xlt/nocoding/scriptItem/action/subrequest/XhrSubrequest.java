@@ -7,7 +7,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.util.Context;
 
-public class XHRSubrequest extends AbstractSubrequest
+public class XhrSubrequest extends AbstractSubrequest
 {
     private final String name;
 
@@ -16,7 +16,7 @@ public class XHRSubrequest extends AbstractSubrequest
     @SuppressWarnings("unused")
     private WebRequest webRequest;
 
-    public XHRSubrequest(final String name, final List<AbstractActionItem> actionItems)
+    public XhrSubrequest(final String name, final List<AbstractActionItem> actionItems)
     {
         this.name = name;
         this.actionItems = actionItems;

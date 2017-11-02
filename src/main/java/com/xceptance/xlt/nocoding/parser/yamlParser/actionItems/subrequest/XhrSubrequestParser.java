@@ -12,7 +12,7 @@ import com.xceptance.xlt.nocoding.parser.yamlParser.actionItems.response.Respons
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
-import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.XHRSubrequest;
+import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.XhrSubrequest;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
@@ -85,7 +85,7 @@ public class XhrSubrequestParser
         }
 
         // Create a new Subrequest
-        final AbstractSubrequest subrequest = new XHRSubrequest(name, actionItems);
+        final AbstractSubrequest subrequest = new XhrSubrequest(name, actionItems);
         // Return the subrequest
         return subrequest;
     }
