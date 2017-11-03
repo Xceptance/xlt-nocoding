@@ -1,8 +1,6 @@
 package com.xceptance.xlt.nocoding.util.variableResolver;
 
 import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -22,10 +20,6 @@ import bsh.Interpreter;
  */
 public class VariableResolver
 {
-    /**
-     * The pattern for finding variables
-     */
-    private final static Pattern PARAMETER_PATTERN = Pattern.compile("\\$\\{[^\\{\\}]*\\}");
 
     // The maximum amount you can re-resolve a value (so if variables reference another variable, we only resolve this many
     // times)
@@ -56,62 +50,9 @@ public class VariableResolver
 
     public String resolveString(final String toResolve, final Context context)
     {
-        return resolveStringTakeThree(toResolve, context);
+        return resolveExpressionAgain(toResolve, false, context).getLeft();
+        // return resolveExpression(toResolve, context);
         // return resolveStringInAGoodWayHopefully(toResolve, context);
-        // return resolveStringNew(toResolve, propertyManager, 0, new Stack<Integer>());
-    }
-
-    /**
-     * Resolves string recursively from the inside to the outside
-     * 
-     * @param toResolve
-     *            The String that you want to resolve
-     * @param context
-     *            The propertyManager with the global data storage inside
-     * @return String - The resolved String
-     * @throws EvalError
-     */
-    public String resolveStringOld(final String toResolve, final Context context)
-    {
-        // Set replacement to our toResolve string
-        String replacement = toResolve;
-        final Matcher matcher = PARAMETER_PATTERN.matcher(toResolve);
-
-        while (matcher.find())
-        {
-            final String foundVariable = matcher.group();
-            // Remove ${ and }
-            final String resolvedVariable = foundVariable.substring(2, foundVariable.length() - 1);
-            // Search in the storage for the variable
-            String resolvedValue = context.getDataStorage().getVariableByKey(resolvedVariable);
-            // if we didn't find it, let beanshell handle the variable
-            if (resolvedValue == null)
-            {
-                try
-                {
-                    final Object beanShellEval = interpreter.eval(resolvedVariable);
-                    // if beanshell found something, we save it as a string
-                    if (beanShellEval != null)
-                    {
-                        resolvedValue = beanShellEval.toString();
-                    }
-                }
-                catch (final EvalError e)
-                {
-                    throw new RuntimeException("Evaluation Error: ", e);
-                }
-            }
-
-            // Replace the resolved value
-            if (foundVariable != null && resolvedValue != null)
-            {
-                replacement = toResolve.replace(foundVariable, resolvedValue);
-                // Finally resolve other placeholders
-                replacement = resolveString(replacement, context);
-            }
-        }
-
-        return replacement;
     }
 
     public String resolveStringInAGoodWayHopefully(final String toResolve, final Context context)
@@ -298,113 +239,6 @@ public class VariableResolver
         return resolvedPair;
     }
 
-    public String resolveStringTakeThree(final String toResolve, final Context context)
-    {
-        String output = "";
-        char current;
-
-        // Main iteration over the string
-        for (int index = 0; index < toResolve.length(); index++)
-        {
-            current = toResolve.charAt(index);
-
-            switch (current)
-            {
-                // Add next char
-                case '\\':
-                    output += toResolve.charAt(++index);
-                    break;
-                // Check for variable definition
-                case '$':
-                    // If we have a full definition of a variable
-                    if (toResolve.charAt(index + 1) == '{' && toResolve.substring(index).contains("}"))
-                    {
-                        // doRecursion
-                        final String variableName = resolveVariableName(toResolve.substring(index + 2), context);
-                        // TODO resolve the variable, then fix the index, so the length of variableName+3 is added.
-                        // but what about the original String and multiple resolutions?
-                    }
-                    // Otherwise, simply add the current char
-                    else
-                    {
-                        output += current;
-                    }
-                    break;
-                // Add current char
-                default:
-                    output += current;
-                    break;
-            }
-
-        }
-
-        return output;
-    }
-
-    /**
-     * Resolves the variable name when encountering a variable definiton
-     * 
-     * @param toResolve
-     * @param context
-     * @return
-     */
-    private String resolveVariableName(final String toResolve, final Context context)
-    {
-        String output = "";
-        char current;
-        boolean ignoreNextChars = false;
-
-        // Main iteration over the string
-        for (int index = 0; index < toResolve.length(); index++)
-        {
-            current = toResolve.charAt(index);
-            // Ignore next char
-            if (current == '\\')
-            {
-                output += toResolve.charAt(++index);
-            }
-            // Ignore every character that is following
-            else if (current == '\'' && toResolve.substring(index).contains("\'"))
-            {
-                ignoreNextChars = true;
-            }
-            // Stop ignoring every character that is following
-            else if (current == '\'' && ignoreNextChars)
-            {
-                ignoreNextChars = false;
-            }
-            // We are at the end of our variable definition
-            else if (current == '}' && !ignoreNextChars)
-            {
-                break;
-            }
-            // We found another variable
-            else if (current == '$')
-            {
-                // If we have a full definition of a variable
-                if (toResolve.charAt(index + 1) == '{' && toResolve.substring(index).contains("}"))
-                {
-                    // doRecursion
-                    final String variableName = resolveVariableName(toResolve.substring(index + 2), context);
-                    // TODO resolve the variable, then fix the index, so the length of variableName+3 is added.
-                    // but what about the original String and multiple resolutions?
-                }
-                // Otherwise, simply add the current char
-                else
-                {
-                    output += current;
-                }
-            }
-
-            else
-            {
-                output += current;
-            }
-        }
-
-        return output;
-    }
-
     /**
      * Asks dataStorage etc for the value of the variable
      * 
@@ -422,7 +256,7 @@ public class VariableResolver
             try
             {
                 final Object beanShellEval = interpreter.eval(variableName);
-                // if beanshell found something, we save it as a string
+                // If beanshell found something, save it as a string and add it to the dataStorage
                 if (beanShellEval != null)
                 {
                     resolvedValue = beanShellEval.toString();
@@ -432,12 +266,12 @@ public class VariableResolver
                     context.getDataStorage().storeVariable(variableName, resolvedValue);
 
                 }
-                // BeanSheall doesn't know the variable, therefore we want the plain text
+                // BeanSheall doesn't know the expression
                 else
                 {
-                    // Try to find it in the properties
+                    // Therefore try to find it in the properties
                     resolvedValue = context.getPropertyByKey(variableName);
-                    // If it still cannot be found, it isn't resolvable anymore
+                    // If it still cannot be found, it isn't resolvable
                     if (resolvedValue == null)
                     {
                         // So we simply add ${ and } again.
@@ -457,8 +291,78 @@ public class VariableResolver
             resolvedValue = variableName;
         }
 
-        // we found a variable, therefore we are done
+        // Return the resolved expression
         return resolvedValue;
+    }
+
+    public Pair<String, Integer> resolveExpressionAgain(final String expression, final boolean mustBeResolved, final Context context)
+    {
+        String resolvedValue = "";
+        char current;
+        boolean isResolved = false;
+        boolean ignoreNextChars = false;
+        int index = 0;
+
+        // Main iteration over the string
+        for (; index < expression.length(); index++)
+        {
+            current = expression.charAt(index);
+            if (current == '\\')
+            {
+                // Add the next char and increment index
+                resolvedValue += expression.charAt(++index);
+            }
+            // Change "mode", so every character that is following literally
+            else if (current == '\'' && expression.substring(index + 1).contains("\'"))
+            {
+                ignoreNextChars = true;
+            }
+            // Stop ignoring every character that is following
+            else if (current == '\'' && ignoreNextChars)
+            {
+                ignoreNextChars = false;
+            }
+            // If we find a "}" and we don't want to ignore it and if we found a variable beforehand
+            else if (current == '}' && !ignoreNextChars && mustBeResolved)
+            {
+                isResolved = true;
+                // Resolve it
+                final String resolved = resolveVariable(resolvedValue, context);
+                if (resolved == null)
+                {
+                    resolvedValue += current;
+                    continue;
+                }
+                else
+                {
+                    resolvedValue = resolved;
+                    // Exit the loop
+                    break;
+                }
+            }
+            // We found a variable start and there is a variable end
+            else if (current == '$' && expression.length() > index + 2 && expression.charAt(index + 1) == '{'
+                     && expression.substring(index + 2).contains("}"))
+            {
+                // Resolve the variable
+                final Pair<String, Integer> resolvedPair = resolveExpressionAgain(expression.substring(index + 2), true, context);
+                // Add it to the function output resolvedValue
+                resolvedValue += resolvedPair.getLeft();
+                // Increment index by length of the variableName plus 3
+                index += resolvedPair.getRight() + 2;
+            }
+            else
+            {
+                resolvedValue += current;
+            }
+        }
+
+        if (mustBeResolved && !isResolved)
+        {
+            resolvedValue = "${" + resolvedValue;
+        }
+
+        return new ImmutablePair<String, Integer>(resolvedValue, index);
     }
 
 }
