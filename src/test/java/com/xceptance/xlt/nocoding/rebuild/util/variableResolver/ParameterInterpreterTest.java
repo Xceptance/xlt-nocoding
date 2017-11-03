@@ -197,7 +197,7 @@ public class ParameterInterpreterTest
         Assert.assertNotNull(resolved);
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testEndlessRecursion()
     {
         context.storeVariable("host", "${host}");

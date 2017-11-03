@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.parser.yamlParser.actionItems.subrequest;
+package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.subrequest;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.xceptance.xlt.nocoding.parser.yamlParser.actionItems.AbstractActionItemParser;
+import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.AbstractActionItemParser;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;

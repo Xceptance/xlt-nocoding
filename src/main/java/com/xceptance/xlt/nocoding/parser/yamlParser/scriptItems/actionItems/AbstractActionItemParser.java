@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.parser.yamlParser.actionItems;
+package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems;
 
 import java.io.IOException;
 import java.util.List;

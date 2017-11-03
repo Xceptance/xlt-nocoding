@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.parser.yamlParser.actionItems.request;
+package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.request;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.Map;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.api.util.XltLogger;
-import com.xceptance.xlt.nocoding.parser.yamlParser.actionItems.AbstractActionItemParser;
+import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.AbstractActionItemParser;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.util.Constants;

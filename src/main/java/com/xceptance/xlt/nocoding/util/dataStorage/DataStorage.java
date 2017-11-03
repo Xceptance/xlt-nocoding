@@ -19,6 +19,7 @@ public class DataStorage
 
     private final Map<String, String> parameters;
 
+    // TODO entfernen
     private final List<StoreItem> storeItems;
 
     private final List<String> staticUrls;

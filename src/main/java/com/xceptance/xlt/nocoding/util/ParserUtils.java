@@ -166,7 +166,7 @@ public class ParserUtils
         }
         else
         {
-            throw new JsonParseException("Unknown node type");
+            throw new JsonParseException("Unknown node type " + type.toString());
         }
         return value;
     }

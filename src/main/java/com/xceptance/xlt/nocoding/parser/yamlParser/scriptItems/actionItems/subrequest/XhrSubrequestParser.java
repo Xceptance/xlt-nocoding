@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.parser.yamlParser.actionItems.subrequest;
+package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.subrequest;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,8 +7,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.xceptance.xlt.api.util.XltLogger;
-import com.xceptance.xlt.nocoding.parser.yamlParser.actionItems.request.RequestParser;
-import com.xceptance.xlt.nocoding.parser.yamlParser.actionItems.response.ResponseParser;
+import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.request.RequestParser;
+import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.response.ResponseParser;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
@@ -48,7 +48,8 @@ public class XhrSubrequestParser
                 case Constants.NAME:
                     name = ParserUtils.readValue(node, fieldName);
                     XltLogger.runTimeLogger.debug("Actionname: " + name);
-                    break;
+                    // Continue the loop so we do not create a new subrequest
+                    continue;
 
                 case Constants.REQUEST:
                     // Log the Request block with the unparsed content

@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.data.GeneralDataProvider;
-import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.scriptItem.StoreItem;
@@ -22,7 +21,7 @@ public class Context
 {
     protected final DataStorage dataStorage;
 
-    protected XltWebClient webClient;
+    protected final XltWebClient webClient;
 
     protected final VariableResolver resolver;
 
@@ -77,24 +76,6 @@ public class Context
     public DataStorage getDataStorage()
     {
         return dataStorage;
-    }
-
-    /**
-     * Sets a new {@link XltWebClient} if no {@link XltWebClient} is set yet
-     * 
-     * @param webClient
-     *            The {@link XltWebClient} you want to attach.
-     */
-    public void setWebClient(final XltWebClient webClient)
-    {
-        if (this.webClient == null)
-        {
-            this.webClient = webClient;
-        }
-        else
-        {
-            XltLogger.runTimeLogger.warn("WebClient already attached. Therefore, no new WebClient is set.");
-        }
     }
 
     /**

@@ -16,7 +16,8 @@ public class StaticSubrequest extends AbstractSubrequest
     @Override
     public void execute(final Context context) throws Exception
     {
-        // TODO [Meeting] Where to set parallel downloads? Property?
+        // TODO Jap
+        // com.xceptance.xlt.staticContent.downloadThreads, false
         final Downloader downloader = new Downloader(context.getWebClient());
         for (final String url : urls)
         {

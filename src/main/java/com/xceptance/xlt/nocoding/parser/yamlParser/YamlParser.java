@@ -85,18 +85,14 @@ public class YamlParser implements Parser
                 // Catch any exception while parsing, so we can print the current line/column number with the error
                 catch (final Exception e)
                 {
-                    throw new JsonParseException(e.getMessage(), parser.getCurrentLocation(), e);
+                    throw new JsonParseException(parser, "No permitted list item: " + parser.getText(), e);
                 }
             }
             // If we don't have a list item, check if it is really a field name. If it is, throw an error
             else if (parser.getCurrentToken() != null && parser.getCurrentToken().equals(JsonToken.FIELD_NAME))
             {
-                // XltLogger.runTimeLogger.warn("No permitted list item: " + parser.getText() + logLineColumn(parser));
-                // throw new com.google.gson.JsonParseException("No permitted list item: " + parser.getText() + logLineColumn(parser));
 
-                // TODO [Meeting] the other methods dont work - NoSuchMethodError -> Dependency Issue but Pom says we use jackson-core
-                // 2.9.0
-                throw new JsonParseException("No permitted list item: " + parser.getText(), parser.getCurrentLocation());
+                throw new JsonParseException(parser, "No permitted list item: " + parser.getText());
             }
             // If we don't have a list item and it's not a field name, we have found null or an Array Entry/Exit or an Object
             // Entry/Exit.

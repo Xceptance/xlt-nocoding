@@ -1,6 +1,8 @@
 package com.xceptance.xlt.nocoding.util.variableResolver;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -50,7 +52,24 @@ public class VariableResolver
 
     public String resolveString(final String toResolve, final Context context)
     {
-        return resolveExpression(toResolve, false, context).getLeft();
+        final List<String> resolvedValues = new ArrayList<String>();
+        String resolvedValue = resolveExpression(toResolve, false, context).getLeft();
+        resolvedValues.add(resolvedValue);
+        // As long as we can still resolve another value, continue
+        while (!resolvedValue.equals(resolveExpression(resolvedValue, false, context).getLeft()))
+        {
+            //
+            resolvedValue = resolveExpression(resolvedValue, false, context).getLeft();
+            if (resolvedValues.contains(resolvedValue))
+            {
+                throw new IllegalArgumentException("Endless recursion detected at variable: " + toResolve);
+            }
+            else
+            {
+                resolvedValues.add(resolvedValue);
+            }
+        }
+        return resolvedValue;
     }
 
     public Pair<String, Integer> resolveExpression(final String expression, final boolean mustBeResolved, final Context context)
@@ -65,13 +84,13 @@ public class VariableResolver
         for (; index < expression.length(); index++)
         {
             current = expression.charAt(index);
-            if (current == '\\')
-            {
-                // Add the next char and increment index
-                resolvedValue += expression.charAt(++index);
-            }
+            // if (current == '\\')
+            // {
+            // // Add the next char and increment index
+            // resolvedValue += expression.charAt(++index);
+            // }
             // Change "mode", so every character that is following literally
-            else if (current == '\'' && expression.substring(index + 1).contains("\'"))
+            if (current == '\'' && expression.substring(index + 1).contains("\'"))
             {
                 ignoreNextChars = true;
             }
