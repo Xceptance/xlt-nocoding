@@ -4,6 +4,12 @@ import java.util.List;
 
 import com.xceptance.xlt.nocoding.util.Context;
 
+/**
+ * Creates a static subrequest, that downloads all specified urls. The amount of parallel download is specified in the
+ * properties.
+ * 
+ * @author ckeiner
+ */
 public class StaticSubrequest extends AbstractSubrequest
 {
     private final List<String> urls;

@@ -7,6 +7,11 @@ import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.util.Context;
 
+/**
+ * Creates a XhrSubrequest that has a name and can consists of a request, response and another subrequest.
+ * 
+ * @author ckeiner
+ */
 public class XhrSubrequest extends AbstractSubrequest
 {
     private final String name;

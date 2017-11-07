@@ -11,6 +11,12 @@ import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 
+/**
+ * Validates a cookie by searching for the Set-Cookie header and verifying its name. If it is specified, it also
+ * validates the content of the cookie.
+ * 
+ * @author ckeiner
+ */
 public class CookieValidator extends AbstractValidator
 {
     protected String cookie;
@@ -60,12 +66,12 @@ public class CookieValidator extends AbstractValidator
                         final int semicolonPosition = header.getValue().indexOf(";");
                         // Content starts after the equal sign (position+1) and ends before the semicolon
                         final String cookieContent = header.getValue().substring(cookie.length() + 1, semicolonPosition);
-                        // If the validationMode is text, assert that both are equal
+                        // If the validationMode is 'Text', assert that both are equal
                         if (getValidationMode().equals(Constants.TEXT))
                         {
                             Assert.assertEquals("Content did not match", expectedContent, cookieContent);
                         }
-                        // If the validationMode is matches, assert that the specified pattern matches
+                        // If the validationMode is matches, assert that the expectedCsontent matches the actual content
                         else if (getValidationMode().equals(Constants.MATCHES))
                         {
                             final Matcher matcher = Pattern.compile(expectedContent).matcher(cookieContent);

@@ -11,6 +11,12 @@ import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 
+/**
+ * Validates a header by searching for its name. Depending on the mode, it validates the amount of the specified header
+ * or the content of the header.
+ * 
+ * @author ckeiner
+ */
 public class HeaderValidator extends AbstractValidator
 {
     /**
@@ -19,7 +25,7 @@ public class HeaderValidator extends AbstractValidator
     protected String header;
 
     /**
-     * The text in the header
+     * The expected content of the header
      */
     protected String expectedContent;
 
@@ -89,10 +95,12 @@ public class HeaderValidator extends AbstractValidator
                 if (getText() != null && getValidationMode() != null && !getValidationMode().equals(Constants.EXISTS)
                     && !getValidationMode().equals(Constants.COUNT))
                 {
+                    // If the validationMode is 'Text', validate that the expectedContent equals the actual content
                     if (getValidationMode().equals(Constants.TEXT))
                     {
                         Assert.assertEquals("Value of header does not match expected value", getText(), header.getValue());
                     }
+                    // If the validationMode is 'Matches', validate that the expectedContent matches the actual content
                     else if (getValidationMode().equals(Constants.MATCHES))
                     {
                         final Matcher matcher = Pattern.compile(expectedContent).matcher(header.getValue());

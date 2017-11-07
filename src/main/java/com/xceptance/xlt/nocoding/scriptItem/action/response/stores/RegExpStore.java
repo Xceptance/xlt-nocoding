@@ -10,11 +10,22 @@ import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
 import com.xceptance.xlt.nocoding.util.Context;
 
+/**
+ * Stores the item that is found via the regular expression.
+ * 
+ * @author ckeiner
+ */
 public class RegExpStore extends AbstractResponseStore
 {
 
+    /**
+     * The group of the match
+     */
     private String group;
 
+    /**
+     * The regular expression
+     */
     private String pattern;
 
     public RegExpStore(final String name, final String pattern)

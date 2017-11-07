@@ -12,6 +12,12 @@ import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 
+/**
+ * Validates the content of the {@link WebResponse} by matching it with a pattern. If specified, the group is used as
+ * matching group and the found content of the regular expression is used.
+ * 
+ * @author ckeiner
+ */
 public class RegExpValidator extends AbstractValidator
 {
     private String pattern;
@@ -104,10 +110,12 @@ public class RegExpValidator extends AbstractValidator
                 // If we did get a match that is not null, verify it equals the text field
                 if (matchingString != null)
                 {
+                    // If the validationMode is 'Text', verify the expectedContent equals the actual content
                     if (getValidationMode().equals(Constants.TEXT))
                     {
                         Assert.assertTrue("Found content does not equal matcher", getExpectedContent().equals(matchingString));
                     }
+                    // If the validationMode is 'Matches', verify the expectedContent matches the actual content
                     else if (getValidationMode().equals(Constants.MATCHES))
                     {
                         final Matcher matcherMode = Pattern.compile(expectedContent).matcher(matchingString);

@@ -6,6 +6,11 @@ import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.util.Context;
 
+/**
+ * Stores the header with the specified name.
+ * 
+ * @author ckeiner
+ */
 public class HeaderStore extends AbstractResponseStore
 {
     /**

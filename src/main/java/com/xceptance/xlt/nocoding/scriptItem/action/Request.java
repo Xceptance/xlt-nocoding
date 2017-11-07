@@ -17,9 +17,16 @@ import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
+import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 
+/**
+ * Describes the request defined in the file and transposes it to a {@link WebRequest} that is also sent via the
+ * {@link XltWebClient}
+ * 
+ * @author ckeiner
+ */
 public class Request extends AbstractActionItem
 {
     /**

@@ -2,6 +2,7 @@ package com.xceptance.xlt.nocoding.scriptItem.action.response;
 
 import java.util.List;
 
+import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
 import com.xceptance.xlt.api.validators.HttpResponseCodeValidator;
 import com.xceptance.xlt.engine.LightWeightPageImpl;
@@ -9,6 +10,12 @@ import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 
+/**
+ * The expected response to a request. A response has the expected httpcode, and a list of response items, which
+ * validate or store something of the {@link WebResponse} defined in the {@link Context}.
+ * 
+ * @author ckeiner
+ */
 public class Response extends AbstractActionItem
 {
 

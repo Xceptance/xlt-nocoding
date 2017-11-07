@@ -7,7 +7,7 @@ import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.util.Context;
 
 /**
- * Validates a cookie
+ * Validates a cookie by verifying the correct name, and if specified the content of the cookie.
  * 
  * @author ckeiner
  */

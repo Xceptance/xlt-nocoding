@@ -3,7 +3,7 @@ package com.xceptance.xlt.nocoding.scriptItem.action.response.stores;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseItem;
 
 /**
- * This is the abstract class for every response item that interacts with the storage.
+ * The abstract class for every response item that interacts with the storage.
  * 
  * @author ckeiner
  */

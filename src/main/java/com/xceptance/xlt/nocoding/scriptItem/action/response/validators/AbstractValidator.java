@@ -1,7 +1,13 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response.validators;
 
+import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseItem;
 
+/**
+ * The abstract class for every response item that validates the {@link WebResponse}.
+ * 
+ * @author ckeiner
+ */
 public abstract class AbstractValidator implements AbstractResponseItem
 {
     protected final String validationName;

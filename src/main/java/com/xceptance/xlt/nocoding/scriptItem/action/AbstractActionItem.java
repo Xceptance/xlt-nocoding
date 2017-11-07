@@ -9,5 +9,11 @@ import com.xceptance.xlt.nocoding.util.Context;
  */
 public abstract class AbstractActionItem
 {
+    /**
+     * Executes the action item
+     * 
+     * @param context
+     * @throws Throwable
+     */
     public abstract void execute(final Context context) throws Throwable;
 }
