@@ -1,11 +1,14 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response.validators;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.Assert;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
+import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 
 public class HeaderValidator extends AbstractValidator
@@ -18,7 +21,7 @@ public class HeaderValidator extends AbstractValidator
     /**
      * The text in the header
      */
-    protected String text;
+    protected String expectedContent;
 
     /**
      * The amount of times the header is in the response
@@ -33,9 +36,9 @@ public class HeaderValidator extends AbstractValidator
      * @param header
      *            The name of the header
      */
-    public HeaderValidator(final String validationName, final String header)
+    public HeaderValidator(final String validationName, final String validationMode, final String header)
     {
-        this(validationName, header, null, null);
+        this(validationName, validationMode, header, null, null);
     }
 
     /**
@@ -51,11 +54,12 @@ public class HeaderValidator extends AbstractValidator
      * @param count
      *            The amount of times the header is in the response
      */
-    public HeaderValidator(final String validationName, final String header, final String text, final String count)
+    public HeaderValidator(final String validationName, final String validationMode, final String header, final String expectedContent,
+        final String count)
     {
-        super(validationName);
+        super(validationName, validationMode);
         this.header = header;
-        this.text = text;
+        this.expectedContent = expectedContent;
         this.count = count;
     }
 
@@ -80,10 +84,21 @@ public class HeaderValidator extends AbstractValidator
             {
                 // Increment the amount of found headers
                 count++;
+
                 // If the header is found, verify the value if specified
-                if (getText() != null)
+                if (getText() != null && getValidationMode() != null && !getValidationMode().equals(Constants.EXISTS)
+                    && !getValidationMode().equals(Constants.COUNT))
                 {
-                    Assert.assertEquals("Value of header does not match expected value", getText(), header.getValue());
+                    if (getValidationMode().equals(Constants.TEXT))
+                    {
+                        Assert.assertEquals("Value of header does not match expected value", getText(), header.getValue());
+                    }
+                    else if (getValidationMode().equals(Constants.MATCHES))
+                    {
+                        final Matcher matcher = Pattern.compile(expectedContent).matcher(header.getValue());
+                        final String errorMsg = expectedContent + " did not match " + header.getValue();
+                        Assert.assertTrue(errorMsg, matcher.find());
+                    }
                 }
                 // At last, set throwException to false, so we know, that we found our specified header.
                 throwException = false;
@@ -96,7 +111,7 @@ public class HeaderValidator extends AbstractValidator
             throw new Exception("Did not find specified header");
         }
         // if we did find the header, then we want to assert that the count (if specified) is correct
-        else if (getCount() != null && count != Integer.parseInt(getCount()))
+        else if (getCount() != null && count != Integer.parseInt(getCount()) && getValidationMode().equals(Constants.COUNT))
         {
             throw new Exception("Amount of found headers does not equal expected count");
         }
@@ -133,12 +148,12 @@ public class HeaderValidator extends AbstractValidator
 
     public String getText()
     {
-        return text;
+        return expectedContent;
     }
 
     public void setText(final String text)
     {
-        this.text = text;
+        this.expectedContent = text;
     }
 
     public String getCount()

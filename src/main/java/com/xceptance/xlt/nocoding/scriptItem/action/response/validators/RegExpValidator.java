@@ -9,31 +9,33 @@ import org.openqa.selenium.InvalidArgumentException;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
 import com.xceptance.xlt.api.util.XltLogger;
+import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 
 public class RegExpValidator extends AbstractValidator
 {
     private String pattern;
 
-    private String text;
+    private String expectedContent;
 
     private String group;
 
-    public RegExpValidator(final String validationName, final String pattern)
+    public RegExpValidator(final String validationName, final String validationMode, final String pattern)
     {
-        this(validationName, pattern, null, null);
+        this(validationName, validationMode, pattern, null, null);
     }
 
-    public RegExpValidator(final String validationName, final String pattern, final String text)
+    public RegExpValidator(final String validationName, final String validationMode, final String pattern, final String expectedContent)
     {
-        this(validationName, pattern, text, null);
+        this(validationName, validationMode, pattern, expectedContent, null);
     }
 
-    public RegExpValidator(final String validationName, final String pattern, final String text, final String group)
+    public RegExpValidator(final String validationName, final String validationMode, final String pattern, final String expectedContent,
+        final String group)
     {
-        super(validationName);
+        super(validationName, validationMode);
         this.pattern = pattern;
-        this.text = text;
+        this.expectedContent = expectedContent;
         this.group = group;
     }
 
@@ -47,14 +49,14 @@ public class RegExpValidator extends AbstractValidator
         this.pattern = pattern;
     }
 
-    public String getText()
+    public String getExpectedContent()
     {
-        return text;
+        return expectedContent;
     }
 
-    public void setText(final String text)
+    public void setExpectedContent(final String expectedContent)
     {
-        this.text = text;
+        this.expectedContent = expectedContent;
     }
 
     public String getGroup()
@@ -87,7 +89,7 @@ public class RegExpValidator extends AbstractValidator
         if (matcher.find())
         {
             // and did specify text, we want to verify, that we have that text in a group
-            if (getText() != null)
+            if (getExpectedContent() != null && getValidationMode() != null && !getValidationMode().equals(Constants.EXISTS))
             {
                 // If we specified a group, save the match of that group
                 if (group != null)
@@ -102,7 +104,16 @@ public class RegExpValidator extends AbstractValidator
                 // If we did get a match that is not null, verify it equals the text field
                 if (matchingString != null)
                 {
-                    Assert.assertTrue("Found content does not equal matcher", getText().equals(matchingString));
+                    if (getValidationMode().equals(Constants.TEXT))
+                    {
+                        Assert.assertTrue("Found content does not equal matcher", getExpectedContent().equals(matchingString));
+                    }
+                    else if (getValidationMode().equals(Constants.MATCHES))
+                    {
+                        final Matcher matcherMode = Pattern.compile(expectedContent).matcher(matchingString);
+                        final String errorMsg = expectedContent + " did not match " + matchingString;
+                        Assert.assertTrue(errorMsg, matcherMode.find());
+                    }
                 }
                 // otherwise throw an error
                 else
@@ -136,10 +147,10 @@ public class RegExpValidator extends AbstractValidator
         setPattern(resolvedValue);
 
         // Resolve text
-        if (getText() != null)
+        if (getExpectedContent() != null)
         {
-            resolvedValue = context.resolveString(getText());
-            setText(resolvedValue);
+            resolvedValue = context.resolveString(getExpectedContent());
+            setExpectedContent(resolvedValue);
         }
 
         // Resolve count

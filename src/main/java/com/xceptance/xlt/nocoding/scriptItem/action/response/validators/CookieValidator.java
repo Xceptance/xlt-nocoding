@@ -1,29 +1,32 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response.validators;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.Assert;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
+import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 
 public class CookieValidator extends AbstractValidator
 {
     protected String cookie;
 
-    protected String text;
+    protected String expectedContent;
 
-    public CookieValidator(final String validationName, final String cookie)
+    public CookieValidator(final String validationName, final String validationMode, final String cookie)
     {
-        this(validationName, cookie, null);
+        this(validationName, validationMode, cookie, null);
     }
 
-    public CookieValidator(final String validationName, final String cookie, final String text)
+    public CookieValidator(final String validationName, final String validationMode, final String cookie, final String expectedContent)
     {
-        super(validationName);
+        super(validationName, validationMode);
         this.cookie = cookie;
-        this.text = text;
+        this.expectedContent = expectedContent;
     }
 
     @Override
@@ -50,16 +53,25 @@ public class CookieValidator extends AbstractValidator
                 // and comparing it with the input name
                 if (cookieName.equals(cookie))
                 {
-                    // Finally check if the text attribute is specified
-                    if (text != null)
+                    // Finally check if the text attribute is specified and the validationMode is specified and is not "Exists"
+                    if (expectedContent != null && getValidationMode() != null && !getValidationMode().equals(Constants.EXISTS))
                     {
-                        // If it is, assert that the cookie content is the same as the text attribute
-                        // by getting the cookie content, that is until the first semicolon
+                        // Get the content of the cookie, which is until the first semicolon
                         final int semicolonPosition = header.getValue().indexOf(";");
                         // Content starts after the equal sign (position+1) and ends before the semicolon
-                        Assert.assertEquals("Content did not match",
-                                            text,
-                                            header.getValue().substring(cookie.length() + 1, semicolonPosition));
+                        final String cookieContent = header.getValue().substring(cookie.length() + 1, semicolonPosition);
+                        // If the validationMode is text, assert that both are equal
+                        if (getValidationMode().equals(Constants.TEXT))
+                        {
+                            Assert.assertEquals("Content did not match", expectedContent, cookieContent);
+                        }
+                        // If the validationMode is matches, assert that the specified pattern matches
+                        else if (getValidationMode().equals(Constants.MATCHES))
+                        {
+                            final Matcher matcher = Pattern.compile(expectedContent).matcher(cookieContent);
+                            final String errorMsg = expectedContent + " did not match " + cookieContent;
+                            Assert.assertTrue(errorMsg, matcher.find());
+                        }
                     }
                     // At last, set throwException to false, so we know, that we found our specified cookie.
                     throwException = false;
@@ -79,10 +91,10 @@ public class CookieValidator extends AbstractValidator
     {
         String resolvedValue = context.resolveString(cookie);
         cookie = resolvedValue;
-        if (text != null)
+        if (expectedContent != null)
         {
-            resolvedValue = context.resolveString(text);
-            text = resolvedValue;
+            resolvedValue = context.resolveString(expectedContent);
+            expectedContent = resolvedValue;
         }
 
     }

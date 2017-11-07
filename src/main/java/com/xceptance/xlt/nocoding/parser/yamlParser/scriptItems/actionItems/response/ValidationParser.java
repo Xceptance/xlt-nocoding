@@ -45,6 +45,7 @@ public class ValidationParser
             // Iterate over the fieldNames
             while (fieldName.hasNext())
             {
+                String validationMode = Constants.EXISTS;
                 // The current fieldName ist the name of the validation
                 validationName = fieldName.next();
                 // Get the substructure (which is an Object)
@@ -67,22 +68,23 @@ public class ValidationParser
                             if (name.hasNext())
                             {
                                 // Get the left hand expression of the second fieldName
-                                final String left = name.next();
-                                if (left.equals(Constants.MATCHES))
+                                validationMode = name.next();
+                                if (validationMode.equals(Constants.MATCHES) || validationMode.equals(Constants.TEXT))
                                 {
-                                    matches = ParserUtils.readValue(storeContent, left);
+                                    matches = ParserUtils.readValue(storeContent, validationMode);
+
                                 }
-                                else if (left.equals(Constants.COUNT))
+                                else if (validationMode.equals(Constants.COUNT))
                                 {
-                                    count = ParserUtils.readValue(storeContent, left);
+                                    count = ParserUtils.readValue(storeContent, validationMode);
                                 }
                                 else
                                 {
-                                    throw new IllegalArgumentException("Unknown validation item: " + left);
+                                    throw new IllegalArgumentException("Unknown validation item: " + validationMode);
                                 }
                             }
                             // Add the validator to the validations
-                            validator.add(new XPathValidator(validationName, xPathExpression, matches, count));
+                            validator.add(new XPathValidator(validationName, validationMode, xPathExpression, matches, count));
 
                             break;
 
@@ -94,15 +96,15 @@ public class ValidationParser
                             // if we have another fieldName, the optional text is specified
                             if (name.hasNext())
                             {
-                                String nextName = name.next();
+                                validationMode = name.next();
                                 // TODO [Meeting] Text vs Matches
-                                if (nextName.equals(Constants.TEXT) || nextName.equals(Constants.MATCHES))
+                                if (validationMode.equals(Constants.TEXT) || validationMode.equals(Constants.MATCHES))
                                 {
-                                    text = ParserUtils.readValue(storeContent, nextName);
+                                    text = ParserUtils.readValue(storeContent, validationMode);
                                     // if we have yet another fieldName, the optional group is specified
                                     if (name.hasNext())
                                     {
-                                        nextName = name.next();
+                                        final String nextName = name.next();
                                         if (nextName.equals(Constants.GROUP))
                                         {
                                             group = ParserUtils.readValue(storeContent, nextName);
@@ -115,12 +117,12 @@ public class ValidationParser
                                 }
                                 else
                                 {
-                                    throw new IllegalArgumentException("Unknown validation item: " + nextName);
+                                    throw new IllegalArgumentException("Unknown validation item: " + validationMode);
                                 }
                             }
 
                             // Add the validator to the validations
-                            validator.add(new RegExpValidator(validationName, pattern, text, group));
+                            validator.add(new RegExpValidator(validationName, validationMode, pattern, text, group));
                             break;
 
                         case Constants.HEADER:
@@ -131,22 +133,22 @@ public class ValidationParser
                             // If we have another fieldName, an optional attribute is specified
                             if (name.hasNext())
                             {
-                                final String textOrCount = name.next();
-                                if (textOrCount.equals(Constants.TEXT))
+                                validationMode = name.next();
+                                if (validationMode.equals(Constants.TEXT))
                                 {
-                                    headerText = ParserUtils.readValue(storeContent, textOrCount);
+                                    headerText = ParserUtils.readValue(storeContent, validationMode);
                                 }
-                                else if (textOrCount.equals(Constants.COUNT))
+                                else if (validationMode.equals(Constants.COUNT))
                                 {
-                                    headerCount = ParserUtils.readValue(storeContent, textOrCount);
+                                    headerCount = ParserUtils.readValue(storeContent, validationMode);
                                 }
                                 else
                                 {
-                                    throw new IllegalArgumentException("Unknown validation item: " + textOrCount);
+                                    throw new IllegalArgumentException("Unknown validation item: " + validationMode);
                                 }
                             }
                             // Add the validator to the validations
-                            validator.add(new HeaderValidator(validationName, header, headerText, headerCount));
+                            validator.add(new HeaderValidator(validationName, validationMode, header, headerText, headerCount));
                             break;
 
                         case Constants.COOKIE:
@@ -156,20 +158,20 @@ public class ValidationParser
                             // If we have another name, the optional "matches" field is specified
                             if (name.hasNext())
                             {
-                                final String nextCookieContent = name.next();
+                                validationMode = name.next();
                                 // TODO [Meeting] Which is the correct one? Specification vs Examples
-                                if (nextCookieContent.equals(Constants.MATCHES) || nextCookieContent.equals(Constants.TEXT))
+                                if (validationMode.equals(Constants.MATCHES) || validationMode.equals(Constants.TEXT))
                                 {
-                                    cookieContent = ParserUtils.readValue(storeContent, nextCookieContent);
+                                    cookieContent = ParserUtils.readValue(storeContent, validationMode);
                                 }
                                 else
                                 {
-                                    throw new IllegalArgumentException("Unknown validation item: " + nextCookieContent);
+                                    throw new IllegalArgumentException("Unknown validation item: " + validationMode);
                                 }
                             }
 
                             // Add the validator to the validations
-                            validator.add(new CookieValidator(validationName, cookieName, cookieContent));
+                            validator.add(new CookieValidator(validationName, validationMode, cookieName, cookieContent));
                             break;
 
                         default:

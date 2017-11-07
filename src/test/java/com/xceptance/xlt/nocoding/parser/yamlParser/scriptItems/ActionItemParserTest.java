@@ -108,7 +108,7 @@ public class ActionItemParserTest extends ParserTest
         final RegExpValidator regExpVal = (RegExpValidator) validation;
         Assert.assertEquals("validation_name_2", regExpVal.getValidationName());
         Assert.assertEquals("regexp_value_2", regExpVal.getPattern());
-        Assert.assertEquals("matches_value_2", regExpVal.getText());
+        Assert.assertEquals("matches_value_2", regExpVal.getExpectedContent());
         // Assert store
         Assert.assertTrue(response.getResponseItems().get(2) instanceof AbstractResponseStore);
         AbstractResponseStore store = (AbstractResponseStore) response.getResponseItems().get(2);
