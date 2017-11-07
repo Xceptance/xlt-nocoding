@@ -18,6 +18,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.Abstract
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.CookieValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.HeaderValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.RegExpValidator;
+import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
@@ -100,17 +101,17 @@ public class ValidatorTest
         // Define the count of occurences of the header
         final String count = "1";
         // Build the validator that searches for the header
-        validator = new HeaderValidator("HeaderValidation Standard", header);
+        validator = new HeaderValidator("HeaderValidation Standard", Constants.EXISTS, header);
         context.setWebResponse(webResponse);
         // Execute
         validator.execute(context);
         // Build the validator, that validates the content of the header equals text
-        validator = new HeaderValidator("HeaderValidation Text", header, text, null);
+        validator = new HeaderValidator("HeaderValidation Text", Constants.TEXT, header, text, null);
         context.setWebResponse(webResponse);
         // Execute
         validator.execute(context);
         // Build the validator that validates the number of occurences of the header equals count
-        validator = new HeaderValidator("HeaderValidation Count", header, null, count);
+        validator = new HeaderValidator("HeaderValidation Count", Constants.COUNT, header, null, count);
         context.setWebResponse(webResponse);
         // Execute
         validator.execute(context);
@@ -136,7 +137,7 @@ public class ValidatorTest
         // Define the content of the cookie
         final String text = "success=Login+successful.+Have+fun+in+our+shop%21";
         // Build the validator that searches only for the cookie
-        validator = new CookieValidator("CookieValidation Standard", cookie);
+        validator = new CookieValidator("CookieValidation Standard", Constants.EXISTS, cookie);
         context.setWebResponse(webResponse);
         // Execute
         validator.execute(context);
@@ -164,7 +165,7 @@ public class ValidatorTest
         final String group = "1";
 
         // Build a validator, that searches for the pattern
-        validator = new RegExpValidator("RegExpValidation Standard", pattern);
+        validator = new RegExpValidator("RegExpValidation Standard", Constants.EXISTS, pattern);
         context.setWebResponse(webResponse);
         // Execute
         validator.execute(context);
@@ -202,17 +203,17 @@ public class ValidatorTest
         // Define the count of occurences of the header
         final String count = "${count_1}";
         // Build the validator that searches for the header
-        validator = new HeaderValidator("HeaderValidationVariable Standard", header);
+        validator = new HeaderValidator("HeaderValidationVariable Standard", Constants.EXISTS, header);
         context.setWebResponse(webResponse);
         // Execute
         validator.execute(context);
         // Build the validator, that validates the content of the header equals text
-        validator = new HeaderValidator("HeaderValidationVariable Text", header, text, null);
+        validator = new HeaderValidator("HeaderValidationVariable Text", Constants.TEXT, header, text, null);
         context.setWebResponse(webResponse);
         // Execute
         validator.execute(context);
         // Build the validator that validates the number of occurences of the header equals count
-        validator = new HeaderValidator("HeaderValidationVariable Count", header, null, count);
+        validator = new HeaderValidator("HeaderValidationVariable Count", Constants.COUNT, header, null, count);
         context.setWebResponse(webResponse);
         // Execute
         validator.execute(context);
@@ -244,7 +245,7 @@ public class ValidatorTest
         // Define the content of the cookie
         final String text = "${cookie_content_name}=${cookie_content_value}";
         // Build the validator that searches only for the cookie
-        validator = new CookieValidator("CookieValidationVariable Standard", cookie);
+        validator = new CookieValidator("CookieValidationVariable Standard", Constants.EXISTS, cookie);
         context.setWebResponse(webResponse);
         // Execute
         validator.execute(context);
@@ -278,7 +279,7 @@ public class ValidatorTest
         final String group = "${group}";
 
         // Build a validator, that searches for the pattern
-        validator = new RegExpValidator("RegExpValidationVariable Standard", pattern);
+        validator = new RegExpValidator("RegExpValidationVariable Standard", Constants.EXISTS, pattern);
         context.setWebResponse(webResponse);
         // Execute
         validator.execute(context);

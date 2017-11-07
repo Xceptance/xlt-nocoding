@@ -12,8 +12,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.RegExpValidator;
-import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
-import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.XhrSubrequest;
+import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.MockObjects;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
@@ -40,7 +39,7 @@ public class XhrSubrequestTest
         actionItems.add(actionItem);
 
         final List<AbstractResponseItem> responseItems = new ArrayList<AbstractResponseItem>();
-        final AbstractResponseItem responseItem = new RegExpValidator("Validate Title", mockObject.regexStringExpected);
+        final AbstractResponseItem responseItem = new RegExpValidator("Validate Title", Constants.TEXT, mockObject.regexStringExpected);
         responseItems.add(responseItem);
         actionItem = new Response("200", responseItems);
         actionItems.add(actionItem);
