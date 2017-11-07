@@ -175,7 +175,7 @@ public class Request extends AbstractActionItem
      * @param context
      *            The propertyManager with the DataStorage
      */
-    private void fillDefaultData(final Context context)
+    void fillDefaultData(final Context context)
     {
         // if the name is null, check if it has a default value
         if (this.getMethod() == null)
@@ -254,7 +254,7 @@ public class Request extends AbstractActionItem
      *            The propertyManager with the DataStorage to use
      * @throws InvalidArgumentException
      */
-    private void resolveValues(final Context context) throws InvalidArgumentException
+    void resolveValues(final Context context) throws InvalidArgumentException
     {
         String resolvedValue;
 
