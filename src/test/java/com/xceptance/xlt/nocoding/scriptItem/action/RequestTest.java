@@ -1,5 +1,6 @@
 package com.xceptance.xlt.nocoding.scriptItem.action;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -41,7 +42,7 @@ public class RequestTest
     }
 
     @Test
-    public void buildWebRequest() throws InvalidArgumentException, MalformedURLException
+    public void buildWebRequest() throws InvalidArgumentException, MalformedURLException, UnsupportedEncodingException
     {
         final HttpMethod method = HttpMethod.GET;
         final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
@@ -52,7 +53,7 @@ public class RequestTest
         final Boolean xhr = false;
 
         request = new Request(url);
-        request.setMethod(method.toString());
+        request.setHttpMethod(method.toString());
         request.setParameters(parameters);
         request.setBody(body);
         request.setEncodeBody(encodeBody.toString());
@@ -88,7 +89,8 @@ public class RequestTest
 
     @Test
     public void buildWebRequestWithVariables()
-        throws InvalidArgumentException, MalformedURLException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
+        throws InvalidArgumentException, MalformedURLException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+        UnsupportedEncodingException
     {
         String key, value;
         final HttpMethod method = HttpMethod.GET;
@@ -159,7 +161,7 @@ public class RequestTest
         headers_var.put("${header3_key}", "${header3_value}");
 
         request = new Request(url_var);
-        request.setMethod(method_var);
+        request.setHttpMethod(method_var);
         request.setParameters(parameters_var);
         request.setBody(body_var);
         request.setEncodeBody(encodeBody_var);
@@ -206,7 +208,8 @@ public class RequestTest
 
     @Test
     public void testDefaultData()
-        throws InvalidArgumentException, MalformedURLException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
+        throws InvalidArgumentException, MalformedURLException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+        UnsupportedEncodingException
     {
         request = new Request(url);
         request.fillDefaultData(context);

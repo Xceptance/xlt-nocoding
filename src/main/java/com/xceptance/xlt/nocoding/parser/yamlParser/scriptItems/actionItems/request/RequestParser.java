@@ -107,7 +107,7 @@ public class RequestParser extends AbstractActionItemParser
 
         // Create request out of the data
         final Request request = new Request(url);
-        request.setMethod(method);
+        request.setHttpMethod(method);
         request.setXhr(xhr);
         request.setEncodeParameters(encodeParameters);
         request.setParameters(parameters);

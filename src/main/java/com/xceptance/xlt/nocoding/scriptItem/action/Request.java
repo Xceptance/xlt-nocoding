@@ -1,8 +1,10 @@
 package com.xceptance.xlt.nocoding.scriptItem.action;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +30,7 @@ public class Request extends AbstractActionItem
     /**
      * The HttpMethod for the webrequest. Defaults to "GET"
      */
-    private String method;
+    private String httpMethod;
 
     /**
      * Sets the WebRequest as Xhr request. Defaults to "false"
@@ -89,14 +91,14 @@ public class Request extends AbstractActionItem
         this.url = url;
     }
 
-    public String getMethod()
+    public String getHttpMethod()
     {
-        return method;
+        return httpMethod;
     }
 
-    public void setMethod(final String method)
+    public void setHttpMethod(final String httpMethod)
     {
-        this.method = method;
+        this.httpMethod = httpMethod;
     }
 
     public String getXhr()
@@ -178,9 +180,9 @@ public class Request extends AbstractActionItem
     void fillDefaultData(final Context context)
     {
         // if the name is null, check if it has a default value
-        if (this.getMethod() == null)
+        if (this.getHttpMethod() == null)
         {
-            setMethod(context.getConfigItemByKey(Constants.METHOD));
+            setHttpMethod(context.getConfigItemByKey(Constants.METHOD));
             // this.httpmethod = HttpMethod.valueOf(method);
         }
         if (this.getXhr() == null)
@@ -263,13 +265,13 @@ public class Request extends AbstractActionItem
         setUrl(resolvedValue);
 
         // Resolve Httpmethod
-        resolvedValue = context.resolveString(getMethod());
+        resolvedValue = context.resolveString(getHttpMethod());
 
         // TODO [Meeting] In alter Suite wird darauf nicht geachtet, siehe auch weiter unten
         // So throw error?
         if (HttpMethod.valueOf(resolvedValue) != null)
         {
-            setMethod(resolvedValue);
+            setHttpMethod(resolvedValue);
         }
         else
         {
@@ -397,23 +399,12 @@ public class Request extends AbstractActionItem
      *            The property manager that has the data storage
      * @return WebRequest - The WebRequest that is generated based on the instance
      * @throws MalformedURLException
+     * @throws UnsupportedEncodingException
      */
-    public WebRequest buildWebRequest() throws MalformedURLException, InvalidArgumentException
+    public WebRequest buildWebRequest() throws MalformedURLException, InvalidArgumentException, UnsupportedEncodingException
     {
-
-        // Finally build the webRequest
-        if (getEncodeBody() != null && Boolean.valueOf(getEncodeBody()))
-        {
-            encodeBody();
-        }
-
-        if (getEncodeParameters() != null && Boolean.valueOf(getEncodeParameters()))
-        {
-            encodeParameters();
-        }
-
         final URL url = new URL(this.url);
-        final WebRequest webRequest = new WebRequest(url, HttpMethod.valueOf(getMethod()));
+        final WebRequest webRequest = new WebRequest(url, HttpMethod.valueOf(getHttpMethod()));
 
         if (getXhr() != null && Boolean.valueOf(getXhr()))
         {
@@ -427,23 +418,45 @@ public class Request extends AbstractActionItem
 
         if (getParameters() != null)
         {
+            if (getEncodeParameters() != null && !Boolean.valueOf(getEncodeParameters()))
+            {
+                decodeParameters();
+            }
             webRequest.setRequestParameters(parameters);
+        }
+
+        // Set Body if specified
+        if (getBody() != null)
+        {
+            if (getEncodeBody() != null && !Boolean.valueOf(getEncodeBody()))
+            {
+                decodeBody();
+            }
+            webRequest.setRequestBody(body);
         }
         return webRequest;
     }
 
-    private void encodeBody()
+    private void decodeBody() throws UnsupportedEncodingException
     {
-        // TODO encode body
+        setBody(URLDecoder.decode(getBody(), "UTF-8"));
 
     }
 
-    private void encodeParameters()
+    private void decodeParameters() throws UnsupportedEncodingException
     {
-        // TODO encode Parameters
-        // String urlString = url.toString();
-        // urlString = StringUtils.replace(urlString, "&amp;", "&");
-        // URL newUrl = new URL(urlString);
+        final List<NameValuePair> decodedParameters = new ArrayList<>();
+        for (final NameValuePair parameter : getParameters())
+        {
+            final String decodedName = parameter.getName() != null ? URLDecoder.decode(parameter.getName(), "UTF-8") : null;
+            final String decodedValue = parameter.getValue() != null ? URLDecoder.decode(parameter.getValue(), "UTF-8") : null;
+
+            final NameValuePair decodedParameter = new NameValuePair(decodedName, decodedValue);
+
+            decodedParameters.add(decodedParameter);
+
+        }
+        setParameters(decodedParameters);
     }
 
     /*
@@ -451,7 +464,7 @@ public class Request extends AbstractActionItem
      */
     public String toSimpleDebugString()
     {
-        final String output = "Request-URL: " + url + " with Method." + method;
+        final String output = "Request-URL: " + url + " with Method." + httpMethod;
 
         return output;
     }

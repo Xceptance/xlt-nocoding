@@ -40,7 +40,7 @@ public class MockParser implements Parser
          * Request
          */
         final Request request = new Request("https://localhost:8443/posters/");
-        request.setMethod(HttpMethod.GET.toString());
+        request.setHttpMethod(HttpMethod.GET.toString());
         request.setParameters(null);
         request.setBody(null);
         request.setEncodeBody("false");
@@ -146,7 +146,7 @@ public class MockParser implements Parser
         final Request request1 = new Request("https://localhost:8443/posters/");
         final Request request2 = new Request("https://localhost:8443/posters/login");
         final Request request3 = new Request("https://localhost:8443/posters/login");
-        request3.setMethod(HttpMethod.POST.toString());
+        request3.setHttpMethod(HttpMethod.POST.toString());
         final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
         parameters.add(new NameValuePair("email", "john@doe.com"));
         parameters.add(new NameValuePair("password", "topsecret"));
@@ -227,7 +227,7 @@ public class MockParser implements Parser
         // XHRSubrequest
         // Request
         final Request requestOfSubrequest = new Request("${host}/posters/getProductOfTopCategory");
-        requestOfSubrequest.setMethod(HttpMethod.POST.toString());
+        requestOfSubrequest.setHttpMethod(HttpMethod.POST.toString());
         final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
         parameters.add(new NameValuePair("categoryId", "2"));
         parameters.add(new NameValuePair("page", "2"));

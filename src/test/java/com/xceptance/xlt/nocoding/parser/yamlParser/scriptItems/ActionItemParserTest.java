@@ -75,7 +75,7 @@ public class ActionItemParserTest extends ParserTest
         // Assert request
         Assert.assertTrue(action.getActionItems().get(0) instanceof Request);
         final Request request = (Request) action.getActionItems().get(0);
-        Assert.assertEquals("GET", request.getMethod());
+        Assert.assertEquals("GET", request.getHttpMethod());
         Assert.assertEquals("true", request.getXhr());
         Assert.assertEquals("false", request.getEncodeParameters());
         Assert.assertEquals("body", request.getBody());
