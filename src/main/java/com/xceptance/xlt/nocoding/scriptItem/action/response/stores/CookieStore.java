@@ -6,9 +6,13 @@ import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.util.Context;
 
+/**
+ * Validates a cookie
+ * 
+ * @author ckeiner
+ */
 public class CookieStore extends AbstractResponseStore
 {
-
     private String cookie;
 
     public CookieStore(final String variableName, final String cookie)
@@ -45,7 +49,8 @@ public class CookieStore extends AbstractResponseStore
                     // by getting the cookie content, that is until the first semicolon
                     final int semicolonPosition = header.getValue().indexOf(";");
                     // Content starts after the equal sign (position+1) and ends before the semicolon
-                    final String cookieContent = header.getValue().substring(cookie.length() + 1, semicolonPosition);
+                    final String cookieContent = header.getValue().substring(header.getValue().substring(equalSignPosition + 1).length(),
+                                                                             semicolonPosition);
                     // And store the content in our storage
                     context.storeVariable(getVariableName(), cookieContent);
 

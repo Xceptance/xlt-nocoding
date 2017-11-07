@@ -16,7 +16,7 @@ import com.xceptance.xlt.nocoding.util.NoCodingPropertyAdmin;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 /**
- * Executes a xlt-nocoding test case by parsing the file and then executing it
+ * Executes a xlt-nocoding test case by parsing the file specified in the properties and executing the parsed commands
  * 
  * @author ckeiner
  */
@@ -24,7 +24,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
 {
 
     /**
-     * The parser we use
+     * The parser to use for parsing
      */
     private Parser parser;
 
@@ -45,14 +45,12 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
     @Before
     public void initialize() throws Exception
     {
-        // Instantiate storage
-        final DataStorage globalStore = new DataStorage();
-        // Instantiate the PropertyManager
-        context = new Context(XltProperties.getInstance(), globalStore);
+        // Instantiate the PropertyManager with a new DataStorage
+        context = new Context(XltProperties.getInstance(), new DataStorage());
         final String pathToFile = getFilePath();
 
-        // this.parser = new com.xceptance.xlt.nocoding.parser.YamlParser(pathToFile);
         this.parser = new com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser(pathToFile);
+        // Parse the file
         itemList = parser.parse();
     }
 

@@ -6,6 +6,11 @@ import java.util.List;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 
+/**
+ * Parses an ActionItem and returns a list of it (since a subrequest can consist of multiple ActionItem)
+ * 
+ * @author ckeiner
+ */
 public abstract class AbstractActionItemParser
 {
 
