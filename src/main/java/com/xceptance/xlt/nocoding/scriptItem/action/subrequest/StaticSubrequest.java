@@ -16,9 +16,10 @@ public class StaticSubrequest extends AbstractSubrequest
     @Override
     public void execute(final Context context) throws Exception
     {
-        // TODO Jap
-        // com.xceptance.xlt.staticContent.downloadThreads, false
-        final Downloader downloader = new Downloader(context.getWebClient());
+        final String numberThreads = context.getPropertyByKey("com.xceptance.xlt.staticContent.downloadThreads");
+        final String userAgentUID = context.getPropertyByKey("userAgent.UID");
+        final Downloader downloader = new Downloader(context.getWebClient(), Integer.valueOf(numberThreads), Boolean.valueOf(userAgentUID));
+        ;
         for (final String url : urls)
         {
             downloader.addRequest(url);
