@@ -7,23 +7,48 @@ import java.util.Map;
 
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.scriptItem.StoreItem;
+import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultHeader;
+import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultItem;
+import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultParameter;
+import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultStatic;
 import com.xceptance.xlt.nocoding.util.Constants;
 
+/**
+ * Handles all data storage related matters. This means, the class saves variables, default
+ * definitions/headers/parameters/static requests.
+ * 
+ * @author ckeiner
+ */
 public class DataStorage
 {
+    /**
+     * Variables saved by {@link StoreItem}
+     */
     private final Map<String, String> variables;
 
+    /**
+     * The default items like httpcode = 200, saved by {@link StoreDefaultItem}
+     */
     private final Map<String, String> configItem;
 
+    /**
+     * The default headers saved by {@link StoreDefaultHeader}
+     */
     private final Map<String, String> headers;
 
+    /**
+     * The default parameters saved by {@link StoreDefaultParameter}
+     */
     private final Map<String, String> parameters;
 
-    // TODO entfernen
-    private final List<StoreItem> storeItems;
-
+    /**
+     * The urls for the default static request, saved by {@link StoreDefaultStatic}
+     */
     private final List<String> staticUrls;
 
+    /**
+     * Fallback values in case certain default items get deleted
+     */
     private final Map<String, String> fallback;
 
     public DataStorage()
@@ -44,7 +69,6 @@ public class DataStorage
         this.headers = new HashMap<String, String>();
         this.parameters = new HashMap<String, String>();
         this.staticUrls = new ArrayList<String>();
-        this.storeItems = new ArrayList<StoreItem>();
     }
 
     /**
@@ -206,11 +230,6 @@ public class DataStorage
         return staticUrls;
     }
 
-    public List<StoreItem> getStoreItems()
-    {
-        return storeItems;
-    }
-
     /**
      * Removes the specified config item and returns it
      * 
@@ -257,19 +276,6 @@ public class DataStorage
     }
 
     /**
-     * Adds a {@link StoreItem} to the default {@link StoreItem}-List
-     * 
-     * @param variableName
-     *            The name of the variable
-     * @param value
-     *            The value of the variable
-     */
-    public void addDefaultStoreItem(final String variableName, final String value)
-    {
-        getStoreItems().add(new StoreItem(variableName, value));
-    }
-
-    /**
      * Deletes all default headers
      */
     public void deleteDefaultHeader()
@@ -294,14 +300,6 @@ public class DataStorage
     }
 
     /**
-     * Deletes all default {@link StoreItem}
-     */
-    public void deleteDefaultStoreItem()
-    {
-        getStoreItems().clear();
-    }
-
-    /**
      * Deletes a single default headers
      */
     public void deleteDefaultHeader(final String header)
@@ -323,25 +321,6 @@ public class DataStorage
     public void deleteDefaultStatic(final String url)
     {
         getStaticUrls().remove(getStaticUrls().indexOf(url));
-    }
-
-    /**
-     * Deletes a single default {@link StoreItem}
-     */
-    public void deleteDefaultStoreItem(final String variableName)
-    {
-        StoreItem toRemove = null;
-        for (final StoreItem storeItem : getStoreItems())
-        {
-            if (storeItem.getVariableName().equals(variableName))
-            {
-                toRemove = storeItem;
-            }
-        }
-        if (toRemove != null)
-        {
-            getStoreItems().remove(getStoreItems().indexOf(toRemove));
-        }
     }
 
 }

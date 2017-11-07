@@ -16,6 +16,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.google.gson.JsonParseException;
 
+/**
+ * Utility methods for parsing.
+ * 
+ * @author ckeiner
+ */
 public class ParserUtils
 {
 

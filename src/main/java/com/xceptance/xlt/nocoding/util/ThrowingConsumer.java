@@ -2,6 +2,12 @@ package com.xceptance.xlt.nocoding.util;
 
 import java.util.function.Consumer;
 
+/**
+ * A simple interface that mimics consumer, and is able to throw exceptions.
+ * 
+ * @author ckeiner
+ * @param <T>
+ */
 @FunctionalInterface
 public interface ThrowingConsumer<T> extends Consumer<T>
 {

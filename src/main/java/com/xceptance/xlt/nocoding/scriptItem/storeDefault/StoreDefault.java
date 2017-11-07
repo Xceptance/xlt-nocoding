@@ -1,10 +1,13 @@
 package com.xceptance.xlt.nocoding.scriptItem.storeDefault;
 
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 
 /**
- * This is the class for simple assignments, so if a script item has the form of "- variable_1: value_1" this ScriptItem
- * is conjured.
+ * The abstrac class for every default store item. A default store item is an item that is used as default value for
+ * undefined (or in certain cases defined) fields like the httpcode in {@link Response}.
+ * 
+ * @author ckeiner
  */
 public abstract class StoreDefault implements ScriptItem
 {

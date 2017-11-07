@@ -5,7 +5,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 
 /**
- * Stores a new default header
+ * Stores a default header.
  * 
  * @author ckeiner
  */
@@ -26,7 +26,7 @@ public class StoreDefaultHeader extends StoreDefault
     public void execute(final Context context) throws Throwable
     {
         // If the value is not "delete"
-        if (!value.equals("delete"))
+        if (!value.equals(Constants.DELETE))
         {
             // Store the header
             context.storeDefaultHeader(variableName, value);

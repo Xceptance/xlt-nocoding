@@ -16,7 +16,7 @@ import bsh.Interpreter;
 /**
  * Tries to resolve variables. A variable is specified as "${(.)*}". Resolves values from the inside to the outside by
  * first looking into the dataStorage, then tries resolving it via beanshell and lastly it looks into the property
- * files.
+ * files. If nothing is found, it returns the original string. If it finds a recursion, it throws an error.
  * 
  * @author ckeiner
  */

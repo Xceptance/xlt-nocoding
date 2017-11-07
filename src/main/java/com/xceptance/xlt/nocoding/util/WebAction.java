@@ -10,7 +10,7 @@ import com.xceptance.xlt.api.actions.AbstractWebAction;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 
 /**
- * The WebAction extends the AbstractWebAction of the xlt framework. Therefore, this is the interface to xlt. A
+ * The WebAction extends the AbstractWebAction of the XLT framework. Therefore, this is the interface to XLT. A
  * WebAction fires a main (web) request, and afterwards an arbitrary amount of Request, Response and AbstractSubrequest.
  * The execution of the main request, etc. can be configured by passing a function to the WebAction.
  * 

@@ -7,13 +7,12 @@ import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.data.GeneralDataProvider;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.engine.XltWebClient;
-import com.xceptance.xlt.nocoding.scriptItem.StoreItem;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
 /**
  * The context for the execution. Thus, the context has methods for handling the data storage, web client, resolving
- * variables, storing the current WebResponse and managing properties
+ * variables, storing the current WebResponse and managing properties.
  * 
  * @author ckeiner
  */
@@ -196,19 +195,6 @@ public class Context
     }
 
     /**
-     * Stores a variable definition as default {@link StoreItem}
-     * 
-     * @param variableName
-     *            The name of the variable
-     * @param value
-     *            The value of the variable
-     */
-    public void storeDefaultStoreItem(final String variableName, final String value)
-    {
-        getDataStorage().addDefaultStoreItem(variableName, value);
-    }
-
-    /**
      * Removes a key value pair from the configItems. If a fallback value was specified for the configItem, it is going to
      * be used from then on
      * 
@@ -254,17 +240,6 @@ public class Context
     }
 
     /**
-     * Removes the specified variable from the default {@link StoreItem}
-     * 
-     * @param variableName
-     *            The name of the variable
-     */
-    public void deleteDefaultStoreItem(final String variableName)
-    {
-        getDataStorage().deleteDefaultStoreItem(variableName);
-    }
-
-    /**
      * Removes all default header
      */
     public void deleteDefaultHeader()
@@ -289,14 +264,6 @@ public class Context
     public void deleteDefaultStatic()
     {
         getDataStorage().deleteDefaultStatic();
-    }
-
-    /**
-     * Deletes all default {@link StoreItem}
-     */
-    public void deleteDefaultStoreItem()
-    {
-        getDataStorage().deleteDefaultStoreItem();
     }
 
     /*
@@ -332,14 +299,6 @@ public class Context
     public List<String> getDefaultStatic()
     {
         return getDataStorage().getStaticUrls();
-    }
-
-    /**
-     * Deletes all default {@link StoreItem}
-     */
-    public List<StoreItem> getDefaultStoreItem()
-    {
-        return getDataStorage().getStoreItems();
     }
 
     /*

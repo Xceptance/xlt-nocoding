@@ -4,6 +4,11 @@ import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 
+/**
+ * Stores a default parameter.
+ * 
+ * @author ckeiner
+ */
 public class StoreDefaultParameter extends StoreDefault
 {
     public StoreDefaultParameter(final String variableName, final String value)
@@ -15,7 +20,7 @@ public class StoreDefaultParameter extends StoreDefault
     public void execute(final Context context) throws Throwable
     {
         // If the value is not "delete"
-        if (!value.equals("delete"))
+        if (!value.equals(Constants.DELETE))
         {
             // Store the default parameter
             context.storeDefaultParameter(variableName, value);

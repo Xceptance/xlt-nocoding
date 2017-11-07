@@ -9,7 +9,7 @@ import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.engine.XltWebClient;
 
 /**
- * Handles all property related matters
+ * Handles all property related matters.
  * 
  * @author ckeiner
  */
