@@ -22,6 +22,7 @@ public class StoreItem implements ScriptItem
     @Override
     public void execute(final Context context) throws Throwable
     {
+        resolveValues(context);
         // Store the variable
         context.storeVariable(variableName, value);
         XltLogger.runTimeLogger.info("Added Variable: " + variableName + " : " + value);
@@ -45,6 +46,12 @@ public class StoreItem implements ScriptItem
     public void setValue(final String value)
     {
         this.value = value;
+    }
+
+    public void resolveValues(final Context context)
+    {
+        final String resolvedValue = context.resolveString(getValue());
+        setValue(resolvedValue);
     }
 
 }
