@@ -50,6 +50,13 @@ public class VariableResolver
         this(GeneralDataProvider.getInstance());
     }
 
+    /**
+     * Resolves the string as long as it can resolve it, but throws an error if it detects recursion
+     * 
+     * @param toResolve
+     * @param context
+     * @return
+     */
     public String resolveString(final String toResolve, final Context context)
     {
         final List<String> resolvedValues = new ArrayList<String>();
@@ -60,9 +67,17 @@ public class VariableResolver
         {
             //
             resolvedValue = resolveExpression(resolvedValue, false, context).getLeft();
-            if (resolvedValues.contains(resolvedValue))
+            if (!resolvedValues.isEmpty() && resolvedValues.contains(resolvedValue))
             {
-                throw new IllegalArgumentException("Endless recursion detected at variable: " + toResolve);
+                // If the last added value is what we have resolved, this isn't an error but intentional
+                if (resolvedValues.indexOf(resolvedValue) == resolvedValues.size() - 1)
+                {
+                    break;
+                }
+                else
+                {
+                    throw new IllegalArgumentException("Endless recursion detected at variable: " + toResolve);
+                }
             }
             else
             {
@@ -72,6 +87,14 @@ public class VariableResolver
         return resolvedValue;
     }
 
+    /**
+     * Resolves the string once
+     * 
+     * @param expression
+     * @param mustBeResolved
+     * @param context
+     * @return
+     */
     public Pair<String, Integer> resolveExpression(final String expression, final boolean mustBeResolved, final Context context)
     {
         String resolvedValue = "";
@@ -89,6 +112,7 @@ public class VariableResolver
             // // Add the next char and increment index
             // resolvedValue += expression.charAt(++index);
             // }
+
             // Change "mode", so every character that is following literally
             if (current == '\'' && expression.substring(index + 1).contains("\'"))
             {
