@@ -23,7 +23,7 @@ This is a library for Xceptance LoadTest (XLT) - http://www.xceptance-loadtest.c
 One is often faced with the requirement to just fire a couple of simple URLs, to verify the performance or functionality of a single feature, to create load in order to stress environments and monitor certain things, or simply to create load in addition to another load test.
 
 XLT-NoCoding is a library for XLT and delivers an easy way to define and fire HTTP requests and offers various tools to validate the responses.
-Additionally it is possible to filter, select and store data from the response with the view of inserting it into the next request or its validation. This is a fast and likewise easy way to define test cases, since **no programming** is needed!
+Additionally it is possible to filter, select and store data from the response in view of inserting it into the next request or its validation. This is a fast and likewise easy way to define test cases, since **no programming** is needed!
 
 Since the source is open and licensed under the Apache License V2.0, feel free to extend and customize it.
 
