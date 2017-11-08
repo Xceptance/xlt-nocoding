@@ -23,11 +23,32 @@ public class CookieValidator extends AbstractValidator
 
     protected String expectedContent;
 
-    public CookieValidator(final String validationName, final String validationMode, final String cookie)
+    /**
+     * Builds a validation module that verifies the specified cookie exists
+     * 
+     * @param validationName
+     *            The name of the validation
+     * @param cookie
+     *            The name of the cookie
+     */
+    public CookieValidator(final String validationName, final String cookie)
     {
-        this(validationName, validationMode, cookie, null);
+        this(validationName, Constants.EXISTS, cookie, null);
     }
 
+    /**
+     * Builds a validation module that verifies the specified cookie exists, with the specified content (if the content is
+     * specified)
+     * 
+     * @param validationName
+     *            The name of the validation
+     * @param validationMode
+     *            The mode of the validation, should be {@link Constants#TEXT} or {@link Constants#MATCHES}
+     * @param cookie
+     *            The name of the cookie
+     * @param expectedContent
+     *            The expected content of the cookie
+     */
     public CookieValidator(final String validationName, final String validationMode, final String cookie, final String expectedContent)
     {
         super(validationName, validationMode);
@@ -35,6 +56,9 @@ public class CookieValidator extends AbstractValidator
         this.expectedContent = expectedContent;
     }
 
+    /**
+     * Resolves the values and validates a cookie in the {@link WebResponse} of the {@link Context}.
+     */
     @Override
     public void execute(final Context context) throws Exception
     {

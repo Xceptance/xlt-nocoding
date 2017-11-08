@@ -55,7 +55,7 @@ public class MockParser implements Parser
 
         // Validator
         final List<AbstractResponseItem> responseItem = new ArrayList<AbstractResponseItem>();
-        responseItem.add(new RegExpValidator("Title", Constants.TEXT, "<title>Posters\\s-\\sThe\\sUltimate\\sOnline\\sShop</title>"));
+        responseItem.add(new RegExpValidator("Title", "<title>Posters\\s-\\sThe\\sUltimate\\sOnline\\sShop</title>"));
         // Store
         responseItem.add(new RegExpStore("Blub", "<title>(.*?)</title>"));
         // Response
@@ -161,12 +161,12 @@ public class MockParser implements Parser
 
         // Validator
         List<AbstractResponseItem> responseItem = new ArrayList<AbstractResponseItem>();
-        responseItem.add(new RegExpValidator("Title", Constants.TEXT, "<title>Posters\\s-\\sThe\\sUltimate\\sOnline\\sShop</title>"));
+        responseItem.add(new RegExpValidator("Title", "<title>Posters\\s-\\sThe\\sUltimate\\sOnline\\sShop</title>"));
         // Response
         final Response response1 = new Response(null, responseItem);
 
         responseItem = new ArrayList<AbstractResponseItem>();
-        responseItem.add(new RegExpValidator("login-form Existance", Constants.TEXT, "<form\\sid=\"formLogin\"[\\s\\S]+?>"));
+        responseItem.add(new RegExpValidator("login-form Existance", "<form\\sid=\"formLogin\"[\\s\\S]+?>"));
         // Response
         final Response response2 = new Response(null, responseItem);
 
@@ -178,7 +178,7 @@ public class MockParser implements Parser
         final Response response3 = new Response("303", responseItem);
 
         responseItem = new ArrayList<AbstractResponseItem>();
-        responseItem.add(new RegExpValidator("Login Greeting", Constants.TEXT, "John"));
+        responseItem.add(new RegExpValidator("Login Greeting", "John"));
         // Response
         final Response response4 = new Response("200", responseItem);
 
@@ -235,7 +235,8 @@ public class MockParser implements Parser
         requestOfSubrequest.setParameters(parameters);
         // Response
         final List<AbstractResponseItem> responseItem = new ArrayList<AbstractResponseItem>();
-        responseItem.add(new RegExpValidator("blub", "Grilled Salmon with Potato Wedges", "Grilled Salmon with Potato Wedges"));
+        responseItem.add(new RegExpValidator("blub", Constants.TEXT, "Grilled Salmon with Potato Wedges",
+                                             "Grilled Salmon with Potato Wedges"));
         final Response responseOfSubrequest = new Response(null, responseItem);
         final List<AbstractActionItem> subrequestItems = new ArrayList<AbstractActionItem>();
         subrequestItems.add(requestOfSubrequest);

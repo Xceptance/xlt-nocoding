@@ -32,15 +32,19 @@ public class XhrSubrequest extends AbstractSubrequest
     {
         final Context localContext = new Context(context);
 
-        // TODO [Meeting] First item request?
+        // If the first action item is not a request, throw an Exception
+        if (!(actionItems.iterator().next() instanceof Request))
+        {
+            throw new Exception();
+        }
+        // If it is a request, set xhr to true
+        else
+        {
+            ((Request) actionItems.iterator().next()).setXhr("true");
+        }
+
         for (final AbstractActionItem actionItem : actionItems)
         {
-            // If this is a request
-            if (actionItem instanceof Request)
-            {
-                // Set Xhr to true
-                ((Request) actionItem).setXhr("true");
-            }
             actionItem.execute(localContext);
         }
     }

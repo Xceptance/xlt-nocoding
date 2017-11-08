@@ -32,43 +32,52 @@ public class HeaderValidator extends AbstractValidator
     /**
      * The amount of times the header is in the response
      */
-    protected String count;
+    protected String expectedCount;
 
     /**
      * The constructor builds a validation module, that simply checks if the specified header can be found
      * 
      * @param validationName
      *            The name of the validation
+     * @param validationMode
+     *            The mode of validation, should be {@link Constants#TEXT}, {@link Constants#MATCHES} or
+     *            {@link Constants#COUNT}
      * @param header
      *            The name of the header
      */
-    public HeaderValidator(final String validationName, final String validationMode, final String header)
+    public HeaderValidator(final String validationName, final String header)
     {
-        this(validationName, validationMode, header, null, null);
+        this(validationName, Constants.EXISTS, header, null, null);
     }
 
     /**
-     * The constructors builds a validation module, that checks either the value of the specified header or if the amount of
-     * the header is as specified.
+     * The constructors builds a validation module, that checks (if specified) the value of the specified header or if the
+     * amount of headers is correct
      * 
      * @param variableName
      *            The name of the variable you want to store the header in
+     * @param validationMode
+     *            The mode of validation, should be {@link Constants#TEXT}, {@link Constants#MATCHES} or
+     *            {@link Constants#COUNT}
      * @param header
      *            The header you want to verify
      * @param text
      *            The text the header is supposed to have
-     * @param count
+     * @param expectedCount
      *            The amount of times the header is in the response
      */
     public HeaderValidator(final String validationName, final String validationMode, final String header, final String expectedContent,
-        final String count)
+        final String expectedCount)
     {
         super(validationName, validationMode);
         this.header = header;
         this.expectedContent = expectedContent;
-        this.count = count;
+        this.expectedCount = expectedCount;
     }
 
+    /**
+     * Resolves the values and validates a header in the {@link WebResponse} of the {@link Context}.
+     */
     @Override
     public void execute(final Context context) throws Exception
     {
@@ -92,13 +101,13 @@ public class HeaderValidator extends AbstractValidator
                 count++;
 
                 // If the header is found, verify the value if specified
-                if (getText() != null && getValidationMode() != null && !getValidationMode().equals(Constants.EXISTS)
+                if (getExpectedContent() != null && getValidationMode() != null && !getValidationMode().equals(Constants.EXISTS)
                     && !getValidationMode().equals(Constants.COUNT))
                 {
                     // If the validationMode is 'Text', validate that the expectedContent equals the actual content
                     if (getValidationMode().equals(Constants.TEXT))
                     {
-                        Assert.assertEquals("Value of header does not match expected value", getText(), header.getValue());
+                        Assert.assertEquals("Value of header does not match expected value", getExpectedContent(), header.getValue());
                     }
                     // If the validationMode is 'Matches', validate that the expectedContent matches the actual content
                     else if (getValidationMode().equals(Constants.MATCHES))
@@ -119,7 +128,7 @@ public class HeaderValidator extends AbstractValidator
             throw new Exception("Did not find specified header");
         }
         // if we did find the header, then we want to assert that the count (if specified) is correct
-        else if (getCount() != null && count != Integer.parseInt(getCount()) && getValidationMode().equals(Constants.COUNT))
+        else if (getExpectedCount() != null && count != Integer.parseInt(getExpectedCount()) && getValidationMode().equals(Constants.COUNT))
         {
             throw new Exception("Amount of found headers does not equal expected count");
         }
@@ -131,16 +140,16 @@ public class HeaderValidator extends AbstractValidator
         String resolvedValue = context.resolveString(getHeader());
         setHeader(resolvedValue);
         // Resolve text if specified
-        if (getText() != null)
+        if (getExpectedContent() != null)
         {
-            resolvedValue = context.resolveString(getText());
-            setText(resolvedValue);
+            resolvedValue = context.resolveString(getExpectedContent());
+            setExpectedContent(resolvedValue);
         }
         // Resolve count if specified
-        if (getCount() != null)
+        if (getExpectedCount() != null)
         {
-            resolvedValue = context.resolveString(getCount());
-            setCount(resolvedValue);
+            resolvedValue = context.resolveString(getExpectedCount());
+            setExpectedCount(resolvedValue);
         }
     }
 
@@ -154,24 +163,24 @@ public class HeaderValidator extends AbstractValidator
         this.header = header;
     }
 
-    public String getText()
+    public String getExpectedContent()
     {
         return expectedContent;
     }
 
-    public void setText(final String text)
+    public void setExpectedContent(final String expectedContent)
     {
-        this.expectedContent = text;
+        this.expectedContent = expectedContent;
     }
 
-    public String getCount()
+    public String getExpectedCount()
     {
-        return count;
+        return expectedCount;
     }
 
-    public void setCount(final String count)
+    public void setExpectedCount(final String expectedCount)
     {
-        this.count = count;
+        this.expectedCount = expectedCount;
     }
 
 }

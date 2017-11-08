@@ -101,7 +101,7 @@ public class ValidatorTest
         // Define the count of occurences of the header
         final String count = "1";
         // Build the validator that searches for the header
-        validator = new HeaderValidator("HeaderValidation Standard", Constants.EXISTS, header);
+        validator = new HeaderValidator("HeaderValidation Standard", header);
         context.setWebResponse(webResponse);
         // Execute
         validator.execute(context);
@@ -137,12 +137,12 @@ public class ValidatorTest
         // Define the content of the cookie
         final String text = "success=Login+successful.+Have+fun+in+our+shop%21";
         // Build the validator that searches only for the cookie
-        validator = new CookieValidator("CookieValidation Standard", Constants.EXISTS, cookie);
+        validator = new CookieValidator("CookieValidation Standard", cookie);
         context.setWebResponse(webResponse);
         // Execute
         validator.execute(context);
         // Build another validator that searches for the cookie and verifies the content equals text
-        validator = new CookieValidator("CookieValidation Text", cookie, text);
+        validator = new CookieValidator("CookieValidation Text", Constants.TEXT, cookie, text);
         context.setWebResponse(webResponse);
         // Execute
         validator.execute(context);
@@ -165,12 +165,12 @@ public class ValidatorTest
         final String group = "1";
 
         // Build a validator, that searches for the pattern
-        validator = new RegExpValidator("RegExpValidation Standard", Constants.EXISTS, pattern);
+        validator = new RegExpValidator("RegExpValidation Standard", pattern);
         context.setWebResponse(webResponse);
         // Execute
         validator.execute(context);
         // Build a validator, that searches for the pattern and verifies text is the first match
-        validator = new RegExpValidator("RegExpValidation Text", pattern, text);
+        validator = new RegExpValidator("RegExpValidation Text", Constants.TEXT, pattern, text);
         context.setWebResponse(webResponse);
         // Execute
         validator.execute(context);
@@ -203,7 +203,7 @@ public class ValidatorTest
         // Define the count of occurences of the header
         final String count = "${count_1}";
         // Build the validator that searches for the header
-        validator = new HeaderValidator("HeaderValidationVariable Standard", Constants.EXISTS, header);
+        validator = new HeaderValidator("HeaderValidationVariable Standard", header);
         context.setWebResponse(webResponse);
         // Execute
         validator.execute(context);
@@ -245,12 +245,12 @@ public class ValidatorTest
         // Define the content of the cookie
         final String text = "${cookie_content_name}=${cookie_content_value}";
         // Build the validator that searches only for the cookie
-        validator = new CookieValidator("CookieValidationVariable Standard", Constants.EXISTS, cookie);
+        validator = new CookieValidator("CookieValidationVariable Standard", cookie);
         context.setWebResponse(webResponse);
         // Execute
         validator.execute(context);
         // Build another validator that searches for the cookie and verifies the content equals text
-        validator = new CookieValidator("CookieValidationVariable Text", cookie, text);
+        validator = new CookieValidator("CookieValidationVariable Text", Constants.TEXT, cookie, text);
         context.setWebResponse(webResponse);
         // Execute
         validator.execute(context);
@@ -279,17 +279,17 @@ public class ValidatorTest
         final String group = "${group}";
 
         // Build a validator, that searches for the pattern
-        validator = new RegExpValidator("RegExpValidationVariable Standard", Constants.EXISTS, pattern);
+        validator = new RegExpValidator("RegExpValidationVariable Standard", pattern);
         context.setWebResponse(webResponse);
         // Execute
         validator.execute(context);
         // Build a validator, that searches for the pattern and verifies text is the first match
-        validator = new RegExpValidator("RegExpValidationVariable Text", pattern, text);
+        validator = new RegExpValidator("RegExpValidationVariable Text", Constants.TEXT, pattern, text);
         context.setWebResponse(webResponse);
         // Execute
         validator.execute(context);
         // Build a validator, that searches for the pattern and verifies text is the match in the matching group of group
-        validator = new RegExpValidator("RegExpValidationVariable Text+Group", pattern, text, group);
+        validator = new RegExpValidator("RegExpValidationVariable Text+Group", Constants.TEXT, pattern, text, group);
         context.setWebResponse(webResponse);
         // Execute
         validator.execute(context);

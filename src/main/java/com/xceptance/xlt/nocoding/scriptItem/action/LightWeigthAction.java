@@ -77,7 +77,6 @@ public class LightWeigthAction extends Action
                                                     .add(new LightWeightPageImpl(action.getContext().getWebResponse(),
                                                                                  action.getTimerName(),
                                                                                  action.getContext().getWebClient()));
-                ;
             }
         }
     }

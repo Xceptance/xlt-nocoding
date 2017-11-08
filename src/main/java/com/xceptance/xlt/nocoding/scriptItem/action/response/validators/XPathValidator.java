@@ -1,5 +1,6 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response.validators;
 
+import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 
 public class XPathValidator extends AbstractValidator
@@ -11,9 +12,9 @@ public class XPathValidator extends AbstractValidator
 
     private final String count;
 
-    public XPathValidator(final String validationName, final String validationMode, final String xPathExpression)
+    public XPathValidator(final String validationName, final String xPathExpression)
     {
-        this(validationName, validationMode, xPathExpression, null, null);
+        this(validationName, Constants.EXISTS, xPathExpression, null, null);
     }
 
     public XPathValidator(final String validationName, final String validationMode, final String xPathExpression, final String text,

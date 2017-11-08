@@ -24,57 +24,66 @@ public class RegExpValidator extends AbstractValidator
 
     private String expectedContent;
 
-    private String group;
+    private String expectedGroup;
 
-    public RegExpValidator(final String validationName, final String validationMode, final String pattern)
+    /**
+     * Builds a validation module, that verifies the pattern finds a match
+     * 
+     * @param validationName
+     *            The name of the validation
+     * @param pattern
+     *            The pattern to search for
+     */
+    public RegExpValidator(final String validationName, final String pattern)
     {
-        this(validationName, validationMode, pattern, null, null);
+        this(validationName, Constants.EXISTS, pattern, null, null);
     }
 
+    /**
+     * Builds a validation module, that verifies the pattern finds a match and the found match either matches or equals the
+     * specified content (depends on the validationMode).
+     * 
+     * @param validationName
+     *            The name of the validation
+     * @param validationMode
+     *            The mode of the validation, should be {@link Constants#TEXT} or {@link Constants#MATCHES}
+     * @param pattern
+     *            The pattern to search for
+     * @param expectedContent
+     *            The expected match
+     */
     public RegExpValidator(final String validationName, final String validationMode, final String pattern, final String expectedContent)
     {
         this(validationName, validationMode, pattern, expectedContent, null);
     }
 
+    /**
+     * Builds a validation module, that verifies the pattern finds a match, takes the match of the expectedGroup an verifies
+     * the found match either matches or equals the specified content (depends on the validationMode).
+     * 
+     * @param validationName
+     *            The name of the validation
+     * @param validationMode
+     *            The mode of the validation, should be {@link Constants#TEXT} or {@link Constants#MATCHES}
+     * @param pattern
+     *            The pattern to search for
+     * @param expectedContent
+     *            The expected match
+     * @param expectedGroup
+     *            The expected group your expected match is in
+     */
     public RegExpValidator(final String validationName, final String validationMode, final String pattern, final String expectedContent,
-        final String group)
+        final String expectedGroup)
     {
         super(validationName, validationMode);
         this.pattern = pattern;
         this.expectedContent = expectedContent;
-        this.group = group;
+        this.expectedGroup = expectedGroup;
     }
 
-    public String getPattern()
-    {
-        return pattern;
-    }
-
-    public void setPattern(final String pattern)
-    {
-        this.pattern = pattern;
-    }
-
-    public String getExpectedContent()
-    {
-        return expectedContent;
-    }
-
-    public void setExpectedContent(final String expectedContent)
-    {
-        this.expectedContent = expectedContent;
-    }
-
-    public String getGroup()
-    {
-        return group;
-    }
-
-    public void setGroup(final String group)
-    {
-        this.group = group;
-    }
-
+    /**
+     * Resolves the values and validates the content of the {@link WebResponse} of the {@link Context}.
+     */
     @Override
     public void execute(final Context context) throws Exception
     {
@@ -98,9 +107,9 @@ public class RegExpValidator extends AbstractValidator
             if (getExpectedContent() != null && getValidationMode() != null && !getValidationMode().equals(Constants.EXISTS))
             {
                 // If we specified a group, save the match of that group
-                if (group != null)
+                if (expectedGroup != null)
                 {
-                    matchingString = matcher.group(Integer.parseInt(getGroup()));
+                    matchingString = matcher.group(Integer.parseInt(getExpectedGroup()));
                 }
                 // otherwise we simply look at group()
                 else
@@ -162,12 +171,42 @@ public class RegExpValidator extends AbstractValidator
         }
 
         // Resolve count
-        if (getGroup() != null)
+        if (getExpectedGroup() != null)
         {
-            resolvedValue = context.resolveString(getGroup());
-            setGroup(resolvedValue);
+            resolvedValue = context.resolveString(getExpectedGroup());
+            setExpectedGroup(resolvedValue);
         }
 
+    }
+
+    public String getPattern()
+    {
+        return pattern;
+    }
+
+    public void setPattern(final String pattern)
+    {
+        this.pattern = pattern;
+    }
+
+    public String getExpectedContent()
+    {
+        return expectedContent;
+    }
+
+    public void setExpectedContent(final String expectedContent)
+    {
+        this.expectedContent = expectedContent;
+    }
+
+    public String getExpectedGroup()
+    {
+        return expectedGroup;
+    }
+
+    public void setExpectedGroup(final String expectedGroup)
+    {
+        this.expectedGroup = expectedGroup;
     }
 
 }
