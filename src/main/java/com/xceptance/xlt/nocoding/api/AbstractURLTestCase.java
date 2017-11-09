@@ -3,6 +3,9 @@ package com.xceptance.xlt.nocoding.api;
 import java.io.File;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.NotImplementedException;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,6 +13,7 @@ import com.xceptance.xlt.api.tests.AbstractTestCase;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.parser.Parser;
+import com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.NoCodingPropertyAdmin;
@@ -48,8 +52,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
         // Instantiate the PropertyManager with a new DataStorage
         context = new Context(XltProperties.getInstance(), new DataStorage());
         final String pathToFile = getFilePath();
-
-        this.parser = new com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser(pathToFile);
+        this.parser = decideParser(pathToFile);
         // Parse the file
         itemList = parser.parse();
     }
@@ -103,8 +106,62 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
     protected String getFilePath()
     {
         final String dataDirectory = context.getPropertyByKey(NoCodingPropertyAdmin.DIRECTORY);
-        final String fileName = context.getPropertyByKey(NoCodingPropertyAdmin.FILENAME);
+        String fileName = context.getPropertyByKey(NoCodingPropertyAdmin.FILENAME);
+        if (StringUtils.isBlank(fileName))
+        {
+            fileName = getClass().getSimpleName();
+        }
+
         return dataDirectory + File.separatorChar + fileName;
+    }
+
+    protected Parser decideParser(String pathToFile)
+    {
+        Parser parser = null;
+        final String fileExtension = FilenameUtils.getExtension(pathToFile);
+        if (fileExtension.equalsIgnoreCase("yml") || fileExtension.equalsIgnoreCase("yaml"))
+        {
+            this.parser = new com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser(pathToFile + fileExtension);
+        }
+        else if (fileExtension.isEmpty())
+        {
+            // No Extension found, try yml and csv
+
+            // check for YAML files first
+            final String[] yamlPaths =
+                {
+                  pathToFile + ".yml", pathToFile + ".yaml"
+                };
+
+            for (final String yamlPath : yamlPaths)
+            {
+                if (new File(yamlPath).isFile())
+                {
+                    pathToFile = yamlPath;
+                    parser = new YamlParser(pathToFile);
+                    break;
+                }
+            }
+
+            // check for CSV file second
+            final String csvPath = pathToFile + ".csv";
+            if (new File(csvPath).isFile())
+            {
+                pathToFile = csvPath;
+                throw new NotImplementedException("Csv not yet implemented.");
+            }
+        }
+        else
+        {
+            throw new IllegalArgumentException("Illegal file type: " + "\"" + fileExtension + "\"" + "\n"
+                                               + "Supported types: '.yaml' | '.yml' or '.csv'" + "\n");
+        }
+        if (parser == null)
+        {
+            // no file with a supported extension found
+            throw new IllegalArgumentException("Failed to find a script file for file path: " + pathToFile);
+        }
+        return parser;
     }
 
 }
