@@ -187,10 +187,6 @@ public class VariableResolver
                 if (beanShellEval != null)
                 {
                     resolvedValue = beanShellEval.toString();
-                    // TODO added
-                    // if we define a variable as ${RANDOM.String(8)} we only want to resolve it once. Thus we need to save
-                    // variables in our dataStorage afterwards
-                    context.getDataStorage().storeVariable(variableName, resolvedValue);
 
                 }
                 // BeanSheall doesn't know the expression
