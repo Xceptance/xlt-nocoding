@@ -186,6 +186,11 @@ public class Request extends AbstractActionItem
      */
     void fillDefaultData(final Context context)
     {
+        if (getUrl() == null || getUrl().isEmpty())
+        {
+            setUrl(context.getConfigItemByKey(Constants.URL));
+        }
+
         // if the name is null, check if it has a default value
         if (this.getHttpMethod() == null)
         {
@@ -211,7 +216,7 @@ public class Request extends AbstractActionItem
         {
             // Get default parameters
             final Map<String, String> defaultParameters = context.getDefaultParameters();
-            // Overwrite the default values with the current ones and/or add the current ones
+            // Overwrite the default values with the current ones or add the current ones
             if (getParameters() != null)
             {
                 for (final NameValuePair parameters : getParameters())

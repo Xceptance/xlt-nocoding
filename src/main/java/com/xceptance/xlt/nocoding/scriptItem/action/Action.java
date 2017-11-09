@@ -3,6 +3,7 @@ package com.xceptance.xlt.nocoding.scriptItem.action;
 import java.util.List;
 
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
+import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 
 /**
@@ -44,11 +45,19 @@ public abstract class Action implements ScriptItem
         return name;
     }
 
-    public void resolveName(final Context context)
+    protected void resolveName(final Context context)
     {
         // Resolve name
         final String resolvedValue = context.resolveString(getName());
         setName(resolvedValue);
+    }
+
+    protected void fillDefaultData(final Context context)
+    {
+        if (getName() == null || getName().isEmpty())
+        {
+            setName(context.getConfigItemByKey(Constants.NAME));
+        }
     }
 
     public void setName(final String name)

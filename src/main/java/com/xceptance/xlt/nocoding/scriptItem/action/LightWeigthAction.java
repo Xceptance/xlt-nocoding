@@ -40,6 +40,7 @@ public class LightWeigthAction extends Action
     @Override
     public void execute(final Context context) throws Throwable
     {
+        fillDefaultData(context);
         // Resolve the name of the action since it could be a variable
         resolveName(context);
 
