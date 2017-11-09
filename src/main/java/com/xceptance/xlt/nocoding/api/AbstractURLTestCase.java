@@ -154,7 +154,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
         else
         {
             throw new IllegalArgumentException("Illegal file type: " + "\"" + fileExtension + "\"" + "\n"
-                                               + "Supported types: '.yaml' | '.yml' or '.csv'" + "\n");
+                                               + "Supported types: '.yaml' | '.yml'\n");// or '.csv'" + "\n");
         }
         if (parser == null)
         {

@@ -23,10 +23,6 @@ import bsh.Interpreter;
 public class VariableResolver
 {
 
-    // The maximum amount you can re-resolve a value (so if variables reference another variable, we only resolve this many
-    // times)
-    private final int resolveDepth = 2;
-
     public Interpreter interpreter;
 
     public VariableResolver(final GeneralDataProvider dataProvider)

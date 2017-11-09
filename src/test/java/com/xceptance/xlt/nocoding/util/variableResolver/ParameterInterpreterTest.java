@@ -23,7 +23,6 @@ import org.junit.Test;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
-import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
 import bsh.EvalError;
 
@@ -197,10 +196,19 @@ public class ParameterInterpreterTest
         Assert.assertNotNull(resolved);
     }
 
+    @Test
+    public void testSimpleRecursion()
+    {
+        context.storeVariable("host", "${host}");
+        final String resolved = interpreter.resolveString("${host}", context);
+        Assert.assertEquals("${host}", resolved);
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void testEndlessRecursion()
     {
-        context.storeVariable("host", "${host}");
+        context.storeVariable("host", "${blub}");
+        context.storeVariable("blub", "${host}");
         final String resolved = interpreter.resolveString("${host}", context);
         Assert.assertEquals("${host}", resolved);
     }
