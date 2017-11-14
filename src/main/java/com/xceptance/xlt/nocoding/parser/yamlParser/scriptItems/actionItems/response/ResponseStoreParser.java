@@ -7,11 +7,12 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.xceptance.xlt.api.util.XltLogger;
+import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.response.selector.SelectorParser;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.AbstractSelector;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.RegexpSelector;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.AbstractResponseStore;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.CookieStore;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.HeaderStore;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.RegExpStore;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.XpathStore;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.GroupResponseStore;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.ResponseStore;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
@@ -49,54 +50,47 @@ public class ResponseStoreParser
                 variableName = fieldName.next();
                 // Get the substructure (which is an Object)
                 final JsonNode storeContent = current.get(variableName);
+
+                /*
+                 * Substructure of validation
+                 */
+
                 // Get the fieldNames of the substructure
                 final Iterator<String> name = storeContent.fieldNames();
                 // Iterate over the content
-                while (name.hasNext())
+                if (name.hasNext())
                 {
-                    // Get the left hand expression
-                    final String leftHandExpression = name.next();
-                    switch (leftHandExpression)
+                    // Build a selector depending on the next element in the iterator
+                    final AbstractSelector selector = new SelectorParser(name).parse(storeContent);
+                    // If we have another name
+                    if (name.hasNext())
                     {
-                        case Constants.XPATH:
-                            // Create a new XpathStore and add it to all responseStores
-                            responseStores.add(new XpathStore(variableName, ParserUtils.readValue(storeContent, leftHandExpression)));
-                            break;
-
-                        case Constants.REGEXP:
-                            // Extract the pattern
-                            final String pattern = ParserUtils.readValue(storeContent, leftHandExpression);
-                            String group = null;
-                            // If we have another name, this means the optional group is specified
-                            if (name.hasNext())
+                        final String nextName = name.next();
+                        // Verify the selector is a RegexpSelector, as no other AbstractSelector has a second argument
+                        if (selector instanceof RegexpSelector)
+                        {
+                            // Verify the name of the next name is the allowed field "Group"
+                            if (nextName.equals(Constants.GROUP))
                             {
-                                final String nextName = name.next();
-                                if (nextName.equals(Constants.GROUP))
-                                {
-                                    group = ParserUtils.readValue(storeContent, nextName);
-                                }
-                                else
-                                {
-                                    throw new IllegalArgumentException("Unknown response store item: " + nextName);
-                                }
+                                // And create a GroupResponseStore
+                                responseStores.add(new GroupResponseStore(variableName, selector,
+                                                                          ParserUtils.readValue(storeContent, nextName)));
                             }
-                            // Add a new RegExpStore to all responseStores
-                            responseStores.add(new RegExpStore(variableName, pattern, group));
-                            break;
-
-                        case Constants.HEADER:
-                            // Create a new HeaderStore and add it to all responseStores
-                            responseStores.add(new HeaderStore(variableName, ParserUtils.readValue(storeContent, leftHandExpression)));
-                            break;
-
-                        case Constants.COOKIE:
-                            // Create a new CookieStore and add it to all responseStores
-                            responseStores.add(new CookieStore(variableName, ParserUtils.readValue(storeContent, leftHandExpression)));
-                            break;
-
-                        default:
-                            // If we find an unknown item, throw an Exception
-                            throw new IOException("No permitted response store item: " + leftHandExpression);
+                            else
+                            {
+                                throw new IllegalArgumentException("Not a permitted ResponseStore item : " + nextName);
+                            }
+                        }
+                        else
+                        {
+                            throw new IllegalArgumentException("Unexpected argument " + nextName);
+                        }
+                    }
+                    // If we don't have another name
+                    else
+                    {
+                        // Simply create a normal ResponseStore
+                        responseStores.add(new ResponseStore(variableName, selector));
                     }
                 }
 

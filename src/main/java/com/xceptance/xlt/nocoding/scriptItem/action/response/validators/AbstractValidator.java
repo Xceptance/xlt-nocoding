@@ -1,7 +1,10 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response.validators;
 
+import java.util.List;
+
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseItem;
+import com.xceptance.xlt.nocoding.util.Context;
 
 /**
  * The abstract class for every response item that validates the {@link WebResponse}.
@@ -10,24 +13,21 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseIte
  */
 public abstract class AbstractValidator implements AbstractResponseItem
 {
-    protected final String validationName;
 
-    protected final String validationMode;
+    private List<String> expressionToValidate;
 
-    public AbstractValidator(final String validationName, final String validationMode)
+    public abstract void execute(Context context) throws Exception;
+
+    public List<String> getExpressionToValidate()
     {
-        this.validationName = validationName;
-        this.validationMode = validationMode;
+        return expressionToValidate;
     }
 
-    public String getValidationName()
+    public void setExpressionToValidate(final List<String> expressionToValidate)
     {
-        return validationName;
+        this.expressionToValidate = expressionToValidate;
     }
 
-    public String getValidationMode()
-    {
-        return validationMode;
-    }
+    protected abstract void resolveValues(final Context context);
 
 }

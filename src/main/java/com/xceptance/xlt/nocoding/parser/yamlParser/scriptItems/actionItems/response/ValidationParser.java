@@ -7,13 +7,12 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.xceptance.xlt.api.util.XltLogger;
+import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.response.selector.SelectorParser;
+import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.response.validators.ValidationModeParser;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseItem;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.Validator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.AbstractSelector;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.AbstractValidator;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.CookieValidator;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.HeaderValidator;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.RegExpValidator;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.XPathValidator;
-import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 public class ValidationParser
 {
@@ -26,10 +25,10 @@ public class ValidationParser
      * @return
      * @throws IOException
      */
-    public List<AbstractValidator> parse(final JsonNode node) throws IOException
+    public List<AbstractResponseItem> parse(final JsonNode node) throws IOException
     {
         // Initialize variables
-        final List<AbstractValidator> validator = new ArrayList<AbstractValidator>();
+        final List<AbstractResponseItem> validator = new ArrayList<AbstractResponseItem>();
         String validationName = null;
 
         // Get an iterator over the elements
@@ -45,139 +44,22 @@ public class ValidationParser
             // Iterate over the fieldNames
             while (fieldName.hasNext())
             {
-                String validationMode = Constants.EXISTS;
-                // The current fieldName ist the name of the validation
+                // The current fieldName is the name of the validation
                 validationName = fieldName.next();
+
+                /*
+                 * Substructure of a validation
+                 */
+
                 // Get the substructure (which is an Object)
-                final JsonNode storeContent = current.get(validationName);
+                final JsonNode validationContent = current.get(validationName);
                 // And get an iterator over the fieldNames
-                final Iterator<String> name = storeContent.fieldNames();
+                final Iterator<String> name = validationContent.fieldNames();
                 // Iterate over the fieldNames of the substructure
-                while (name.hasNext())
-                {
-                    // Get the left hand expression
-                    final String leftHandExpression = name.next();
-                    switch (leftHandExpression)
-                    {
-                        case Constants.XPATH:
-                            // Get the xPath Expression
-                            final String xPathExpression = ParserUtils.readValue(storeContent, leftHandExpression);
-                            String matches = null;
-                            String count = null;
-                            // if we have another fieldName, an optional attribute is specified
-                            if (name.hasNext())
-                            {
-                                // Get the left hand expression of the second fieldName
-                                validationMode = name.next();
-                                if (validationMode.equals(Constants.MATCHES) || validationMode.equals(Constants.TEXT))
-                                {
-                                    matches = ParserUtils.readValue(storeContent, validationMode);
 
-                                }
-                                else if (validationMode.equals(Constants.COUNT))
-                                {
-                                    count = ParserUtils.readValue(storeContent, validationMode);
-                                }
-                                else
-                                {
-                                    throw new IllegalArgumentException("Unknown validation item: " + validationMode);
-                                }
-                            }
-                            // Add the validator to the validations
-                            validator.add(new XPathValidator(validationName, validationMode, xPathExpression, matches, count));
-
-                            break;
-
-                        case Constants.REGEXP:
-                            // Extract the RegExp pattern
-                            final String pattern = ParserUtils.readValue(storeContent, leftHandExpression);
-                            String group = null;
-                            String text = null;
-                            // if we have another fieldName, the optional text is specified
-                            if (name.hasNext())
-                            {
-                                validationMode = name.next();
-                                // TODO [Meeting] Text vs Matches
-                                if (validationMode.equals(Constants.TEXT) || validationMode.equals(Constants.MATCHES))
-                                {
-                                    text = ParserUtils.readValue(storeContent, validationMode);
-                                    // if we have yet another fieldName, the optional group is specified
-                                    if (name.hasNext())
-                                    {
-                                        final String nextName = name.next();
-                                        if (nextName.equals(Constants.GROUP))
-                                        {
-                                            group = ParserUtils.readValue(storeContent, nextName);
-                                        }
-                                        else
-                                        {
-                                            throw new IllegalArgumentException("Unknown validation item: " + nextName);
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    throw new IllegalArgumentException("Unknown validation item: " + validationMode);
-                                }
-                            }
-
-                            // Add the validator to the validations
-                            validator.add(new RegExpValidator(validationName, validationMode, pattern, text, group));
-                            break;
-
-                        case Constants.HEADER:
-                            // Extract the name of the header
-                            final String header = ParserUtils.readValue(storeContent, leftHandExpression);
-                            String headerText = null;
-                            String headerCount = null;
-                            // If we have another fieldName, an optional attribute is specified
-                            if (name.hasNext())
-                            {
-                                validationMode = name.next();
-                                if (validationMode.equals(Constants.TEXT))
-                                {
-                                    headerText = ParserUtils.readValue(storeContent, validationMode);
-                                }
-                                else if (validationMode.equals(Constants.COUNT))
-                                {
-                                    headerCount = ParserUtils.readValue(storeContent, validationMode);
-                                }
-                                else
-                                {
-                                    throw new IllegalArgumentException("Unknown validation item: " + validationMode);
-                                }
-                            }
-                            // Add the validator to the validations
-                            validator.add(new HeaderValidator(validationName, validationMode, header, headerText, headerCount));
-                            break;
-
-                        case Constants.COOKIE:
-                            final String cookieName = ParserUtils.readValue(storeContent, leftHandExpression);
-                            String cookieContent = null;
-
-                            // If we have another name, the optional "matches" field is specified
-                            if (name.hasNext())
-                            {
-                                validationMode = name.next();
-                                // TODO [Meeting] Which is the correct one? Specification vs Examples
-                                if (validationMode.equals(Constants.MATCHES) || validationMode.equals(Constants.TEXT))
-                                {
-                                    cookieContent = ParserUtils.readValue(storeContent, validationMode);
-                                }
-                                else
-                                {
-                                    throw new IllegalArgumentException("Unknown validation item: " + validationMode);
-                                }
-                            }
-
-                            // Add the validator to the validations
-                            validator.add(new CookieValidator(validationName, validationMode, cookieName, cookieContent));
-                            break;
-
-                        default:
-                            throw new IOException("No permitted validation item: " + leftHandExpression);
-                    }
-                }
+                final AbstractSelector selector = new SelectorParser(name).parse(validationContent);
+                final AbstractValidator validation = new ValidationModeParser(name).parse(validationContent);
+                validator.add(new Validator(validationName, selector, validation));
 
                 XltLogger.runTimeLogger.debug("Added " + validationName + " to Validations");
             }

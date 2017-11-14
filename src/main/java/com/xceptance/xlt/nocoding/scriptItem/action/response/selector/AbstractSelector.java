@@ -1,5 +1,8 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response.selector;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.nocoding.util.Context;
 
@@ -14,11 +17,15 @@ public abstract class AbstractSelector
 
     protected String selectionExpression;
 
-    protected String result;
+    /**
+     * The result of the selection
+     */
+    protected final List<String> result;
 
     public AbstractSelector(final String selectionExpression)
     {
         this.selectionExpression = selectionExpression;
+        result = new ArrayList<String>(1);
     }
 
     public abstract void execute(Context context);
@@ -38,14 +45,14 @@ public abstract class AbstractSelector
         selectionExpression = context.resolveString(selectionExpression);
     }
 
-    public String getResult()
+    public List<String> getResult()
     {
         return result;
     }
 
-    public void setResult(final String result)
+    public void addResult(final String result)
     {
-        this.result = result;
+        getResult().add(result);
     }
 
 }
