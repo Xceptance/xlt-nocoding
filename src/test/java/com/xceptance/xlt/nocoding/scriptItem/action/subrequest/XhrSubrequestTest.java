@@ -10,8 +10,10 @@ import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseItem;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.HttpcodeValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.RegExpValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.Validator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.RegexpSelector;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.MockObjects;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
@@ -38,9 +40,10 @@ public class XhrSubrequestTest
         actionItems.add(actionItem);
 
         final List<AbstractResponseItem> responseItems = new ArrayList<AbstractResponseItem>();
-        final AbstractResponseItem responseItem = new RegExpValidator("Validate Title", mockObject.regexStringExpected);
+        responseItems.add(new HttpcodeValidator("200"));
+        final AbstractResponseItem responseItem = new Validator("Validate Title", new RegexpSelector(mockObject.regexStringExpected), null);
         responseItems.add(responseItem);
-        actionItem = new Response("200", responseItems);
+        actionItem = new Response(responseItems);
         actionItems.add(actionItem);
         final AbstractSubrequest xhrSubrequest = new XhrSubrequest("XhrSubrequest", actionItems);
 
