@@ -37,6 +37,7 @@ public class ActionItemParser extends AbstractScriptItemParser
         // Initialize variables
         String name = null;
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
+        final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>(1);
 
         // Get the current objectNode
         final ObjectNode objectNode = ParserUtils.getNodeAt(parser);
@@ -97,18 +98,8 @@ public class ActionItemParser extends AbstractScriptItemParser
                 }
             }
         }
-
-        // Check if we got a name
-        if (name.equals(null) || name.equals(""))
-        {
-            throw new IOException("Name is null");
-        }
-
-        // Create a new ScriptItem
-        final ScriptItem scriptItem = new LightWeigthAction(name, actionItems);
-        // And add it to a List of scriptItems so it matches the signature
-        final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>(1);
-        scriptItems.add(scriptItem);
+        // Add the action to the script items
+        scriptItems.add(new LightWeigthAction(name, actionItems));
         // Return all scriptItems
         return scriptItems;
     }

@@ -1,5 +1,6 @@
 package com.xceptance.xlt.nocoding.scriptItem.action;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
@@ -21,6 +22,14 @@ public abstract class Action implements ScriptItem
      * The list of actionItems. An actionItem can be a Request, Response or AbstractSubrequest
      */
     protected final List<AbstractActionItem> actionItems;
+
+    /**
+     * Creates an action with an actionItems list of size 1, since we intend to add a default request.
+     */
+    public Action()
+    {
+        actionItems = new ArrayList<AbstractActionItem>(1);
+    }
 
     /**
      * Creates an action with the specified request, response and subrequests
@@ -57,6 +66,25 @@ public abstract class Action implements ScriptItem
         if (getName() == null || getName().isEmpty())
         {
             setName(context.getConfigItemByKey(Constants.NAME));
+        }
+
+        // Add default requests
+        boolean hasRequest = false;
+        for (final AbstractActionItem abstractActionItem : actionItems)
+        {
+            if (abstractActionItem instanceof Request)
+            {
+                hasRequest = true;
+            }
+        }
+        if (!hasRequest)
+        {
+            final String url = context.getConfigItemByKey(Constants.URL);
+            if (url == null)
+            {
+                throw new IllegalStateException("No default url specified");
+            }
+            actionItems.add(0, new Request(url));
         }
     }
 

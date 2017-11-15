@@ -22,6 +22,11 @@ public class LightWeigthAction extends Action
      */
     private LightWeightPage lightWeightPage;
 
+    public LightWeigthAction()
+    {
+        super();
+    }
+
     public LightWeigthAction(final String name, final List<AbstractActionItem> actionItems)
     {
         super(name, actionItems);
