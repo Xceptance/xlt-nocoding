@@ -2,6 +2,7 @@ package com.xceptance.xlt.nocoding.scriptItem.action.response.stores;
 
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.AbstractSelector;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.RegexpSelector;
 import com.xceptance.xlt.nocoding.util.Context;
 
 public class GroupResponseStore extends AbstractResponseStore
@@ -20,22 +21,17 @@ public class GroupResponseStore extends AbstractResponseStore
     {
         // Resolve values
         resolveValues(context);
+        // Set the group for the selector
+        if (selector instanceof RegexpSelector)
+        {
+            ((RegexpSelector) selector).setGroup(group);
+        }
         // Execute the selector
         selector.execute(context);
         // Try to turn group into an Integer
-
-        int group;
-        try
-        {
-            group = Integer.parseInt(this.group);
-        }
-        catch (final Exception e)
-        {
-            group = 0;
-        }
         // Finally store the variable
-        context.storeVariable(getVariableName(), selector.getResult().get(group));
-        XltLogger.runTimeLogger.info("Added Variable: " + variableName + " : " + selector.getResult().get(group));
+        context.storeVariable(getVariableName(), selector.getResult().get(0));
+        XltLogger.runTimeLogger.info("Added Variable: " + variableName + " : " + selector.getResult().get(0));
     }
 
     private void resolveValues(final Context context)
