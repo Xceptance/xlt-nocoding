@@ -17,6 +17,11 @@ public class Validator implements AbstractResponseItem
 
     private final String group;
 
+    public Validator(final String validationName, final AbstractSelector selector, final AbstractValidationMode mode)
+    {
+        this(validationName, selector, mode, null);
+    }
+
     public Validator(final String validationName, final AbstractSelector selector, final AbstractValidationMode mode, final String group)
     {
         this.validationName = validationName;
