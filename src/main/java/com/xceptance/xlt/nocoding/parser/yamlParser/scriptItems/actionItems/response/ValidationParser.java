@@ -13,6 +13,8 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseIte
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Validator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.AbstractSelector;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.AbstractValidationMode;
+import com.xceptance.xlt.nocoding.util.Constants;
+import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 public class ValidationParser
 {
@@ -46,7 +48,9 @@ public class ValidationParser
             {
                 // The current fieldName is the name of the validation
                 validationName = fieldName.next();
-
+                String group = null;
+                AbstractSelector selector = null;
+                AbstractValidationMode validation = null;
                 /*
                  * Substructure of a validation
                  */
@@ -56,10 +60,24 @@ public class ValidationParser
                 // And get an iterator over the fieldNames
                 final Iterator<String> name = validationContent.fieldNames();
                 // Iterate over the fieldNames of the substructure
+                while (name.hasNext())
+                {
+                    final String nextName = name.next();
 
-                final AbstractSelector selector = new SelectorParser(name).parse(validationContent);
-                final AbstractValidationMode validation = new ValidationModeParser(name).parse(validationContent);
-                validator.add(new Validator(validationName, selector, validation));
+                    if (Constants.isPermittedSelectionMode(nextName))
+                    {
+                        selector = new SelectorParser(nextName).parse(validationContent);
+                    }
+                    else if (Constants.isPermittedValidationMode(nextName))
+                    {
+                        validation = new ValidationModeParser(nextName).parse(validationContent);
+                    }
+                    else if (nextName.equals(Constants.GROUP))
+                    {
+                        group = ParserUtils.readValue(validationContent, nextName);
+                    }
+                }
+                validator.add(new Validator(validationName, selector, validation, group));
 
                 XltLogger.runTimeLogger.debug("Added " + validationName + " to Validations");
             }

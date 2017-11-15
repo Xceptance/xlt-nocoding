@@ -10,6 +10,7 @@ import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.AbstractActionItemParser;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseItem;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.HttpcodeValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
@@ -44,7 +45,10 @@ public class ResponseParser extends AbstractActionItemParser
             switch (fieldName)
             {
                 case Constants.HTTPCODE:
+                    // Extract the httpcode
                     httpcode = ParserUtils.readValue(node, fieldName);
+                    // Add the validator for the httpcode to the responseItems
+                    responseItems.add(new HttpcodeValidator(httpcode));
                     XltLogger.runTimeLogger.debug("Added Httpcode " + httpcode);
                     break;
 
@@ -63,7 +67,7 @@ public class ResponseParser extends AbstractActionItemParser
             }
         }
 
-        actionItems.add(new Response(httpcode, responseItems));
+        actionItems.add(new Response(responseItems));
         return actionItems;
     }
 

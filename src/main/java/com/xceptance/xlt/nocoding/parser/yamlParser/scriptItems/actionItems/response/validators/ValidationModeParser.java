@@ -1,11 +1,8 @@
 package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.response.validators;
 
-import java.util.Iterator;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.AbstractValidationMode;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.CountValidator;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.ExistsValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.MatchesValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.TextValidator;
 import com.xceptance.xlt.nocoding.util.Constants;
@@ -13,52 +10,29 @@ import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 public class ValidationModeParser
 {
-    final Iterator<String> iterator;
+    final String identifier;
 
-    public ValidationModeParser(final Iterator<String> iterator)
+    public ValidationModeParser(final String identifier)
     {
-        this.iterator = iterator;
+        this.identifier = identifier;
     }
 
     public AbstractValidationMode parse(final JsonNode node)
     {
         AbstractValidationMode mode = null;
 
-        if (iterator.hasNext())
+        final String validationExpression = ParserUtils.readValue(node, identifier);
+        if (identifier.equals(Constants.MATCHES))
         {
-            final String nextExpression = iterator.next();
-            final String validationExpression = ParserUtils.readValue(node, nextExpression);
-            if (nextExpression.equals(Constants.MATCHES))
-            {
-                String group = null;
-                if (iterator.hasNext())
-                {
-                    group = ParserUtils.readValue(node, iterator.next());
-                }
-                mode = new MatchesValidator(validationExpression, group);
-            }
-            else if (nextExpression.equals(Constants.TEXT))
-            {
-                String group = null;
-                if (iterator.hasNext())
-                {
-                    group = ParserUtils.readValue(node, iterator.next());
-                }
-                mode = new TextValidator(validationExpression, group);
-            }
-            else if (nextExpression.equals(Constants.COUNT))
-            {
-                if (iterator.hasNext())
-                {
-                    throw new IllegalArgumentException("Unexpected item " + iterator.next());
-                }
-                mode = new CountValidator(validationExpression);
-            }
+            mode = new MatchesValidator(validationExpression);
         }
-
-        else
+        else if (identifier.equals(Constants.TEXT))
         {
-            mode = new ExistsValidator();
+            mode = new TextValidator(validationExpression);
+        }
+        else if (identifier.equals(Constants.COUNT))
+        {
+            mode = new CountValidator(validationExpression);
         }
 
         return mode;

@@ -19,9 +19,9 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.AbstractResponseStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.RegExpStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.XpathStore;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.AbstractValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.AbstractValidationMode;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.ExistsValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.RegExpValidator;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.XPathValidator;
 
 public class ActionItemParserTest extends ParserTest
 {
@@ -96,14 +96,14 @@ public class ActionItemParserTest extends ParserTest
         final Response response = (Response) action.getActionItems().get(1);
         Assert.assertEquals("400", response.getHttpcode());
         // Assert validator
-        Assert.assertTrue(response.getResponseItems().get(0) instanceof AbstractValidator);
-        AbstractValidator validation = (AbstractValidator) response.getResponseItems().get(0);
-        Assert.assertTrue(validation instanceof XPathValidator);
-        final XPathValidator xpathVal = (XPathValidator) validation;
-        Assert.assertEquals("validation_name_1", xpathVal.getValidationName());
-        Assert.assertEquals("xpath_value_1", xpathVal.getxPathExpression());
-        Assert.assertTrue(response.getResponseItems().get(1) instanceof AbstractValidator);
-        validation = (AbstractValidator) response.getResponseItems().get(1);
+        Assert.assertTrue(response.getResponseItems().get(0) instanceof AbstractValidationMode);
+        AbstractValidationMode validation = (AbstractValidationMode) response.getResponseItems().get(0);
+        Assert.assertTrue(validation instanceof ExistsValidator);
+        final ExistsValidator existsValidator = (ExistsValidator) validation;
+        Assert.assertEquals("validation_name_1", existsValidator.getValidationName());
+        Assert.assertEquals("xpath_value_1", existsValidator.getxPathExpression());
+        Assert.assertTrue(response.getResponseItems().get(1) instanceof AbstractValidationMode);
+        validation = (AbstractValidationMode) response.getResponseItems().get(1);
         Assert.assertTrue(validation instanceof RegExpValidator);
         final RegExpValidator regExpVal = (RegExpValidator) validation;
         Assert.assertEquals("validation_name_2", regExpVal.getValidationName());

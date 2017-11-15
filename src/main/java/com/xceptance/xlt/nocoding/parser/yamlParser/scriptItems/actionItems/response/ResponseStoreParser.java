@@ -61,7 +61,7 @@ public class ResponseStoreParser
                 if (name.hasNext())
                 {
                     // Build a selector depending on the next element in the iterator
-                    final AbstractSelector selector = new SelectorParser(name).parse(storeContent);
+                    final AbstractSelector selector = new SelectorParser(name.next()).parse(storeContent);
                     // If we have another name
                     if (name.hasNext())
                     {
