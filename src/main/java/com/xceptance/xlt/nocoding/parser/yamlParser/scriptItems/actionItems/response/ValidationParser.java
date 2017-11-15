@@ -12,7 +12,7 @@ import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.resp
 import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Validator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.AbstractSelector;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.AbstractValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.AbstractValidationMode;
 
 public class ValidationParser
 {
@@ -58,7 +58,7 @@ public class ValidationParser
                 // Iterate over the fieldNames of the substructure
 
                 final AbstractSelector selector = new SelectorParser(name).parse(validationContent);
-                final AbstractValidator validation = new ValidationModeParser(name).parse(validationContent);
+                final AbstractValidationMode validation = new ValidationModeParser(name).parse(validationContent);
                 validator.add(new Validator(validationName, selector, validation));
 
                 XltLogger.runTimeLogger.debug("Added " + validationName + " to Validations");

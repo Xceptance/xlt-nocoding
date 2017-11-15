@@ -7,14 +7,14 @@ import org.junit.Assert;
 
 import com.xceptance.xlt.nocoding.util.Context;
 
-public class MatchesValidator extends AbstractValidator
+public class MatchesValidator extends AbstractValidationMode
 {
 
     private String validationExpression;
 
     private String group;
 
-    private final AbstractValidator secondValidation;
+    private final AbstractValidationMode secondValidation;
 
     public MatchesValidator(final String validationExpression)
     {
@@ -26,7 +26,7 @@ public class MatchesValidator extends AbstractValidator
         this(validationExpression, group, null);
     }
 
-    public MatchesValidator(final String validationExpression, final String group, final AbstractValidator secondValidation)
+    public MatchesValidator(final String validationExpression, final String group, final AbstractValidationMode secondValidation)
     {
         this.validationExpression = validationExpression;
         this.group = group;

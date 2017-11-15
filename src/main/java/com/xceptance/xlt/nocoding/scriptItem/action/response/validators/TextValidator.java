@@ -4,14 +4,14 @@ import org.junit.Assert;
 
 import com.xceptance.xlt.nocoding.util.Context;
 
-public class TextValidator extends AbstractValidator
+public class TextValidator extends AbstractValidationMode
 {
 
     private String validationExpression;
 
     private String group;
 
-    private final AbstractValidator secondValidation;
+    private final AbstractValidationMode secondValidation;
 
     public TextValidator(final String validationExpression)
     {
@@ -23,7 +23,7 @@ public class TextValidator extends AbstractValidator
         this(validationExpression, group, null);
     }
 
-    public TextValidator(final String validationExpression, final String group, final AbstractValidator secondValidation)
+    public TextValidator(final String validationExpression, final String group, final AbstractValidationMode secondValidation)
     {
         this.validationExpression = validationExpression;
         this.group = group;

@@ -4,7 +4,7 @@ import org.junit.Assert;
 
 import com.xceptance.xlt.nocoding.util.Context;
 
-public class ExistsValidator extends AbstractValidator
+public class ExistsValidator extends AbstractValidationMode
 {
 
     @Override

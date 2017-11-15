@@ -4,18 +4,18 @@ import org.junit.Assert;
 
 import com.xceptance.xlt.nocoding.util.Context;
 
-public class CountValidator extends AbstractValidator
+public class CountValidator extends AbstractValidationMode
 {
     private String count;
 
-    private final AbstractValidator secondValidation;
+    private final AbstractValidationMode secondValidation;
 
     public CountValidator(final String count)
     {
         this(count, null);
     }
 
-    public CountValidator(final String count, final AbstractValidator secondValidation)
+    public CountValidator(final String count, final AbstractValidationMode secondValidation)
     {
         this.count = count;
         this.secondValidation = secondValidation;

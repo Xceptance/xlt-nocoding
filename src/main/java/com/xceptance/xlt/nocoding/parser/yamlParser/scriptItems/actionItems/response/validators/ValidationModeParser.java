@@ -3,7 +3,7 @@ package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.res
 import java.util.Iterator;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.AbstractValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.AbstractValidationMode;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.CountValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.ExistsValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.MatchesValidator;
@@ -20,9 +20,9 @@ public class ValidationModeParser
         this.iterator = iterator;
     }
 
-    public AbstractValidator parse(final JsonNode node)
+    public AbstractValidationMode parse(final JsonNode node)
     {
-        AbstractValidator validator = null;
+        AbstractValidationMode mode = null;
 
         if (iterator.hasNext())
         {
@@ -35,7 +35,7 @@ public class ValidationModeParser
                 {
                     group = ParserUtils.readValue(node, iterator.next());
                 }
-                validator = new MatchesValidator(validationExpression, group);
+                mode = new MatchesValidator(validationExpression, group);
             }
             else if (nextExpression.equals(Constants.TEXT))
             {
@@ -44,7 +44,7 @@ public class ValidationModeParser
                 {
                     group = ParserUtils.readValue(node, iterator.next());
                 }
-                validator = new TextValidator(validationExpression, group);
+                mode = new TextValidator(validationExpression, group);
             }
             else if (nextExpression.equals(Constants.COUNT))
             {
@@ -52,16 +52,16 @@ public class ValidationModeParser
                 {
                     throw new IllegalArgumentException("Unexpected item " + iterator.next());
                 }
-                validator = new CountValidator(validationExpression);
+                mode = new CountValidator(validationExpression);
             }
         }
 
         else
         {
-            validator = new ExistsValidator();
+            mode = new ExistsValidator();
         }
 
-        return validator;
+        return mode;
     }
 
 }

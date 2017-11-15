@@ -1,7 +1,7 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response;
 
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.AbstractSelector;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.AbstractValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.AbstractValidationMode;
 import com.xceptance.xlt.nocoding.util.Context;
 
 public class Validator implements AbstractResponseItem
@@ -11,13 +11,13 @@ public class Validator implements AbstractResponseItem
 
     private final AbstractSelector selector;
 
-    private final AbstractValidator validator;
+    private final AbstractValidationMode mode;
 
-    public Validator(final String validationName, final AbstractSelector selector, final AbstractValidator validator)
+    public Validator(final String validationName, final AbstractSelector selector, final AbstractValidationMode mode)
     {
         this.validationName = validationName;
         this.selector = selector;
-        this.validator = validator;
+        this.mode = mode;
     }
 
     @Override
@@ -25,11 +25,11 @@ public class Validator implements AbstractResponseItem
     {
         selector.execute(context);
         // Set the result of the execution as expression to validate in validator
-        validator.setExpressionToValidate(selector.getResult());
+        mode.setExpressionToValidate(selector.getResult());
         // validate the solution of the selector
         try
         {
-            validator.execute(context);
+            mode.execute(context);
         }
         catch (final Exception e)
         {
