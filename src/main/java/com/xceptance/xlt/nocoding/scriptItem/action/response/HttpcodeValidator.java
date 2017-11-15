@@ -42,4 +42,9 @@ public class HttpcodeValidator implements AbstractResponseItem
         httpcode = context.resolveString(httpcode);
     }
 
+    public String getHttpcode()
+    {
+        return httpcode;
+    }
+
 }

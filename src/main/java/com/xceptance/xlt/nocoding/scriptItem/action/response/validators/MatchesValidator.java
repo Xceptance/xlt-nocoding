@@ -76,4 +76,19 @@ public class MatchesValidator extends AbstractValidationMode
         group = context.resolveString(group);
     }
 
+    public String getValidationExpression()
+    {
+        return validationExpression;
+    }
+
+    public String getGroup()
+    {
+        return group;
+    }
+
+    public AbstractValidationMode getSecondValidation()
+    {
+        return secondValidation;
+    }
+
 }

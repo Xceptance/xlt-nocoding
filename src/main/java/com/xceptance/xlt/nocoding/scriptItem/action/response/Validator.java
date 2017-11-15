@@ -59,4 +59,24 @@ public class Validator implements AbstractResponseItem
         }
     }
 
+    public String getValidationName()
+    {
+        return validationName;
+    }
+
+    public AbstractSelector getSelector()
+    {
+        return selector;
+    }
+
+    public AbstractValidationMode getMode()
+    {
+        return mode;
+    }
+
+    public String getGroup()
+    {
+        return group;
+    }
+
 }

@@ -15,13 +15,15 @@ import com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.LightWeigthAction;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseItem;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.HttpcodeValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.Validator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.RegexpSelector;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.XpathSelector;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.AbstractResponseStore;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.RegExpStore;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.XpathStore;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.AbstractValidationMode;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.ExistsValidator;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.RegExpValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.ResponseStore;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.MatchesValidator;
 
 public class ActionItemParserTest extends ParserTest
 {
@@ -94,34 +96,42 @@ public class ActionItemParserTest extends ParserTest
         // Assert response
         Assert.assertTrue(action.getActionItems().get(1) instanceof Response);
         final Response response = (Response) action.getActionItems().get(1);
-        Assert.assertEquals("400", response.getHttpcode());
-        // Assert validator
-        Assert.assertTrue(response.getResponseItems().get(0) instanceof AbstractValidationMode);
-        AbstractValidationMode validation = (AbstractValidationMode) response.getResponseItems().get(0);
-        Assert.assertTrue(validation instanceof ExistsValidator);
-        final ExistsValidator existsValidator = (ExistsValidator) validation;
-        Assert.assertEquals("validation_name_1", existsValidator.getValidationName());
-        Assert.assertEquals("xpath_value_1", existsValidator.getxPathExpression());
-        Assert.assertTrue(response.getResponseItems().get(1) instanceof AbstractValidationMode);
-        validation = (AbstractValidationMode) response.getResponseItems().get(1);
-        Assert.assertTrue(validation instanceof RegExpValidator);
-        final RegExpValidator regExpVal = (RegExpValidator) validation;
-        Assert.assertEquals("validation_name_2", regExpVal.getValidationName());
-        Assert.assertEquals("regexp_value_2", regExpVal.getPattern());
-        Assert.assertEquals("matches_value_2", regExpVal.getExpectedContent());
-        // Assert store
-        Assert.assertTrue(response.getResponseItems().get(2) instanceof AbstractResponseStore);
-        AbstractResponseStore store = (AbstractResponseStore) response.getResponseItems().get(2);
-        Assert.assertTrue(store instanceof XpathStore);
-        final XpathStore xpathStore = (XpathStore) store;
-        Assert.assertEquals("variable_1", xpathStore.getVariableName());
-        Assert.assertEquals("xpath_1", xpathStore.getxPathExpression());
-        Assert.assertTrue(response.getResponseItems().get(3) instanceof AbstractResponseStore);
-        store = (AbstractResponseStore) response.getResponseItems().get(3);
-        Assert.assertTrue(store instanceof RegExpStore);
-        final RegExpStore regExpStore = (RegExpStore) store;
-        Assert.assertEquals("variable_2", regExpStore.getVariableName());
-        Assert.assertEquals("xpath_2", regExpStore.getPattern());
+        final List<AbstractResponseItem> responseItems = response.getResponseItems();
+
+        // Assert HttpcodeValidator
+        Assert.assertTrue(responseItems.get(0) instanceof HttpcodeValidator);
+        Assert.assertEquals("400", ((HttpcodeValidator) responseItems.get(0)).getHttpcode());
+
+        // Assert first validation
+        Assert.assertTrue(responseItems.get(1) instanceof Validator);
+        Validator validation = (Validator) responseItems.get(1);
+        Assert.assertEquals("validation_name_1", validation.getValidationName());
+        Assert.assertTrue(validation.getSelector() instanceof XpathSelector);
+        Assert.assertEquals("xpath_value_1", validation.getSelector().getSelectionExpression());
+
+        // Assert second validation
+        Assert.assertTrue(responseItems.get(2) instanceof Validator);
+        validation = (Validator) responseItems.get(2);
+        Assert.assertEquals("validation_name_2", validation.getValidationName());
+        Assert.assertTrue(validation.getSelector() instanceof RegexpSelector);
+        Assert.assertEquals("regexp_value_2", validation.getSelector().getSelectionExpression());
+        Assert.assertTrue(validation.getMode() instanceof MatchesValidator);
+        Assert.assertEquals("matches_value_2", ((MatchesValidator) validation.getMode()).getValidationExpression());
+
+        // Assert first store
+        Assert.assertTrue(responseItems.get(3) instanceof AbstractResponseStore);
+        AbstractResponseStore store = (AbstractResponseStore) response.getResponseItems().get(3);
+        Assert.assertTrue(store instanceof ResponseStore);
+        Assert.assertEquals("variable_1", store.getVariableName());
+        Assert.assertTrue(store.getSelector() instanceof XpathSelector);
+        Assert.assertEquals("xpath_1", store.getSelector().getSelectionExpression());
+
+        Assert.assertTrue(responseItems.get(4) instanceof AbstractResponseStore);
+        store = (AbstractResponseStore) responseItems.get(4);
+        Assert.assertTrue(store instanceof ResponseStore);
+        Assert.assertEquals("variable_2", store.getVariableName());
+        Assert.assertTrue(store.getSelector() instanceof RegexpSelector);
+        Assert.assertEquals("xpath_2", store.getSelector().getSelectionExpression());
     }
 
     @Test
