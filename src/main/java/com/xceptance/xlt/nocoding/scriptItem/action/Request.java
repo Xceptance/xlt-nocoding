@@ -279,16 +279,7 @@ public class Request extends AbstractActionItem
         // Resolve Httpmethod
         resolvedValue = context.resolveString(getHttpMethod());
 
-        // TODO [Meeting] In alter Suite wird darauf nicht geachtet, siehe auch weiter unten
-        // So throw error?
-        if (HttpMethod.valueOf(resolvedValue) != null)
-        {
-            setHttpMethod(resolvedValue);
-        }
-        else
-        {
-            throw new InvalidArgumentException("Httpmethod unknown");
-        }
+        setHttpMethod(resolvedValue);
 
         // Resolve (is)Xhr if it exists
         if (getXhr() != null)

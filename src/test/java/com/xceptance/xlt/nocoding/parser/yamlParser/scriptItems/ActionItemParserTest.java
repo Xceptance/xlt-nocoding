@@ -28,6 +28,21 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.MatchesV
 public class ActionItemParserTest extends ParserTest
 {
     /*
+     * Function test
+     */
+
+    protected final String fileSingleActionNoDefaultsData = path + "SAND.yml";
+
+    // TODO [Meeting] I only "parse" these 3 and do not confirm the result?
+    protected final String fileXhrSubrequests = path + "xhrSubrequests.yml";
+
+    protected final String fileStaticSubrequests = path + "staticSubrequests.yml";
+
+    protected final String fileComplexTestCase = path + "complexTestCase.yml";
+
+    protected final String fileEmptyAction = path + "emptyAction.yml";
+
+    /*
      * Error cases
      */
 
@@ -47,20 +62,9 @@ public class ActionItemParserTest extends ParserTest
 
     protected final String fileSyntaxErrorUrlNull = path + "syntaxErrorUrlNull.yml";
 
-    /*
-     * Function test
-     */
+    protected final String fileWrongOrderAction = path + "wrongOrderAction.yml";
 
-    protected final String fileSingleActionNoDefaultsData = path + "SAND.yml";
-
-    // TODO [Meeting] I only "parse" these 3 and do not confirm the result?
-    protected final String fileXhrSubrequests = path + "xhrSubrequests.yml";
-
-    protected final String fileStaticSubrequests = path + "staticSubrequests.yml";
-
-    protected final String fileComplexTestCase = path + "complexTestCase.yml";
-
-    protected final String fileEmptyAction = path + "emptyAction.yml";
+    protected final String fileWrongOrderSubrequest = path + "wrongOrderSubrequest.yml";
 
     @Test
     public void testSingleActionNoDefaultsParsing() throws Exception
@@ -164,7 +168,6 @@ public class ActionItemParserTest extends ParserTest
     public void testEmptyActionParsing() throws Exception
     {
         final Parser parser = new YamlParser(fileEmptyAction);
-        @SuppressWarnings("unused")
         final List<ScriptItem> scriptItems = parser.parse();
         Assert.assertTrue(scriptItems.get(0) instanceof LightWeigthAction);
     }
@@ -233,6 +236,24 @@ public class ActionItemParserTest extends ParserTest
     public void testSyntaxErrorUrlNullParsing() throws Exception
     {
         final Parser parser = new YamlParser(fileSyntaxErrorUrlNull);
+        @SuppressWarnings("unused")
+        final List<ScriptItem> scriptItems = parser.parse();
+    }
+
+    // TODO
+    @Test(expected = JsonParseException.class)
+    public void testWrongOrderActionParsing() throws Exception
+    {
+        final Parser parser = new YamlParser(fileWrongOrderAction);
+        @SuppressWarnings("unused")
+        final List<ScriptItem> scriptItems = parser.parse();
+    }
+
+    // TODO
+    @Test(expected = JsonParseException.class)
+    public void testWrongOrderSubrequestParsing() throws Throwable
+    {
+        final Parser parser = new YamlParser(fileWrongOrderSubrequest);
         @SuppressWarnings("unused")
         final List<ScriptItem> scriptItems = parser.parse();
     }

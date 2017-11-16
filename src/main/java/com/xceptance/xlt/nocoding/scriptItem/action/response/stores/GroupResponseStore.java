@@ -13,7 +13,6 @@ public class GroupResponseStore extends AbstractResponseStore
     {
         super(variableName, selector);
         this.group = group;
-        // TODO Auto-generated constructor stub
     }
 
     @Override

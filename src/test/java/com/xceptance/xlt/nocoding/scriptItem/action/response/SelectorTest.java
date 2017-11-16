@@ -3,13 +3,9 @@ package com.xceptance.xlt.nocoding.scriptItem.action.response;
 import org.junit.Assert;
 import org.junit.Test;
 
+// TODO test all selectors
 public class SelectorTest
 {
-
-    public SelectorTest()
-    {
-        // TODO Auto-generated constructor stub
-    }
 
     @Test
     public void testCookieSelector() throws Exception

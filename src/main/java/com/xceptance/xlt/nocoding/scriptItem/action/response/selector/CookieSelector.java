@@ -11,7 +11,6 @@ public class CookieSelector extends AbstractSelector
     public CookieSelector(final String selectionExpression)
     {
         super(selectionExpression);
-        // TODO Auto-generated constructor stub
     }
 
     @Override

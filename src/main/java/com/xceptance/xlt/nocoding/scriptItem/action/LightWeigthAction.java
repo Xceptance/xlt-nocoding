@@ -48,6 +48,10 @@ public class LightWeigthAction extends Action
         fillDefaultData(context);
         // Resolve the name of the action since it could be a variable
         resolveName(context);
+        if (name == null || name.isEmpty())
+        {
+            throw new IllegalArgumentException("Name cannot be empty or null. Please add a default name or specify one.");
+        }
 
         final WebAction action = new WebAction(name, context, getActionItems(), (final WebAction webAction) -> {
             try

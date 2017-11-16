@@ -33,7 +33,7 @@ public class ActionItemParser extends AbstractScriptItemParser
     {
         // Initialize variables
         String name = null;
-        final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
+        final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>(3);
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>(1);
 
         // Create a jsonNode iterator so we can iterate over the ArrayNode

@@ -8,11 +8,11 @@ import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.WebAction;
 
-// TODO
 public class DomAction extends Action
 {
     private HtmlPage htmlPage;
 
+    @SuppressWarnings("unused")
     private final long waitingTime = 30000;
 
     public DomAction(final String name, final List<AbstractActionItem> actionItems)
