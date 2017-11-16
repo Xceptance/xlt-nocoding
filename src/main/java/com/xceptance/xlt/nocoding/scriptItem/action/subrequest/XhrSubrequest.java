@@ -37,10 +37,13 @@ public class XhrSubrequest extends AbstractSubrequest
         {
             throw new Exception();
         }
-        // If it is a request, set xhr to true
+        // If it is a request, set xhr to true, and set additonal headers
         else
         {
-            ((Request) actionItems.iterator().next()).setXhr("true");
+            final Request request = ((Request) actionItems.iterator().next());
+            request.setXhr("true");
+            request.getHeaders().put("X-Requested-With", "XMLHttpRequest");
+            request.getHeaders().put("Referer", context.getWebResponse().getWebRequest().getUrl().toString());
         }
 
         for (final AbstractActionItem actionItem : actionItems)

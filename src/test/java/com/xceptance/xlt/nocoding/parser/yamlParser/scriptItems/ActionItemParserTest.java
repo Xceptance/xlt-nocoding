@@ -60,6 +60,8 @@ public class ActionItemParserTest extends ParserTest
 
     protected final String fileComplexTestCase = path + "complexTestCase.yml";
 
+    protected final String fileEmptyAction = path + "emptyAction.yml";
+
     @Test
     public void testSingleActionNoDefaultsParsing() throws Exception
     {
@@ -156,6 +158,15 @@ public class ActionItemParserTest extends ParserTest
         final Parser parser = new YamlParser(fileComplexTestCase);
         @SuppressWarnings("unused")
         final List<ScriptItem> scriptItems = parser.parse();
+    }
+
+    @Test
+    public void testEmptyActionParsing() throws Exception
+    {
+        final Parser parser = new YamlParser(fileEmptyAction);
+        @SuppressWarnings("unused")
+        final List<ScriptItem> scriptItems = parser.parse();
+        Assert.assertTrue(scriptItems.get(0) instanceof LightWeigthAction);
     }
 
     /*

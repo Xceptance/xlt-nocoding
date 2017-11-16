@@ -62,7 +62,9 @@ public class YamlParser implements Parser
         while (nodes.hasNext())
         {
             final JsonNode node = nodes.next();
+            // final String currentName;
             final String currentName = node.fieldNames().next();
+
             // Check if we have a permitted list item
             if (Constants.isPermittedListItem(currentName))
             {
