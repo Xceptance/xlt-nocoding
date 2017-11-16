@@ -21,7 +21,7 @@ public class StoreItemParserTest extends ParserTest
         final Parser parser = new YamlParser(fileStore);
         final List<ScriptItem> scriptItems = parser.parse();
 
-        Assert.assertEquals(5, scriptItems.size());
+        Assert.assertEquals(7, scriptItems.size());
 
         // Assert it's a StoreItem
         Assert.assertTrue(scriptItems.get(0) instanceof StoreItem);
@@ -48,6 +48,16 @@ public class StoreItemParserTest extends ParserTest
         storeItem = (StoreItem) scriptItems.get(4);
         Assert.assertEquals("var_5", storeItem.getVariableName());
         Assert.assertEquals("${var_4}", storeItem.getValue());
+
+        Assert.assertTrue(scriptItems.get(5) instanceof StoreItem);
+        storeItem = (StoreItem) scriptItems.get(5);
+        Assert.assertEquals("1234", storeItem.getVariableName());
+        Assert.assertEquals("12", storeItem.getValue());
+
+        Assert.assertTrue(scriptItems.get(6) instanceof StoreItem);
+        storeItem = (StoreItem) scriptItems.get(6);
+        Assert.assertEquals("var_1", storeItem.getVariableName());
+        Assert.assertEquals("", storeItem.getValue());
 
     }
 }
