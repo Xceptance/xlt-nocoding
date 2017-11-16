@@ -46,32 +46,56 @@ public class XhrSubrequestParser
             switch (fieldName)
             {
                 case Constants.NAME:
-                    name = ParserUtils.readValue(node, fieldName);
-                    XltLogger.runTimeLogger.debug("Actionname: " + name);
-                    // Continue the loop so we do not create a new subrequest
-                    continue;
-
-                case Constants.REQUEST:
-                    // Log the Request block with the unparsed content
-                    XltLogger.runTimeLogger.debug("Request: " + node.get(fieldName).toString());
-                    // Create a new request parser and get the first element, so we can set Xhr to true
-                    actionItem = new RequestParser().parse(node.get(fieldName)).get(0);
-                    if (actionItem instanceof Request)
+                    // Check that this is the first item we parse
+                    if (actionItems.isEmpty())
                     {
-                        ((Request) actionItem).setXhr("true");
+                        name = ParserUtils.readValue(node, fieldName);
+                        XltLogger.runTimeLogger.debug("Actionname: " + name);
+                        // Continue the loop so we do not create a new subrequest
+                        continue;
                     }
                     else
                     {
-                        throw new IOException("Could not convert Request Item to Request Object: " + fieldName);
+                        throw new IllegalArgumentException("Name must be defined as first item in action.");
                     }
-                    break;
+
+                case Constants.REQUEST:
+                    // Check that this is the first item we parse (excluding name)
+                    if (actionItems.isEmpty())
+                    {
+                        // Log the Request block with the unparsed content
+                        XltLogger.runTimeLogger.debug("Request: " + node.get(fieldName).toString());
+                        // Create a new request parser and get the first element, so we can set Xhr to true
+                        actionItem = new RequestParser().parse(node.get(fieldName)).get(0);
+                        if (actionItem instanceof Request)
+                        {
+                            ((Request) actionItem).setXhr("true");
+                        }
+                        else
+                        {
+                            throw new IOException("Could not convert Request Item to Request Object: " + fieldName);
+                        }
+                        break;
+                    }
+                    else
+                    {
+                        throw new IllegalArgumentException("Request cannot be defined after a response or subrequest.");
+                    }
 
                 case Constants.RESPONSE:
-                    // Log the Response block with the unparsed content
-                    XltLogger.runTimeLogger.debug("Response: " + node.get(fieldName).toString());
-                    // Create a new ResponseParser and parse the response
-                    actionItem = new ResponseParser().parse(node.get(fieldName)).get(0);
-                    break;
+                    // Check that no subrequest was defined beforehand
+                    if (actionItems.isEmpty() || actionItems.get(0) instanceof Request)
+                    {
+                        // Log the Response block with the unparsed content
+                        XltLogger.runTimeLogger.debug("Response: " + node.get(fieldName).toString());
+                        // Create a new ResponseParser and parse the response
+                        actionItem = new ResponseParser().parse(node.get(fieldName)).get(0);
+                        break;
+                    }
+                    else
+                    {
+                        throw new IllegalArgumentException("Response mustn't be defined after subrequests.");
+                    }
 
                 case Constants.SUBREQUESTS:
                     XltLogger.runTimeLogger.debug("Subrequests: " + node.get(fieldName).toString());

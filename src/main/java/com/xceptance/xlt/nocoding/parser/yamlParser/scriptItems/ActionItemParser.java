@@ -14,6 +14,7 @@ import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.subr
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.LightWeigthAction;
+import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
@@ -56,26 +57,50 @@ public class ActionItemParser extends AbstractScriptItemParser
                 switch (fieldName)
                 {
                     case Constants.NAME:
-                        // Save the name
-                        name = ParserUtils.readValue(node, fieldName);
-                        if (name == null || name.isEmpty())
+                        // Check that this is the first item we parse
+                        if (actionItems.isEmpty())
                         {
-                            throw new IllegalArgumentException("Please specify a name for an action.");
+                            // Save the name
+                            name = ParserUtils.readValue(node, fieldName);
+                            if (name == null || name.isEmpty())
+                            {
+                                throw new IllegalArgumentException("Please specify a name for an action.");
+                            }
+                            XltLogger.runTimeLogger.debug("Actionname: " + name);
+                            break;
                         }
-                        XltLogger.runTimeLogger.debug("Actionname: " + name);
-                        break;
+                        else
+                        {
+                            throw new IllegalArgumentException("Name must be defined as first item in action.");
+                        }
 
                     case Constants.REQUEST:
-                        XltLogger.runTimeLogger.debug("Request: " + node.get(fieldName).toString());
-                        // Set parser to the request parser
-                        actionItemParser = new RequestParser();
-                        break;
+                        // Check that this is the first item we parse (excluding name)
+                        if (actionItems.isEmpty())
+                        {
+                            XltLogger.runTimeLogger.debug("Request: " + node.get(fieldName).toString());
+                            // Set parser to the request parser
+                            actionItemParser = new RequestParser();
+                            break;
+                        }
+                        else
+                        {
+                            throw new IllegalArgumentException("Request cannot be defined after a response or subrequest.");
+                        }
 
                     case Constants.RESPONSE:
-                        XltLogger.runTimeLogger.debug("Response: " + node.get(fieldName).toString());
-                        // Set parser to the response parser
-                        actionItemParser = new ResponseParser();
-                        break;
+                        // Check that no subrequest was defined beforehand
+                        if (actionItems.isEmpty() || actionItems.get(0) instanceof Request)
+                        {
+                            XltLogger.runTimeLogger.debug("Response: " + node.get(fieldName).toString());
+                            // Set parser to the response parser
+                            actionItemParser = new ResponseParser();
+                            break;
+                        }
+                        else
+                        {
+                            throw new IllegalArgumentException("Response mustn't be defined after subrequests.");
+                        }
 
                     case Constants.SUBREQUESTS:
                         XltLogger.runTimeLogger.debug("Subrequests: " + node.get(fieldName).toString());
