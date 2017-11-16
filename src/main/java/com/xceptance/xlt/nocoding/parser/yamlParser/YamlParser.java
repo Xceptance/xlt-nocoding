@@ -2,11 +2,14 @@ package com.xceptance.xlt.nocoding.parser.yamlParser;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.parser.Parser;
@@ -48,27 +51,34 @@ public class YamlParser implements Parser
         // Allow comments in the parser, so we have the correct line numbers
         parser.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS, true);
 
+        // Map the parsed content to JsonNodes
+        final ObjectMapper mapper = new ObjectMapper();
+        final JsonNode root = mapper.readTree(parser);
+        final Iterator<JsonNode> nodes = root.elements();
+
         int numberObject = 0;
 
         // Iterate over all tokens
-        while (parser.nextToken() != null)
+        while (nodes.hasNext())
         {
+            final JsonNode node = nodes.next();
+            final String currentName = node.fieldNames().next();
             // Check if we have a permitted list item
-            if (Constants.isPermittedListItem(parser.getText()))
+            if (Constants.isPermittedListItem(currentName))
             {
                 numberObject++;
-                XltLogger.runTimeLogger.info(numberObject + ".th ScriptItem: " + parser.getText());
+                XltLogger.runTimeLogger.info(numberObject + ".th ScriptItem: " + currentName);
 
                 try
                 {
                     // Differentiate between Store, Action and default definitions
                     AbstractScriptItemParser scriptItemParser = null;
-                    if (parser.getText().equals(Constants.STORE))
+                    if (currentName.equals(Constants.STORE))
                     {
                         // Set parser to StoreItemParser
                         scriptItemParser = new StoreItemParser();
                     }
-                    else if (parser.getText().equals(Constants.ACTION))
+                    else if (currentName.equals(Constants.ACTION))
                     {
                         // Set parser to ActionItemParser
                         scriptItemParser = new ActionItemParser();
@@ -79,17 +89,17 @@ public class YamlParser implements Parser
                         scriptItemParser = new DefaultItemParser();
                     }
 
-                    scriptItems.addAll(scriptItemParser.parse(parser));
+                    scriptItems.addAll(scriptItemParser.parse(node));
 
                 }
                 // Catch any exception while parsing, so we can print the current line/column number with the error
                 catch (final Exception e)
                 {
-                    throw new JsonParseException(parser, "No permitted list item: " + parser.getText(), e);
+                    throw new JsonParseException(parser, "No permitted list item: " + currentName, e);
                 }
             }
             // If we don't have a list item, check if it is really a field name. If it is, throw an error
-            else if (parser.getCurrentToken() != null && parser.getCurrentToken().equals(JsonToken.FIELD_NAME))
+            else if (parser.currentToken() != null && parser.getCurrentToken().equals(JsonToken.FIELD_NAME))
             {
 
                 throw new JsonParseException(parser, "No permitted list item: " + parser.getText());

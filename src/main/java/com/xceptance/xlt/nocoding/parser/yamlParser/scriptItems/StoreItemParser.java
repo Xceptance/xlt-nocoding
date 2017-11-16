@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
@@ -16,12 +15,12 @@ import com.xceptance.xlt.nocoding.util.ParserUtils;
 public class StoreItemParser extends AbstractScriptItemParser
 {
 
-    public List<ScriptItem> parse(final JsonParser parser) throws IOException
+    public List<ScriptItem> parse(final JsonNode root) throws IOException
     {
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
 
         // Get the current JsonNode from the parser where the Store item is located
-        final JsonNode jsonNode = ParserUtils.getNodeAt(Constants.STORE, parser);
+        final JsonNode jsonNode = root.get(Constants.STORE);
 
         // Convert the node to a Map
         final Map<String, String> storeItems = ParserUtils.getArrayNodeAsMap(jsonNode);

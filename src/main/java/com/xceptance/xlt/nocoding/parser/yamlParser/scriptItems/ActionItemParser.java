@@ -5,10 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.AbstractActionItemParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.request.RequestParser;
@@ -32,17 +29,15 @@ public class ActionItemParser extends AbstractScriptItemParser
      * @throws IOException
      */
     @Override
-    public List<ScriptItem> parse(final JsonParser parser) throws IOException
+    public List<ScriptItem> parse(final JsonNode root) throws IOException
     {
         // Initialize variables
         String name = null;
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>(1);
 
-        // Get the current objectNode
-        final ObjectNode objectNode = ParserUtils.getNodeAt(parser);
         // Create a jsonNode iterator so we can iterate over the ArrayNode
-        final Iterator<JsonNode> iterator = objectNode.elements();
+        final Iterator<JsonNode> iterator = root.elements();
 
         // While we have elements in our Node
         while (iterator.hasNext())
@@ -62,7 +57,11 @@ public class ActionItemParser extends AbstractScriptItemParser
                 {
                     case Constants.NAME:
                         // Save the name
-                        name = node.get(fieldName).textValue();
+                        name = ParserUtils.readValue(node, fieldName);
+                        if (name == null || name.isEmpty())
+                        {
+                            throw new IllegalArgumentException("Please specify a name for an action.");
+                        }
                         XltLogger.runTimeLogger.debug("Actionname: " + name);
                         break;
 
@@ -87,7 +86,7 @@ public class ActionItemParser extends AbstractScriptItemParser
                     default:
                         // We iterate over the field names, so there is no way we have an Array/Object Start. Thus if we find something that
                         // isn't specified, it's not a permitted action item and we want to throw an exception.
-                        throw new JsonParseException("No permitted action item: " + fieldName, parser.getCurrentLocation());
+                        throw new IOException("No permitted action item: " + fieldName);
                 }
 
                 // If we specified an actionItemParser

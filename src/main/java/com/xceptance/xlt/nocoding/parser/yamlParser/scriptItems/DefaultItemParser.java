@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.request.HeaderParser;
@@ -23,14 +22,15 @@ public class DefaultItemParser extends AbstractScriptItemParser
 {
 
     @Override
-    public List<ScriptItem> parse(final JsonParser parser) throws IOException
+    public List<ScriptItem> parse(final JsonNode root) throws IOException
     {
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
-        String variableName = parser.getText();
+        // Get the name of the item
+        String variableName = root.fieldNames().next();
         String value = null;
         if (variableName.equals(Constants.HEADERS))
         {
-            final JsonNode jsonNode = ParserUtils.getNodeAt(Constants.HEADERS, parser);
+            final JsonNode jsonNode = root.get(Constants.HEADERS);
             if (jsonNode.isTextual() && jsonNode.textValue().equals(Constants.DELETE))
             {
                 variableName = Constants.HEADERS;
@@ -50,7 +50,7 @@ public class DefaultItemParser extends AbstractScriptItemParser
         }
         else if (variableName.equals(Constants.PARAMETERS))
         {
-            final JsonNode jsonNode = ParserUtils.getNodeAt(Constants.PARAMETERS, parser);
+            final JsonNode jsonNode = root.get(Constants.PARAMETERS);
             final List<NameValuePair> parameters = new ParameterParser().parse(jsonNode);
             if (jsonNode.isTextual() && jsonNode.textValue().equals(Constants.DELETE))
             {
@@ -70,7 +70,7 @@ public class DefaultItemParser extends AbstractScriptItemParser
         }
         else if (variableName.equals(Constants.STATIC))
         {
-            final JsonNode jsonNode = ParserUtils.getNodeAt(Constants.STATIC, parser);
+            final JsonNode jsonNode = root.get(Constants.STATIC);
             if (jsonNode.isTextual() && jsonNode.textValue().equals(Constants.DELETE))
             {
                 variableName = Constants.STATIC;
@@ -93,7 +93,7 @@ public class DefaultItemParser extends AbstractScriptItemParser
         else
         {
             // We get simple name value pairs, as such we simply want to read
-            final JsonNode jsonNode = ParserUtils.getNodeAt(variableName, parser);
+            final JsonNode jsonNode = root.get(variableName);
             value = ParserUtils.readSingleValue(jsonNode);
             scriptItems.add(new StoreDefaultItem(variableName, value));
         }

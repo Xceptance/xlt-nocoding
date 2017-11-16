@@ -3,7 +3,7 @@ package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems;
 import java.io.IOException;
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 
 /**
@@ -14,6 +14,6 @@ import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 public abstract class AbstractScriptItemParser
 {
 
-    public abstract List<ScriptItem> parse(JsonParser parser) throws IOException;
+    public abstract List<ScriptItem> parse(JsonNode root) throws IOException;
 
 }
