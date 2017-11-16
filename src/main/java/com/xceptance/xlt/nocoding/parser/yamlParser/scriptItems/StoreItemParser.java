@@ -3,9 +3,9 @@ package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.StoreItem;
@@ -22,16 +22,15 @@ public class StoreItemParser extends AbstractScriptItemParser
         // Get the current JsonNode from the parser where the Store item is located
         final JsonNode jsonNode = root.get(Constants.STORE);
 
-        // Convert the node to a Map
-        final Map<String, String> storeItems = ParserUtils.getArrayNodeAsMap(jsonNode);
+        // Convert the node to a list of NameValuePair so it retains its order
+        final List<NameValuePair> storeItemss = ParserUtils.getArrayNodeAsNameValuePair(jsonNode);
 
-        // For each Map Entry
-        for (final Map.Entry<String, String> storeItem : storeItems.entrySet())
+        for (final NameValuePair storeItem : storeItemss)
         {
             // Add a new StoreItem to the scriptItems
-            scriptItems.add(new StoreItem(storeItem.getKey(), storeItem.getValue()));
+            scriptItems.add(new StoreItem(storeItem.getName(), storeItem.getValue()));
             // Log the added item
-            XltLogger.runTimeLogger.debug("Added " + storeItem.getKey() + "=" + storeItem.getValue() + " to StoreItems");
+            XltLogger.runTimeLogger.debug("Added " + storeItem.getName() + "=" + storeItem.getValue() + " to StoreItems");
         }
 
         // Return all StoreItems

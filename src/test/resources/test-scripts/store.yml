@@ -1,0 +1,8 @@
+- Store :
+    - var_1 : val_1
+    - var_2 : val_1
+    - name_3 : ${var_2}
+
+- Store :
+    - var_4 : ${var_2}
+    - var_5 : ${var_4}
