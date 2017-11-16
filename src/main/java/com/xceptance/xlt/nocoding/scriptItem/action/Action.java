@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
+import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
+import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 
@@ -68,14 +71,33 @@ public abstract class Action implements ScriptItem
             setName(context.getConfigItemByKey(Constants.NAME));
         }
 
-        // Add default requests
+        // Check if the order of the items is allowed
         boolean hasRequest = false;
+        boolean hasResponse = false;
+        boolean hasSubrequest = false;
         for (final AbstractActionItem abstractActionItem : actionItems)
         {
             if (abstractActionItem instanceof Request)
             {
+                if (hasResponse || hasSubrequest)
+                {
+                    throw new IllegalArgumentException("Request defined after Response and/or Subrequest!");
+                }
                 hasRequest = true;
             }
+            else if (abstractActionItem instanceof Response)
+            {
+                if (hasSubrequest)
+                {
+                    throw new IllegalArgumentException("Response defined after Subrequest!");
+                }
+                hasResponse = true;
+            }
+            else if (abstractActionItem instanceof AbstractSubrequest)
+            {
+                hasSubrequest = true;
+            }
+
         }
         if (!hasRequest)
         {
@@ -85,6 +107,23 @@ public abstract class Action implements ScriptItem
                 throw new IllegalStateException("No default url specified");
             }
             actionItems.add(0, new Request(url));
+        }
+        if (!hasResponse)
+        {
+            int index = 0;
+            if (hasRequest)
+            {
+                index++;
+            }
+            actionItems.add(index, new Response());
+        }
+        if (!hasSubrequest)
+        {
+            // Add default static requests
+            if (context.getDefaultStatic() != null && !context.getDefaultStatic().isEmpty())
+            {
+                actionItems.add(new StaticSubrequest(context.getDefaultStatic()));
+            }
         }
     }
 

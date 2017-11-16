@@ -240,7 +240,6 @@ public class ActionItemParserTest extends ParserTest
         final List<ScriptItem> scriptItems = parser.parse();
     }
 
-    // TODO
     @Test(expected = JsonParseException.class)
     public void testWrongOrderActionParsing() throws Exception
     {
@@ -249,7 +248,6 @@ public class ActionItemParserTest extends ParserTest
         final List<ScriptItem> scriptItems = parser.parse();
     }
 
-    // TODO
     @Test(expected = JsonParseException.class)
     public void testWrongOrderSubrequestParsing() throws Throwable
     {

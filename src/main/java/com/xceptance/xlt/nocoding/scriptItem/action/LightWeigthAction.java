@@ -8,7 +8,6 @@ import com.xceptance.xlt.api.htmlunit.LightWeightPage;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.engine.LightWeightPageImpl;
 import com.xceptance.xlt.engine.SessionImpl;
-import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.WebAction;
 
@@ -45,14 +44,17 @@ public class LightWeigthAction extends Action
     @Override
     public void execute(final Context context) throws Throwable
     {
+        // Fill default data of an action, therefore: Name, Request, Response and possible static subrequests
         fillDefaultData(context);
         // Resolve the name of the action since it could be a variable
         resolveName(context);
+
         if (name == null || name.isEmpty())
         {
             throw new IllegalArgumentException("Name cannot be empty or null. Please add a default name or specify one.");
         }
 
+        // Define the WebAction
         final WebAction action = new WebAction(name, context, getActionItems(), (final WebAction webAction) -> {
             try
             {
@@ -66,12 +68,7 @@ public class LightWeigthAction extends Action
             }
         });
 
-        // Add default static requests
-        if (context.getDefaultStatic() != null && !context.getDefaultStatic().isEmpty())
-        {
-            getActionItems().add(new StaticSubrequest(context.getDefaultStatic()));
-        }
-
+        // Execute it
         try
         {
             // Execute the requests, responses and subrequests via xlt api
