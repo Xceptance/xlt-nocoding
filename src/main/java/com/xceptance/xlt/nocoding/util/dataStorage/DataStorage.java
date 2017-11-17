@@ -2,6 +2,7 @@ package com.xceptance.xlt.nocoding.util.dataStorage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,7 +68,7 @@ public class DataStorage
         this.configItem = configItem;
         this.fallback = fallback;
         this.headers = new HashMap<String, String>();
-        this.parameters = new HashMap<String, String>();
+        this.parameters = new LinkedHashMap<String, String>();
         this.staticUrls = new ArrayList<String>();
     }
 

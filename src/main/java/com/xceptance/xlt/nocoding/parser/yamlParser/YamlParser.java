@@ -97,7 +97,7 @@ public class YamlParser implements Parser
                 // Catch any exception while parsing, so we can print the current line/column number with the error
                 catch (final Exception e)
                 {
-                    throw new JsonParseException(parser, "No permitted list item: " + currentName, e);
+                    throw new JsonParseException(parser, e.getMessage(), e);
                 }
             }
             // If we don't have a list item, check if it is really a field name. If it is, throw an error

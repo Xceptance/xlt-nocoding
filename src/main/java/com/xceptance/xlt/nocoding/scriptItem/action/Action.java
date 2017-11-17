@@ -68,6 +68,7 @@ public abstract class Action implements ScriptItem
     {
         if (getName() == null || getName().isEmpty())
         {
+            // TODO Null check
             setName(context.getConfigItemByKey(Constants.NAME));
         }
 
@@ -107,6 +108,7 @@ public abstract class Action implements ScriptItem
                 throw new IllegalStateException("No default url specified");
             }
             actionItems.add(0, new Request(url));
+            hasRequest = true;
         }
         if (!hasResponse)
         {

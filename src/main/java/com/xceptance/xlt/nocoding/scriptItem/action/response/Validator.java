@@ -6,7 +6,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.Abstract
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.ExistsValidator;
 import com.xceptance.xlt.nocoding.util.Context;
 
-public class Validator implements AbstractResponseItem
+public class Validator extends AbstractResponseItem
 {
 
     private final String validationName;

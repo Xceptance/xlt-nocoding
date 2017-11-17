@@ -44,4 +44,20 @@ public class Response extends AbstractActionItem
         return responseItems;
     }
 
+    public void fillDefaultData(final Context context)
+    {
+        boolean hasHttpcodeValidator = false;
+        for (final AbstractResponseItem responseItem : responseItems)
+        {
+            if (responseItem instanceof HttpcodeValidator)
+            {
+                hasHttpcodeValidator = true;
+            }
+        }
+        if (!hasHttpcodeValidator)
+        {
+            responseItems.add(0, new HttpcodeValidator(null));
+        }
+    }
+
 }

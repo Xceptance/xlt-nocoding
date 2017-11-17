@@ -40,6 +40,10 @@ public class SelectorParser
         {
             selector = new CookieSelector(selectorExpression);
         }
+        else
+        {
+            throw new IllegalArgumentException("Unknown Selection : " + identifier);
+        }
         // return the selector
         return selector;
     }

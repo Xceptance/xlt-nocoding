@@ -56,7 +56,7 @@ public class DefaultItemParser extends AbstractScriptItemParser
             {
                 variableName = Constants.PARAMETERS;
                 value = Constants.DELETE;
-                scriptItems.add(new StoreDefaultHeader(variableName, value));
+                scriptItems.add(new StoreDefaultParameter(variableName, value));
             }
             else
             {
@@ -75,7 +75,7 @@ public class DefaultItemParser extends AbstractScriptItemParser
             {
                 variableName = Constants.STATIC;
                 value = Constants.DELETE;
-                scriptItems.add(new StoreDefaultHeader(variableName, value));
+                scriptItems.add(new StoreDefaultStatic(variableName, value));
             }
             else
             {

@@ -19,6 +19,7 @@ public class StoreDefaultParameter extends StoreDefault
     @Override
     public void execute(final Context context) throws Throwable
     {
+        super.resolveValues(context);
         // If the value is not "delete"
         if (!value.equals(Constants.DELETE))
         {

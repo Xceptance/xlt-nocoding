@@ -11,7 +11,7 @@ import com.xceptance.xlt.nocoding.util.Context;
  * 
  * @author ckeiner
  */
-public abstract class AbstractValidationMode implements AbstractResponseItem
+public abstract class AbstractValidationMode extends AbstractResponseItem
 {
 
     private List<String> expressionToValidate;

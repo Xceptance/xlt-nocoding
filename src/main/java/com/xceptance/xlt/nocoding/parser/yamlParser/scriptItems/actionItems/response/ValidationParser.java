@@ -76,6 +76,10 @@ public class ValidationParser
                     {
                         group = ParserUtils.readValue(validationContent, nextName);
                     }
+                    else
+                    {
+                        throw new IllegalArgumentException("Unknown Validation Item " + nextName);
+                    }
                 }
                 validator.add(new Validator(validationName, selector, validation, group));
 

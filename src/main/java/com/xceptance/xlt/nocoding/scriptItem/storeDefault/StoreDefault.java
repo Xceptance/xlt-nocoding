@@ -2,6 +2,7 @@ package com.xceptance.xlt.nocoding.scriptItem.storeDefault;
 
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
+import com.xceptance.xlt.nocoding.util.Context;
 
 /**
  * The abstrac class for every default store item. A default store item is an item that is used as default value for
@@ -13,7 +14,7 @@ public abstract class StoreDefault implements ScriptItem
 {
     protected final String variableName;
 
-    protected final String value;
+    protected String value;
 
     public StoreDefault(final String variableName, final String value)
     {
@@ -29,6 +30,11 @@ public abstract class StoreDefault implements ScriptItem
     public String getValue()
     {
         return value;
+    }
+
+    protected void resolveValues(final Context context)
+    {
+        value = context.resolveString(getValue());
     }
 
 }

@@ -6,7 +6,7 @@ import com.xceptance.xlt.engine.LightWeightPageImpl;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 
-public class HttpcodeValidator implements AbstractResponseItem
+public class HttpcodeValidator extends AbstractResponseItem
 {
     private String httpcode;
 
@@ -29,7 +29,8 @@ public class HttpcodeValidator implements AbstractResponseItem
         }
     }
 
-    private void fillDefaultData(final Context context)
+    @Override
+    protected void fillDefaultData(final Context context)
     {
         if (httpcode == null)
         {

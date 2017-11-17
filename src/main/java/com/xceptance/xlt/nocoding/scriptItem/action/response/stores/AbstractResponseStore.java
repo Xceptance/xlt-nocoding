@@ -8,7 +8,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.AbstractSe
  * 
  * @author ckeiner
  */
-public abstract class AbstractResponseStore implements AbstractResponseItem
+public abstract class AbstractResponseStore extends AbstractResponseItem
 {
     protected final String variableName;
 

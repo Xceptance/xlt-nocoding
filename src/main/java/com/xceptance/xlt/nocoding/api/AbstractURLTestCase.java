@@ -121,7 +121,12 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
         final String fileExtension = FilenameUtils.getExtension(pathToFile);
         if (fileExtension.equalsIgnoreCase("yml") || fileExtension.equalsIgnoreCase("yaml"))
         {
-            this.parser = new com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser(pathToFile + fileExtension);
+            String parserInput = pathToFile;
+            if (!pathToFile.contains(fileExtension))
+            {
+                parserInput += fileExtension;
+            }
+            parser = new YamlParser(parserInput);
         }
         else if (fileExtension.isEmpty())
         {

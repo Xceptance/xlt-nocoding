@@ -10,7 +10,7 @@ import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
  * 
  * @author ckeiner
  */
-public interface AbstractResponseItem
+public abstract class AbstractResponseItem
 {
     /**
      * Executes the item by either storing or validating something in the {@link WebResponse}
@@ -20,4 +20,9 @@ public interface AbstractResponseItem
      * @throws Exception
      */
     public abstract void execute(final Context context) throws Exception;
+
+    protected void fillDefaultData(final Context context)
+    {
+
+    }
 }

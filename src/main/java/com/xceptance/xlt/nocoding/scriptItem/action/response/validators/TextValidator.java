@@ -24,7 +24,9 @@ public class TextValidator extends AbstractValidationMode
         // Assert that the expression is not null
         Assert.assertNotNull(expressionToValidate);
         // Assert both strings are equal
-        Assert.assertEquals(validationExpression + " was not " + expressionToValidate, validationExpression, expressionToValidate);
+        Assert.assertEquals("Expected : " + validationExpression + " but was " + expressionToValidate,
+                            validationExpression,
+                            expressionToValidate);
     }
 
     @Override
