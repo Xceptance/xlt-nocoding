@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.openqa.selenium.InvalidArgumentException;
 
@@ -239,8 +240,10 @@ public class Request extends AbstractActionItem
 
         if (context.getDefaultHeaders() != null)
         {
+            // Create a tree map that is case insensitive (since headers are case insensitive
+            final TreeMap<String, String> defaultHeaders = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
             // Get the default headers
-            final Map<String, String> defaultHeaders = context.getDefaultHeaders();
+            defaultHeaders.putAll(context.getDefaultHeaders());
             // Overwrite the default values with the current ones and/or add the current ones
             if (getHeaders() != null)
             {

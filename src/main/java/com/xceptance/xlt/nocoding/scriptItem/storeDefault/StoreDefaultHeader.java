@@ -29,9 +29,9 @@ public class StoreDefaultHeader extends StoreDefault
         // If the value is not "delete"
         if (!value.equals(Constants.DELETE))
         {
-            // Store the header
-            context.storeDefaultHeader(variableName, value);
-            XltLogger.runTimeLogger.debug("Added " + variableName + "=" + value + " to default header storage");
+            // Store the header as lowercase
+            context.storeDefaultHeader(variableName.toLowerCase(), value);
+            XltLogger.runTimeLogger.debug("Added " + variableName.toLowerCase() + "=" + value + " to default header storage");
         }
         else
         {
