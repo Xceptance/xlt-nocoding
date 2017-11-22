@@ -23,7 +23,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.RegexpSele
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.XpathSelector;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.AbstractResponseStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.ResponseStore;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.MatchesValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.MatchesValidator;
 
 public class ActionItemParserTest extends ParserTest
 {

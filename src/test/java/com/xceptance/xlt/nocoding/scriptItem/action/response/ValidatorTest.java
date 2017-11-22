@@ -18,10 +18,10 @@ import com.xceptance.xlt.nocoding.XltMockWebConnection;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.CookieSelector;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.HeaderSelector;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.RegexpSelector;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.CountValidator;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.ExistsValidator;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.MatchesValidator;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.TextValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.CountValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.ExistsValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.MatchesValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.TextValidator;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 

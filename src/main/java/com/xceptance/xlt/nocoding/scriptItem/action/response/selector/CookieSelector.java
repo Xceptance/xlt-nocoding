@@ -36,10 +36,19 @@ public class CookieSelector extends AbstractSelector
                 // and comparing it with the input name
                 if (cookieName.equals(getSelectionExpression()))
                 {
+                    String cookieContent = null;
                     // Get the content of the cookie, which is until the first semicolon
                     final int semicolonPosition = header.getValue().indexOf(";");
-                    // Content starts after the equal sign (position+1) and ends before the semicolon
-                    String cookieContent = header.getValue().substring(equalSignPosition + 1, semicolonPosition);
+                    // If the cookei does not end with a semicolon, set it at the end
+                    if (semicolonPosition < 0)
+                    {
+                        cookieContent = header.getValue().substring(equalSignPosition + 1, header.getValue().length());
+                    }
+                    else
+                    {
+                        // Content starts after the equal sign (position+1) and ends before the semicolon
+                        cookieContent = header.getValue().substring(equalSignPosition + 1, semicolonPosition);
+                    }
                     // Remove possible whitespaces at the beginning or end
                     cookieContent = cookieContent.trim();
                     addResult(cookieContent);

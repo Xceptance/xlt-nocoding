@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.scriptItem.action.response.validators;
+package com.xceptance.xlt.nocoding.scriptItem.action.response.validator;
 
 import org.junit.Assert;
 

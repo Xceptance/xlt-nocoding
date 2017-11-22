@@ -1,10 +1,10 @@
 package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.response.validators;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.AbstractValidationMode;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.CountValidator;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.MatchesValidator;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validators.TextValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.AbstractValidationMode;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.CountValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.MatchesValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.TextValidator;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 

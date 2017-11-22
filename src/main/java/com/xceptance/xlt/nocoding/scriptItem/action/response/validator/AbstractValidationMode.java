@@ -1,9 +1,8 @@
-package com.xceptance.xlt.nocoding.scriptItem.action.response.validators;
+package com.xceptance.xlt.nocoding.scriptItem.action.response.validator;
 
 import java.util.List;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseItem;
 import com.xceptance.xlt.nocoding.util.Context;
 
 /**
@@ -11,7 +10,7 @@ import com.xceptance.xlt.nocoding.util.Context;
  * 
  * @author ckeiner
  */
-public abstract class AbstractValidationMode extends AbstractResponseItem
+public abstract class AbstractValidationMode
 {
 
     private List<String> expressionToValidate;
