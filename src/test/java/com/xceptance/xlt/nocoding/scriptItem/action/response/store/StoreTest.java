@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.scriptItem.action.response;
+package com.xceptance.xlt.nocoding.scriptItem.action.response.store;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -18,8 +18,8 @@ import com.xceptance.xlt.nocoding.XltMockWebConnection;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.CookieSelector;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.HeaderSelector;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.RegexpSelector;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.AbstractResponseStore;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.ResponseStore;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.store.AbstractResponseStore;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.store.ResponseStore;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 

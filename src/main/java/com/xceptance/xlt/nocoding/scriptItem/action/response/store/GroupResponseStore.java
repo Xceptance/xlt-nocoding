@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.scriptItem.action.response.stores;
+package com.xceptance.xlt.nocoding.scriptItem.action.response.store;
 
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.AbstractSelector;

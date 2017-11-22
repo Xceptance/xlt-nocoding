@@ -10,9 +10,9 @@ import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.response.selector.SelectorParser;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.AbstractSelector;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.RegexpSelector;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.AbstractResponseStore;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.GroupResponseStore;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.ResponseStore;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.store.AbstractResponseStore;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.store.GroupResponseStore;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.store.ResponseStore;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 

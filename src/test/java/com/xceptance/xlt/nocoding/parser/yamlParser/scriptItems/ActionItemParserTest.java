@@ -21,8 +21,8 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Validator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.RegexpSelector;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.XpathSelector;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.AbstractResponseStore;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.stores.ResponseStore;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.store.AbstractResponseStore;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.store.ResponseStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.MatchesValidator;
 
 public class ActionItemParserTest extends ParserTest
