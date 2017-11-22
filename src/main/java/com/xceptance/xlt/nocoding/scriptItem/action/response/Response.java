@@ -32,6 +32,7 @@ public class Response extends AbstractActionItem
     @Override
     public void execute(final Context context) throws Throwable
     {
+        fillDefaultData(context);
         // Execute every AbstractResponseItem
         for (final AbstractResponseItem abstractResponseItem : responseItems)
         {

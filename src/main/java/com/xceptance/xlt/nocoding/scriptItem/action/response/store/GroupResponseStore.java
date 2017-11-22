@@ -25,6 +25,12 @@ public class GroupResponseStore extends AbstractResponseStore
         {
             ((RegexpSelector) selector).setGroup(group);
         }
+        // If group is specified but the class is not a RegexpSelector, throw an error
+        else if (group != null)
+        {
+            throw new IllegalArgumentException("Group specified but selector is " + selector.getClass().getName()
+                                               + " and not a RegexpSelector");
+        }
         // Execute the selector
         selector.execute(context);
         // Try to turn group into an Integer
