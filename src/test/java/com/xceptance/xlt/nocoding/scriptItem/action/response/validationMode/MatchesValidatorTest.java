@@ -18,6 +18,19 @@ public class MatchesValidatorTest extends ValidationModeTest
         mode.execute(context);
     }
 
+    @Test
+    public void testMatchesValidatorWithVariables() throws Exception
+    {
+        final String variableName = "matches";
+        final String value = "test";
+        context.storeVariable(variableName, value);
+        final List<String> result = new ArrayList<>();
+        result.add(value);
+        final AbstractValidationMode mode = new MatchesValidator("${" + variableName + "}");
+        mode.setExpressionToValidate(result);
+        mode.execute(context);
+    }
+
     @Test(expected = AssertionError.class)
     public void testMatchesValidatorWrongText() throws Exception
     {

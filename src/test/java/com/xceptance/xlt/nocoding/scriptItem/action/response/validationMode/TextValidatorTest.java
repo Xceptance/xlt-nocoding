@@ -18,6 +18,19 @@ public class TextValidatorTest extends ValidationModeTest
         mode.execute(context);
     }
 
+    @Test
+    public void testTextValidatorWithVariables() throws Exception
+    {
+        final String variableName = "text";
+        final String value = "test";
+        context.storeVariable(variableName, value);
+        final List<String> result = new ArrayList<>();
+        result.add(value);
+        final AbstractValidationMode mode = new TextValidator("${" + variableName + "}");
+        mode.setExpressionToValidate(result);
+        mode.execute(context);
+    }
+
     @Test(expected = AssertionError.class)
     public void testTextValidatorWrongText() throws Exception
     {

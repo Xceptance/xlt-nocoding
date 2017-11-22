@@ -23,6 +23,19 @@ public class CountValidatorTest extends ValidationModeTest
         mode.execute(context);
     }
 
+    @Test
+    public void testCountValidatorWithVariables() throws Exception
+    {
+        final String variableName = "count";
+        final String value = "1";
+        context.storeVariable(variableName, value);
+        final List<String> result = new ArrayList<>();
+        result.add("test");
+        final AbstractValidationMode mode = new CountValidator("${" + variableName + "}");
+        mode.setExpressionToValidate(result);
+        mode.execute(context);
+    }
+
     @Test(expected = AssertionError.class)
     public void testCountValidatorWrongCount() throws Exception
     {
