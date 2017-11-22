@@ -10,7 +10,8 @@ public class ExistsValidator extends AbstractValidationMode
     @Override
     public void execute(final Context context) throws Exception
     {
-        Assert.assertFalse(getExpressionToValidate().isEmpty());
+        Assert.assertNotNull("Expression is null", getExpressionToValidate());
+        Assert.assertFalse("Result list is empty", getExpressionToValidate().isEmpty());
     }
 
     @Override

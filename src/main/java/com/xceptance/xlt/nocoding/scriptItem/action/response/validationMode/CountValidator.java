@@ -19,13 +19,13 @@ public class CountValidator extends AbstractValidationMode
         // Resolve values
         resolveValues(context);
         final Integer count = Integer.parseInt(this.count);
-
-        // Assert that the amount of results is the same as the specified one
-        if (count != null)
+        if (getExpressionToValidate() == null)
         {
-            Assert.assertTrue("Expected " + this.count + " matches but found " + count.toString() + "matches",
-                              count.equals(getExpressionToValidate().size()));
+            throw new IllegalStateException("Result list is null");
         }
+        // Assert that the amount of results is the same as the specified one
+        Assert.assertTrue("Expected " + this.count + " matches but found " + count.toString() + "matches",
+                          count.equals(getExpressionToValidate().size()));
     }
 
     @Override

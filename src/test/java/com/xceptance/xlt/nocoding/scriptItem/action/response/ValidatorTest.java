@@ -3,6 +3,7 @@ package com.xceptance.xlt.nocoding.scriptItem.action.response;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -101,7 +102,7 @@ public class ValidatorTest
     public void testValidationWithRegexp() throws Throwable
     {
         // Build Validator with ExistsModule
-        final String validationName = "Header Validation";
+        final String validationName = "Regexp Validation";
         AbstractSelector selector = new RegexpSelector(mockObjects.regexString);
         AbstractValidationMode mode = new ExistsValidator();
         Validator validator = new Validator(validationName, selector, mode);
@@ -124,6 +125,44 @@ public class ValidatorTest
         selector = new RegexpSelector(mockObjects.regexString);
         mode = new CountValidator("1");
         validator = new Validator(validationName, selector, mode);
+        executeRequest(validator);
+    }
+
+    @Test
+    public void testNoResolvingOfValidationName() throws Throwable
+    {
+        final String variableName = "validationName";
+        final String validationName = "Regexp Validation";
+        context.storeVariable(variableName, validationName);
+        // Build Validator with ExistsModule
+        final AbstractSelector selector = new RegexpSelector(mockObjects.regexString);
+        final AbstractValidationMode mode = new ExistsValidator();
+        final Validator validator = new Validator("${" + variableName + "}", selector, mode);
+        executeRequest(validator);
+        Assert.assertNotEquals(validationName, validator.getValidationName());
+    }
+
+    @Test
+    public void testGroupRegexpValidation() throws Throwable
+    {
+        final String validationName = "Regexp Validation";
+        // Build Validator with ExistsModule
+        final AbstractSelector selector = new RegexpSelector(mockObjects.regexString);
+        final AbstractValidationMode mode = new ExistsValidator();
+        final Validator validator = new Validator(validationName, selector, mode, "0");
+        executeRequest(validator);
+        Assert.assertTrue(selector instanceof RegexpSelector);
+        Assert.assertEquals("0", ((RegexpSelector) selector).getGroup());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidGroupValidation() throws Throwable
+    {
+        final String validationName = "Regexp Validation";
+        // Build Validator with ExistsModule
+        final AbstractSelector selector = new HeaderSelector("Set-Cookie");
+        final AbstractValidationMode mode = new ExistsValidator();
+        final Validator validator = new Validator(validationName, selector, mode, "0");
         executeRequest(validator);
     }
 

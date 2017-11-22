@@ -19,6 +19,9 @@ public class TextValidator extends AbstractValidationMode
     {
         // Resolve values
         resolveValues(context);
+        // Assert we have results
+        Assert.assertNotNull("Result list is null", getExpressionToValidate());
+        Assert.assertFalse("Result list is empty", getExpressionToValidate().isEmpty());
         // Get the expression we want
         final String expressionToValidate = getExpressionToValidate().get(0);
         // Assert that the expression is not null
