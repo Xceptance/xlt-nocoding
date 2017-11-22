@@ -1,5 +1,6 @@
 package com.xceptance.xlt.nocoding.scriptItem.action;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
@@ -198,12 +199,20 @@ public class RequestTest
 
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testInvalidDeclaration()
+    @Test(expected = InvalidArgumentException.class)
+    public void testEmptyRequest()
         throws InvalidArgumentException, MalformedURLException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
     {
         request = new Request(null);
-        request.resolveValues(context);
+        try
+        {
+            request.execute(context);
+        }
+        catch (final IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Test

@@ -388,6 +388,11 @@ public class Request extends AbstractActionItem
         // Then resolve all variables
         resolveValues(context);
 
+        if (this.url == null || this.url.isEmpty())
+        {
+            throw new InvalidArgumentException("Url is empty. Please set a default url or specify a url.");
+        }
+
         setWebRequest(buildWebRequest());
         // Check that we have built the webRequest
         if (getWebRequest() != null)
@@ -422,7 +427,7 @@ public class Request extends AbstractActionItem
             webRequest.setAdditionalHeaders(headers);
         }
 
-        if (getParameters() != null)
+        if (getParameters() != null && !getParameters().isEmpty())
         {
             if (getEncodeParameters() != null && !Boolean.valueOf(getEncodeParameters()))
             {
@@ -431,8 +436,8 @@ public class Request extends AbstractActionItem
             webRequest.setRequestParameters(parameters);
         }
 
-        // Set Body if specified
-        if (getBody() != null)
+        // Set Body if specified and no parameters are set
+        if (getBody() != null && !getBody().isEmpty() && (getParameters() == null || getParameters().isEmpty()))
         {
             if (getEncodeBody() != null && !Boolean.valueOf(getEncodeBody()))
             {

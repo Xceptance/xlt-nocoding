@@ -125,7 +125,7 @@ public class ParameterInterpreterTest
     }
 
     // ----------------------------------------------------------------------------------------
-    /* My stuff */
+    /* New Test Cases */
     // ----------------------------------------------------------------------------------------
 
     @Test
@@ -211,6 +211,18 @@ public class ParameterInterpreterTest
         context.storeVariable("blub", "${host}");
         final String resolved = interpreter.resolveString("${host}", context);
         Assert.assertEquals("${host}", resolved);
+    }
+
+    @Test
+    public void testNullStore()
+    {
+        /*
+         * TODO fix null storage but keep invalidMoreCurlyBraces working; see commit d4fe455d for a fixing null storage but
+         * breaking invalidMoreCurlyBraces
+         */
+        context.storeVariable("host", null);
+        final String resolved = interpreter.resolveString("${host}", context);
+        Assert.assertNull(resolved);
     }
 
 }
