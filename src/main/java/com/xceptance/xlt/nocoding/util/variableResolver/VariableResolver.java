@@ -57,30 +57,27 @@ public class VariableResolver
     {
         final List<String> resolvedValues = new ArrayList<String>();
         String resolvedValue = resolveExpression(toResolve, false, context).getLeft();
-        if (resolvedValue != null)
+        resolvedValues.add(resolvedValue);
+        // As long as we can still resolve another value, continue
+        while (!resolvedValue.equals(resolveExpression(resolvedValue, false, context).getLeft()))
         {
-            resolvedValues.add(resolvedValue);
-            // As long as we can still resolve another value, continue
-            while (!resolvedValue.equals(resolveExpression(resolvedValue, false, context).getLeft()))
+            //
+            resolvedValue = resolveExpression(resolvedValue, false, context).getLeft();
+            if (!resolvedValues.isEmpty() && resolvedValues.contains(resolvedValue))
             {
-                //
-                resolvedValue = resolveExpression(resolvedValue, false, context).getLeft();
-                if (!resolvedValues.isEmpty() && resolvedValues.contains(resolvedValue))
+                // If the last added value is what we have resolved, this isn't an error but intentional
+                if (resolvedValues.indexOf(resolvedValue) == resolvedValues.size() - 1)
                 {
-                    // If the last added value is what we have resolved, this isn't an error but intentional
-                    if (resolvedValues.indexOf(resolvedValue) == resolvedValues.size() - 1)
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        throw new IllegalArgumentException("Endless recursion detected at variable: " + toResolve);
-                    }
+                    break;
                 }
                 else
                 {
-                    resolvedValues.add(resolvedValue);
+                    throw new IllegalArgumentException("Endless recursion detected at variable: " + toResolve);
                 }
+            }
+            else
+            {
+                resolvedValues.add(resolvedValue);
             }
         }
         return resolvedValue;
@@ -128,11 +125,17 @@ public class VariableResolver
                 isResolved = true;
                 // Resolve it
                 final String resolved = resolveVariable(resolvedValue, context);
-                // Since we never return null and add ${ and } if we didnt find anything, we can set it.
-                resolvedValue = resolved;
-                // Exit the loop
-                break;
-                // }
+                if (resolved == null)
+                {
+                    resolvedValue += current;
+                    continue;
+                }
+                else
+                {
+                    resolvedValue = resolved;
+                    // Exit the loop
+                    break;
+                }
             }
             // We found a variable start and there is a variable end
             else if (current == '$' && expression.length() > index + 2 && expression.charAt(index + 1) == '{'
@@ -141,15 +144,7 @@ public class VariableResolver
                 // Resolve the variable
                 final Pair<String, Integer> resolvedPair = resolveExpression(expression.substring(index + 2), true, context);
                 // Add it to the function output resolvedValue
-                // But if we get null and the
-                if (resolvedPair.getLeft() == null && resolvedValue.isEmpty())
-                {
-                    resolvedValue = null;
-                }
-                else
-                {
-                    resolvedValue += resolvedPair.getLeft();
-                }
+                resolvedValue += resolvedPair.getLeft();
                 // Increment index by length of the variableName plus 3
                 index += resolvedPair.getRight() + 2;
             }
@@ -179,8 +174,7 @@ public class VariableResolver
         // Try to resolve it in the dataStorage
         String resolvedValue = context.getDataStorage().getVariableByKey(variableName);
         // If we didn't find it, let beanshell handle the variable
-        if (!context.getDataStorage().getVariables().containsKey(variableName) && resolvedValue == null && !variableName.equals("{")
-            && !variableName.equals("}"))
+        if (resolvedValue == null && !variableName.equals("{") && !variableName.equals("}"))
         {
             try
             {
@@ -211,7 +205,7 @@ public class VariableResolver
             }
         }
         // This fixes Text${'{'}
-        else if (resolvedValue == null && !context.getDataStorage().getVariables().containsKey(variableName))
+        else if (resolvedValue == null)
         {
             resolvedValue = variableName;
         }
