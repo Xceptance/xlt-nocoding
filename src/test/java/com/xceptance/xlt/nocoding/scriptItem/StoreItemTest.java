@@ -40,4 +40,16 @@ public class StoreItemTest
         Assert.assertEquals(Constants.DELETE, context.getDataStorage().getVariableByKey("test"));
     }
 
+    @Test
+    public void resolveStore() throws Throwable
+    {
+        ScriptItem store = new StoreItem("var_1", "val_1");
+        Assert.assertNull(context.getDataStorage().getVariableByKey("var_1"));
+        store.execute(context);
+        Assert.assertEquals("val_1", context.getDataStorage().getVariableByKey("var_1"));
+        store = new StoreItem("var_2", "${var_1}");
+        store.execute(context);
+        Assert.assertEquals("val_1", context.getDataStorage().getVariableByKey("var_2"));
+    }
+
 }
