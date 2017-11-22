@@ -1,18 +1,15 @@
-package com.xceptance.xlt.nocoding.scriptItem.action.response.validator;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+package com.xceptance.xlt.nocoding.scriptItem.action.response.validationMode;
 
 import org.junit.Assert;
 
 import com.xceptance.xlt.nocoding.util.Context;
 
-public class MatchesValidator extends AbstractValidationMode
+public class TextValidator extends AbstractValidationMode
 {
 
     private String validationExpression;
 
-    public MatchesValidator(final String validationExpression)
+    public TextValidator(final String validationExpression)
     {
         this.validationExpression = validationExpression;
     }
@@ -26,21 +23,16 @@ public class MatchesValidator extends AbstractValidationMode
         final String expressionToValidate = getExpressionToValidate().get(0);
         // Assert that the expression is not null
         Assert.assertNotNull(expressionToValidate);
-        // Build a matcher from the fields
-        final Matcher matcher = Pattern.compile(validationExpression).matcher(expressionToValidate);
-        // Assert we found a match
-        Assert.assertTrue(validationExpression + " did not match " + expressionToValidate, matcher.find());
+        // Assert both strings are equal
+        Assert.assertEquals("Expected : " + validationExpression + " but was " + expressionToValidate,
+                            validationExpression,
+                            expressionToValidate);
     }
 
     @Override
     protected void resolveValues(final Context context)
     {
         validationExpression = context.resolveString(validationExpression);
-    }
-
-    public String getValidationExpression()
-    {
-        return validationExpression;
     }
 
 }

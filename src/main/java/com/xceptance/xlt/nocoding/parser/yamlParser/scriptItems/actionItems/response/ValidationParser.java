@@ -12,7 +12,7 @@ import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.resp
 import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Validator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.AbstractSelector;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.AbstractValidationMode;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMode.AbstractValidationMode;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 

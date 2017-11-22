@@ -2,8 +2,8 @@ package com.xceptance.xlt.nocoding.scriptItem.action.response;
 
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.AbstractSelector;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.RegexpSelector;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.AbstractValidationMode;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.ExistsValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMode.AbstractValidationMode;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMode.ExistsValidator;
 import com.xceptance.xlt.nocoding.util.Context;
 
 public class Validator extends AbstractResponseItem
