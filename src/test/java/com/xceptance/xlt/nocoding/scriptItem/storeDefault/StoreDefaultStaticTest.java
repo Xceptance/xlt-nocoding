@@ -7,8 +7,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
-import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultParameter;
-import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultStatic;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 public class StoreDefaultStaticTest extends StoreDefaultTest
@@ -33,7 +31,7 @@ public class StoreDefaultStaticTest extends StoreDefaultTest
         store.execute(context);
         Assert.assertTrue(context.getDefaultStatic().contains(url));
 
-        store = new StoreDefaultStatic(url, "delete");
+        store = new StoreDefaultStatic(url, Constants.DELETE);
         store.execute(context);
         Assert.assertTrue(context.getDefaultStatic().isEmpty());
     }
@@ -48,7 +46,7 @@ public class StoreDefaultStaticTest extends StoreDefaultTest
         store.add(new StoreDefaultStatic("url", url));
         store.add(new StoreDefaultStatic("url", url));
         store.add(new StoreDefaultStatic("url", url));
-        Assert.assertNull(context.getDefaultParameters().get("header_1"));
+        Assert.assertTrue(context.getDefaultStatic().isEmpty());
         int i = 0;
         for (final ScriptItem scriptItem : store)
         {
@@ -56,9 +54,10 @@ public class StoreDefaultStaticTest extends StoreDefaultTest
             Assert.assertEquals(url, context.getDefaultStatic().get(i));
             i++;
         }
-        final ScriptItem deleteIt = new StoreDefaultParameter(Constants.STATIC, "delete");
+        Assert.assertEquals(context.getDefaultStatic().size(), 5);
+        final ScriptItem deleteIt = new StoreDefaultStatic(Constants.STATIC, Constants.DELETE);
         deleteIt.execute(context);
-        Assert.assertTrue(context.getDefaultParameters().isEmpty());
+        Assert.assertTrue(context.getDefaultStatic().isEmpty());
     }
 
 }

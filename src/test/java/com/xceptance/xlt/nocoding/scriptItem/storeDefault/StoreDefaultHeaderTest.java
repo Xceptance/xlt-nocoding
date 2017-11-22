@@ -7,7 +7,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
-import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultHeader;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 public class StoreDefaultHeaderTest extends StoreDefaultTest
@@ -28,7 +27,7 @@ public class StoreDefaultHeaderTest extends StoreDefaultTest
         Assert.assertNull(context.getDefaultHeaders().get("header_1"));
         store.execute(context);
         Assert.assertEquals("value", context.getDefaultHeaders().get("header_1"));
-        store = new StoreDefaultHeader("header_1", "delete");
+        store = new StoreDefaultHeader("header_1", Constants.DELETE);
         store.execute(context);
         Assert.assertNull(context.getDefaultHeaders().get("header_1"));
     }
@@ -50,10 +49,22 @@ public class StoreDefaultHeaderTest extends StoreDefaultTest
             Assert.assertEquals("value", context.getDefaultHeaders().get("header_" + i));
             i++;
         }
-        final ScriptItem deleteIt = new StoreDefaultHeader(Constants.HEADERS, "delete");
+        final ScriptItem deleteIt = new StoreDefaultHeader(Constants.HEADERS, Constants.DELETE);
         deleteIt.execute(context);
         Assert.assertNull(context.getDefaultHeaders().get("header_1"));
         Assert.assertTrue(context.getDefaultHeaders().isEmpty());
+    }
+
+    @Test
+    public void storeCaseInsensitiveHeaders() throws Throwable
+    {
+        final StoreDefault item1 = new StoreDefaultHeader("heAder_1", "heAder_1");
+        final StoreDefault item2 = new StoreDefaultHeader("header_1", "header_1");
+        Assert.assertNull(context.getDefaultHeaders().get("header_1"));
+        item1.execute(context);
+        Assert.assertEquals("heAder_1", context.getDefaultHeaders().get("header_1"));
+        item2.execute(context);
+        Assert.assertEquals("header_1", context.getDefaultHeaders().get("header_1"));
     }
 
 }
