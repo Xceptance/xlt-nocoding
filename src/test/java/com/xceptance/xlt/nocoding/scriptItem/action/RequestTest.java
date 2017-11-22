@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,6 +20,9 @@ import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.api.util.XltProperties;
+import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
+import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultHeader;
+import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultParameter;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
@@ -216,9 +220,47 @@ public class RequestTest
     }
 
     @Test
-    public void testDefaultData()
-        throws InvalidArgumentException, MalformedURLException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
-        UnsupportedEncodingException
+    public void testCaseInsensitiveHeaders() throws Throwable
+    {
+        // TODO [MEETING] go over this
+        final Map<String, String> defaultValues = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
+        defaultValues.put("Accept", "text/html");
+        defaultValues.put("Cookie", "cookie1=value1");
+        final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
+        defaultValues.forEach((key, value) -> {
+            scriptItems.add(new StoreDefaultHeader(key, value));
+        });
+
+        for (final ScriptItem scriptItem : scriptItems)
+        {
+            scriptItem.execute(context);
+        }
+
+        request = new Request(url);
+        final Map<String, String> newHeader = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
+        newHeader.put("AccEpt", "application/xhtml+xml");
+        newHeader.put("COOkIE", "cookieName=cookieValue");
+        request.setHeaders(newHeader);
+        request.fillDefaultData(context);
+        webRequest = request.buildWebRequest();
+
+        final Map<String, String> actualHeader = webRequest.getAdditionalHeaders();
+
+        actualHeader.forEach((key, value) -> {
+            if (!(newHeader.containsKey(key)))
+            {
+                throw new AssertionError();
+            }
+            else
+            {
+                System.out.println("Key is: " + key);
+                Assert.assertEquals(newHeader.get(key), value);
+            }
+        });
+    }
+
+    @Test
+    public void testDefaultData() throws InvalidArgumentException, MalformedURLException, UnsupportedEncodingException
     {
         request = new Request(url);
         request.fillDefaultData(context);
@@ -230,18 +272,152 @@ public class RequestTest
         Assert.assertFalse(Boolean.getBoolean(request.getEncodeParameters()));
         Assert.assertFalse(Boolean.getBoolean(request.getEncodeParameters()));
     }
-    //
-    // private void resolveValues(final Request request, final Context context)
-    // throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
-    // {
-    // final Method method = ReflectionUtils.getMethod(request.getClass(), "resolveValues", Context.class);
-    // method.invoke(request, context);
-    // }
-    //
-    // private void fillDefaultData(final Request request, final Context context)
-    // throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
-    // {
-    // final Method method = ReflectionUtils.getMethod(request.getClass(), "fillDefaultData", Context.class);
-    // method.invoke(request, context);
-    // }
+
+    @Test
+    public void testDefaultHeaders() throws Throwable
+    {
+        // Simply use default headers
+        final Map<String, String> defaultValues = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
+        defaultValues.put("Accept", "text/html");
+        defaultValues.put("Accept-Encoding", "gzip");
+        defaultValues.put("Cookie", "cookie1=value1");
+        defaultValues.put("Referer", "https://www.xceptance.com");
+        final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
+        defaultValues.forEach((key, value) -> {
+            scriptItems.add(new StoreDefaultHeader(key, value));
+        });
+
+        for (final ScriptItem scriptItem : scriptItems)
+        {
+            scriptItem.execute(context);
+        }
+        request = new Request(url);
+        request.fillDefaultData(context);
+        webRequest = request.buildWebRequest();
+
+        final Map<String, String> actualHeader = webRequest.getAdditionalHeaders();
+
+        actualHeader.forEach((key, value) -> {
+            Assert.assertTrue(defaultValues.containsKey(key));
+            Assert.assertEquals(defaultValues.get(key), value);
+        });
+    }
+
+    @Test
+    public void testOverwriteDefaultHeaders() throws Throwable
+    {
+        final Map<String, String> defaultValues = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
+        defaultValues.put("Accept", "text/html");
+        defaultValues.put("Accept-Encoding", "gzip");
+        defaultValues.put("Cookie", "cookie1=value1");
+        defaultValues.put("Referer", "https://www.xceptance.com");
+        final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
+        defaultValues.forEach((key, value) -> {
+            scriptItems.add(new StoreDefaultHeader(key, value));
+        });
+
+        for (final ScriptItem scriptItem : scriptItems)
+        {
+            scriptItem.execute(context);
+        }
+
+        request = new Request(url);
+        final Map<String, String> newHeader = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
+        newHeader.put("Accept", "application/xhtml+xml");
+        newHeader.put("Cookie", "cookieName=cookieValue");
+        request.setHeaders(newHeader);
+        request.fillDefaultData(context);
+        webRequest = request.buildWebRequest();
+
+        final Map<String, String> actualHeader = webRequest.getAdditionalHeaders();
+
+        actualHeader.forEach((key, value) -> {
+            if (!(newHeader.containsKey(key)))
+            {
+                Assert.assertTrue(defaultValues.containsKey(key));
+                Assert.assertEquals(defaultValues.get(key), value);
+            }
+            else
+            {
+                Assert.assertEquals(newHeader.get(key), value);
+            }
+        });
+    }
+
+    @Test
+    public void testDefaultParameters() throws Throwable
+    {
+        final Map<String, String> defaultValues = new HashMap<String, String>();
+        defaultValues.put("param_1", "value_1");
+        defaultValues.put("param_2", "value_2");
+        defaultValues.put("param_3", "value_3");
+        defaultValues.put("param_4", "value_4");
+        final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
+        defaultValues.forEach((key, value) -> {
+            scriptItems.add(new StoreDefaultParameter(key, value));
+        });
+
+        for (final ScriptItem scriptItem : scriptItems)
+        {
+            scriptItem.execute(context);
+        }
+
+        for (final ScriptItem scriptItem : scriptItems)
+        {
+            scriptItem.execute(context);
+        }
+        request = new Request(url);
+        request.fillDefaultData(context);
+        webRequest = request.buildWebRequest();
+
+        final List<NameValuePair> actualParameters = webRequest.getRequestParameters();
+
+        for (final NameValuePair parameter : actualParameters)
+        {
+            Assert.assertTrue(defaultValues.containsKey(parameter.getName()));
+            Assert.assertEquals(defaultValues.get(parameter.getName()), parameter.getValue());
+        }
+    }
+
+    @Test
+    public void testOverwriteDefaultParameters() throws Throwable
+    {
+        final Map<String, String> defaultValues = new HashMap<String, String>();
+        defaultValues.put("param_1", "value_1");
+        defaultValues.put("param_2", "value_2");
+        defaultValues.put("param_3", "value_3");
+        defaultValues.put("param_4", "value_4");
+        final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
+        defaultValues.forEach((key, value) -> {
+            scriptItems.add(new StoreDefaultParameter(key, value));
+        });
+
+        for (final ScriptItem scriptItem : scriptItems)
+        {
+            scriptItem.execute(context);
+        }
+
+        for (final ScriptItem scriptItem : scriptItems)
+        {
+            scriptItem.execute(context);
+        }
+        request = new Request(url);
+        final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+        parameters.add(new NameValuePair("param_1", "aDifferentValue"));
+        parameters.add(new NameValuePair("param_5", "anotherDifferentValue"));
+        request.fillDefaultData(context);
+        webRequest = request.buildWebRequest();
+
+        final List<NameValuePair> actualParameters = webRequest.getRequestParameters();
+
+        for (final NameValuePair parameter : actualParameters)
+        {
+            if (!parameters.contains(parameter))
+            {
+                Assert.assertTrue(defaultValues.containsKey(parameter.getName()));
+                Assert.assertEquals(defaultValues.get(parameter.getName()), parameter.getValue());
+            }
+        }
+    }
+
 }

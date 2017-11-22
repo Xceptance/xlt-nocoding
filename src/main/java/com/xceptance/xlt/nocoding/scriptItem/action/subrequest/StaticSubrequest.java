@@ -32,4 +32,10 @@ public class StaticSubrequest extends AbstractSubrequest
         }
         downloader.loadRequests();
     }
+
+    public List<String> getUrls()
+    {
+        return urls;
+    }
+
 }
