@@ -20,21 +20,23 @@ import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
- * Reads a yaml file, provided per constructor, and generates a testsuite out of the yaml file.
+ * Reads a yaml file, provided per constructor, and generates an {@link ArrayList} filled with {@link ScriptItem}s out
+ * of the yaml file.
  * 
  * @author ckeiner
  */
-public class YamlParser implements Parser
+public class YamlParser extends Parser
 {
 
     /**
-     * The yaml file
+     * Creates a {@link File} with the provided path to the file.
+     * 
+     * @param pathToFile
+     *            The path to the file.
      */
-    final File file;
-
     public YamlParser(final String pathToFile)
     {
-        this.file = new File(pathToFile);
+        super(pathToFile);
     }
 
     /**
@@ -46,7 +48,7 @@ public class YamlParser implements Parser
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
         // Build the parser
         final YAMLFactory factory = new YAMLFactory();
-        final JsonParser parser = factory.createParser(file);
+        final JsonParser parser = factory.createParser(getFile());
         // Allow comments in the parser, so we have the correct line numbers
         parser.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS, true);
 
