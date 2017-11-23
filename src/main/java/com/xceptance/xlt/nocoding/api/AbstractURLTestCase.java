@@ -51,7 +51,9 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
     {
         // Instantiate the PropertyManager with a new DataStorage
         context = new Context(XltProperties.getInstance(), new DataStorage());
+        // Resolve the filePath to use
         final String pathToFile = getFilePath();
+        // Create the appropriate parser
         this.parser = decideParser(pathToFile);
         // Parse the file
         itemList = parser.parse();
@@ -66,15 +68,17 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
     public void executeTest() throws Throwable
     {
         XltLogger.runTimeLogger.info("Starting Testcase : " + this.toString());
-        // for each script item, execute it
+        // If there are ScriptItems in the itemList
         if (getItemList() != null && !getItemList().isEmpty())
         {
+            // Execute every item
             for (final ScriptItem item : itemList)
             {
                 XltLogger.runTimeLogger.info("Starting ScriptItem : " + item.toString());
                 item.execute(context);
             }
         }
+        // If there are no ScriptItems, throw an error
         else
         {
             XltLogger.runTimeLogger.error("No Script Items were found");
@@ -105,33 +109,47 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
      */
     protected String getFilePath()
     {
+        // Find the data directory in the property files
         final String dataDirectory = context.getPropertyByKey(NoCodingPropertyAdmin.DIRECTORY);
+        // Get the fileName from the property files
         String fileName = context.getPropertyByKey(NoCodingPropertyAdmin.FILENAME);
+        // If the fileName is empty
         if (StringUtils.isBlank(fileName))
         {
+            // Get the class and convert the class to a simple name
             fileName = getClass().getSimpleName();
         }
-
+        // Finally, return the path to the file
         return dataDirectory + File.separatorChar + fileName;
     }
 
+    /**
+     * Creates the correct parser depending on the file extension, i.e. creates the YamlParser for yml/yaml files.
+     * 
+     * @param pathToFile
+     *            The path to the file with or without the extension.
+     * @return The parser that should be used for the specified file.
+     */
     protected Parser decideParser(String pathToFile)
     {
         Parser parser = null;
+        // Get the extension
         final String fileExtension = FilenameUtils.getExtension(pathToFile);
+        // If it is yml or yaml
         if (fileExtension.equalsIgnoreCase("yml") || fileExtension.equalsIgnoreCase("yaml"))
         {
             String parserInput = pathToFile;
+            // if the pathToFile does not contain the fileExtension, add it
             if (!pathToFile.contains(fileExtension))
             {
                 parserInput += fileExtension;
             }
+            // Create the YamlParser with the correct input
             parser = new YamlParser(parserInput);
         }
+        // If the file extension is empty, try to add yml, yaml and csv
         else if (fileExtension.isEmpty())
         {
-            // No Extension found, try yml and csv
-
             // check for YAML files first
             final String[] yamlPaths =
                 {
@@ -140,6 +158,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
 
             for (final String yamlPath : yamlPaths)
             {
+                // If the new path is a file, create the parser and quit the loop
                 if (new File(yamlPath).isFile())
                 {
                     pathToFile = yamlPath;
@@ -163,7 +182,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
         }
         if (parser == null)
         {
-            // no file with a supported extension found
+            // No file with a supported extension was found
             throw new IllegalArgumentException("Failed to find a script file for file path: " + pathToFile);
         }
         return parser;
