@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -54,61 +53,66 @@ public class YamlParser implements Parser
         // Map the parsed content to JsonNodes
         final ObjectMapper mapper = new ObjectMapper();
         final JsonNode root = mapper.readTree(parser);
-        final Iterator<JsonNode> nodes = root.elements();
 
-        int numberObject = 0;
-
-        // Iterate over all tokens
-        while (nodes.hasNext())
+        // If we have a root, extract its elements
+        if (root != null)
         {
-            final JsonNode node = nodes.next();
-            // final String currentName;
-            final String currentName = node.fieldNames().next();
+            final Iterator<JsonNode> nodes = root.elements();
 
-            // Check if we have a permitted list item
-            if (Constants.isPermittedListItem(currentName))
+            int numberObject = 0;
+
+            // Iterate over all tokens
+            while (nodes.hasNext())
             {
-                numberObject++;
-                XltLogger.runTimeLogger.info(numberObject + ".th ScriptItem: " + currentName);
+                final JsonNode node = nodes.next();
+                // final String currentName;
+                final String currentName = node.fieldNames().next();
 
-                try
+                // Check if we have a permitted list item
+                if (Constants.isPermittedListItem(currentName))
                 {
-                    // Differentiate between Store, Action and default definitions
-                    AbstractScriptItemParser scriptItemParser = null;
-                    if (currentName.equals(Constants.STORE))
-                    {
-                        // Set parser to StoreItemParser
-                        scriptItemParser = new StoreItemParser();
-                    }
-                    else if (currentName.equals(Constants.ACTION))
-                    {
-                        // Set parser to ActionItemParser
-                        scriptItemParser = new ActionItemParser();
-                    }
-                    else
-                    {
-                        // Set parser to DefaultItemParser
-                        scriptItemParser = new DefaultItemParser();
-                    }
+                    numberObject++;
+                    XltLogger.runTimeLogger.info(numberObject + ".th ScriptItem: " + currentName);
 
-                    scriptItems.addAll(scriptItemParser.parse(node));
+                    try
+                    {
+                        // Differentiate between Store, Action and default definitions
+                        AbstractScriptItemParser scriptItemParser = null;
+                        if (currentName.equals(Constants.STORE))
+                        {
+                            // Set parser to StoreItemParser
+                            scriptItemParser = new StoreItemParser();
+                        }
+                        else if (currentName.equals(Constants.ACTION))
+                        {
+                            // Set parser to ActionItemParser
+                            scriptItemParser = new ActionItemParser();
+                        }
+                        else
+                        {
+                            // Set parser to DefaultItemParser
+                            scriptItemParser = new DefaultItemParser();
+                        }
 
+                        scriptItems.addAll(scriptItemParser.parse(node));
+
+                    }
+                    // Catch any exception while parsing, so we can print the current line/column number with the error
+                    catch (final Exception e)
+                    {
+                        throw new JsonParseException(parser, e.getMessage(), e);
+                    }
                 }
-                // Catch any exception while parsing, so we can print the current line/column number with the error
-                catch (final Exception e)
+                // If we don't have a list item, check if it is really a field name. If it is, throw an error
+                else // if (parser.currentToken() != null && parser.getCurrentToken().equals(JsonToken.FIELD_NAME))
                 {
-                    throw new JsonParseException(parser, e.getMessage(), e);
+
+                    throw new JsonParseException(parser, "No permitted list item: " + parser.getText());
                 }
-            }
-            // If we don't have a list item, check if it is really a field name. If it is, throw an error
-            else if (parser.currentToken() != null && parser.getCurrentToken().equals(JsonToken.FIELD_NAME))
-            {
+                // If we don't have a list item and it's not a field name, we have found null or an Array Entry/Exit or an Object
+                // Entry/Exit.
 
-                throw new JsonParseException(parser, "No permitted list item: " + parser.getText());
             }
-            // If we don't have a list item and it's not a field name, we have found null or an Array Entry/Exit or an Object
-            // Entry/Exit.
-
         }
 
         // Return all scriptItems

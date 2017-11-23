@@ -20,28 +20,31 @@ import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 public class XhrSubrequestTest
 {
-    private MockObjects mockObject;
+    private MockObjects mockObjects;
 
     private Context context;
 
     @Before
     public void init()
     {
-        mockObject = new MockObjects();
+        mockObjects = new MockObjects();
         context = new Context(XltProperties.getInstance(), new DataStorage());
         context.getWebClient().setTimerName("Xhr-TimerName");
+        mockObjects.loadResponse();
+        context.setWebResponse(mockObjects.getResponse());
     }
 
     @Test
-    public void textExecute() throws Throwable
+    public void testExecute() throws Throwable
     {
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
-        AbstractActionItem actionItem = new Request(mockObject.urlStringDemoHtml);
+        AbstractActionItem actionItem = new Request(mockObjects.urlStringDemoHtml);
         actionItems.add(actionItem);
 
         final List<AbstractResponseItem> responseItems = new ArrayList<AbstractResponseItem>();
         responseItems.add(new HttpcodeValidator("200"));
-        final AbstractResponseItem responseItem = new Validator("Validate Title", new RegexpSelector(mockObject.regexStringExpected), null);
+        final AbstractResponseItem responseItem = new Validator("Validate Title", new RegexpSelector(mockObjects.regexStringExpected),
+                                                                null);
         responseItems.add(responseItem);
         actionItem = new Response(responseItems);
         actionItems.add(actionItem);

@@ -87,6 +87,8 @@ public class Request extends AbstractActionItem
     public Request(final String url)
     {
         this.url = url;
+        parameters = new ArrayList<NameValuePair>();
+        headers = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
     }
 
     public String getUrl()
