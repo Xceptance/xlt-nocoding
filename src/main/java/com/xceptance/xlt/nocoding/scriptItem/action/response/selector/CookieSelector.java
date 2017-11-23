@@ -5,6 +5,12 @@ import java.util.List;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.util.Context;
 
+/**
+ * Stores all cookies from the headers located in {@link Context#getWebResponse()}. The cookie is selected via name
+ * provided by {@link #getSelectionExpression()}. The value of the cookie is then accessible with {@link #getResult()}.
+ * 
+ * @author ckeiner
+ */
 public class CookieSelector extends AbstractSelector
 {
 
@@ -13,6 +19,10 @@ public class CookieSelector extends AbstractSelector
         super(selectionExpression);
     }
 
+    /**
+     * Iterates over the headers in {@link Context#getWebResponse()} and selects the cookie with the name provided by
+     * {@link #getSelectionExpression()}. Finally, it stores the value in the results.
+     */
     @Override
     public void execute(final Context context)
     {
@@ -26,33 +36,32 @@ public class CookieSelector extends AbstractSelector
             // Search for the Set-Cookie header
             if (header.getName().equals("Set-Cookie"))
             {
-                // Trim all whitespaces
-                // And verify if this is the correct cookie by
-                // grabbing the cookie name
+                // Get the cookieName by looking for the seperating character
                 final int equalSignPosition = header.getValue().indexOf("=");
+                // Get the cookieName
                 String cookieName = header.getValue().substring(0, equalSignPosition);
                 // Remove possible whitespaces at the beginning
                 cookieName = cookieName.trim();
-                // and comparing it with the input name
+                // and compare it with the selectionExpression
                 if (cookieName.equals(getSelectionExpression()))
                 {
                     String cookieContent = null;
-                    // Get the content of the cookie, which is until the first semicolon
+                    // Get the end position of the cookie content, which is at the first semicolon
                     final int semicolonPosition = header.getValue().indexOf(";");
-                    // If the cookei does not end with a semicolon, set it at the end
+                    // If the cookie does not have a semicolon, the content ends with the end of the string
                     if (semicolonPosition < 0)
                     {
+                        // The content starts after the equal sign position and ends at the end of the string
                         cookieContent = header.getValue().substring(equalSignPosition + 1, header.getValue().length());
                     }
                     else
                     {
-                        // Content starts after the equal sign (position+1) and ends before the semicolon
+                        // Content starts after the equal sign position and ends before the semicolon
                         cookieContent = header.getValue().substring(equalSignPosition + 1, semicolonPosition);
                     }
                     // Remove possible whitespaces at the beginning or end
                     cookieContent = cookieContent.trim();
                     addResult(cookieContent);
-                    break;
                 }
             }
         }

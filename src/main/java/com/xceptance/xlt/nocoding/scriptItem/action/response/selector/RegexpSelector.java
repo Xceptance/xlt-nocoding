@@ -7,6 +7,13 @@ import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
 import com.xceptance.xlt.nocoding.util.Context;
 
+/**
+ * Matches the pattern provided via {@link #getSelectionExpression()} and applies it to the
+ * {@link LightWeightPage#getContent()} which is created with the {@link Context#getWebResponse()}. Then, stores the
+ * match in {@link #addResult(String)}.
+ * 
+ * @author ckeiner
+ */
 public class RegexpSelector extends AbstractSelector
 {
 
@@ -23,6 +30,11 @@ public class RegexpSelector extends AbstractSelector
         this.group = group;
     }
 
+    /**
+     * Compiles the pattern provided via {@link #getSelectionExpression()} and applies it to the
+     * {@link LightWeightPage#getContent()} that is created with {@link Context#getWebResponse()}. If {@link #group} is
+     * specified, it only stores this matching group. Else, it stores every group.
+     */
     @Override
     public void execute(final Context context)
     {
@@ -55,11 +67,17 @@ public class RegexpSelector extends AbstractSelector
         }
     }
 
+    /**
+     * Resolves the {@link #getSelectionExpression()} and {@link #group}.
+     */
     @Override
     protected void resolveValues(final Context context)
     {
         super.resolveValues(context);
-        group = context.resolveString(group);
+        if (group != null && !group.isEmpty())
+        {
+            group = context.resolveString(group);
+        }
     }
 
     public String getGroup()

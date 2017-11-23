@@ -9,12 +9,16 @@ import com.xceptance.xlt.nocoding.util.Context;
 /**
  * Selects an element from the {@link WebResponse} in the {@link Context}. The selection happens in
  * {@link AbstractSelector#execute(Context)}. To get the result, you need to use {@link AbstractSelector#getResult()}.
+ * However, you cannot reuse an instance twice.
  * 
  * @author ckeiner
  */
 public abstract class AbstractSelector
 {
 
+    /**
+     * The expression to use for the selection
+     */
     protected String selectionExpression;
 
     /**
@@ -22,24 +26,42 @@ public abstract class AbstractSelector
      */
     protected final List<String> result;
 
+    /**
+     * Creates an instance of {@link AbstractSelector}, sets {@link #selectionExpression} and creates an {@link ArrayList}
+     * for {@link #result}.
+     * 
+     * @param selectionExpression
+     */
     public AbstractSelector(final String selectionExpression)
     {
         this.selectionExpression = selectionExpression;
         result = new ArrayList<String>(1);
     }
 
+    /**
+     * Executes the selector. Normally, it should look into the {@link WebResponse} located in {@link Context}. Then sets
+     * the selected expression via {@link #addResult(String)}.
+     * 
+     * @param context
+     */
     public abstract void execute(Context context);
 
-    public String getSelectionExpression()
+    /**
+     * Adds a string to the result list.
+     * 
+     * @param result
+     *            The string to be added to the result.
+     */
+    public void addResult(final String result)
     {
-        return selectionExpression;
+        getResult().add(result);
     }
 
-    public void setSelectionExpression(final String selectionExpression)
-    {
-        this.selectionExpression = selectionExpression;
-    }
-
+    /**
+     * Resolves the {@link #selectionExpression}.
+     * 
+     * @param context
+     */
     protected void resolveValues(final Context context)
     {
         selectionExpression = context.resolveString(selectionExpression);
@@ -50,9 +72,14 @@ public abstract class AbstractSelector
         return result;
     }
 
-    public void addResult(final String result)
+    public String getSelectionExpression()
     {
-        getResult().add(result);
+        return selectionExpression;
+    }
+
+    public void setSelectionExpression(final String selectionExpression)
+    {
+        this.selectionExpression = selectionExpression;
     }
 
 }
