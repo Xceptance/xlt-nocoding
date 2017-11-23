@@ -2,10 +2,10 @@ package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.req
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.TreeMap;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
+import com.xceptance.xlt.nocoding.util.RecentKeyTreeMap;
 
 public class HeaderParser
 {
@@ -21,7 +21,7 @@ public class HeaderParser
     public Map<String, String> parse(final JsonNode node) throws IOException
     {
         // Create a tree map that is case insensitive (since headers are case insensitive
-        final TreeMap<String, String> headers = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
+        final RecentKeyTreeMap<String, String> headers = new RecentKeyTreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
         // And transform the JsonNode to a Map and put it in the TreeMap
         headers.putAll(ParserUtils.getArrayNodeAsMap(node));
         // Return headers

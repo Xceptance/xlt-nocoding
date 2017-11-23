@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import org.openqa.selenium.InvalidArgumentException;
 
@@ -21,6 +20,7 @@ import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.RecentKeyTreeMap;
 
 /**
  * Describes the request defined in the file and transposes it to a {@link WebRequest} that is also sent via the
@@ -88,7 +88,7 @@ public class Request extends AbstractActionItem
     {
         this.url = url;
         parameters = new ArrayList<NameValuePair>();
-        headers = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
+        headers = new RecentKeyTreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
     }
 
     public String getUrl()
@@ -243,7 +243,7 @@ public class Request extends AbstractActionItem
         if (context.getDefaultHeaders() != null)
         {
             // Create a tree map that is case insensitive (since headers are case insensitive
-            final TreeMap<String, String> defaultHeaders = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
+            final RecentKeyTreeMap<String, String> defaultHeaders = new RecentKeyTreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
             // Get the default headers
             defaultHeaders.putAll(context.getDefaultHeaders());
             // Overwrite the default values with the current ones and/or add the current ones
