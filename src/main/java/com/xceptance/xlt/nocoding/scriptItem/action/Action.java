@@ -3,6 +3,8 @@ package com.xceptance.xlt.nocoding.scriptItem.action;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openqa.selenium.InvalidArgumentException;
+
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
@@ -70,6 +72,10 @@ public abstract class Action implements ScriptItem
         {
             // TODO Null check
             setName(context.getConfigItemByKey(Constants.NAME));
+            if (getName() == null || getName().isEmpty())
+            {
+                throw new InvalidArgumentException("Name cannot be empty or null. Please add a default name or specify one.");
+            }
         }
 
         // Check if the order of the items is allowed
@@ -119,13 +125,11 @@ public abstract class Action implements ScriptItem
             }
             actionItems.add(index, new Response());
         }
-        if (!hasSubrequest)
+
+        // Add default static requests
+        if (context.getDefaultStatic() != null && !context.getDefaultStatic().isEmpty())
         {
-            // Add default static requests
-            if (context.getDefaultStatic() != null && !context.getDefaultStatic().isEmpty())
-            {
-                actionItems.add(new StaticSubrequest(context.getDefaultStatic()));
-            }
+            actionItems.add(new StaticSubrequest(context.getDefaultStatic()));
         }
     }
 

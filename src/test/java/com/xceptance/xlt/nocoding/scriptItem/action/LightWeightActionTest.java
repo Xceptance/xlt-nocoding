@@ -16,7 +16,6 @@ import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
-// TODO tests
 public class LightWeightActionTest
 {
     Context context;

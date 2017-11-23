@@ -24,7 +24,7 @@ public class CountValidator extends AbstractValidationMode
             throw new IllegalStateException("Result list is null");
         }
         // Assert that the amount of results is the same as the specified one
-        Assert.assertTrue("Expected " + this.count + " matches but found " + count.toString() + "matches",
+        Assert.assertTrue("Expected " + this.count + " matches but found " + count.toString() + " matches",
                           count.equals(getExpressionToValidate().size()));
     }
 

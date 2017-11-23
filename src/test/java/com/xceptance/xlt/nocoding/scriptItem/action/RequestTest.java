@@ -214,7 +214,6 @@ public class RequestTest
         }
         catch (final IOException e)
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -222,7 +221,6 @@ public class RequestTest
     @Test
     public void testCaseInsensitiveHeaders() throws Throwable
     {
-        // TODO [MEETING] go over this
         final Map<String, String> defaultValues = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
         defaultValues.put("Accept", "text/html");
         defaultValues.put("Cookie", "cookie1=value1");

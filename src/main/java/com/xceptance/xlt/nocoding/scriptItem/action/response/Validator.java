@@ -1,5 +1,6 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response;
 
+import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.AbstractSelector;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.RegexpSelector;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMode.AbstractValidationMode;
@@ -60,7 +61,15 @@ public class Validator extends AbstractResponseItem
         }
         catch (final Exception e)
         {
-            throw new Exception(validationName + " could not validate: " + e.getMessage(), e);
+            final String message = "\"" + validationName + "\" could not validate: " + e.getMessage();
+            XltLogger.runTimeLogger.error(message);
+            throw new Exception(message, e);
+        }
+        catch (final AssertionError e)
+        {
+            final String message = "\"" + validationName + "\" could not validate: " + e.getMessage();
+            XltLogger.runTimeLogger.error(message);
+            throw new AssertionError(message, e);
         }
     }
 

@@ -3,8 +3,6 @@ package com.xceptance.xlt.nocoding.scriptItem.action;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openqa.selenium.InvalidArgumentException;
-
 import com.xceptance.xlt.api.engine.Session;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
 import com.xceptance.xlt.api.util.XltLogger;
@@ -50,11 +48,6 @@ public class LightWeigthAction extends Action
         fillDefaultData(context);
         // Resolve the name of the action since it could be a variable
         resolveName(context);
-
-        if (name == null || name.isEmpty())
-        {
-            throw new InvalidArgumentException("Name cannot be empty or null. Please add a default name or specify one.");
-        }
 
         // Define the WebAction
         final WebAction action = new WebAction(name, context, getActionItems(), (final WebAction webAction) -> {
