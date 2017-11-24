@@ -16,21 +16,26 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
+/**
+ * Parses a response item to a {@link Response} wrapped in a {@link List}<{@link AbstractActionItem}>.
+ * 
+ * @author ckeiner
+ */
 public class ResponseParser extends AbstractActionItemParser
 {
 
     /**
-     * Parses the response item to the Response object
+     * Parses the response item to a {@link Response}.
      * 
      * @param node
      *            The node the item starts at
-     * @return The response with the specified values
+     * @return The {@link Response} wrapped in a {@link List}<{@link AbstractActionItem}>
      * @throws IOException
      */
     @Override
     public List<AbstractActionItem> parse(final JsonNode node) throws IOException
     {
-
+        // Verify that an object was used and not an array
         if (!(node instanceof ObjectNode))
         {
             throw new IllegalArgumentException("Expected ObjectNode in response but was " + node.getClass().getSimpleName());
@@ -47,7 +52,7 @@ public class ResponseParser extends AbstractActionItemParser
         // As long as we have a fieldName
         while (fieldNames.hasNext())
         {
-            // Get it
+            // Get the next fieldName
             final String fieldName = fieldNames.next();
             switch (fieldName)
             {
@@ -60,21 +65,24 @@ public class ResponseParser extends AbstractActionItemParser
                     break;
 
                 case Constants.VALIDATION:
+                    // Create a new validation parser and add the result to the responseItems
                     responseItems.addAll(new ValidationParser().parse(node.get(fieldName)));
                     XltLogger.runTimeLogger.debug("Added Validation");
                     break;
 
                 case Constants.STORE:
+                    // Create a new response store parser and add the result to the responseItems
                     responseItems.addAll(new ResponseStoreParser().parse(node.get(fieldName)));
                     XltLogger.runTimeLogger.debug("Added Validation");
                     break;
 
                 default:
-                    throw new IOException("No permitted response item: " + fieldName);
+                    throw new IllegalArgumentException("No permitted response item: " + fieldName);
             }
         }
-
+        // Add the response to the actionItems
         actionItems.add(new Response(responseItems));
+        // Return it
         return actionItems;
     }
 

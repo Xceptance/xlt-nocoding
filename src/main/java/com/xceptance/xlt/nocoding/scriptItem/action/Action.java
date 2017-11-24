@@ -86,7 +86,7 @@ public abstract class Action implements ScriptItem
         {
             if (abstractActionItem instanceof Request)
             {
-                if (hasResponse || hasSubrequest)
+                if (hasResponse || hasSubrequest || hasRequest)
                 {
                     throw new IllegalArgumentException("Request defined after Response and/or Subrequest!");
                 }
@@ -94,7 +94,7 @@ public abstract class Action implements ScriptItem
             }
             else if (abstractActionItem instanceof Response)
             {
-                if (hasSubrequest)
+                if (hasSubrequest || hasResponse)
                 {
                     throw new IllegalArgumentException("Response defined after Subrequest!");
                 }
