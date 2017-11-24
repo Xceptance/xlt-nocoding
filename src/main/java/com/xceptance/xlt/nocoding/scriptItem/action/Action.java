@@ -66,6 +66,11 @@ public abstract class Action implements ScriptItem
         setName(resolvedValue);
     }
 
+    /**
+     * Fills in the default data and verifies there is only one request, response and in the correct order.
+     * 
+     * @param context
+     */
     protected void fillDefaultData(final Context context)
     {
         if (getName() == null || getName().isEmpty())
