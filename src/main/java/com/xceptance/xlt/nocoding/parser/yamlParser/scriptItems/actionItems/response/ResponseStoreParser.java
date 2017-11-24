@@ -1,6 +1,5 @@
 package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.response;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -18,22 +17,28 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.store.ResponseStore
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
+/**
+ * Parses a store item in the response block to a {@link List}<{@link AbstractResponseStore}>.
+ * 
+ * @author ckeiner
+ */
 public class ResponseStoreParser
 {
 
     /**
-     * Parses the store item in the response block to List<AbstractResponseStore>
+     * Parses the store item in the response block to a {@link List}<{@link AbstractResponseStore}>
      * 
      * @param node
-     *            The node the item starts at
+     *            The node the store item starts at
      * @return A list of the specified store items
-     * @throws IOException
+     * @throws IllegalArgumentException
      */
-    public List<AbstractResponseStore> parse(final JsonNode node) throws IOException
+    public List<AbstractResponseStore> parse(final JsonNode node) throws IllegalArgumentException
     {
+        // Verify that an array was used and not an object
         if (!(node instanceof ArrayNode))
         {
-            throw new IllegalArgumentException("Expected ArrayNode in Validate block but was " + node.getClass().getSimpleName());
+            throw new IllegalArgumentException("Expected ArrayNode in the store block but was " + node.getClass().getSimpleName());
         }
         // Initialize variables
         String variableName = null;
@@ -44,7 +49,7 @@ public class ResponseStoreParser
         // As long as we have another element
         while (iterator.hasNext())
         {
-            // Get it
+            // Get the next element
             final JsonNode current = iterator.next();
             // Get an iterator over the fieldNames
             final Iterator<String> fieldName = current.fieldNames();
@@ -52,34 +57,36 @@ public class ResponseStoreParser
             // As long as we have another fieldName
             while (fieldName.hasNext())
             {
-                // Extract the fieldName as the name of the variable
+                // Get the next fieldName which is also the variableName
                 variableName = fieldName.next();
 
                 /*
                  * Substructure of Store
                  */
-                // Get the substructure (which is an Object)
+
+                // Get the substructure
                 final JsonNode storeContent = current.get(variableName);
+                // Verify that an object was used and not an array
                 if (!(storeContent instanceof ObjectNode))
                 {
-                    throw new IllegalArgumentException("Expected ObjectNode after the validation name, " + variableName + " but was "
+                    throw new IllegalArgumentException("Expected ObjectNode after the variable name, " + variableName + ", but was "
                                                        + node.getClass().getSimpleName());
                 }
-                // Get the fieldNames of the substructure
+                // And get an iterator over the fieldNames
                 final Iterator<String> name = storeContent.fieldNames();
                 // Iterate over the content
                 if (name.hasNext())
                 {
                     // Build a selector depending on the next element in the iterator
                     final AbstractSelector selector = new SelectorParser(name.next()).parse(storeContent);
-                    // If we have another name
+                    // If we have another name, it must be Constants.GROUP
                     if (name.hasNext())
                     {
                         final String nextName = name.next();
                         // Verify the selector is a RegexpSelector, as no other AbstractSelector has a second argument
                         if (selector instanceof RegexpSelector)
                         {
-                            // Verify the name of the next name is the allowed field "Group"
+                            // Verify the value of the nextName is the allowed field Constants.GROUP
                             if (nextName.equals(Constants.GROUP))
                             {
                                 // And create a GroupResponseStore

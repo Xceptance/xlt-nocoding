@@ -33,7 +33,7 @@ public class ResponseParser extends AbstractActionItemParser
      * @throws IOException
      */
     @Override
-    public List<AbstractActionItem> parse(final JsonNode node) throws IOException
+    public List<AbstractActionItem> parse(final JsonNode node) throws IllegalArgumentException
     {
         // Verify that an object was used and not an array
         if (!(node instanceof ObjectNode))
