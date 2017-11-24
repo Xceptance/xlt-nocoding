@@ -9,8 +9,17 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.XpathSelec
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
+/**
+ * Takes an identifier (which is an element of {@link JsonNode#fieldNames()}) of a {@link JsonNode} with the selection
+ * item in it and parses it to an {@link AbstractSelector}.
+ * 
+ * @author ckeiner
+ */
 public class SelectorParser
 {
+    /**
+     * The identifier of the selection item, should be an item in {@link Constants#PERMITTEDSELECTIONMODE}.
+     */
     final String identifier;
 
     public SelectorParser(final String identifier)
@@ -18,6 +27,13 @@ public class SelectorParser
         this.identifier = identifier;
     }
 
+    /**
+     * Parses the selection item in node to an {@link AbstractSelector}
+     * 
+     * @param node
+     *            The node of the validation item
+     * @return The specified {@link AbstractSelector}
+     */
     public AbstractSelector parse(final JsonNode node)
     {
         AbstractSelector selector = null;
