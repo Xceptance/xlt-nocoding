@@ -70,8 +70,8 @@ public abstract class Action implements ScriptItem
     {
         if (getName() == null || getName().isEmpty())
         {
-            // TODO Null check
             setName(context.getConfigItemByKey(Constants.NAME));
+            // Verify that we now have a name for the action
             if (getName() == null || getName().isEmpty())
             {
                 throw new InvalidArgumentException("Name cannot be empty or null. Please add a default name or specify one.");

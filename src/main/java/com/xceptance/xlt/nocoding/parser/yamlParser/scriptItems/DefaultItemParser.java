@@ -51,7 +51,6 @@ public class DefaultItemParser extends AbstractScriptItemParser
         else if (variableName.equals(Constants.PARAMETERS))
         {
             final JsonNode jsonNode = root.get(Constants.PARAMETERS);
-            final List<NameValuePair> parameters = new ParameterParser().parse(jsonNode);
             if (jsonNode.isTextual() && jsonNode.textValue().equals(Constants.DELETE))
             {
                 variableName = Constants.PARAMETERS;
@@ -60,6 +59,7 @@ public class DefaultItemParser extends AbstractScriptItemParser
             }
             else
             {
+                final List<NameValuePair> parameters = new ParameterParser().parse(jsonNode);
                 for (final NameValuePair parameter : parameters)
                 {
                     variableName = parameter.getName();
