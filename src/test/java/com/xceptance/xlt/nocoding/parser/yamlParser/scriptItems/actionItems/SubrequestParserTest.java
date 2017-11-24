@@ -12,6 +12,7 @@ import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 
 public class SubrequestParserTest extends ParserTest
 {
+    protected final String path = super.path + "actionItems/subrequests/";
 
     protected final String fileXhrSubrequests = path + "xhrSubrequests.yml";
 

@@ -12,6 +12,7 @@ import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 
 public class ResponseParserTest extends ParserTest
 {
+    protected final String path = super.path + "actionItems/response/";
 
     protected final String fileSyntaxErrorResponse = path + "syntaxErrorResponse.yml";
 

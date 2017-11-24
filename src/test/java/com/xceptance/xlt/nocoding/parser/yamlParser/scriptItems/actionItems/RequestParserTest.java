@@ -13,6 +13,8 @@ import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 public class RequestParserTest extends ParserTest
 {
 
+    protected final String path = super.path + "actionItems/request/";
+
     protected final String fileSyntaxErrorRequest = path + "syntaxErrorRequest.yml";
 
     protected final String fileSyntaxErrorRequestArrayNotObject = path + "syntaxErrorRequestArrayNotObject.yml";
