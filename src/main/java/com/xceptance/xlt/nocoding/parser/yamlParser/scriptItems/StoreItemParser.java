@@ -23,9 +23,9 @@ public class StoreItemParser extends AbstractScriptItemParser
         final JsonNode jsonNode = root.get(Constants.STORE);
 
         // Convert the node to a list of NameValuePair so it retains its order
-        final List<NameValuePair> storeItemss = ParserUtils.getArrayNodeAsNameValuePair(jsonNode);
+        final List<NameValuePair> storeItems = ParserUtils.getArrayNodeAsNameValuePair(jsonNode);
 
-        for (final NameValuePair storeItem : storeItemss)
+        for (final NameValuePair storeItem : storeItems)
         {
             // Add a new StoreItem to the scriptItems
             scriptItems.add(new StoreItem(storeItem.getName(), storeItem.getValue()));

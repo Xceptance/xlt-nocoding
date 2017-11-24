@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.parser.Parser;
@@ -55,6 +56,11 @@ public class YamlParser extends Parser
         // Map the parsed content to JsonNodes
         final ObjectMapper mapper = new ObjectMapper();
         final JsonNode root = mapper.readTree(parser);
+
+        if (root != null && !(root instanceof ArrayNode))
+        {
+            throw new IllegalArgumentException("List items must be arrays.");
+        }
 
         // If we have a root, extract its elements
         if (root != null)

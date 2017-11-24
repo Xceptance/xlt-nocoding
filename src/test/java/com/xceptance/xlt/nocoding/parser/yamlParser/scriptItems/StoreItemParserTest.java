@@ -5,6 +5,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.ParserTest;
 import com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser;
@@ -14,6 +15,8 @@ import com.xceptance.xlt.nocoding.scriptItem.StoreItem;
 public class StoreItemParserTest extends ParserTest
 {
     protected final String fileStore = path + "store.yml";
+
+    protected final String fileStoreObjectNotArray = path + "syntaxErrorStoreObjectNotArray.yml";
 
     @Test
     public void testStoreParsing() throws Exception
@@ -59,5 +62,13 @@ public class StoreItemParserTest extends ParserTest
         Assert.assertEquals("var_1", storeItem.getVariableName());
         Assert.assertEquals("", storeItem.getValue());
 
+    }
+
+    @Test(expected = JsonParseException.class)
+    public void testStoreObjectParse() throws Exception
+    {
+        final Parser parser = new YamlParser(fileStoreObjectNotArray);
+        @SuppressWarnings("unused")
+        final List<ScriptItem> scriptItems = parser.parse();
     }
 }

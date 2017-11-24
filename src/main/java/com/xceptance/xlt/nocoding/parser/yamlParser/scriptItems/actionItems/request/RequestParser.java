@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.AbstractActionItemParser;
@@ -29,6 +30,10 @@ public class RequestParser extends AbstractActionItemParser
     @Override
     public List<AbstractActionItem> parse(final JsonNode node) throws IOException
     {
+        if (!(node instanceof ObjectNode))
+        {
+            throw new IllegalArgumentException("Items in action must be objects.");
+        }
         // Initialize variables
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
         String url = "";

@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.NullNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.AbstractActionItemParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.request.RequestParser;
@@ -32,6 +34,7 @@ public class ActionItemParser extends AbstractScriptItemParser
     @Override
     public List<ScriptItem> parse(final JsonNode root) throws IOException
     {
+
         // Initialize variables
         String name = null;
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>(3);
@@ -45,6 +48,10 @@ public class ActionItemParser extends AbstractScriptItemParser
         {
             // Get the next element
             final JsonNode node = iterator.next();
+            if (!(node instanceof NullNode) && !(node instanceof ObjectNode))
+            {
+                throw new IllegalArgumentException("Items in action must be objects.");
+            }
             // Get the fieldName of the objects in the array node
             final Iterator<String> fieldNames = node.fieldNames();
 
@@ -62,6 +69,11 @@ public class ActionItemParser extends AbstractScriptItemParser
                         {
                             // Save the name
                             name = ParserUtils.readValue(node, fieldName);
+                            // We found a name, so it mustn't be empty or null
+                            if (name == null || name.isEmpty())
+                            {
+                                throw new IllegalArgumentException("Please specify a name for an action.");
+                            }
                             XltLogger.runTimeLogger.debug("Actionname: " + name);
                             break;
                         }

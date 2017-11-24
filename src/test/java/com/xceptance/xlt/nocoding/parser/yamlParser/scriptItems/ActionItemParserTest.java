@@ -50,6 +50,8 @@ public class ActionItemParserTest extends ParserTest
 
     protected final String fileSyntaxErrorRequest = path + "syntaxErrorRequest.yml";
 
+    protected final String fileSyntaxErrorRequestArrayNotObject = path + "syntaxErrorRequestArrayNotObject.yml";
+
     protected final String fileSyntaxErrorResponse = path + "syntaxErrorResponse.yml";
 
     protected final String fileSyntaxErrorSubrequests = path + "syntaxErrorSubrequests.yml";
@@ -59,6 +61,8 @@ public class ActionItemParserTest extends ParserTest
     protected final String fileSyntaxErrorStatic = path + "syntaxErrorStatic.yml";
 
     protected final String fileSyntaxErrorActionNameNull = path + "syntaxErrorActionNameNull.yml";
+
+    protected final String fileSyntaxErrorActionArrayNotObject = path + "syntaxErrorActionArrayNotObject.yml";
 
     protected final String fileSyntaxErrorUrlNull = path + "syntaxErrorUrlNull.yml";
 
@@ -193,6 +197,14 @@ public class ActionItemParserTest extends ParserTest
     }
 
     @Test(expected = JsonParseException.class)
+    public void testSyntaxErrorRequestArrayNotObjectParsing() throws Exception
+    {
+        final Parser parser = new YamlParser(fileSyntaxErrorRequestArrayNotObject);
+        @SuppressWarnings("unused")
+        final List<ScriptItem> scriptItems = parser.parse();
+    }
+
+    @Test(expected = JsonParseException.class)
     public void testSyntaxErrorResponseParsing() throws Exception
     {
         final Parser parser = new YamlParser(fileSyntaxErrorResponse);
@@ -228,6 +240,14 @@ public class ActionItemParserTest extends ParserTest
     public void testSyntaxErrorActionNameNullParsing() throws Exception
     {
         final Parser parser = new YamlParser(fileSyntaxErrorActionNameNull);
+        @SuppressWarnings("unused")
+        final List<ScriptItem> scriptItems = parser.parse();
+    }
+
+    @Test(expected = JsonParseException.class)
+    public void testSyntaxErrorActionArrayNotObjectParsing() throws Exception
+    {
+        final Parser parser = new YamlParser(fileSyntaxErrorActionArrayNotObject);
         @SuppressWarnings("unused")
         final List<ScriptItem> scriptItems = parser.parse();
     }

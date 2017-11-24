@@ -9,8 +9,10 @@ import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
@@ -33,6 +35,11 @@ public class ParserUtils
      */
     public static Map<String, String> getArrayNodeAsMap(final JsonNode jsonNode)
     {
+        if (!(jsonNode.asToken() == JsonToken.START_ARRAY))
+        {
+            throw new IllegalArgumentException("Store must be an array.");
+        }
+
         final Map<String, String> map = new HashMap<String, String>();
         // Get iterator for all elements of the ArrayNode
         final Iterator<JsonNode> iterator = jsonNode.elements();
@@ -67,6 +74,11 @@ public class ParserUtils
      */
     public static List<NameValuePair> getArrayNodeAsNameValuePair(final JsonNode jsonNode)
     {
+        if (!(jsonNode instanceof ArrayNode))
+        {
+            throw new IllegalArgumentException("Store must be an array.");
+        }
+
         final List<NameValuePair> nvp = new ArrayList<NameValuePair>();
         // Get iterator for all elements of the ArrayNode
         final Iterator<JsonNode> iterator = jsonNode.elements();
