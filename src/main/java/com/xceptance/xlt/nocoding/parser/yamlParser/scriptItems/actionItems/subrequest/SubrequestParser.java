@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.AbstractActionItemParser;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
@@ -27,6 +28,10 @@ public class SubrequestParser extends AbstractActionItemParser
     @Override
     public List<AbstractActionItem> parse(final JsonNode node) throws IOException
     {
+        if (!(node instanceof ArrayNode))
+        {
+            throw new IllegalArgumentException("Expected ArrayNode in Subrequest but was " + node.getClass().getSimpleName());
+        }
         // Initialize Variables
         final List<AbstractSubrequest> subrequest = new ArrayList<AbstractSubrequest>();
 
@@ -58,6 +63,11 @@ public class SubrequestParser extends AbstractActionItemParser
                         final List<String> urls = new ArrayList<String>();
                         // Get the node with the urls
                         final JsonNode staticUrls = current.get(fieldName);
+                        if (!(staticUrls instanceof ArrayNode))
+                        {
+                            throw new IllegalArgumentException("Expected ArrayNode in Static block but was "
+                                                               + node.getClass().getSimpleName());
+                        }
                         // Create an iterator over the elements
                         final Iterator<JsonNode> staticUrlsIterator = staticUrls.elements();
                         while (staticUrlsIterator.hasNext())

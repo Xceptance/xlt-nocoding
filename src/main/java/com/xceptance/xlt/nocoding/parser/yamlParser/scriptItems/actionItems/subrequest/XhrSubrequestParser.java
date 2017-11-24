@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.request.RequestParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.response.ResponseParser;
@@ -29,6 +30,10 @@ public class XhrSubrequestParser
      */
     public AbstractSubrequest parse(final JsonNode node) throws IOException
     {
+        if (!(node instanceof ObjectNode))
+        {
+            throw new IllegalArgumentException("Expected ObjectNode in Xhr block but was " + node.getClass().getSimpleName());
+        }
         // Initialize variables
         String name = null;
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();

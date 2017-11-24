@@ -19,6 +19,12 @@ public class SubrequestParserTest extends ParserTest
 
     protected final String fileSyntaxErrorSubrequests = path + "syntaxErrorSubrequests.yml";
 
+    protected final String fileSyntaxErrorSubrequestsObjectNotArray = path + "syntaxErrorSubrequestsObjectNotArray.yml";
+
+    protected final String fileSyntaxErrorSubrequestsStaticItemObjectNotArray = path + "syntaxErrorSubrequestsStaticItemObjectNotArray.yml";
+
+    protected final String fileSyntaxErrorSubrequestsXhrItemArrayNotObject = path + "syntaxErrorSubrequestsXhrItemArrayNotObject.yml";
+
     protected final String fileSyntaxErrorXhr = path + "syntaxErrorXhr.yml";
 
     protected final String fileSyntaxErrorStatic = path + "syntaxErrorStatic.yml";
@@ -45,6 +51,30 @@ public class SubrequestParserTest extends ParserTest
     public void testSyntaxErrorSubrequestsParsing() throws Exception
     {
         final Parser parser = new YamlParser(fileSyntaxErrorSubrequests);
+        @SuppressWarnings("unused")
+        final List<ScriptItem> scriptItems = parser.parse();
+    }
+
+    @Test(expected = JsonParseException.class)
+    public void testSyntaxErrorSubrequestsObjectNotArrayParsing() throws Exception
+    {
+        final Parser parser = new YamlParser(fileSyntaxErrorSubrequestsObjectNotArray);
+        @SuppressWarnings("unused")
+        final List<ScriptItem> scriptItems = parser.parse();
+    }
+
+    @Test(expected = JsonParseException.class)
+    public void testSyntaxErrorSubrequestsStaticItemObjectNotArrayParsing() throws Exception
+    {
+        final Parser parser = new YamlParser(fileSyntaxErrorSubrequestsStaticItemObjectNotArray);
+        @SuppressWarnings("unused")
+        final List<ScriptItem> scriptItems = parser.parse();
+    }
+
+    @Test(expected = JsonParseException.class)
+    public void testSyntaxErrorSubrequestsXhrItemArrayNotObjectParsing() throws Exception
+    {
+        final Parser parser = new YamlParser(fileSyntaxErrorSubrequestsXhrItemArrayNotObject);
         @SuppressWarnings("unused")
         final List<ScriptItem> scriptItems = parser.parse();
     }
