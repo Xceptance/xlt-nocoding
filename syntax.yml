@@ -3,9 +3,9 @@
 #########################################
 
 - Action :
-    Name : Cheataction  #mandatory
-    Request :    #mandatory
-        Url : http://www.xceptance.com  #mandatory
+    Name : Cheataction  #mandatory but can be defaulted
+    Request :    #mandatory if the Url isn't defaulted
+        Url : http://www.xceptance.com  #mandatory but can be defaulted
         Method : POST #HTTPMETHOD, default = GET
         Xhr : false #Boolean, default = false
         Encode-Parameters : false #Boolean, default = true

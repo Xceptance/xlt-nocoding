@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.xceptance.xlt.api.util.XltProperties;
-import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
@@ -35,9 +34,9 @@ public class StoreItemTest
         Assert.assertNull(context.getDataStorage().getVariableByKey("test"));
         store.execute(context);
         Assert.assertEquals("text", context.getDataStorage().getVariableByKey("test"));
-        store = new StoreItem("test", Constants.DELETE);
+        store = new StoreItem("test", "newValue");
         store.execute(context);
-        Assert.assertEquals(Constants.DELETE, context.getDataStorage().getVariableByKey("test"));
+        Assert.assertEquals("newValue", context.getDataStorage().getVariableByKey("test"));
     }
 
     @Test
