@@ -62,10 +62,6 @@ public class ActionItemParser extends AbstractScriptItemParser
                         {
                             // Save the name
                             name = ParserUtils.readValue(node, fieldName);
-                            if (name == null || name.isEmpty())
-                            {
-                                throw new IllegalArgumentException("Please specify a name for an action.");
-                            }
                             XltLogger.runTimeLogger.debug("Actionname: " + name);
                             break;
                         }
