@@ -7,11 +7,16 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
+/**
+ * Parses a parameter item to a {@link List}<{@link NameValuePair}>
+ * 
+ * @author ckeiner
+ */
 public class ParameterParser
 {
 
     /**
-     * Parses the parameter item to a List<NameValuePair>
+     * Parses the parameter item to a {@link List}<{@link NameValuePair}>
      * 
      * @param node
      *            The node the item starts at

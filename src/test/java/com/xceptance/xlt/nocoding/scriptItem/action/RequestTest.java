@@ -25,6 +25,7 @@ import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultHeader;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultParameter;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.RecentKeyTreeMap;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 /**
@@ -199,7 +200,6 @@ public class RequestTest
         Assert.assertEquals(expected.getHttpMethod(), webRequest.getHttpMethod());
         Assert.assertEquals(expected.getUrl(), webRequest.getUrl());
         Assert.assertEquals(expected.isXHR(), webRequest.isXHR());
-        Assert.assertEquals(expected.toString(), webRequest.toString());
 
     }
 
@@ -416,6 +416,21 @@ public class RequestTest
                 Assert.assertEquals(defaultValues.get(parameter.getName()), parameter.getValue());
             }
         }
+    }
+
+    @Test
+    public void testSetHeaders()
+    {
+        final Request request = new Request(null);
+        Map<String, String> headers = null;
+        request.setHeaders(headers);
+        Assert.assertTrue(request.getHeaders() instanceof RecentKeyTreeMap);
+        Assert.assertTrue(request.getHeaders().isEmpty());
+        headers = new HashMap<String, String>();
+        headers.put("Accept", "text/html");
+        request.setHeaders(headers);
+        Assert.assertTrue(request.getHeaders() instanceof RecentKeyTreeMap);
+        Assert.assertFalse(request.getHeaders().isEmpty());
     }
 
 }

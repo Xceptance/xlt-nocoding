@@ -146,9 +146,18 @@ public class Request extends AbstractActionItem
         return headers;
     }
 
+    /**
+     * Create a {@link RecentKeyTreeMap} out of the specified map
+     * 
+     * @param headers
+     */
     public void setHeaders(final Map<String, String> headers)
     {
-        this.headers = headers;
+        if (headers != null && !headers.isEmpty())
+        {
+            this.headers = new RecentKeyTreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
+            this.headers.putAll(headers);
+        }
     }
 
     public String getBody()

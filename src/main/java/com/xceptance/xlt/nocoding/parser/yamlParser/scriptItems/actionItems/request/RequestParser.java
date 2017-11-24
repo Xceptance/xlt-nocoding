@@ -17,23 +17,30 @@ import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
+/**
+ * Parses a request item to a {@link Request} wrapped in a {@link List}<{@link AbstractActionItem}>.
+ * 
+ * @author ckeiner
+ */
 public class RequestParser extends AbstractActionItemParser
 {
 
     /**
-     * Parses a JsonNode to a request object
+     * Parses a JsonNode to a {@link Request}.
      * 
      * @param node
      *            The node of the Request
-     * @return A list of all {@link AbstractActionItem}s.
+     * @return The {@link Request} wrapped in a {@link List}<{@link AbstractActionItem}>.
      */
     @Override
     public List<AbstractActionItem> parse(final JsonNode node) throws IOException
     {
+        // Verify that an object was used and not an array
         if (!(node instanceof ObjectNode))
         {
             throw new IllegalArgumentException("Expected ObjectNode in request but was " + node.getClass().getSimpleName());
         }
+
         // Initialize variables
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
         String url = "";
@@ -51,14 +58,19 @@ public class RequestParser extends AbstractActionItemParser
         // As long as we have a fieldName
         while (fieldNames.hasNext())
         {
-            // Get it
+            // Get the next fieldName
             final String fieldName = fieldNames.next();
 
-            // Depending on the fieldName, we want to generally do the same thing but assign it to different variables
+            // Depending on the fieldName, we generally want to read the value but assign it to different variables
             switch (fieldName)
             {
                 case Constants.URL:
                     url = ParserUtils.readValue(node, fieldName);
+                    // If we started a url definition but it has no value, throw an Exception
+                    if (url.equals(null) || url.equals(""))
+                    {
+                        throw new IllegalArgumentException("Url not specified");
+                    }
                     // XltLogger.runTimeLogger.debug("URL: " + url);
                     break;
 
@@ -100,14 +112,8 @@ public class RequestParser extends AbstractActionItemParser
 
                 default:
                     // If there is an unknown field, throw an Exception
-                    throw new IOException("No permitted request item: " + fieldName);
+                    throw new IllegalArgumentException("No permitted request item: " + fieldName);
             }
-        }
-
-        // If we do not have a url, throw an Exception
-        if (url.equals(null) || url.equals(""))
-        {
-            throw new IOException("Url not specified");
         }
 
         // Create request out of the data
