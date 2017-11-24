@@ -9,7 +9,6 @@ import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -35,9 +34,9 @@ public class ParserUtils
      */
     public static Map<String, String> getArrayNodeAsMap(final JsonNode jsonNode)
     {
-        if (!(jsonNode.asToken() == JsonToken.START_ARRAY))
+        if (!(jsonNode instanceof ArrayNode))
         {
-            throw new IllegalArgumentException("Store must be an array.");
+            throw new IllegalArgumentException("Expected ArrayNode but was " + jsonNode.getClass().getSimpleName());
         }
 
         final Map<String, String> map = new HashMap<String, String>();
@@ -76,7 +75,7 @@ public class ParserUtils
     {
         if (!(jsonNode instanceof ArrayNode))
         {
-            throw new IllegalArgumentException("Store must be an array.");
+            throw new IllegalArgumentException("Expected ArrayNode but was " + jsonNode.getClass().getSimpleName());
         }
 
         final List<NameValuePair> nvp = new ArrayList<NameValuePair>();

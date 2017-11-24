@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.response.selector.SelectorParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.response.validators.ValidationModeParser;
@@ -29,6 +31,10 @@ public class ValidationParser
      */
     public List<AbstractResponseItem> parse(final JsonNode node) throws IOException
     {
+        if (!(node instanceof ArrayNode))
+        {
+            throw new IllegalArgumentException("Expected ArrayNode in Validate block but was " + node.getClass().getSimpleName());
+        }
         // Initialize variables
         final List<AbstractResponseItem> validator = new ArrayList<AbstractResponseItem>();
         String validationName = null;
@@ -57,6 +63,12 @@ public class ValidationParser
 
                 // Get the substructure (which is an Object)
                 final JsonNode validationContent = current.get(validationName);
+                if (!(validationContent instanceof ObjectNode))
+                {
+                    throw new IllegalArgumentException("Expected ObjectNode after the validation name, " + validationName + " but was "
+                                                       + node.getClass().getSimpleName());
+                }
+
                 // And get an iterator over the fieldNames
                 final Iterator<String> name = validationContent.fieldNames();
                 // Iterate over the fieldNames of the substructure

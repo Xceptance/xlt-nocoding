@@ -32,7 +32,7 @@ public class RequestParser extends AbstractActionItemParser
     {
         if (!(node instanceof ObjectNode))
         {
-            throw new IllegalArgumentException("Items in action must be objects.");
+            throw new IllegalArgumentException("Expected ObjectNode in request but was " + node.getClass().getSimpleName());
         }
         // Initialize variables
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();

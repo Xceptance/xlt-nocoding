@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.response.selector.SelectorParser;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.AbstractSelector;
@@ -29,6 +31,10 @@ public class ResponseStoreParser
      */
     public List<AbstractResponseStore> parse(final JsonNode node) throws IOException
     {
+        if (!(node instanceof ArrayNode))
+        {
+            throw new IllegalArgumentException("Expected ArrayNode in Validate block but was " + node.getClass().getSimpleName());
+        }
         // Initialize variables
         String variableName = null;
         final List<AbstractResponseStore> responseStores = new ArrayList<AbstractResponseStore>();
@@ -48,13 +54,17 @@ public class ResponseStoreParser
             {
                 // Extract the fieldName as the name of the variable
                 variableName = fieldName.next();
-                // Get the substructure (which is an Object)
-                final JsonNode storeContent = current.get(variableName);
 
                 /*
-                 * Substructure of validation
+                 * Substructure of Store
                  */
-
+                // Get the substructure (which is an Object)
+                final JsonNode storeContent = current.get(variableName);
+                if (!(storeContent instanceof ObjectNode))
+                {
+                    throw new IllegalArgumentException("Expected ObjectNode after the validation name, " + variableName + " but was "
+                                                       + node.getClass().getSimpleName());
+                }
                 // Get the fieldNames of the substructure
                 final Iterator<String> name = storeContent.fieldNames();
                 // Iterate over the content

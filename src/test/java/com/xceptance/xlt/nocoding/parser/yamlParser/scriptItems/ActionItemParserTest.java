@@ -54,6 +54,17 @@ public class ActionItemParserTest extends ParserTest
 
     protected final String fileSyntaxErrorResponse = path + "syntaxErrorResponse.yml";
 
+    protected final String fileSyntaxErrorResponseArrayNotObject = path + "syntaxErrorResponseArrayNotObject.yml";
+
+    protected final String fileSyntaxErrorResponseStoreItemArrayNotObject = path + "syntaxErrorResponseStoreItemArrayNotObject.yml";
+
+    protected final String fileSyntaxErrorResponseStoreObjectNotArray = path + "syntaxErrorResponseStoreObjectNotArray.yml";
+
+    protected final String fileSyntaxErrorResponseValidationItemArrayNotObject = path
+                                                                                 + "syntaxErrorResponseValidationItemArrayNotObject.yml";
+
+    protected final String fileSyntaxErrorResponseValidationObjectNotArray = path + "syntaxErrorResponseValidationObjectNotArray.yml";
+
     protected final String fileSyntaxErrorSubrequests = path + "syntaxErrorSubrequests.yml";
 
     protected final String fileSyntaxErrorXhr = path + "syntaxErrorXhr.yml";
@@ -208,6 +219,46 @@ public class ActionItemParserTest extends ParserTest
     public void testSyntaxErrorResponseParsing() throws Exception
     {
         final Parser parser = new YamlParser(fileSyntaxErrorResponse);
+        @SuppressWarnings("unused")
+        final List<ScriptItem> scriptItems = parser.parse();
+    }
+
+    @Test(expected = JsonParseException.class)
+    public void testSyntaxErrorResponseArrayNotObjectParsing() throws Exception
+    {
+        final Parser parser = new YamlParser(fileSyntaxErrorResponseArrayNotObject);
+        @SuppressWarnings("unused")
+        final List<ScriptItem> scriptItems = parser.parse();
+    }
+
+    @Test(expected = JsonParseException.class)
+    public void testSyntaxErrorResponseStoreItemArrayNotObjectParsing() throws Exception
+    {
+        final Parser parser = new YamlParser(fileSyntaxErrorResponseStoreItemArrayNotObject);
+        @SuppressWarnings("unused")
+        final List<ScriptItem> scriptItems = parser.parse();
+    }
+
+    @Test(expected = JsonParseException.class)
+    public void testSyntaxErrorResponseStoreObjectNotArrayParsing() throws Exception
+    {
+        final Parser parser = new YamlParser(fileSyntaxErrorResponseStoreObjectNotArray);
+        @SuppressWarnings("unused")
+        final List<ScriptItem> scriptItems = parser.parse();
+    }
+
+    @Test(expected = JsonParseException.class)
+    public void testSyntaxErrorResponseValidationItemArrayNotObjectParsing() throws Exception
+    {
+        final Parser parser = new YamlParser(fileSyntaxErrorResponseValidationItemArrayNotObject);
+        @SuppressWarnings("unused")
+        final List<ScriptItem> scriptItems = parser.parse();
+    }
+
+    @Test(expected = JsonParseException.class)
+    public void testSyntaxErrorResponseValidationObjectNotArrayParsing() throws Exception
+    {
+        final Parser parser = new YamlParser(fileSyntaxErrorResponseValidationObjectNotArray);
         @SuppressWarnings("unused")
         final List<ScriptItem> scriptItems = parser.parse();
     }
