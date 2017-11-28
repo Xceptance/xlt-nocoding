@@ -13,9 +13,10 @@ import com.xceptance.xlt.nocoding.util.Context;
 public class StoreDefaultStatic extends StoreDefault
 {
 
-    public StoreDefaultStatic(final String variableName, final String value)
+    public StoreDefaultStatic(final String value)
     {
-        super(variableName, value);
+        // variableName isn't used, so we set it to "Static" to remain some sort of meaning
+        super(Constants.STATIC, value);
     }
 
     @Override

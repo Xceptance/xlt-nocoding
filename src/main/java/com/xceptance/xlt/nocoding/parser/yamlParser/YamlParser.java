@@ -15,8 +15,8 @@ import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.AbstractScriptItemParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.ActionItemParser;
+import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.StoreDefaultParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.StoreItemParser;
-import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.storeDefault.StoreDefaultParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.util.Constants;
 
