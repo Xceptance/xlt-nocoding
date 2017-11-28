@@ -12,9 +12,23 @@ import com.xceptance.xlt.nocoding.scriptItem.StoreItem;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
+/**
+ * Parses the Store block to a {@link List}<{@link ScriptItem}>.
+ * 
+ * @author ckeiner
+ */
 public class StoreItemParser extends AbstractScriptItemParser
 {
 
+    /**
+     * Parses the Store block to a {@link List}<{@link ScriptItem}>.
+     * 
+     * @param root
+     *            The {@link JsonNode} the Store block starts at
+     * @return {@link List}<{@link ScriptItem}> with all {@link StoreItem}
+     * @throws IOException
+     */
+    @Override
     public List<ScriptItem> parse(final JsonNode root) throws IOException
     {
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();

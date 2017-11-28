@@ -11,6 +11,7 @@ import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.request.HeaderParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.request.ParameterParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
+import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefault;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultHeader;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultItem;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultParameter;
@@ -18,16 +19,36 @@ import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultStatic;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
+/**
+ * Parses a default item to a {@link List}<{@link ScriptItem}>. Default items are defined in
+ * {@link Constants#PERMITTEDLISTITEMS} and neither {@link Constants#ACTION} nor {@link Constants#STORE}.
+ * 
+ * @author ckeiner
+ */
 public class DefaultItemParser extends AbstractScriptItemParser
 {
 
+    /**
+     * Parses the default item at {@link JsonNode} root to a {@link List}<{@link ScriptItem}>.
+     * 
+     * @param root
+     *            The node the default item starts at
+     * @return A {@link List}<{@link ScriptItem}> with the specified {@link StoreDefault}.
+     * @throws IOException
+     */
     @Override
     public List<ScriptItem> parse(final JsonNode root) throws IOException
     {
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
+        String value = null;
         // Get the name of the item
         String variableName = root.fieldNames().next();
-        String value = null;
+
+        // Check if the name is a permitted action item
+        if (!Constants.isPermittedListItem(variableName))
+        {
+            throw new IllegalArgumentException("Not a permitted list item: " + variableName);
+        }
         if (variableName.equals(Constants.HEADERS))
         {
             final JsonNode jsonNode = root.get(Constants.HEADERS);

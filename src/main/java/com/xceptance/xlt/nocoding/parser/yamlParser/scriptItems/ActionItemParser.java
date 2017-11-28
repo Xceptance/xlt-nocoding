@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang3.NotImplementedException;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.NullNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -20,21 +22,25 @@ import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
+/**
+ * Parses the action block to a {@link List}<{@link ScriptItem}>.
+ * 
+ * @author ckeiner
+ */
 public class ActionItemParser extends AbstractScriptItemParser
 {
 
     /**
-     * Parses an Action ScriptItem.
+     * Parses the action block to a {@link List}<{@link ScriptItem}>.
      * 
-     * @param parser
-     *            Where the current parser is
-     * @return A list of LightWeightActions containing a single action.
+     * @param root
+     *            The node the action block starts at
+     * @return A list of {@link ScriptItem}s containing a single action.
      * @throws IOException
      */
     @Override
     public List<ScriptItem> parse(final JsonNode root) throws IOException
     {
-
         // Initialize variables
         String name = null;
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>(3);
@@ -48,17 +54,26 @@ public class ActionItemParser extends AbstractScriptItemParser
         {
             // Get the next element
             final JsonNode node = iterator.next();
+            // Verify that this is either a NullNode or an ObjectNode
             if (!(node instanceof NullNode) && !(node instanceof ObjectNode))
             {
-                throw new IllegalArgumentException("Items in action must be objects.");
+                throw new IllegalArgumentException("Action must either be emtpy or an ObjectNode, and not a "
+                                                   + node.getClass().getSimpleName());
             }
             // Get the fieldName of the objects in the array node
             final Iterator<String> fieldNames = node.fieldNames();
 
             while (fieldNames.hasNext())
             {
+                // Get the next fieldName
                 final String fieldName = fieldNames.next();
                 AbstractActionItemParser actionItemParser = null;
+
+                // Check if the name is a permitted action item
+                if (!Constants.isPermittedActionItem(fieldName))
+                {
+                    throw new IllegalArgumentException("Not a permitted action item: " + fieldName);
+                }
 
                 // Differentiate between what kind of ActionItem this is
                 switch (fieldName)
@@ -117,9 +132,8 @@ public class ActionItemParser extends AbstractScriptItemParser
                         break;
 
                     default:
-                        // We iterate over the field names, so there is no way we have an Array/Object Start. Thus if we find something that
-                        // isn't specified, it's not a permitted action item and we want to throw an exception.
-                        throw new IOException("No permitted action item: " + fieldName);
+                        // If it has any other value, throw a NotImplementedException
+                        throw new NotImplementedException("Permitted action item but no parsing specified: " + fieldName);
                 }
 
                 // If we specified an actionItemParser
@@ -132,6 +146,9 @@ public class ActionItemParser extends AbstractScriptItemParser
         }
         // Add the action to the script items
         scriptItems.add(new LightWeigthAction(name, actionItems));
+
+        // TODO check mode here and create DomAction or LightWeightAction - or simply remove this
+
         // Return all scriptItems
         return scriptItems;
     }

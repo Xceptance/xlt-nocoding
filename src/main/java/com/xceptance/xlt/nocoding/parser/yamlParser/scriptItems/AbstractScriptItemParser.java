@@ -14,6 +14,14 @@ import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 public abstract class AbstractScriptItemParser
 {
 
+    /**
+     * Parses the list item at the specified {@link JsonNode} root.
+     * 
+     * @param root
+     *            The node the list item starts at
+     * @return {@link List}<{@link ScriptItem}>
+     * @throws IOException
+     */
     public abstract List<ScriptItem> parse(JsonNode root) throws IOException;
 
 }
