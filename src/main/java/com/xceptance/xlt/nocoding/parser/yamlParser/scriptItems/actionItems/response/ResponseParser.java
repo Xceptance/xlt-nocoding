@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang3.NotImplementedException;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xceptance.xlt.api.util.XltLogger;
@@ -54,6 +56,13 @@ public class ResponseParser extends AbstractActionItemParser
         {
             // Get the next fieldName
             final String fieldName = fieldNames.next();
+
+            // Check if the name is a permitted request item
+            if (!Constants.isPermittedResponseItem(fieldName))
+            {
+                throw new IllegalArgumentException("Not a permitted response item: " + fieldName);
+            }
+
             switch (fieldName)
             {
                 case Constants.HTTPCODE:
@@ -77,7 +86,7 @@ public class ResponseParser extends AbstractActionItemParser
                     break;
 
                 default:
-                    throw new IllegalArgumentException("No permitted response item: " + fieldName);
+                    throw new NotImplementedException("Permitted response item but no parser specified: " + fieldName);
             }
         }
         // Add the response to the actionItems

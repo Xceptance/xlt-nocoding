@@ -1,5 +1,7 @@
 package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.response.validators;
 
+import org.apache.commons.lang3.NotImplementedException;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMode.AbstractValidationMode;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMode.CountValidator;
@@ -50,6 +52,10 @@ public class ValidationModeParser
         else if (identifier.equals(Constants.COUNT))
         {
             mode = new CountValidator(validationExpression);
+        }
+        else
+        {
+            throw new NotImplementedException("Permitted Validation Mode but no parsing specified: " + identifier);
         }
         // Return it
         return mode;

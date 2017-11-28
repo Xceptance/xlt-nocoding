@@ -12,7 +12,6 @@ import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.requ
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.response.ResponseParser;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
-import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.XhrSubrequest;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
@@ -28,7 +27,7 @@ public class XhrSubrequestParser
      * @return The XhrSubrequest
      * @throws IOException
      */
-    public AbstractSubrequest parse(final JsonNode node) throws IOException
+    public XhrSubrequest parse(final JsonNode node) throws IOException
     {
         if (!(node instanceof ObjectNode))
         {
@@ -114,10 +113,8 @@ public class XhrSubrequestParser
             actionItems.add(actionItem);
         }
 
-        // Create a new Subrequest
-        final AbstractSubrequest subrequest = new XhrSubrequest(name, actionItems);
         // Return the subrequest
-        return subrequest;
+        return new XhrSubrequest(name, actionItems);
     }
 
 }

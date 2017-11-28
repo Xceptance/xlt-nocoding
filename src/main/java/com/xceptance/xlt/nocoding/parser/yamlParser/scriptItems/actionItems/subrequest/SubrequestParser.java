@@ -10,24 +10,29 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.AbstractActionItemParser;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
-import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
 import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.ParserUtils;
 
+/**
+ * Parses the Subrequests item in the action block to {@link List}<{@link AbstractSubrequest}> since there can be
+ * multiple {@link AbstractSubrequest} in the Subrequests block.
+ * 
+ * @author ckeiner
+ */
 public class SubrequestParser extends AbstractActionItemParser
 {
 
     /**
-     * Parses the subrequest item in the action block to List<AbstractSubrequest>
+     * Parses the subrequest item in the action block to {@link List}<{@link AbstractSubrequest}>
      * 
      * @param node
-     *            The node the item starts at
+     *            The ArrayNode the item starts at
      * @return A list with all specified subrequest under that subrequest block
      * @throws IOException
      */
     @Override
     public List<AbstractActionItem> parse(final JsonNode node) throws IOException
     {
+        // Verify that we have an ArrayNode
         if (!(node instanceof ArrayNode))
         {
             throw new IllegalArgumentException("Expected ArrayNode in Subrequest but was " + node.getClass().getSimpleName());
@@ -51,6 +56,7 @@ public class SubrequestParser extends AbstractActionItemParser
             {
                 // Extract the first fieldName, which specifies which kind of subrequest this is
                 final String fieldName = fieldNames.next();
+                // Depending on the name, create the correct Parser and execute it
                 switch (fieldName)
                 {
                     case Constants.XHR:
@@ -59,32 +65,8 @@ public class SubrequestParser extends AbstractActionItemParser
                         break;
 
                     case Constants.STATIC:
-                        // Create a list of urls
-                        final List<String> urls = new ArrayList<String>();
-                        // Get the node with the urls
-                        final JsonNode staticUrls = current.get(fieldName);
-                        if (!(staticUrls instanceof ArrayNode))
-                        {
-                            throw new IllegalArgumentException("Expected ArrayNode in Static block but was "
-                                                               + node.getClass().getSimpleName());
-                        }
-                        // Create an iterator over the elements
-                        final Iterator<JsonNode> staticUrlsIterator = staticUrls.elements();
-                        while (staticUrlsIterator.hasNext())
-                        {
-                            // Read the url
-                            final String url = ParserUtils.readSingleValue(staticUrlsIterator.next());
-                            // Add it to the list
-                            urls.add(url);
-                        }
-                        // Catch empty url list
-                        if (urls.isEmpty())
-                        {
-                            throw new IllegalArgumentException("No urls found");
-                        }
-
-                        // Add all request to the static subrequests
-                        subrequest.add(new StaticSubrequest(urls));
+                        // Create StaticSubrequestParser and parse the current node
+                        subrequest.add(new StaticSubrequestParser().parse(current.get(fieldName)));
                         break;
 
                     default:
@@ -94,8 +76,11 @@ public class SubrequestParser extends AbstractActionItemParser
             }
 
         }
+        // Create new AbstractActionItem list
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
+        // Add all subrequests to it
         actionItems.addAll(subrequest);
+        // Return the list with all subrequests
         return actionItems;
     }
 

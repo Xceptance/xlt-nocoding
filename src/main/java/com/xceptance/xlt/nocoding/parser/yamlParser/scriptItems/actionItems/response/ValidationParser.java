@@ -33,7 +33,7 @@ public class ValidationParser
      * @return A List<AbstractValidator> which consists of {@link Validator}.
      * @throws IllegalArgumentException
      */
-    public List<AbstractResponseItem> parse(final JsonNode node) throws IllegalArgumentException
+    public List<Validator> parse(final JsonNode node) throws IllegalArgumentException
     {
         // Verify that an array was used and not an object
         if (!(node instanceof ArrayNode))
@@ -41,7 +41,7 @@ public class ValidationParser
             throw new IllegalArgumentException("Expected ArrayNode in the validate block but was " + node.getClass().getSimpleName());
         }
         // Initialize variables
-        final List<AbstractResponseItem> validator = new ArrayList<AbstractResponseItem>();
+        final List<Validator> validator = new ArrayList<Validator>();
         String validationName = null;
 
         // Get an iterator over the elements

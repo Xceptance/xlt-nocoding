@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.NotImplementedException;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
@@ -61,6 +63,12 @@ public class RequestParser extends AbstractActionItemParser
             // Get the next fieldName
             final String fieldName = fieldNames.next();
 
+            // Check if the name is a permitted request item
+            if (!Constants.isPermittedRequestItem(fieldName))
+            {
+                throw new IllegalArgumentException("Not a permitted request item: " + fieldName);
+            }
+
             // Depending on the fieldName, we generally want to read the value but assign it to different variables
             switch (fieldName)
             {
@@ -111,8 +119,8 @@ public class RequestParser extends AbstractActionItemParser
                     break;
 
                 default:
-                    // If there is an unknown field, throw an Exception
-                    throw new IllegalArgumentException("No permitted request item: " + fieldName);
+                    // If it has any other value, throw a NotImplementedException
+                    throw new NotImplementedException("Permitted request item but no parser specified: " + fieldName);
             }
         }
 

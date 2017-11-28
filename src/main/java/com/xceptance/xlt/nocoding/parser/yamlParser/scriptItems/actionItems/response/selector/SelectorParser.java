@@ -1,5 +1,7 @@
 package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.response.selector;
 
+import org.apache.commons.lang3.NotImplementedException;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.AbstractSelector;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.CookieSelector;
@@ -58,7 +60,7 @@ public class SelectorParser
         }
         else
         {
-            throw new IllegalArgumentException("Unknown Selection : " + identifier);
+            throw new NotImplementedException("Permitted Selection but no parsing specified: " + identifier);
         }
         // return the selector
         return selector;
