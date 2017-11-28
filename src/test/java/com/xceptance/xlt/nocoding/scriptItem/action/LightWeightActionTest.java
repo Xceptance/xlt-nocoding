@@ -49,11 +49,11 @@ public class LightWeightActionTest
     {
         final String url = "http://www.xceptance.net";
         final List<ScriptItem> store = new ArrayList<ScriptItem>();
-        store.add(new StoreDefaultStatic("url", url));
-        store.add(new StoreDefaultStatic("url", url));
-        store.add(new StoreDefaultStatic("url", url));
-        store.add(new StoreDefaultStatic("url", url));
-        store.add(new StoreDefaultStatic("url", url));
+        store.add(new StoreDefaultStatic(url));
+        store.add(new StoreDefaultStatic(url));
+        store.add(new StoreDefaultStatic(url));
+        store.add(new StoreDefaultStatic(url));
+        store.add(new StoreDefaultStatic(url));
         Assert.assertTrue(context.getDefaultStatic().isEmpty());
         int i = 0;
         for (final ScriptItem scriptItem : store)
