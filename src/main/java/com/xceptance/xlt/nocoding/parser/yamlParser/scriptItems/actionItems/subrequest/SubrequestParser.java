@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang3.NotImplementedException;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.AbstractActionItemParser;
@@ -56,6 +58,13 @@ public class SubrequestParser extends AbstractActionItemParser
             {
                 // Extract the first fieldName, which specifies which kind of subrequest this is
                 final String fieldName = fieldNames.next();
+
+                // Check if the name is a permitted request item
+                if (!Constants.isPermittedSubRequestItem(fieldName))
+                {
+                    throw new IllegalArgumentException("Not a permitted subrequest item: " + fieldName);
+                }
+
                 // Depending on the name, create the correct Parser and execute it
                 switch (fieldName)
                 {
@@ -70,7 +79,7 @@ public class SubrequestParser extends AbstractActionItemParser
                         break;
 
                     default:
-                        throw new IOException("No permitted subrequest item: " + fieldName);
+                        throw new NotImplementedException("Permitted subrequest item but no parsing specified: " + fieldName);
                 }
 
             }

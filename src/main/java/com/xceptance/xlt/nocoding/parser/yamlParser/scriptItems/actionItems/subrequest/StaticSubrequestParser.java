@@ -43,11 +43,12 @@ public class StaticSubrequestParser
             urls.add(url);
         }
 
+        // If there are no urls, throw an Exception
         if (urls.isEmpty())
         {
             throw new IllegalArgumentException("No urls found");
         }
-
+        // Return the specified StaticSubrequest
         return new StaticSubrequest(urls);
     }
 

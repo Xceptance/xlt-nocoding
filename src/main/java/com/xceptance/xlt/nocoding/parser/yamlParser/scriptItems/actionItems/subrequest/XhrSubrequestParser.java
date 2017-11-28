@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang3.NotImplementedException;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xceptance.xlt.api.util.XltLogger;
@@ -16,19 +18,25 @@ import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.XhrSubrequest;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
+/**
+ * Parses the XHR block to a {@link XhrSubrequest}.
+ * 
+ * @author ckeiner
+ */
 public class XhrSubrequestParser
 {
 
     /**
-     * Parses a XhrSubrequest to a XhrSubrequest Object
+     * Parses the XHR block to a {@link XhrSubrequest}.
      * 
      * @param node
-     *            The node the item starts at
-     * @return The XhrSubrequest
+     *            The ObjectNode the item starts at
+     * @return The {@link XhrSubrequest}
      * @throws IOException
      */
     public XhrSubrequest parse(final JsonNode node) throws IOException
     {
+        // Verify the node is an ObjectNode
         if (!(node instanceof ObjectNode))
         {
             throw new IllegalArgumentException("Expected ObjectNode in Xhr block but was " + node.getClass().getSimpleName());
@@ -46,6 +54,12 @@ public class XhrSubrequestParser
             // Get the next fieldName
             final String fieldName = fieldNames.next();
             AbstractActionItem actionItem = null;
+
+            // Check if the fieldName is a permitted action item, and thus a permitted XhrSubrequestItem
+            if (!Constants.isPermittedActionItem(fieldName))
+            {
+                throw new IllegalArgumentException("Not a permitted XhrSubrequest item: " + fieldName);
+            }
 
             switch (fieldName)
             {
@@ -108,7 +122,7 @@ public class XhrSubrequestParser
                     break;
 
                 default:
-                    throw new IOException("No permitted xhr subrequest item: " + fieldName);
+                    throw new NotImplementedException("Permitted XhrSubrequest item but no parsing specified: " + fieldName);
             }
             actionItems.add(actionItem);
         }
