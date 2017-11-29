@@ -12,16 +12,30 @@ import com.xceptance.xlt.nocoding.util.Context;
 public class StoreDefaultItem extends StoreDefault
 {
 
+    /**
+     * Creates an instance of {@link StoreDefaultItem} that sets {@link #getVariableName()} and {@link #getValue()}
+     * 
+     * @param variableName
+     *            The name of the default item
+     * @param value
+     *            The default value of the default item
+     */
     public StoreDefaultItem(final String variableName, final String value)
     {
         super(variableName, value);
     }
 
+    /**
+     * If {@link #getValue()} is {@link Constants#DELETE}, the default item with the name {@link #getVariableName()} is
+     * deleted with {@link Context#deleteConfigItem(String)}. Else it stores a default itemr with
+     * {@link Context#storeConfigItem(String, String)}.
+     */
     @Override
     public void execute(final Context context) throws Throwable
     {
+        // Resolve values
         super.resolveValues(context);
-        // If the value is not "delete"
+        // If the value is not Constants.DELETE
         if (!value.equals(Constants.DELETE))
         {
             // Store the item in ConfigItems
@@ -30,7 +44,7 @@ public class StoreDefaultItem extends StoreDefault
         }
         else
         {
-            // Delete the speicifed ConfigItem
+            // Delete the specified ConfigItem
             context.deleteConfigItem(variableName);
             XltLogger.runTimeLogger.debug("Removed " + variableName + " from default storage");
         }

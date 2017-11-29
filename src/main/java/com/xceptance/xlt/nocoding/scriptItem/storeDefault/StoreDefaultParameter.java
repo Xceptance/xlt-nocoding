@@ -11,14 +11,28 @@ import com.xceptance.xlt.nocoding.util.Context;
  */
 public class StoreDefaultParameter extends StoreDefault
 {
+    /**
+     * Creates an instance of {@link StoreDefaultParameter} that sets {@link #getVariableName()} and {@link #getValue()}
+     * 
+     * @param variableName
+     *            The name of the parameter
+     * @param value
+     *            The default value of the parameter
+     */
     public StoreDefaultParameter(final String variableName, final String value)
     {
         super(variableName, value);
     }
 
+    /**
+     * If {@link #getValue()} is {@link Constants#DELETE}, the list of default parameters is deleted with
+     * {@link Context#deleteDefaultParameter()}. Else it stores a default parameter with
+     * {@link Context#storeDefaultParameter(String, String)}.
+     */
     @Override
     public void execute(final Context context) throws Throwable
     {
+        // Resolve values
         super.resolveValues(context);
         // If the value is not "delete"
         if (!value.equals(Constants.DELETE))
@@ -33,13 +47,14 @@ public class StoreDefaultParameter extends StoreDefault
             if (variableName.equals(Constants.PARAMETERS))
             {
                 context.deleteDefaultParameter();
+                XltLogger.runTimeLogger.debug("Removed all default parameters");
             }
             // else we simply delete the specified parameters
             else
             {
                 context.deleteDefaultParameter(variableName);
+                XltLogger.runTimeLogger.debug("Removed " + variableName + " from default parameter storage");
             }
-            XltLogger.runTimeLogger.debug("Removed " + variableName + " from default parameter storage");
         }
     }
 

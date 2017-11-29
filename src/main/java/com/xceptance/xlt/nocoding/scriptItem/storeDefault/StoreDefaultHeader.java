@@ -13,18 +13,27 @@ public class StoreDefaultHeader extends StoreDefault
 {
 
     /**
+     * Creates an instance of {@link StoreDefaultHeader} that sets {@link #getVariableName()} and {@link #getValue()}
+     * 
      * @param variableName
      *            The name of the header
      * @param value
+     *            The default value of the header
      */
     public StoreDefaultHeader(final String variableName, final String value)
     {
         super(variableName, value);
     }
 
+    /**
+     * If {@link #getValue()} is {@link Constants#DELETE}, the list of default headers is deleted with
+     * {@link Context#deleteDefaultHeader()}. Else it stores a default header with
+     * {@link Context#storeDefaultHeader(String, String)}.
+     */
     @Override
     public void execute(final Context context) throws Throwable
     {
+        // Resolve values
         super.resolveValues(context);
         // If the value is not "delete"
         if (!value.equals(Constants.DELETE))
@@ -39,13 +48,14 @@ public class StoreDefaultHeader extends StoreDefault
             if (variableName.equals(Constants.HEADERS))
             {
                 context.deleteDefaultHeader();
+                XltLogger.runTimeLogger.debug("Removed all default headers");
             }
-            // else we simply delete the specified header
+            // Else we simply delete the specified header
             else
             {
                 context.deleteDefaultHeader(variableName);
+                XltLogger.runTimeLogger.debug("Removed " + variableName + " from default header storage");
             }
-            XltLogger.runTimeLogger.debug("Removed " + variableName + " from default header storage");
         }
     }
 
