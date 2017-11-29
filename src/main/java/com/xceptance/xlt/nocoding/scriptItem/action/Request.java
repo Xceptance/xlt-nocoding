@@ -71,11 +71,6 @@ public class Request extends AbstractActionItem
     private String encodeBody;
 
     /**
-     * The {@link WebRequest} defined by the instance
-     */
-    private WebRequest webRequest;
-
-    /**
      * Creates an instance of {@link Request}, that sets {@link #url}.
      * 
      * @param url
@@ -176,16 +171,6 @@ public class Request extends AbstractActionItem
     public void setEncodeBody(final String encodeBody)
     {
         this.encodeBody = encodeBody;
-    }
-
-    public WebRequest getWebRequest()
-    {
-        return webRequest;
-    }
-
-    public void setWebRequest(final WebRequest webRequest)
-    {
-        this.webRequest = webRequest;
     }
 
     /**
@@ -298,44 +283,26 @@ public class Request extends AbstractActionItem
         resolvedValue = context.resolveString(getHttpMethod());
         setHttpMethod(resolvedValue);
 
-        // Resolve (is)Xhr if it exists
+        // Resolve Xhr if it isn't null
         if (getXhr() != null)
         {
             resolvedValue = context.resolveString(getXhr());
-            // confirm that the value is either false or true
-            if (resolvedValue.equalsIgnoreCase("false") || resolvedValue.equalsIgnoreCase("true"))
-            {
-                setXhr(resolvedValue);
-            }
-            // if the value is neither false nor true, throw an exception
-            else
-            {
-                throw new InvalidArgumentException("Xhr is neither true nor false");
-            }
+            setXhr(resolvedValue);
         }
 
-        // Resolve (is)EncodeParameters if it exists
+        // Resolve encodeParameters if it isn't null
         if (getEncodeParameters() != null)
         {
             resolvedValue = context.resolveString(getEncodeParameters());
-            // confirm that the value is either false or true
-            if (resolvedValue.equalsIgnoreCase("false") || resolvedValue.equalsIgnoreCase("true"))
-            {
-                setEncodeParameters(resolvedValue);
-            }
-            // if the value is neither false nor true, throw an exception
-            else
-            {
-                throw new InvalidArgumentException("Xhr is neither true nor false");
-            }
+            setEncodeParameters(resolvedValue);
         }
 
-        // Resolve each parameter in parameters if they exist
+        // Resolve each parameter in parameters if is neither null nor empty
         if (getParameters() != null && !getParameters().isEmpty())
         {
             final List<NameValuePair> resolvedParameters = new ArrayList<NameValuePair>();
             String resolvedParameterName, resolvedParameterValue;
-            // Iterrate over the list
+            // Iterate over the list
             for (final NameValuePair parameter : parameters)
             {
                 // Resolve the name of the parameter
@@ -349,36 +316,27 @@ public class Request extends AbstractActionItem
             setParameters(resolvedParameters);
         }
 
-        // Resolve each header in headers if they exists
+        // Resolve each header in headers if is neither null nor empty
         if (getHeaders() != null && !getHeaders().isEmpty())
         {
-            // Make a new map
+            // Create a new map
             final Map<String, String> resolvedHeaders = new HashMap<String, String>();
-            // And insert the resolved name and key of the old map into the new one
-            getHeaders().forEach((final String name, final String key) -> {
-                resolvedHeaders.put(context.resolveString(name), context.resolveString(key));
+            // And insert the resolved key and value of the old map into the new one
+            getHeaders().forEach((final String key, final String value) -> {
+                resolvedHeaders.put(context.resolveString(key), context.resolveString(value));
             });
             // Reassign the header to its resolved values
             setHeaders(resolvedHeaders);
         }
 
-        // Resolve (is)EncodeBody
+        // Resolve encodeBody if it isn't null
         if (getEncodeBody() != null)
         {
             resolvedValue = context.resolveString(getEncodeBody());
-            // confirm that the value is either false or true
-            if (resolvedValue.equalsIgnoreCase("false") || resolvedValue.equalsIgnoreCase("true"))
-            {
-                setEncodeBody(resolvedValue);
-            }
-            // if the value is neither false nor true, throw an exception
-            else
-            {
-                throw new InvalidArgumentException("Xhr is neither true nor false");
-            }
+            setEncodeBody(resolvedValue);
         }
 
-        // Resolve Body
+        // Resolve Body if it isn't null
         if (getBody() != null)
         {
             resolvedValue = context.resolveString(getBody());
@@ -410,13 +368,14 @@ public class Request extends AbstractActionItem
             throw new InvalidArgumentException("Url is empty. Please set a default url or specify a url.");
         }
 
-        // Build the WebRequest and set it
-        setWebRequest(buildWebRequest());
-        // Check that we have built the webRequest
-        if (getWebRequest() != null)
+        // Build the WebRequest
+        final WebRequest webRequest = buildWebRequest();
+
+        // Check that the webRequest isn't null
+        if (webRequest != null)
         {
-            // load the response
-            final WebResponse webResponse = context.getWebClient().loadWebResponse(getWebRequest());
+            // Load the response
+            final WebResponse webResponse = context.getWebClient().loadWebResponse(webRequest);
             // And set it in the context
             context.setWebResponse(webResponse);
         }
@@ -432,21 +391,27 @@ public class Request extends AbstractActionItem
      */
     public WebRequest buildWebRequest() throws MalformedURLException, InvalidArgumentException, UnsupportedEncodingException
     {
+        // Create a URL object
         final URL url = new URL(this.url);
+        // Create a WebRequest
         final WebRequest webRequest = new WebRequest(url, HttpMethod.valueOf(getHttpMethod()));
 
+        // Set Xhr if it is specified and can be converted to a boolean
         if (getXhr() != null && Boolean.valueOf(getXhr()))
         {
             webRequest.setXHR();
         }
 
-        if (getHeaders() != null)
+        // Set headers if they aren't null or empty
+        if (getHeaders() != null || !getHeaders().isEmpty())
         {
             webRequest.setAdditionalHeaders(headers);
         }
 
+        // Set parameters if they aren't null or empty
         if (getParameters() != null && !getParameters().isEmpty())
         {
+            // Decode parameters if they are specified and set to "true"
             if (getEncodeParameters() != null && !Boolean.valueOf(getEncodeParameters()))
             {
                 decodeParameters();
@@ -457,21 +422,34 @@ public class Request extends AbstractActionItem
         // Set Body if specified and no parameters are set
         if (getBody() != null && !getBody().isEmpty() && (getParameters() == null || getParameters().isEmpty()))
         {
+            // Decode Body if they are specified and set to "true"
             if (getEncodeBody() != null && !Boolean.valueOf(getEncodeBody()))
             {
                 decodeBody();
             }
             webRequest.setRequestBody(body);
         }
+
+        // Return the webRequest
         return webRequest;
     }
 
+    /**
+     * Decodes the body.
+     * 
+     * @throws UnsupportedEncodingException
+     */
     private void decodeBody() throws UnsupportedEncodingException
     {
         setBody(URLDecoder.decode(getBody(), "UTF-8"));
 
     }
 
+    /**
+     * Decodes each parameter in {@link #parameters}.
+     * 
+     * @throws UnsupportedEncodingException
+     */
     private void decodeParameters() throws UnsupportedEncodingException
     {
         final List<NameValuePair> decodedParameters = new ArrayList<>();
