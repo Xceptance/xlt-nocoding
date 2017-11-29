@@ -9,6 +9,11 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.WebAction;
 
+/**
+ * The {@link Action} in dom mode, but not implemented yet.
+ * 
+ * @author ckeiner
+ */
 public class DomAction extends Action
 {
     private HtmlPage htmlPage;

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.openqa.selenium.InvalidArgumentException;
 
+import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
@@ -84,9 +85,12 @@ public abstract class Action implements ScriptItem
     }
 
     /**
-     * Fills in the default data and verifies there is only one request, response and in the correct order.
+     * Fills in the default data for name, request, response if it isn't specified and verifies there is only one request,
+     * response and in the correct order. Finally, it adds the default static subrequests even if static subrequests are
+     * already defined.
      * 
      * @param context
+     *            The {@link Context} with the {@link DataStorage}.
      */
     protected void fillDefaultData(final Context context)
     {
@@ -128,30 +132,41 @@ public abstract class Action implements ScriptItem
             }
 
         }
+        // If there is no request
         if (!hasRequest)
         {
+            // Look for the default URL
             final String url = context.getConfigItemByKey(Constants.URL);
+            // if it is null, throw an Exception
             if (url == null)
             {
                 throw new IllegalStateException("No default url specified");
             }
+            XltLogger.runTimeLogger.debug("Added default request (" + url + ") to Action " + name);
+            // Otherwise add the default Request to the actionItems
             actionItems.add(0, new Request(url));
+            // Set hasRequest to true
             hasRequest = true;
         }
+        // If no response was specified, add the default response
         if (!hasResponse)
         {
-            int index = 0;
-            if (hasRequest)
-            {
-                index++;
-            }
-            actionItems.add(index, new Response());
+            // TODO Es gibt keine Action ohne Request -> Index kann nie 0 sein!
+            // int index = 0;
+            // if (hasRequest)
+            // {
+            // index++;
+            // }
+            XltLogger.runTimeLogger.debug("Added default response to Action " + name);
+            // Add the default Response at index 1 (since a Request is before Response)
+            actionItems.add(1, new Response());
         }
 
         // Add default static requests
         if (context.getDefaultStatic() != null && !context.getDefaultStatic().isEmpty())
         {
             actionItems.add(new StaticSubrequest(context.getDefaultStatic()));
+            XltLogger.runTimeLogger.debug("Added default static subrequests to Action " + name);
         }
     }
 

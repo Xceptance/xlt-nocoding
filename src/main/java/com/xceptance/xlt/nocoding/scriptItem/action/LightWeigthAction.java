@@ -3,6 +3,7 @@ package com.xceptance.xlt.nocoding.scriptItem.action;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.engine.Session;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
 import com.xceptance.xlt.api.util.XltLogger;
@@ -12,7 +13,9 @@ import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.WebAction;
 
 /**
- * The class that describes an action in lightweight mode
+ * The {@link Action} in light mode, which means the {@link WebResponse} is parsed to a {@link LightWeightPage}.
+ * 
+ * @author ckeiner
  */
 public class LightWeigthAction extends Action
 {
@@ -21,35 +24,40 @@ public class LightWeigthAction extends Action
      */
     private LightWeightPage lightWeightPage;
 
+    /**
+     * Creates an instance of {@link LightWeigthAction} that sets {@link #actionItems} to an {@link ArrayList} of size 1.
+     */
     public LightWeigthAction()
     {
         super();
     }
 
+    /**
+     * Creates an instance of {@link LightWeigthAction} that sets {@link #name} and {@link #actionItems}.
+     * 
+     * @param name
+     *            The name of the action
+     * @param actionItems
+     *            A {@link List}<{@link AbstractActionItem}>
+     */
     public LightWeigthAction(final String name, final List<AbstractActionItem> actionItems)
     {
         super(name, actionItems);
     }
 
-    public LightWeigthAction(final String name, final Request request)
-    {
-        this(name, new ArrayList<AbstractActionItem>(1));
-        actionItems.add(request);
-    }
-
     /**
-     * Executes the light weight action by building a WebAction, running it and then validating the answer. In the end, the
-     * page gets appended to the result browser.
+     * Executes the {@link LightWeigthAction} by building a {@link WebAction}, running it and then validating the answer. In
+     * the end, the page gets appended to the result browser.
      */
     @Override
     public void execute(final Context context) throws Throwable
     {
-        // Fill default data of an action, therefore: Name, Request, Response and possible static subrequests
+        // Fill default data
         fillDefaultData(context);
-        // Resolve the name of the action since it could be a variable
+        // Resolve values
         resolveName(context);
 
-        // Define the WebAction
+        // Define the WebAction with the doExecute-Method
         final WebAction action = new WebAction(name, context, getActionItems(), (final WebAction webAction) -> {
             try
             {
@@ -63,13 +71,14 @@ public class LightWeigthAction extends Action
             }
         });
 
-        // Execute it
+        // Try to execute it
         try
         {
             // Execute the requests, responses and subrequests via xlt api
             action.run();
             setLightWeightPage(new LightWeightPage(action.getContext().getWebResponse(), action.getTimerName()));
         }
+        // And always append the page to the result browser
         finally
         {
             // Append the page to the result browser
@@ -84,10 +93,11 @@ public class LightWeigthAction extends Action
     }
 
     /**
-     * This method uses an action as parameter and defines how to execute a WebAction. This is used in a lambda method in
-     * the execute-Method.
+     * This method uses an action as parameter and defines how to execute a {@link WebAction}. This is used for the
+     * constructor in {@link WebAction}, so we can define the behavior of {@link WebAction} here.
      * 
      * @param action
+     *            The {@link WebAction} that executes this method.
      * @throws Exception
      */
     public void doExecute(final WebAction action) throws Throwable
@@ -100,7 +110,7 @@ public class LightWeigthAction extends Action
         // Check if the first actionItem is a Request
         if (!(actionItems.iterator().next() instanceof Request))
         {
-            throw new Exception();
+            throw new Exception("First item of action \"" + action.getTimerName() + "\" is not a Request!");
         }
 
         // If there are actionItems

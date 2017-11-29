@@ -12,7 +12,6 @@ import java.util.Map;
 
 import org.openqa.selenium.InvalidArgumentException;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.WebResponse;
@@ -21,27 +20,28 @@ import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.RecentKeyTreeMap;
+import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
+import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
 /**
- * Describes the request defined in the file and transposes it to a {@link WebRequest} that is also sent via the
- * {@link XltWebClient}
+ * Describes a HTTP Request, that gets transformed to a {@link WebRequest} and then sent with the {@link XltWebClient}.
  * 
  * @author ckeiner
  */
 public class Request extends AbstractActionItem
 {
     /**
-     * The URL of the website as String
+     * The URL as {@link String}
      */
     private String url;
 
     /**
-     * The HttpMethod for the webrequest. Defaults to "GET"
+     * The HttpMethod for the {@link WebRequest}. Defaults to "GET"
      */
     private String httpMethod;
 
     /**
-     * Sets the WebRequest as Xhr request. Defaults to "false"
+     * Sets the {@link WebRequest} as Xhr request. Defaults to "false"
      */
     private String xhr;
 
@@ -51,17 +51,17 @@ public class Request extends AbstractActionItem
     private String encodeParameters;
 
     /**
-     * The list of all parameters
+     * The list of the parameters
      */
     private List<NameValuePair> parameters;
 
     /**
-     * A map that define the headers
+     * A map that defines the headers
      */
     private Map<String, String> headers;
 
     /**
-     * The body of the WebRequest
+     * The body of the {@link WebRequest}
      */
     private String body;
 
@@ -71,18 +71,15 @@ public class Request extends AbstractActionItem
     private String encodeBody;
 
     /**
-     * The webRequest as defined with this request object
+     * The {@link WebRequest} defined by the instance
      */
-    @JsonIgnore
     private WebRequest webRequest;
 
     /**
-     * Creates a class with the minimum of information, that is the URL and the name of the Action
+     * Creates an instance of {@link Request}, that sets {@link #url}.
      * 
      * @param url
-     *            The URL of the website
-     * @param name
-     *            The name of the action
+     *            The URL as {@link String}.
      */
     public Request(final String url)
     {
@@ -147,9 +144,10 @@ public class Request extends AbstractActionItem
     }
 
     /**
-     * Create a {@link RecentKeyTreeMap} out of the specified map
+     * Create a {@link RecentKeyTreeMap} out of the specified map, so headers are treated case insensitive.
      * 
      * @param headers
+     *            The map with the headers
      */
     public void setHeaders(final Map<String, String> headers)
     {
@@ -191,33 +189,35 @@ public class Request extends AbstractActionItem
     }
 
     /**
-     * Fills in the default values for certain attributes
+     * Fills in the default values for all attributes if the attribute isn't specified
      * 
      * @param context
-     *            The propertyManager with the DataStorage
+     *            The {@link Context} with the {@link DataStorage}
      */
     void fillDefaultData(final Context context)
     {
+        // Set default URL if it isn't specified
         if (getUrl() == null || getUrl().isEmpty())
         {
             setUrl(context.getConfigItemByKey(Constants.URL));
         }
 
-        // if the name is null, check if it has a default value
+        // Set default HttpMethod if it isn't specified
         if (this.getHttpMethod() == null)
         {
             setHttpMethod(context.getConfigItemByKey(Constants.METHOD));
-            // this.httpmethod = HttpMethod.valueOf(method);
         }
+
+        // Set default Xhr if it isn't specified
         if (this.getXhr() == null)
         {
             setXhr(context.getConfigItemByKey(Constants.XHR));
-            // this.isXhr = Boolean.valueOf(isXhr);
         }
+
+        // Set default encodeParameters if it isn't specified
         if (this.getEncodeParameters() == null)
         {
             setEncodeParameters(context.getConfigItemByKey(Constants.ENCODEPARAMETERS));
-            // this.encodeParameters = Boolean.valueOf(encodeParameters);
         }
 
         /*
@@ -238,6 +238,7 @@ public class Request extends AbstractActionItem
             }
             // Create new list in which we store the all parameters
             final List<NameValuePair> newParameters = new ArrayList<NameValuePair>(defaultParameters.size());
+            // Add all parameters from the map to the list newParameters
             defaultParameters.forEach((key, value) -> {
                 newParameters.add(new NameValuePair(key, value));
             });
@@ -264,10 +265,13 @@ public class Request extends AbstractActionItem
             setHeaders(defaultHeaders);
         }
 
+        // Set default body if it isn't specified
         if (this.getBody() == null)
         {
             setBody(context.getConfigItemByKey(Constants.BODY));
         }
+
+        // Set default encodeBody if it isn't specified
         if (this.getEncodeBody() == null)
         {
             setEncodeBody(context.getConfigItemByKey(Constants.ENCODEBODY));
@@ -276,10 +280,10 @@ public class Request extends AbstractActionItem
     }
 
     /**
-     * Tries to resolve all variables of non-null attributes. Variables are specified by "${variable}".
+     * Tries to resolve all variables of non-null attributes
      * 
      * @param context
-     *            The propertyManager with the DataStorage to use
+     *            The {@link Context} with the {@link DataStorage}
      * @throws InvalidArgumentException
      */
     void resolveValues(final Context context) throws InvalidArgumentException
@@ -292,7 +296,6 @@ public class Request extends AbstractActionItem
 
         // Resolve Httpmethod
         resolvedValue = context.resolveString(getHttpMethod());
-
         setHttpMethod(resolvedValue);
 
         // Resolve (is)Xhr if it exists
@@ -384,12 +387,14 @@ public class Request extends AbstractActionItem
     }
 
     /**
-     * Builds the webRequest with the given context and stores it locally. Access it with getWebRequest()
+     * Builds the {@link WebRequest} with the given {@link Context} and sends the {@link WebRequest} with
+     * {@link Context#getWebClient()}. Finally, it stores the {@link WebResponse} with
+     * {@link Context#setWebResponse(WebResponse)}.
      * 
-     * @throws {@link
-     *             IOException}
-     * @throws {@link
-     *             InvalidArgumentException}
+     * @param context
+     *            The {@link Context} with the {@link DataStorage}, {@link VariableResolver} and {@link XltWebClient}
+     * @throws IOException
+     * @throws InvalidArgumentException
      */
     @Override
     public void execute(final Context context) throws InvalidArgumentException, IOException
@@ -399,28 +404,30 @@ public class Request extends AbstractActionItem
         // Then resolve all variables
         resolveValues(context);
 
+        // Throw an error if the url is null or empty
         if (this.url == null || this.url.isEmpty())
         {
             throw new InvalidArgumentException("Url is empty. Please set a default url or specify a url.");
         }
 
+        // Build the WebRequest and set it
         setWebRequest(buildWebRequest());
         // Check that we have built the webRequest
         if (getWebRequest() != null)
         {
             // load the response
             final WebResponse webResponse = context.getWebClient().loadWebResponse(getWebRequest());
+            // And set it in the context
             context.setWebResponse(webResponse);
         }
     }
 
     /**
-     * Builds the web request that is specified by this instance
+     * Builds the web request that is specified by this object
      * 
-     * @param context
-     *            The property manager that has the data storage
-     * @return WebRequest - The WebRequest that is generated based on the instance
+     * @return The {@link WebRequest} that is specified by this object
      * @throws MalformedURLException
+     * @throws InvalidArgumentException
      * @throws UnsupportedEncodingException
      */
     public WebRequest buildWebRequest() throws MalformedURLException, InvalidArgumentException, UnsupportedEncodingException
