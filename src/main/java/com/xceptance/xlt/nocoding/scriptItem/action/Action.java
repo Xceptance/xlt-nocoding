@@ -11,10 +11,14 @@ import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubreques
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
+import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
 /**
- * This is the abstract class each Action ScriptItem has, so if the ScriptItem has the form of "- Action : ...", this
- * ScriptItem is conjured.
+ * The abstract class for each Action. An Action consist of a {@link #name} and
+ * {@link List}<{@link AbstractActionItem}>.
+ * 
+ * @author ckeiner
  */
 public abstract class Action implements ScriptItem
 {
@@ -24,12 +28,12 @@ public abstract class Action implements ScriptItem
     protected String name;
 
     /**
-     * The list of actionItems. An actionItem can be a Request, Response or AbstractSubrequest
+     * The list of actionItems
      */
     protected final List<AbstractActionItem> actionItems;
 
     /**
-     * Creates an action with an actionItems list of size 1, since we intend to add a default request.
+     * Creates an instance of {@link Action} that sets {@link #actionItems} to an {@link ArrayList} of size 1.
      */
     public Action()
     {
@@ -37,11 +41,12 @@ public abstract class Action implements ScriptItem
     }
 
     /**
-     * Creates an action with the specified request, response and subrequests
+     * Creates an instance of {@link Action} that sets {@link #name} and {@link #actionItems}.
      * 
-     * @param request
-     * @param response
-     * @param subrequests
+     * @param name
+     *            The name of the action
+     * @param actionItems
+     *            A {@link List}<{@link AbstractActionItem}>
      */
     public Action(final String name, final List<AbstractActionItem> actionItems)
     {
@@ -54,15 +59,27 @@ public abstract class Action implements ScriptItem
         return actionItems;
     }
 
+    public void setName(final String name)
+    {
+        this.name = name;
+    }
+
     public String getName()
     {
         return name;
     }
 
+    /**
+     * Resolves name
+     * 
+     * @param context
+     *            The {@link Context} with the {@link VariableResolver} and {@link DataStorage}
+     */
     protected void resolveName(final Context context)
     {
         // Resolve name
         final String resolvedValue = context.resolveString(getName());
+        // Set new name
         setName(resolvedValue);
     }
 
@@ -136,11 +153,6 @@ public abstract class Action implements ScriptItem
         {
             actionItems.add(new StaticSubrequest(context.getDefaultStatic()));
         }
-    }
-
-    public void setName(final String name)
-    {
-        this.name = name;
     }
 
 }

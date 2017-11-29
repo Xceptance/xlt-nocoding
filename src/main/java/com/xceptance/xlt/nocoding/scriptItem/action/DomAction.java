@@ -3,8 +3,9 @@ package com.xceptance.xlt.nocoding.scriptItem.action;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.NotImplementedException;
+
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.WebAction;
 
@@ -29,20 +30,21 @@ public class DomAction extends Action
     @Override
     public void execute(final Context context) throws Throwable
     {
-        final WebAction action = new WebAction(name, context, getActionItems(), (final WebAction webAction) -> {
-            try
-            {
-                doExecute(webAction);
-            }
-            catch (final Throwable e)
-            {
-                XltLogger.runTimeLogger.error("Execution Step failed");
-                e.printStackTrace();
-                throw new Exception(e);
-            }
-        });
-
-        action.run();
+        throw new NotImplementedException("Dom mode not yet implemented!");
+        // final WebAction action = new WebAction(name, context, getActionItems(), (final WebAction webAction) -> {
+        // try
+        // {
+        // doExecute(webAction);
+        // }
+        // catch (final Throwable e)
+        // {
+        // XltLogger.runTimeLogger.error("Execution Step failed");
+        // e.printStackTrace();
+        // throw new Exception(e);
+        // }
+        // });
+        //
+        // action.run();
     }
 
     public HtmlPage getHtmlPage()

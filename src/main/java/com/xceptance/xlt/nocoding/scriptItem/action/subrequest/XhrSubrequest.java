@@ -88,14 +88,21 @@ public class XhrSubrequest extends AbstractSubrequest
      */
     public void assertOrder()
     {
+        boolean hasRequest = false;
         boolean hasResponse = false;
         boolean hasSubrequest = false;
         for (final AbstractActionItem actionItem : actionItems)
         {
-            // If a Response or AbstractSubrequest is before Request, throw an Exception
-            if (actionItem instanceof Request && (hasResponse || hasSubrequest))
+            // If it is a Request
+            if (actionItem instanceof Request)
             {
-                throw new IllegalArgumentException("Request cannot be defined after a response or subrequest.");
+                // Verify there is no other request, response or subrequest before it
+                if (hasResponse || hasSubrequest || hasRequest)
+                {
+                    throw new IllegalArgumentException("Request cannot be defined after a response or subrequest.");
+                }
+                // Set hasRequest to true
+                hasRequest = true;
             }
             // If it is a Response, set hasResponse to true
             else if (actionItem instanceof Response)
