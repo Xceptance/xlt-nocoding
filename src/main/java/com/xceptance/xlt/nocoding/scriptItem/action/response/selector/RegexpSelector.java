@@ -1,5 +1,6 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response.selector;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,11 +20,27 @@ public class RegexpSelector extends AbstractSelector
 
     private String group;
 
+    /**
+     * Creates an instance of {@link RegexpSelector}, sets {@link #selectionExpression} and creates an {@link ArrayList} for
+     * {@link #result}.
+     * 
+     * @param selectionExpression
+     *            The regular expression to use on the content of the {@link WebResponse}.
+     */
     public RegexpSelector(final String selectionExpression)
     {
         this(selectionExpression, null);
     }
 
+    /**
+     * Creates an instance of {@link RegexpSelector}, sets {@link #selectionExpression} and creates an {@link ArrayList} for
+     * {@link #result}.
+     * 
+     * @param selectionExpression
+     *            The regular expression to use on the content of the {@link WebResponse}.
+     * @param group
+     *            The matching group to use
+     */
     public RegexpSelector(final String selectionExpression, final String group)
     {
         super(selectionExpression);

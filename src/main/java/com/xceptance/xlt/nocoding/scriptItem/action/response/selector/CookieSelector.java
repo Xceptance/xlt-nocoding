@@ -1,19 +1,28 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response.selector;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.util.Context;
 
 /**
- * Stores all cookies from the headers located in {@link Context#getWebResponse()}. The cookie is selected via name
- * provided by {@link #getSelectionExpression()}. The value of the cookie is then accessible with {@link #getResult()}.
+ * Stores the specified cookie from the headers located in {@link Context#getWebResponse()}. The cookie is selected via
+ * name provided by {@link #getSelectionExpression()}. The value of the cookie is then accessible with
+ * {@link #getResult()}.
  * 
  * @author ckeiner
  */
 public class CookieSelector extends AbstractSelector
 {
 
+    /**
+     * Creates an instance of {@link CookieSelector}, sets {@link #selectionExpression} and creates an {@link ArrayList} for
+     * {@link #result}.
+     * 
+     * @param selectionExpression
+     *            The name of the cookie
+     */
     public CookieSelector(final String selectionExpression)
     {
         super(selectionExpression);
@@ -21,7 +30,10 @@ public class CookieSelector extends AbstractSelector
 
     /**
      * Iterates over the headers in {@link Context#getWebResponse()} and selects the cookie with the name provided by
-     * {@link #getSelectionExpression()}. Finally, it stores the value in the results.
+     * {@link #getSelectionExpression()}. Finally, it stores the value in the results via {@link #addResult(String)}.
+     * 
+     * @param context
+     *            The {@link Context} to use
      */
     @Override
     public void execute(final Context context)
@@ -36,7 +48,7 @@ public class CookieSelector extends AbstractSelector
             // Search for the Set-Cookie header
             if (header.getName().equals("Set-Cookie"))
             {
-                // Get the cookieName by looking for the seperating character
+                // Get the cookieName by looking for the separating character
                 final int equalSignPosition = header.getValue().indexOf("=");
                 // Get the cookieName
                 String cookieName = header.getValue().substring(0, equalSignPosition);

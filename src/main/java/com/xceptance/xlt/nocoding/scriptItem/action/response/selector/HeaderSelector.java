@@ -1,5 +1,6 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response.selector;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
@@ -14,6 +15,13 @@ import com.xceptance.xlt.nocoding.util.Context;
 public class HeaderSelector extends AbstractSelector
 {
 
+    /**
+     * Creates an instance of {@link HeaderSelector}, sets {@link #selectionExpression} and creates an {@link ArrayList} for
+     * {@link #result}.
+     * 
+     * @param selectionExpression
+     *            The name of the header
+     */
     public HeaderSelector(final String selectionExpression)
     {
         super(selectionExpression);
@@ -21,7 +29,7 @@ public class HeaderSelector extends AbstractSelector
 
     /**
      * Iterates over all headers in {@link Context#getWebResponse()} and stores every header with the name
-     * {@link #getSelectionExpression()}.
+     * {@link #getSelectionExpression()} via {@link #addResult(String)}.
      */
     @Override
     public void execute(final Context context)
@@ -37,7 +45,7 @@ public class HeaderSelector extends AbstractSelector
             // Search for the header name
             if (header.getName().equals(getSelectionExpression()))
             {
-                // Add it to the result list
+                // Add the value to the result list
                 addResult(header.getValue());
             }
         }

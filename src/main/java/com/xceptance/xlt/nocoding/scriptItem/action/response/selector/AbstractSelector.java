@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
+import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
 /**
  * Selects an element from the {@link WebResponse} in the {@link Context}. The selection happens in
@@ -43,6 +45,7 @@ public abstract class AbstractSelector
      * the selected expression via {@link #addResult(String)}.
      * 
      * @param context
+     *            The {@link Context} to use
      */
     public abstract void execute(Context context);
 
@@ -58,9 +61,10 @@ public abstract class AbstractSelector
     }
 
     /**
-     * Resolves the {@link #selectionExpression}.
+     * Resolves {@link #selectionExpression}.
      * 
      * @param context
+     *            The {@link Context} with the {@link VariableResolver} and {@link DataStorage}.
      */
     protected void resolveValues(final Context context)
     {
