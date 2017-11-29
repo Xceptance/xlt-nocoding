@@ -17,6 +17,12 @@ public abstract class Parser
      */
     protected final File file;
 
+    /**
+     * Creates a {@link File} with the provided path to the file.
+     * 
+     * @param pathToFile
+     *            The path to the file.
+     */
     public Parser(final String pathToFile)
     {
         this.file = new File(pathToFile);
