@@ -9,9 +9,10 @@ public interface ScriptItem
 {
 
     /**
-     * The single interface method, which executes the ScriptItem
+     * The method, which executes the ScriptItem
      * 
      * @param context
+     *            The current {@link Context}
      * @throws Throwable
      */
     public void execute(Context context) throws Throwable;
