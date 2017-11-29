@@ -13,7 +13,8 @@ import com.xceptance.xlt.nocoding.util.Context;
 public class ResponseStore extends AbstractResponseStore
 {
     /**
-     * The matching group for the {@link RegexpSelector}
+     * The matching group for the {@link RegexpSelector}. Leave null if group should not be used or it isn't a
+     * {@link RegexpSelector}.
      */
     private String group;
 
@@ -40,7 +41,8 @@ public class ResponseStore extends AbstractResponseStore
      * @param selector
      *            The selector to use for the value, should be {@link RegexpSelector}
      * @param group
-     *            The matching group of the regular expression
+     *            The matching group of the regular expression. Leave null if group should not be used or it isn't a
+     *            {@link RegexpSelector}.
      */
     public ResponseStore(final String variableName, final AbstractSelector selector, final String group)
     {

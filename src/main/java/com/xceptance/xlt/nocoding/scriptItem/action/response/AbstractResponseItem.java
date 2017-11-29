@@ -6,7 +6,7 @@ import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 /**
  * The interface for every response item. A response item is either an item that stores something or an item that
- * validates the {@link WebResponse} of a http request.
+ * validates the {@link WebResponse} of a HTTP request.
  * 
  * @author ckeiner
  */
