@@ -62,6 +62,9 @@ public class SelectorParser
         {
             throw new NotImplementedException("Permitted Selection but no parsing specified: " + identifier);
         }
+
+        // TODO ask node if fieldname group exists
+
         // return the selector
         return selector;
     }

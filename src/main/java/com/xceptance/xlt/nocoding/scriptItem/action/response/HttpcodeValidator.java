@@ -1,9 +1,10 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response;
 
+import org.junit.Assert;
+
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
 import com.xceptance.xlt.api.validators.HttpResponseCodeValidator;
-import com.xceptance.xlt.engine.LightWeightPageImpl;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 
@@ -39,15 +40,8 @@ public class HttpcodeValidator extends AbstractResponseItem
     {
         resolveValues(context);
         fillDefaultData(context);
-        // Build a LightWeightPage to validate the page with HttpResponseCodeValidator
-        final LightWeightPage page = new LightWeightPageImpl(context.getWebResponse(), context.getWebClient().getTimerName(),
-                                                             context.getWebClient());
-        if (page != null && httpcode != null)
-        {
-            new HttpResponseCodeValidator(Integer.parseInt(this.httpcode)).validate(page);
-        }
-        // TODO warum nicht das hier?
-        // Assert.assertEquals(Integer.parseInt(this.httpcode), context.getWebResponse().getStatusCode());
+        // TODO test
+        Assert.assertEquals(Integer.parseInt(this.httpcode), context.getWebResponse().getStatusCode());
     }
 
     /**

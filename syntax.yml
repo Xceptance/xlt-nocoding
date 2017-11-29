@@ -106,8 +106,7 @@
 
 #Delete default values
 - Cookies : delete
-- Variables : delete
-- Header : delete
+- Headers : delete
 - Httpcode : delete
 - Url : delete
 - Method : delete

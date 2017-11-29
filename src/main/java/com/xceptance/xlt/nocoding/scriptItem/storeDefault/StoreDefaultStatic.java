@@ -45,18 +45,9 @@ public class StoreDefaultStatic extends StoreDefault
         }
         else
         {
-            // If the variableName is Constants.STATIC, then we delete all default static request urls
-            if (variableName.equals(Constants.STATIC))
-            {
-                context.deleteDefaultStatic();
-                XltLogger.runTimeLogger.debug("Removed all default static requests");
-            }
-            // else we simply delete the specified parameters
-            else
-            {
-                context.deleteDefaultStatic(variableName);
-                XltLogger.runTimeLogger.debug("Removed " + variableName + " from default static request storage");
-            }
+            // Delete all default statics
+            context.deleteDefaultStatic();
+            XltLogger.runTimeLogger.debug("Removed all default static requests");
         }
     }
 

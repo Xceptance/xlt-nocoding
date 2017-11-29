@@ -62,6 +62,11 @@ public class XhrSubrequest extends AbstractSubrequest
             request.getHeaders().put("X-Requested-With", "XMLHttpRequest");
             request.getHeaders().put("Referer", context.getWebResponse().getWebRequest().getUrl().toString());
         }
+        else
+        {
+            // TODO check aber evtl hinfällig wgn assertOrder
+            throw new IllegalStateException();
+        }
 
         // Try and catch to add the name of the XhrSubrequest to the Exception
         try
