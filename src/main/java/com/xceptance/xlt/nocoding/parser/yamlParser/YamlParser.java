@@ -21,8 +21,8 @@ import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
- * Reads a yaml file, provided per constructor, and generates an {@link ArrayList} filled with {@link ScriptItem}s out
- * of the yaml file.
+ * Reads a Yaml file, provided per constructor, and generates an {@link List} filled with {@link ScriptItem}s out of the
+ * Yaml file.
  * 
  * @author ckeiner
  */
@@ -42,46 +42,56 @@ public class YamlParser extends Parser
 
     /**
      * Parses the file and returns a list of ScriptItem
+     * 
+     * @return {@link List}<{@link ScriptItem}>
      */
     @Override
     public List<ScriptItem> parse() throws Exception
     {
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
-        // Build the parser
+        // Build the factory
         final YAMLFactory factory = new YAMLFactory();
+        // Create the parser
         final JsonParser parser = factory.createParser(getFile());
         // Allow comments in the parser, so we have the correct line numbers
         parser.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS, true);
 
-        // Map the parsed content to JsonNodes
+        // Create an ObjectMapper
         final ObjectMapper mapper = new ObjectMapper();
+        // Map the parsed content to JsonNodes, which is easier to use
         final JsonNode root = mapper.readTree(parser);
 
+        // Check that the root, which consists of the list items, is an ArrayNode
         if (root != null && !(root instanceof ArrayNode))
         {
-            throw new IllegalArgumentException("List items must be arrays.");
+            throw new IllegalArgumentException("Expected list items to be of type ArrayNode but is of type "
+                                               + root.getClass().getSimpleName());
         }
 
         // If we have a root, extract its elements
         if (root != null)
         {
+            // Get an iterator over the elements
             final Iterator<JsonNode> nodes = root.elements();
-
+            // Count the number of list items we have
             int numberObject = 0;
 
             // Iterate over all tokens
             while (nodes.hasNext())
             {
+                // Get the next element
                 final JsonNode node = nodes.next();
                 // final String currentName;
                 final String currentName = node.fieldNames().next();
+                // Increase the counter
+                numberObject++;
 
                 // Check if we have a permitted list item
                 if (Constants.isPermittedListItem(currentName))
                 {
-                    numberObject++;
                     XltLogger.runTimeLogger.info(numberObject + ".th ScriptItem: " + currentName);
 
+                    // Try and catch, so we can use a JsonParseException, which prints the line/column number
                     try
                     {
                         // Differentiate between Store, Action and default definitions
@@ -101,7 +111,7 @@ public class YamlParser extends Parser
                             // Set parser to DefaultItemParser
                             scriptItemParser = new StoreDefaultParser();
                         }
-
+                        // Parse the scriptItem
                         scriptItems.addAll(scriptItemParser.parse(node));
 
                     }
@@ -111,18 +121,13 @@ public class YamlParser extends Parser
                         throw new JsonParseException(parser, e.getMessage(), e);
                     }
                 }
-                // If we don't have a list item, check if it is really a field name. If it is, throw an error
-                else // if (parser.currentToken() != null && parser.getCurrentToken().equals(JsonToken.FIELD_NAME))
+                // If the item wasn't a permitted list item, throw an exception
+                else
                 {
-
                     throw new JsonParseException(parser, "No permitted list item: " + parser.getText());
                 }
-                // If we don't have a list item and it's not a field name, we have found null or an Array Entry/Exit or an Object
-                // Entry/Exit.
-
             }
         }
-
         // Return all scriptItems
         return scriptItems;
     }
