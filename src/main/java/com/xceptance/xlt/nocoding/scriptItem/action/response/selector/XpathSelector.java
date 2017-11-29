@@ -1,12 +1,11 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response.selector;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.gargoylesoftware.htmlunit.Page;
+import org.apache.commons.lang3.NotImplementedException;
+
 import com.gargoylesoftware.htmlunit.SgmlPage;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.html.DomNode;
@@ -51,39 +50,39 @@ public class XpathSelector extends AbstractSelector
     @Override
     public void execute(final Context context)
     {
-        // throw new NotImplementedException("Not yet implemented!");
+        throw new NotImplementedException("Not yet implemented!");
 
-        webResponse = context.getWebResponse();
-        if (isParsable(webResponse))
-        {
-            // TODO Do this in the context, don't forget to delete when next action
-            if (htmlPage == null)
-            {
-                try
-                {
-                    final Page page = context.getWebClient().loadWebResponseInto(context.getWebResponse(),
-                                                                                 context.getWebClient().getCurrentWindow());
-                    if (page instanceof SgmlPage)
-                    {
-                        htmlPage = (SgmlPage) page;
-                    }
-                }
-                catch (FailingHttpStatusCodeException | IOException e)
-                {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-
-                // htmlPage = new HtmlPage(webResponse, context.getWebClient().loadWebResponseInto(webResponse, webWindow));
-            }
-            final List<DomNode> htmlElements = getHtmlElementListByXPath(getSelectionExpression());
-            for (final DomNode htmlElement : htmlElements)
-            {
-                final String elementAsString = getStringFromHtmlElement(htmlElement);
-                XltLogger.runTimeLogger.debug("Found Element: " + elementAsString);
-                addResult(elementAsString);
-            }
-        }
+        // webResponse = context.getWebResponse();
+        // if (isParsable(webResponse))
+        // {
+        // // TODO Do this in the context, don't forget to delete when next action
+        // if (htmlPage == null)
+        // {
+        // try
+        // {
+        // final Page page = context.getWebClient().loadWebResponseInto(context.getWebResponse(),
+        // context.getWebClient().getCurrentWindow());
+        // if (page instanceof SgmlPage)
+        // {
+        // htmlPage = (SgmlPage) page;
+        // }
+        // }
+        // catch (FailingHttpStatusCodeException | IOException e)
+        // {
+        // // TODO Auto-generated catch block
+        // e.printStackTrace();
+        // }
+        //
+        // // htmlPage = new HtmlPage(webResponse, context.getWebClient().loadWebResponseInto(webResponse, webWindow));
+        // }
+        // final List<DomNode> htmlElements = getHtmlElementListByXPath(getSelectionExpression());
+        // for (final DomNode htmlElement : htmlElements)
+        // {
+        // final String elementAsString = getStringFromHtmlElement(htmlElement);
+        // XltLogger.runTimeLogger.debug("Found Element: " + elementAsString);
+        // addResult(elementAsString);
+        // }
+        // }
 
     }
 
