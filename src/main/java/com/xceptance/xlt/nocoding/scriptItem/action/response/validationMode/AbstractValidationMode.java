@@ -2,20 +2,28 @@ package com.xceptance.xlt.nocoding.scriptItem.action.response.validationMode;
 
 import java.util.List;
 
-import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.nocoding.util.Context;
 
 /**
- * The abstract class for every response item that validates the {@link WebResponse}.
+ * The abstract class for every response item that specifies how to validate the {@link #expressionToValidate}.
  * 
  * @author ckeiner
  */
 public abstract class AbstractValidationMode
 {
 
+    /**
+     * The expression which is to be validated
+     */
     private List<String> expressionToValidate;
 
-    public abstract void execute(Context context) throws Exception;
+    /**
+     * Executes the validation mode. Therefore, this method should use at least one assertion.
+     * 
+     * @param context
+     *            The {@link Context} to use
+     */
+    public abstract void execute(Context context);
 
     public List<String> getExpressionToValidate()
     {
@@ -27,6 +35,12 @@ public abstract class AbstractValidationMode
         this.expressionToValidate = expressionToValidate;
     }
 
+    /**
+     * Resolves values
+     * 
+     * @param context
+     *            The {@link Context} to use
+     */
     protected abstract void resolveValues(final Context context);
 
 }

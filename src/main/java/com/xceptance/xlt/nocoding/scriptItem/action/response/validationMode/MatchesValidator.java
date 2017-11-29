@@ -7,22 +7,42 @@ import org.junit.Assert;
 
 import com.xceptance.xlt.nocoding.util.Context;
 
+/**
+ * Validates that the first result in {@link #getExpressionToValidate()} matches the {@link Pattern} provided by
+ * {@link #validationExpression}.
+ * 
+ * @author ckeiner
+ */
 public class MatchesValidator extends AbstractValidationMode
 {
 
+    /**
+     * The {@link Pattern} to match {@link #getExpressionToValidate()} against as {@link String}
+     */
     private String validationExpression;
 
+    /**
+     * Creates an instance of {@link MatchesValidator} that sets {@link #validationExpression}
+     * 
+     * @param validationExpression
+     *            The {@link Pattern} to match {@link #getExpressionToValidate()} against as {@link String}
+     */
     public MatchesValidator(final String validationExpression)
     {
         this.validationExpression = validationExpression;
     }
 
+    /**
+     * Resolves values, verifies {@link #getExpressionToValidate()} is neither null nor empty, and matches the first result
+     * of {@link #getExpressionToValidate()} against the {@link Pattern} provided by {@link #validationExpression}. Finally,
+     * it verifies there is at least one result.
+     */
     @Override
-    public void execute(final Context context) throws Exception
+    public void execute(final Context context)
     {
         // Resolve values
         resolveValues(context);
-        // Assert we have results
+        // Assert we have a result list and its has elements in it
         Assert.assertNotNull("Result list is null", getExpressionToValidate());
         Assert.assertFalse("Result list is empty", getExpressionToValidate().isEmpty());
         // Get the expression we want
@@ -31,10 +51,13 @@ public class MatchesValidator extends AbstractValidationMode
         Assert.assertNotNull(expressionToValidate);
         // Build a matcher from the fields
         final Matcher matcher = Pattern.compile(validationExpression).matcher(expressionToValidate);
-        // Assert we found a match
+        // Verify a match was found
         Assert.assertTrue(validationExpression + " did not match " + expressionToValidate, matcher.find());
     }
 
+    /**
+     * Resolves {@link #validationExpression}
+     */
     @Override
     protected void resolveValues(final Context context)
     {
