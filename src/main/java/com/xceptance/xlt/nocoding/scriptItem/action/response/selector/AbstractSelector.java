@@ -29,8 +29,7 @@ public abstract class AbstractSelector
     protected final List<String> result;
 
     /**
-     * Creates an instance of {@link AbstractSelector}, sets {@link #selectionExpression} and creates an {@link ArrayList}
-     * for {@link #result}.
+     * Sets {@link #selectionExpression} and creates an {@link ArrayList} for {@link #result}.
      * 
      * @param selectionExpression
      */

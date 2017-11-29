@@ -10,10 +10,24 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.AbstractSe
  */
 public abstract class AbstractResponseStore extends AbstractResponseItem
 {
+    /**
+     * The name of the variable
+     */
     protected final String variableName;
 
+    /**
+     * The selector for the value of the variable
+     */
     protected final AbstractSelector selector;
 
+    /**
+     * Sets {@link #variableName} and {@link #selector}.
+     * 
+     * @param variableName
+     *            The name of the variable
+     * @param selector
+     *            The selector to use for the value
+     */
     public AbstractResponseStore(final String variableName, final AbstractSelector selector)
     {
         this.variableName = variableName;

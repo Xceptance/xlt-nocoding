@@ -12,7 +12,6 @@ import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.resp
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.AbstractSelector;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.RegexpSelector;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.store.AbstractResponseStore;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.store.GroupResponseStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.store.ResponseStore;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
@@ -79,6 +78,7 @@ public class ResponseStoreParser
                 {
                     // Build a selector depending on the next element in the iterator
                     final AbstractSelector selector = new SelectorParser(name.next()).parse(storeContent);
+
                     // If we have another name, it must be Constants.GROUP
                     if (name.hasNext())
                     {
@@ -90,8 +90,8 @@ public class ResponseStoreParser
                             if (nextName.equals(Constants.GROUP))
                             {
                                 // And create a GroupResponseStore
-                                responseStores.add(new GroupResponseStore(variableName, selector,
-                                                                          ParserUtils.readValue(storeContent, nextName)));
+                                responseStores.add(new ResponseStore(variableName, selector,
+                                                                     ParserUtils.readValue(storeContent, nextName)));
                             }
                             else
                             {
