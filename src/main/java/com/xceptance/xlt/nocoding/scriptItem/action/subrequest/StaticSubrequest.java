@@ -55,4 +55,11 @@ public class StaticSubrequest extends AbstractSubrequest
         return urls;
     }
 
+    @Override
+    public void fillDefaultData(final Context context)
+    {
+        // No need to do anything since there are default static subrequests but no default static urls
+
+    }
+
 }

@@ -71,6 +71,14 @@ public class Request extends AbstractActionItem
     private String encodeBody;
 
     /**
+     * Creates an instance of {@link Request}, that sets {@link #url} to null.
+     */
+    public Request()
+    {
+        this(null);
+    }
+
+    /**
      * Creates an instance of {@link Request}, that sets {@link #url}.
      * 
      * @param url

@@ -30,6 +30,7 @@ public class XpathSelector extends AbstractSelector
      */
     static final Map<String, String> HEADERCONTENTTYPES = new HashMap<>();
 
+    // TODO reicht eigentlich wenn htmlunit instance of sgmlpage stimmt oder so
     static final String HTML = "html";
 
     static final String TEXTHTML = "text/html";

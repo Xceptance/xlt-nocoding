@@ -260,7 +260,8 @@ public class RequestTest
     @Test
     public void testDefaultData() throws InvalidArgumentException, MalformedURLException, UnsupportedEncodingException
     {
-        request = new Request(url);
+        context.storeConfigItem(Constants.URL, url);
+        request = new Request();
         request.fillDefaultData(context);
         webRequest = request.buildWebRequest();
 

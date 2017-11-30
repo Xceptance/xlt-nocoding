@@ -30,17 +30,19 @@ public class LightWeightActionTest
     public void testDefaultRequest()
     {
         // Set url
-        final String url = "https://www.xceptance.come";
+        final String url = "https://www.xceptance.com";
         context.storeConfigItem(Constants.URL, url);
         final String configName = Constants.NAME;
         final String value = "TestName";
         context.storeConfigItem(configName, value);
+
         final LightWeigthAction action = new LightWeigthAction();
         action.fillDefaultData(context);
         Assert.assertNotNull(action.getActionItems());
         Assert.assertFalse(action.getActionItems().isEmpty());
         Assert.assertTrue(action.getActionItems().get(0) instanceof Request);
         final Request request = (Request) action.getActionItems().get(0);
+        request.fillDefaultData(context);
         Assert.assertEquals(url, request.getUrl());
     }
 

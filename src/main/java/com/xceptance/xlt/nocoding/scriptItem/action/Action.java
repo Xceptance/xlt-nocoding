@@ -3,13 +3,10 @@ package com.xceptance.xlt.nocoding.scriptItem.action;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openqa.selenium.InvalidArgumentException;
-
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
-import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
+import com.xceptance.xlt.nocoding.util.ActionItemUtil;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
@@ -94,73 +91,12 @@ public abstract class Action implements ScriptItem
      */
     protected void fillDefaultData(final Context context)
     {
-        if (getName() == null || getName().isEmpty())
+        if (name == null || name.isEmpty())
         {
-            setName(context.getConfigItemByKey(Constants.NAME));
-            // Verify that we now have a name for the action
-            if (getName() == null || getName().isEmpty())
-            {
-                throw new InvalidArgumentException("Name cannot be empty or null. Please add a default name or specify one.");
-            }
+            name = context.getConfigItemByKey(Constants.NAME);
         }
-
-        // Check if the order of the items is allowed
-        boolean hasRequest = false;
-        boolean hasResponse = false;
-        boolean hasSubrequest = false;
-        for (final AbstractActionItem abstractActionItem : actionItems)
-        {
-            if (abstractActionItem instanceof Request)
-            {
-                if (hasResponse || hasSubrequest || hasRequest)
-                {
-                    throw new IllegalArgumentException("Request defined after Response and/or Subrequest!");
-                }
-                hasRequest = true;
-            }
-            else if (abstractActionItem instanceof Response)
-            {
-                if (hasSubrequest || hasResponse)
-                {
-                    throw new IllegalArgumentException("Response defined after Subrequest!");
-                }
-                hasResponse = true;
-            }
-            else if (abstractActionItem instanceof AbstractSubrequest)
-            {
-                hasSubrequest = true;
-            }
-
-        }
-        // If there is no request
-        if (!hasRequest)
-        {
-            // Look for the default URL
-            final String url = context.getConfigItemByKey(Constants.URL);
-            // if it is null, throw an Exception
-            if (url == null)
-            {
-                throw new IllegalStateException("No default url specified");
-            }
-            XltLogger.runTimeLogger.debug("Added default request (" + url + ") to Action " + name);
-            // Otherwise add the default Request to the actionItems
-            actionItems.add(0, new Request(url));
-            // Set hasRequest to true
-            hasRequest = true;
-        }
-        // If no response was specified, add the default response
-        if (!hasResponse)
-        {
-            // TODO Es gibt keine Action ohne Request -> Index kann nie 0 sein!
-            // int index = 0;
-            // if (hasRequest)
-            // {
-            // index++;
-            // }
-            XltLogger.runTimeLogger.debug("Added default response to Action " + name);
-            // Add the default Response at index 1 (since a Request is before Response)
-            actionItems.add(1, new Response());
-        }
+        ActionItemUtil.assertOrder(actionItems);
+        ActionItemUtil.fillDefaultData(actionItems, context);
 
         // Add default static requests
         if (context.getDefaultStatic() != null && !context.getDefaultStatic().isEmpty())

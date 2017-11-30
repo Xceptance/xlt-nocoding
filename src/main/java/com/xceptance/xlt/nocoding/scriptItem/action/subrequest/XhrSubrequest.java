@@ -5,10 +5,13 @@ import java.util.List;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
+import com.xceptance.xlt.nocoding.util.ActionItemUtil;
+import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 
 /**
- * Creates a XhrSubrequest that has a name and can consists of a request, response and multiple subrequest.
+ * Creates a {@link XhrSubrequest} that has a name and consists of a {@link Request}, {@link Response} and maybe
+ * multiple {@link AbstractSubrequest}.
  * 
  * @author ckeiner
  */
@@ -17,7 +20,7 @@ public class XhrSubrequest extends AbstractSubrequest
     /**
      * The name of the subrequest
      */
-    private final String name;
+    private String name;
 
     /**
      * The request, response and subrequests of this subrequest
@@ -50,23 +53,15 @@ public class XhrSubrequest extends AbstractSubrequest
         final Context localContext = new Context(context);
 
         // Assert that the order of Request, Response, Subrequest is correct
-        assertOrder();
-        // TODO If the first action item is not a request, throw an Exception
-        if (actionItems.iterator().next() instanceof Request)
-        {
-            // Get the request
-            final Request request = ((Request) actionItems.iterator().next());
-            // Set Xhr to true
-            request.setXhr("true");
-            // Set XhrSubrequest specific headers
-            request.getHeaders().put("X-Requested-With", "XMLHttpRequest");
-            request.getHeaders().put("Referer", context.getWebResponse().getWebRequest().getUrl().toString());
-        }
-        else
-        {
-            // TODO check aber evtl hinfällig wgn assertOrder
-            throw new IllegalStateException();
-        }
+        ActionItemUtil.assertOrder(actionItems);
+
+        // Get the request
+        final Request request = ((Request) actionItems.iterator().next());
+        // Set Xhr to true
+        request.setXhr("true");
+        // Set XhrSubrequest specific headers
+        request.getHeaders().put("X-Requested-With", "XMLHttpRequest");
+        request.getHeaders().put("Referer", context.getWebResponse().getWebRequest().getUrl().toString());
 
         // Try and catch to add the name of the XhrSubrequest to the Exception
         try
@@ -89,42 +84,16 @@ public class XhrSubrequest extends AbstractSubrequest
     }
 
     /**
-     * Asserts that the order of {@link Request}, {@link Response}, and {@link AbstractSubrequest} is correct
+     * Sets name and request to the default name and request if they aren't not specified
      */
-    public void assertOrder()
+    @Override
+    public void fillDefaultData(final Context context)
     {
-        boolean hasRequest = false;
-        boolean hasResponse = false;
-        boolean hasSubrequest = false;
-        for (final AbstractActionItem actionItem : actionItems)
+        if (name == null || name.isEmpty())
         {
-            // If it is a Request
-            if (actionItem instanceof Request)
-            {
-                // Verify there is no other request, response or subrequest before it
-                if (hasResponse || hasSubrequest || hasRequest)
-                {
-                    throw new IllegalArgumentException("Request cannot be defined after a response or subrequest.");
-                }
-                // Set hasRequest to true
-                hasRequest = true;
-            }
-            // If it is a Response, set hasResponse to true
-            else if (actionItem instanceof Response)
-            {
-                hasResponse = true;
-                // If an AbstractSubrequest is before Response,throw an error
-                if (hasSubrequest)
-                {
-                    throw new IllegalArgumentException("Response mustn't be defined after subrequests.");
-                }
-            }
-            // If an AbstractSubrequest is found, set hasSubrequest to true
-            else if (actionItem instanceof AbstractSubrequest && !hasSubrequest)
-            {
-                hasSubrequest = true;
-            }
+            name = context.getConfigItemByKey(Constants.NAME);
         }
+        ActionItemUtil.fillDefaultData(actionItems, context);
     }
 
 }
