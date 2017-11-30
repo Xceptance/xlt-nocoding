@@ -82,7 +82,7 @@ public class ResponseParser extends AbstractActionItemParser
                 case Constants.STORE:
                     // Create a new response store parser and add the result to the responseItems
                     responseItems.addAll(new ResponseStoreParser().parse(node.get(fieldName)));
-                    XltLogger.runTimeLogger.debug("Added Validation");
+                    XltLogger.runTimeLogger.debug("Added Store");
                     break;
 
                 default:

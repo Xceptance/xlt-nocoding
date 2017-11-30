@@ -91,6 +91,7 @@ public class ValidationParser
                         if (validation == null && selector == null)
                         {
                             // Parse the selector
+                            XltLogger.runTimeLogger.debug("Selection Mode is " + selector);
                             selector = new SelectorParser(nextName).parse(validationContent);
                         }
                         else
@@ -115,6 +116,7 @@ public class ValidationParser
                         if (selector != null && validation == null)
                         {
                             // Parse the validation mode
+                            XltLogger.runTimeLogger.debug("Validation Mode is " + selector);
                             validation = new ValidationModeParser(nextName).parse(validationContent);
                         }
                         else

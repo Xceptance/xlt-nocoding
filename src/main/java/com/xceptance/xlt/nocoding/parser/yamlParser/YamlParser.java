@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -55,6 +56,7 @@ public class YamlParser extends Parser
         final JsonParser parser = factory.createParser(getFile());
         // Allow comments in the parser, so we have the correct line numbers
         parser.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS, true);
+        parser.configure(Feature.ALLOW_YAML_COMMENTS, true);
 
         // Create an ObjectMapper
         final ObjectMapper mapper = new ObjectMapper();
