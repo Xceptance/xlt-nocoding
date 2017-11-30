@@ -87,14 +87,50 @@ public class ValidationParser
                     // If it is a permitted selection mode
                     if (Constants.isPermittedSelectionMode(nextName))
                     {
-                        // Parse the selector
-                        selector = new SelectorParser(nextName).parse(validationContent);
+                        // Check that the selector is the first item and no other selector was defined already
+                        if (validation == null && selector == null)
+                        {
+                            // Parse the selector
+                            selector = new SelectorParser(nextName).parse(validationContent);
+                        }
+                        else
+                        {
+                            // Throw an error depending on why the parsing failed
+                            String errorMessage = null;
+                            if (validation != null)
+                            {
+                                errorMessage = "Selection must be parsed before the Validation Mode!";
+                            }
+                            else if (selector != null)
+                            {
+                                errorMessage = "Cannot parse two selections!";
+                            }
+                            throw new IllegalArgumentException(errorMessage);
+                        }
                     }
                     // If it is a permitted validation mode
                     else if (Constants.isPermittedValidationMode(nextName))
                     {
-                        // Parse the validation mode
-                        validation = new ValidationModeParser(nextName).parse(validationContent);
+                        // Check that the validation is the second item and no other validation was defined already
+                        if (selector != null && validation == null)
+                        {
+                            // Parse the validation mode
+                            validation = new ValidationModeParser(nextName).parse(validationContent);
+                        }
+                        else
+                        {
+                            // Throw an error depending on why the parsing failed
+                            String errorMessage = null;
+                            if (selector == null)
+                            {
+                                errorMessage = "Validation Mode must be parsed after selection!";
+                            }
+                            else if (validation != null)
+                            {
+                                errorMessage = "Cannot parse two validation modes!";
+                            }
+                            throw new IllegalArgumentException(errorMessage);
+                        }
                     }
                     // If it is group
                     else if (nextName.equals(Constants.GROUP))

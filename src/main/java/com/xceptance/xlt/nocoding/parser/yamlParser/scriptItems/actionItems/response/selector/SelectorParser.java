@@ -13,7 +13,9 @@ import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
  * Takes an identifier (which is an element of {@link JsonNode#fieldNames()}) of a {@link JsonNode} with the selection
- * item in it and parses it to an {@link AbstractSelector}.
+ * item in it and parses it to an {@link AbstractSelector}. Also checks if a {@link Constants#GROUP} is specified at the
+ * {@link JsonNode} and if {@link Constants#GROUP} is specified, verifies the {@link AbstractSelector} is a
+ * {@link RegexpSelector}.
  * 
  * @author ckeiner
  */
@@ -30,7 +32,8 @@ public class SelectorParser
     }
 
     /**
-     * Parses the selection item in node to an {@link AbstractSelector}
+     * Parses the selection item in node to an {@link AbstractSelector}. Also checks if a group is specified and verifies it
+     * is at a {@link RegexpSelector}.
      * 
      * @param node
      *            The node of the validation item
@@ -41,6 +44,7 @@ public class SelectorParser
         AbstractSelector selector = null;
         // Get the associated value
         final String selectorExpression = ParserUtils.readValue(node, identifier);
+        final boolean hasGroup = node.has(Constants.GROUP);
         // Build a selector depending on the name of the selector
         if (identifier.equals(Constants.XPATH))
         {
@@ -48,7 +52,7 @@ public class SelectorParser
         }
         else if (identifier.equals(Constants.REGEXP))
         {
-            if (node.has(Constants.GROUP))
+            if (hasGroup)
             {
                 selector = new RegexpSelector(selectorExpression, ParserUtils.readValue(node, Constants.GROUP));
             }
@@ -70,7 +74,11 @@ public class SelectorParser
             throw new NotImplementedException("Permitted Selection but no parsing specified: " + identifier);
         }
 
-        // TODO ask node if fieldname group exists
+        if (hasGroup && !(selector instanceof RegexpSelector))
+        {
+            throw new IllegalArgumentException(Constants.GROUP + " only allowed with RegexpSelector, but is "
+                                               + selector.getClass().getSimpleName());
+        }
 
         // return the selector
         return selector;
