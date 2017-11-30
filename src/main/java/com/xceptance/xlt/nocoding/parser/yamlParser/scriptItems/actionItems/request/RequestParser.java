@@ -74,11 +74,6 @@ public class RequestParser extends AbstractActionItemParser
             {
                 case Constants.URL:
                     url = ParserUtils.readValue(node, fieldName);
-                    // If we started a url definition but it has no value, throw an Exception
-                    if (url.equals(null) || url.equals(""))
-                    {
-                        throw new IllegalArgumentException("Url not specified");
-                    }
                     // XltLogger.runTimeLogger.debug("URL: " + url);
                     break;
 

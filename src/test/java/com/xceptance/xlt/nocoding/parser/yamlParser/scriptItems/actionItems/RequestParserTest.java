@@ -19,7 +19,7 @@ public class RequestParserTest extends ParserTest
 
     protected final String fileSyntaxErrorRequestArrayNotObject = path + "syntaxErrorRequestArrayNotObject.yml";
 
-    protected final String fileSyntaxErrorUrlNull = path + "syntaxErrorUrlNull.yml";
+    protected final String fileUrlNull = path + "urlNull.yml";
 
     @Test(expected = JsonParseException.class)
     public void testSyntaxErrorRequestParsing() throws Exception
@@ -37,10 +37,10 @@ public class RequestParserTest extends ParserTest
         final List<ScriptItem> scriptItems = parser.parse();
     }
 
-    @Test(expected = JsonParseException.class)
-    public void testSyntaxErrorUrlNullParsing() throws Exception
+    @Test
+    public void testUrlNullParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileSyntaxErrorUrlNull);
+        final Parser parser = new YamlParser(fileUrlNull);
         @SuppressWarnings("unused")
         final List<ScriptItem> scriptItems = parser.parse();
     }

@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.commons.lang3.NotImplementedException;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.NullNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.request.RequestParser;
@@ -37,7 +38,7 @@ public class XhrSubrequestParser
     public XhrSubrequest parse(final JsonNode node) throws IOException
     {
         // Verify the node is an ObjectNode
-        if (!(node instanceof ObjectNode))
+        if (!(node instanceof NullNode) && !(node instanceof ObjectNode))
         {
             throw new IllegalArgumentException("Expected ObjectNode in Xhr block but was " + node.getClass().getSimpleName());
         }
@@ -68,9 +69,11 @@ public class XhrSubrequestParser
                     if (actionItems.isEmpty())
                     {
                         name = ParserUtils.readValue(node, fieldName);
-                        XltLogger.runTimeLogger.debug("Actionname: " + name);
-                        // Continue the loop so we do not create a new subrequest
-                        continue;
+                        if (name != null)
+                        {
+                            XltLogger.runTimeLogger.debug("Xhr Subrequest Name: " + name);
+                        }
+                        break;
                     }
                     else
                     {
@@ -124,7 +127,10 @@ public class XhrSubrequestParser
                 default:
                     throw new NotImplementedException("Permitted XhrSubrequest item but no parsing specified: " + fieldName);
             }
-            actionItems.add(actionItem);
+            if (actionItem != null)
+            {
+                actionItems.add(actionItem);
+            }
         }
 
         // Return the subrequest

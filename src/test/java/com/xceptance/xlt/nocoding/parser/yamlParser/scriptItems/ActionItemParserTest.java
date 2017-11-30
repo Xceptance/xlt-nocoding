@@ -43,7 +43,7 @@ public class ActionItemParserTest extends ParserTest
 
     protected final String fileSyntaxErrorAction = path + "syntaxErrorAction.yml";
 
-    protected final String fileSyntaxErrorActionNameNull = path + "syntaxErrorActionNameNull.yml";
+    protected final String fileActionNameNull = path + "actionNameNull.yml";
 
     protected final String fileSyntaxErrorActionArrayNotObject = path + "syntaxErrorActionArrayNotObject.yml";
 
@@ -151,10 +151,10 @@ public class ActionItemParserTest extends ParserTest
         final List<ScriptItem> scriptItems = parser.parse();
     }
 
-    @Test(expected = JsonParseException.class)
-    public void testSyntaxErrorActionNameNullParsing() throws Exception
+    @Test
+    public void testActionNameNullParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileSyntaxErrorActionNameNull);
+        final Parser parser = new YamlParser(fileActionNameNull);
         @SuppressWarnings("unused")
         final List<ScriptItem> scriptItems = parser.parse();
     }
