@@ -13,9 +13,9 @@ import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.resp
 import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Validator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.AbstractSelector;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.RegexpSelector;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMode.AbstractValidationMode;
 import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
  * Parses the validation block to a {@link List}<{@link AbstractResponseItem}> which consists of {@link Validator}.
@@ -60,7 +60,6 @@ public class ValidationParser
             {
                 // The current fieldName is the name of the validation
                 validationName = fieldName.next();
-                String group = null;
                 AbstractSelector selector = null;
                 AbstractValidationMode validation = null;
 
@@ -100,8 +99,11 @@ public class ValidationParser
                     // If it is group
                     else if (nextName.equals(Constants.GROUP))
                     {
-                        // Store the value in group
-                        group = ParserUtils.readValue(validationContent, nextName);
+                        if (!(selector instanceof RegexpSelector))
+                        {
+                            throw new IllegalArgumentException("Group cannot be specified unless selector is RegexpSelector, but is "
+                                                               + selector.getClass().getSimpleName());
+                        }
                     }
                     // If it is none of the above, nextName was not a permitted validation item
                     else
@@ -110,7 +112,7 @@ public class ValidationParser
                     }
                 }
                 // Add the new validator to the validator list
-                validator.add(new Validator(validationName, selector, validation, group));
+                validator.add(new Validator(validationName, selector, validation));
                 // Print a debug statement
                 XltLogger.runTimeLogger.debug("Added " + validationName + " to Validations");
             }

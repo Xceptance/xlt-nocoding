@@ -51,7 +51,7 @@ public class XpathSelector extends AbstractSelector
     @Override
     public void execute(final Context context)
     {
-        throw new NotImplementedException("Not yet implemented!");
+        throw new NotImplementedException("XPathSelector not yet implemented!");
 
         // webResponse = context.getWebResponse();
         // if (isParsable(webResponse))

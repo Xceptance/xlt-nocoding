@@ -40,7 +40,7 @@ public class XhrSubrequestParser
         // Verify the node is an ObjectNode
         if (!(node instanceof NullNode) && !(node instanceof ObjectNode))
         {
-            throw new IllegalArgumentException("Expected ObjectNode in Xhr block but was " + node.getClass().getSimpleName());
+            throw new IllegalArgumentException("Expected NullNode or ObjectNode in Xhr block but was " + node.getClass().getSimpleName());
         }
         // Initialize variables
         String name = null;

@@ -31,12 +31,6 @@ public class Validator extends AbstractResponseItem
     private AbstractValidationMode mode;
 
     /**
-     * The matching group of the {@link RegexpSelector}. Leave null if group should not be used or {@link #selector} isn't a
-     * {@link RegexpSelector}.
-     */
-    private final String group;
-
-    /**
      * Creates an instance of {@link Validator} that sets the {@link #validationName}, {@link #selector} and {@link #mode}.
      * 
      * @param validationName
@@ -48,28 +42,9 @@ public class Validator extends AbstractResponseItem
      */
     public Validator(final String validationName, final AbstractSelector selector, final AbstractValidationMode mode)
     {
-        this(validationName, selector, mode, null);
-    }
-
-    /**
-     * Creates an instance of {@link Validator} that sets the {@link #validationName}, {@link #selector} and {@link #mode}.
-     * 
-     * @param validationName
-     *            The name of the validation
-     * @param selector
-     *            The selector to use
-     * @param mode
-     *            The validation method
-     * @param group
-     *            The matching group of the {@link RegexpSelector}. Leave null if group should not be used or
-     *            {@link #selector} isn't a {@link RegexpSelector}.
-     */
-    public Validator(final String validationName, final AbstractSelector selector, final AbstractValidationMode mode, final String group)
-    {
         this.validationName = validationName;
         this.selector = selector;
         this.mode = mode;
-        this.group = group;
     }
 
     /**
@@ -81,17 +56,6 @@ public class Validator extends AbstractResponseItem
     @Override
     public void execute(final Context context) throws Exception
     {
-        // Set group if specified
-        if (group != null && selector instanceof RegexpSelector)
-        {
-            ((RegexpSelector) selector).setGroup(group);
-        }
-        // If group is specified but the class is not a RegexpSelector, throw an error
-        else if (group != null)
-        {
-            throw new IllegalArgumentException("Group specified but selector is " + selector.getClass().getName()
-                                               + " and not a RegexpSelector");
-        }
         // Execute the selector
         selector.execute(context);
 
@@ -136,11 +100,6 @@ public class Validator extends AbstractResponseItem
     public AbstractValidationMode getMode()
     {
         return mode;
-    }
-
-    public String getGroup()
-    {
-        return group;
     }
 
 }

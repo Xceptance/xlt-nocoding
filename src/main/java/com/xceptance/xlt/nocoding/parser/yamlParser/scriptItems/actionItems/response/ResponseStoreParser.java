@@ -14,7 +14,6 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.RegexpSele
 import com.xceptance.xlt.nocoding.scriptItem.action.response.store.AbstractResponseStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.store.ResponseStore;
 import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
  * Parses a store item in the response block to a {@link List}<{@link AbstractResponseStore}>.
@@ -76,37 +75,30 @@ public class ResponseStoreParser
                 // Iterate over the content
                 if (name.hasNext())
                 {
+                    AbstractSelector selector = null;
                     // Build a selector depending on the next element in the iterator
-                    final AbstractSelector selector = new SelectorParser(name.next()).parse(storeContent);
-
-                    // If we have another name, it must be Constants.GROUP
-                    if (name.hasNext())
+                    String nextName = name.next();
+                    if (Constants.isPermittedSelectionMode(nextName))
                     {
-                        final String nextName = name.next();
-                        // Verify the selector is a RegexpSelector, as no other AbstractSelector has a second argument
-                        if (selector instanceof RegexpSelector)
+                        selector = new SelectorParser(nextName).parse(storeContent);
+                        // If we have another name, it must be Constants.GROUP
+                        if (name.hasNext())
                         {
+                            nextName = name.next();
                             // Verify the value of the nextName is the allowed field Constants.GROUP
                             if (nextName.equals(Constants.GROUP))
                             {
-                                // And create a GroupResponseStore
-                                responseStores.add(new ResponseStore(variableName, selector,
-                                                                     ParserUtils.readValue(storeContent, nextName)));
+                                // Verify the selector is a RegexpSelector, as no other AbstractSelector has a second argument
+                                if (!(selector instanceof RegexpSelector))
+                                {
+                                    throw new IllegalArgumentException("Not a permitted ResponseStore item : " + nextName);
+                                }
                             }
                             else
                             {
-                                throw new IllegalArgumentException("Not a permitted ResponseStore item : " + nextName);
+                                throw new IllegalArgumentException("Unexpected argument " + nextName);
                             }
                         }
-                        else
-                        {
-                            throw new IllegalArgumentException("Unexpected argument " + nextName);
-                        }
-                    }
-                    // If we don't have another name
-                    else
-                    {
-                        // Simply create a normal ResponseStore
                         responseStores.add(new ResponseStore(variableName, selector));
                     }
                 }

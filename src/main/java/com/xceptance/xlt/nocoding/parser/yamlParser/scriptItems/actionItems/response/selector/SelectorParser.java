@@ -48,7 +48,14 @@ public class SelectorParser
         }
         else if (identifier.equals(Constants.REGEXP))
         {
-            selector = new RegexpSelector(selectorExpression);
+            if (node.has(Constants.GROUP))
+            {
+                selector = new RegexpSelector(selectorExpression, ParserUtils.readValue(node, Constants.GROUP));
+            }
+            else
+            {
+                selector = new RegexpSelector(selectorExpression);
+            }
         }
         else if (identifier.equals(Constants.HEADER))
         {

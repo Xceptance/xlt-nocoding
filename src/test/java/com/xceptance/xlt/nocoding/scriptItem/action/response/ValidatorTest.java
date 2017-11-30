@@ -147,23 +147,12 @@ public class ValidatorTest
     {
         final String validationName = "Regexp Validation";
         // Build Validator with ExistsModule
-        final AbstractSelector selector = new RegexpSelector(mockObjects.regexString);
+        final AbstractSelector selector = new RegexpSelector(mockObjects.regexString, "0");
         final AbstractValidationMode mode = new ExistsValidator();
-        final Validator validator = new Validator(validationName, selector, mode, "0");
+        final Validator validator = new Validator(validationName, selector, mode);
         executeRequest(validator);
         Assert.assertTrue(selector instanceof RegexpSelector);
         Assert.assertEquals("0", ((RegexpSelector) selector).getGroup());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testInvalidGroupValidation() throws Throwable
-    {
-        final String validationName = "Regexp Validation";
-        // Build Validator with ExistsModule
-        final AbstractSelector selector = new HeaderSelector("Set-Cookie");
-        final AbstractValidationMode mode = new ExistsValidator();
-        final Validator validator = new Validator(validationName, selector, mode, "0");
-        executeRequest(validator);
     }
 
     /*

@@ -192,7 +192,7 @@ public class ExtendedValidatorTest
         mode.execute(context);
         ;
         // Build a validator, that searches for the pattern and verifies text is the match in the matching group of group
-        mode = new Validator("RegExpValidation Text+Group", new RegexpSelector(pattern), new TextValidator(text), group);
+        mode = new Validator("RegExpValidation Text+Group", new RegexpSelector(pattern, group), new TextValidator(text));
         context.setWebResponse(webResponse);
         // Execute
         mode.execute(context);
@@ -318,7 +318,7 @@ public class ExtendedValidatorTest
         mode.execute(context);
         ;
         // Build a validator, that searches for the pattern and verifies text is the match in the matching group of group
-        mode = new Validator("RegExpValidation Text+Group", new RegexpSelector(pattern), new TextValidator(text), group);
+        mode = new Validator("RegExpValidation Text+Group", new RegexpSelector(pattern, group), new TextValidator(text));
         context.setWebResponse(webResponse);
         // Execute
         mode.execute(context);
