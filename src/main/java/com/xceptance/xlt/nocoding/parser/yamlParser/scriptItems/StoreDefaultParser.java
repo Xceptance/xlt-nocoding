@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.storeDefault.StoreDefaultCookieParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.storeDefault.StoreDefaultHeaderParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.storeDefault.StoreDefaultItemParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.storeDefault.StoreDefaultParameterParser;
@@ -45,7 +46,6 @@ public class StoreDefaultParser extends AbstractScriptItemParser
         if (variableName.equals(Constants.HEADERS))
         {
             scriptItems.addAll(new StoreDefaultHeaderParser().parse(root.get(Constants.HEADERS)));
-
         }
         else if (variableName.equals(Constants.PARAMETERS))
         {
@@ -54,6 +54,10 @@ public class StoreDefaultParser extends AbstractScriptItemParser
         else if (variableName.equals(Constants.STATIC))
         {
             scriptItems.addAll(new StoreDefaultStaticParser().parse(root.get(Constants.STATIC)));
+        }
+        else if (variableName.equals(Constants.COOKIES))
+        {
+            scriptItems.addAll(new StoreDefaultCookieParser().parse(root.get(Constants.COOKIES)));
         }
         else
         {
