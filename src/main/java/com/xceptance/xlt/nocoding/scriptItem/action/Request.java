@@ -56,6 +56,11 @@ public class Request extends AbstractActionItem
     private List<NameValuePair> parameters;
 
     /**
+     * The list of cookies
+     */
+    private List<NameValuePair> cookies;
+
+    /**
      * A map that defines the headers
      */
     private Map<String, String> headers;
@@ -88,6 +93,7 @@ public class Request extends AbstractActionItem
     {
         this.url = url;
         parameters = new ArrayList<NameValuePair>();
+        cookies = new ArrayList<NameValuePair>();
         headers = new RecentKeyTreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
     }
 
@@ -139,6 +145,16 @@ public class Request extends AbstractActionItem
     public void setParameters(final List<NameValuePair> parameters)
     {
         this.parameters = parameters;
+    }
+
+    public List<NameValuePair> getCookies()
+    {
+        return cookies;
+    }
+
+    public void setCookies(final List<NameValuePair> cookies)
+    {
+        this.cookies = cookies;
     }
 
     public Map<String, String> getHeaders()
@@ -238,6 +254,32 @@ public class Request extends AbstractActionItem
             // Assign newParameters to the parameters for this request
             setParameters(newParameters);
         }
+
+        // /*
+        // * Set default cookies
+        // */
+        //
+        // if (context.getDefaultCookies() != null)
+        // {
+        // // Get default parameters
+        // final Map<String, String> defaultParameters = context.getDefaultParameters();
+        // // Overwrite the default values with the current ones or add the current ones
+        // if (getParameters() != null)
+        // {
+        // for (final NameValuePair parameters : getParameters())
+        // {
+        // defaultParameters.put(parameters.getName(), parameters.getValue());
+        // }
+        // }
+        // // Create new list in which we store the all parameters
+        // final List<NameValuePair> newParameters = new ArrayList<NameValuePair>(defaultParameters.size());
+        // // Add all parameters from the map to the list newParameters
+        // defaultParameters.forEach((key, value) -> {
+        // newParameters.add(new NameValuePair(key, value));
+        // });
+        // // Assign newParameters to the parameters for this request
+        // setParameters(newParameters);
+        // }
 
         /*
          * Set default headers

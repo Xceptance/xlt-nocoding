@@ -325,11 +325,19 @@ public class Context
     }
 
     /**
-     * Deletes all static requests
+     * Gets all static requests
      */
     public List<String> getDefaultStatic()
     {
         return getDataStorage().getStaticUrls();
+    }
+
+    /**
+     * Gets all static requests
+     */
+    public List<NameValuePair> getDefaultCookies()
+    {
+        return getDataStorage().getCookies();
     }
 
     /*
