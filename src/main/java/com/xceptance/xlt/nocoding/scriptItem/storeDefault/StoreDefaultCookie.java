@@ -1,5 +1,6 @@
 package com.xceptance.xlt.nocoding.scriptItem.storeDefault;
 
+import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
@@ -19,8 +20,7 @@ public class StoreDefaultCookie extends StoreDefault
         // If the value is not "delete"
         if (!value.equals(Constants.DELETE))
         {
-            // TODO add cookies
-            // context.getWebClient().addCookie(arg0, arg1, arg2);
+            context.storeDefaultCookie(new NameValuePair(variableName, value));
             XltLogger.runTimeLogger.debug("Added " + variableName.toLowerCase() + "=" + value + " to default cookies");
         }
         else
@@ -29,13 +29,13 @@ public class StoreDefaultCookie extends StoreDefault
             // If the variableName is Constants.HEADERS, then we delete all default headers
             if (variableName.equals(Constants.COOKIES))
             {
-                // context.deleteDefaultHeader();
+                context.deleteDefaultCookie();
                 XltLogger.runTimeLogger.debug("Removed all default cookies");
             }
             // Else we simply delete the specified header
             else
             {
-                // context.deleteDefaultHeader(variableName);
+                context.deleteDefaultCookie(variableName);
                 XltLogger.runTimeLogger.debug("Removed " + variableName + " from default cookies");
             }
         }

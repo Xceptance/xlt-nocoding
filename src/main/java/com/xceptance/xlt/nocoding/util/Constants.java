@@ -88,7 +88,7 @@ public class Constants
     /**
      * Supported list items:
      * <ul>
-     * {@link #ACTION}
+     * <li>{@link #ACTION}
      * <li>{@link #STORE}
      * <li>{@link #NAME}
      * <li>{@link #HTTPCODE}
@@ -110,6 +110,7 @@ public class Constants
 
     /**
      * Supported action items:
+     * <ul>
      * <li>{@link #NAME}
      * <li>{@link #REQUEST}
      * <li>{@link #RESPONSE}
@@ -120,6 +121,7 @@ public class Constants
 
     /**
      * Supported request items:
+     * <ul>
      * <li>{@link #URL}
      * <li>{@link #METHOD}
      * <li>{@link #XHR}
@@ -134,6 +136,7 @@ public class Constants
 
     /**
      * Supported subrequest items:
+     * <ul>
      * <li>{@link #XHR}
      * <li>{@link #STATIC}
      * </ul>

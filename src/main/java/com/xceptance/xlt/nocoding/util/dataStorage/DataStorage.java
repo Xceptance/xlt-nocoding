@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.scriptItem.StoreItem;
+import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultCookie;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultHeader;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultItem;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultParameter;
@@ -28,7 +29,7 @@ public class DataStorage
     private final Map<String, String> variables;
 
     /**
-     * The default items like httpcode = 200, saved by {@link StoreDefaultItem}
+     * The default items (like httpcode = 200) saved by {@link StoreDefaultItem}
      */
     private final Map<String, String> configItem;
 
@@ -41,6 +42,11 @@ public class DataStorage
      * The default parameters saved by {@link StoreDefaultParameter}
      */
     private final Map<String, String> parameters;
+
+    /**
+     * The default cookies saved by {@link StoreDefaultCookie}
+     */
+    private final List<NameValuePair> cookies;
 
     /**
      * The urls for the default static request, saved by {@link StoreDefaultStatic}
@@ -70,6 +76,7 @@ public class DataStorage
         this.headers = new HashMap<String, String>();
         this.parameters = new LinkedHashMap<String, String>();
         this.staticUrls = new ArrayList<String>();
+        this.cookies = new ArrayList<NameValuePair>();
     }
 
     /**
@@ -231,6 +238,11 @@ public class DataStorage
         return staticUrls;
     }
 
+    public List<NameValuePair> getCookies()
+    {
+        return cookies;
+    }
+
     /**
      * Removes the specified config item and returns it
      * 
@@ -277,6 +289,17 @@ public class DataStorage
     }
 
     /**
+     * Adds a cookie to the default cookies
+     * 
+     * @param cookie
+     *            The name value pair of the cookie
+     */
+    public void addDefaultCookie(final NameValuePair cookie)
+    {
+        getCookies().add(cookie);
+    }
+
+    /**
      * Deletes all default headers
      */
     public void deleteDefaultHeader()
@@ -301,6 +324,14 @@ public class DataStorage
     }
 
     /**
+     * Deletes all cookies in the default cookies
+     */
+    public void deleteDefaultCookie()
+    {
+        getCookies().clear();
+    }
+
+    /**
      * Deletes a single default headers
      */
     public void deleteDefaultHeader(final String header)
@@ -322,6 +353,23 @@ public class DataStorage
     public void deleteDefaultStatic(final String url)
     {
         getStaticUrls().remove(getStaticUrls().indexOf(url));
+    }
+
+    /**
+     * Deletes a cookie in the default cookies
+     * 
+     * @param cookie
+     *            The name value pair of the cookie
+     */
+    public void deleteDefaultCookie(final String cookieName)
+    {
+        for (final NameValuePair cookie : getCookies())
+        {
+            if (cookie.getName().equals(cookieName))
+            {
+                getCookies().remove(cookie);
+            }
+        }
     }
 
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
+import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.api.data.GeneralDataProvider;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.engine.XltWebClient;
@@ -195,6 +196,17 @@ public class Context
     }
 
     /**
+     * Stores a cookie in the default cookies
+     * 
+     * @param cookie
+     *            The name value pair of the cookie
+     */
+    public void storeDefaultCookie(final NameValuePair cookie)
+    {
+        getDataStorage().addDefaultCookie(cookie);
+    }
+
+    /**
      * Removes a key value pair from the configItems. If a fallback value was specified for the configItem, it is going to
      * be used from then on
      * 
@@ -240,6 +252,17 @@ public class Context
     }
 
     /**
+     * Deletes a cookie in the default cookies
+     * 
+     * @param cookie
+     *            The name value pair of the cookie
+     */
+    public void deleteDefaultCookie(final String cookieName)
+    {
+        getDataStorage().deleteDefaultCookie(cookieName);
+    }
+
+    /**
      * Removes all default header
      */
     public void deleteDefaultHeader()
@@ -264,6 +287,14 @@ public class Context
     public void deleteDefaultStatic()
     {
         getDataStorage().deleteDefaultStatic();
+    }
+
+    /**
+     * Deletes all cookies in the default cookies
+     */
+    public void deleteDefaultCookie()
+    {
+        getDataStorage().deleteDefaultCookie();
     }
 
     /*
