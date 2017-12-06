@@ -476,11 +476,12 @@ public class Request extends AbstractActionItem
         // Set default cookies
         if (getCookies() != null && !getCookies().isEmpty())
         {
+            String cookieString = "";
             for (final NameValuePair cookie : cookies)
             {
-                final String cookieString = cookie.getName() + "=" + cookie.getValue();
-                context.getWebClient().addCookie(cookieString, webRequest.getUrl(), this);
+                cookieString += cookie.getName() + "=" + cookie.getValue() + ";";
             }
+            webRequest.setAdditionalHeader("Cookie", cookieString);
         }
 
         // Return the webRequest
