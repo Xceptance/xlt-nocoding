@@ -23,7 +23,7 @@ public class CookieSelectorTest extends SelectorTest
     {
         final String variableName = "variable_1";
         final String storeValue = mockObjects.cookieName1;
-        context.storeVariable(variableName, storeValue);
+        context.getVariables().store(variableName, storeValue);
         final AbstractSelector selector = new CookieSelector("${" + variableName + "}");
         selector.execute(context);
         final List<String> result = selector.getResult();

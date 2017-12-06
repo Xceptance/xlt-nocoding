@@ -23,7 +23,6 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMode.Exis
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMode.MatchesValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMode.TextValidator;
 import com.xceptance.xlt.nocoding.util.Context;
-import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 public class ExtendedValidatorTest
 {
@@ -49,7 +48,7 @@ public class ExtendedValidatorTest
         List<NameValuePair> headers;
         String name;
         String value;
-        this.context = new Context(XltProperties.getInstance(), new DataStorage());
+        this.context = new Context(XltProperties.getInstance());
         webConnection = new XltMockWebConnection(context.getWebClient());
 
         // Set answer to localhost/posters/
@@ -202,11 +201,11 @@ public class ExtendedValidatorTest
     public void HeaderValidatorWithVariables() throws Exception
     {
         // Store the header name
-        context.getDataStorage().storeVariable("header_1", "Cache-Control");
+        context.getDataStorage().getVariables().store("header_1", "Cache-Control");
         // Store some of the content
-        context.getDataStorage().storeVariable("content_1", "no-cache, no-store, max-");
+        context.getDataStorage().getVariables().store("content_1", "no-cache, no-store, max-");
         // Store the expected count of headers
-        context.getDataStorage().storeVariable("count_1", "1");
+        context.getDataStorage().getVariables().store("count_1", "1");
         // Build WebRequest with localhost/posters as url
         final URL url = new URL("https://localhost:8443/posters/");
         final WebRequest settings = new WebRequest(url);
@@ -241,11 +240,11 @@ public class ExtendedValidatorTest
     public void CookieValidatorWithVariables() throws Exception
     {
         // Store the cookie name
-        context.getDataStorage().storeVariable("cookie", "NINJA_FLASH");
+        context.getDataStorage().getVariables().store("cookie", "NINJA_FLASH");
         // Store the first part of the cookie content
-        context.getDataStorage().storeVariable("cookie_content_name", "success");
+        context.getDataStorage().getVariables().store("cookie_content_name", "success");
         // Store the second part of the cookie content
-        context.getDataStorage().storeVariable("cookie_content_value", "Login+successful.+Have+fun+in+our+shop%21");
+        context.getDataStorage().getVariables().store("cookie_content_value", "Login+successful.+Have+fun+in+our+shop%21");
         // Build WebRequest with localhost/posters/login/POST as url
         final URL url = new URL("https://localhost:8443/posters/login/POST");
         final WebRequest settings = new WebRequest(url, HttpMethod.POST);
@@ -286,11 +285,11 @@ public class ExtendedValidatorTest
     public void RegExpValidatorWithVariables() throws Exception
     {
         // Store a pattern
-        context.getDataStorage().storeVariable("pattern", "class.*>");
+        context.getDataStorage().getVariables().store("pattern", "class.*>");
         // Store the expected match
-        context.getDataStorage().storeVariable("text", "class=\"userMenuHeader\">Welcome: Guest</li>");
+        context.getDataStorage().getVariables().store("text", "class=\"userMenuHeader\">Welcome: Guest</li>");
         // Store the group the match is in
-        context.getDataStorage().storeVariable("group", "1");
+        context.getDataStorage().getVariables().store("group", "1");
         // Build WebRequest with localhost/posters as url
         final URL url = new URL("https://localhost:8443/posters/");
         final WebRequest settings = new WebRequest(url);

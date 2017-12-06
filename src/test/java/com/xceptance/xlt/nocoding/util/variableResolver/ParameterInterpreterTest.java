@@ -22,7 +22,6 @@ import org.junit.Test;
 
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.util.Context;
-import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 import bsh.EvalError;
 
@@ -38,7 +37,7 @@ public class ParameterInterpreterTest
     @Before
     public void setup()
     {
-        context = new Context(XltProperties.getInstance(), new DataStorage());
+        context = new Context(XltProperties.getInstance());
         interpreter = new VariableResolver();
     }
 
@@ -131,7 +130,7 @@ public class ParameterInterpreterTest
     @Test
     public void variableBehindVariable()
     {
-        context.getDataStorage().storeVariable("bub", "${bub}");
+        context.getVariables().store("bub", "${bub}");
         final String resolved = interpreter.resolveString("${bub}", context);
         Assert.assertEquals("${bub}", resolved);
     }
@@ -139,7 +138,7 @@ public class ParameterInterpreterTest
     @Test
     public void unfinishedDeclaration()
     {
-        context.getDataStorage().storeVariable("test", "t");
+        context.getVariables().store("test", "t");
         String resolved = interpreter.resolveString("${test", context);
         Assert.assertEquals("${test", resolved);
         resolved = interpreter.resolveString("${tes${test}", context);
@@ -149,7 +148,7 @@ public class ParameterInterpreterTest
     @Test
     public void normalParam()
     {
-        context.getDataStorage().storeVariable("host", "https://localhost:8443/posters/");
+        context.getVariables().store("host", "https://localhost:8443/posters/");
         final String resolved = interpreter.resolveString("${host}", context);
         Assert.assertEquals("https://localhost:8443/posters/", resolved);
     }
@@ -157,7 +156,7 @@ public class ParameterInterpreterTest
     @Test
     public void twoNormalParam()
     {
-        context.getDataStorage().storeVariable("host", "https://localhost:8443/posters/");
+        context.getVariables().store("host", "https://localhost:8443/posters/");
         final String resolved = interpreter.resolveString("${host}${host}", context);
         Assert.assertEquals("https://localhost:8443/posters/https://localhost:8443/posters/", resolved);
     }
@@ -165,8 +164,8 @@ public class ParameterInterpreterTest
     @Test
     public void paramInParam()
     {
-        context.getDataStorage().storeVariable("host", "https://localhost:8443/posters/");
-        context.getDataStorage().storeVariable("blub", "s");
+        context.getVariables().store("host", "https://localhost:8443/posters/");
+        context.getVariables().store("blub", "s");
         final String resolved = interpreter.resolveString("${ho${blub}t}", context);
         Assert.assertEquals("https://localhost:8443/posters/", resolved);
     }
@@ -174,8 +173,8 @@ public class ParameterInterpreterTest
     @Test
     public void paramInParamWithAnotherParam()
     {
-        context.getDataStorage().storeVariable("host", "https://localhost:8443/posters/");
-        context.getDataStorage().storeVariable("blub", "s");
+        context.getVariables().store("host", "https://localhost:8443/posters/");
+        context.getVariables().store("blub", "s");
         final String resolved = interpreter.resolveString("${ho${blub}t}${host}", context);
         Assert.assertEquals("https://localhost:8443/posters/https://localhost:8443/posters/", resolved);
     }
@@ -199,7 +198,7 @@ public class ParameterInterpreterTest
     @Test
     public void testSimpleRecursion()
     {
-        context.storeVariable("host", "${host}");
+        context.getVariables().store("host", "${host}");
         final String resolved = interpreter.resolveString("${host}", context);
         Assert.assertEquals("${host}", resolved);
     }
@@ -207,8 +206,8 @@ public class ParameterInterpreterTest
     @Test(expected = IllegalArgumentException.class)
     public void testEndlessRecursion()
     {
-        context.storeVariable("host", "${blub}");
-        context.storeVariable("blub", "${host}");
+        context.getVariables().store("host", "${blub}");
+        context.getVariables().store("blub", "${host}");
         final String resolved = interpreter.resolveString("${host}", context);
         Assert.assertEquals("${host}", resolved);
     }
@@ -216,7 +215,7 @@ public class ParameterInterpreterTest
     @Test
     public void testNullIsUnresolvableStore()
     {
-        context.storeVariable("host", null);
+        context.getVariables().store("host", null);
         final String resolved = interpreter.resolveString("${host}", context);
         Assert.assertEquals("${host}", resolved);
     }

@@ -14,7 +14,6 @@ import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultStatic;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
-import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 public class LightWeightActionTest
 {
@@ -23,7 +22,7 @@ public class LightWeightActionTest
     @Before
     public void init()
     {
-        context = new Context(XltProperties.getInstance(), new DataStorage());
+        context = new Context(XltProperties.getInstance());
     }
 
     @Test
@@ -31,10 +30,10 @@ public class LightWeightActionTest
     {
         // Set url
         final String url = "https://www.xceptance.com";
-        context.storeConfigItem(Constants.URL, url);
+        context.getDefaultItems().store(Constants.URL, url);
         final String configName = Constants.NAME;
         final String value = "TestName";
-        context.storeConfigItem(configName, value);
+        context.getDefaultItems().store(configName, value);
 
         final LightWeigthAction action = new LightWeigthAction();
         action.fillDefaultData(context);
@@ -56,19 +55,19 @@ public class LightWeightActionTest
         store.add(new StoreDefaultStatic(url));
         store.add(new StoreDefaultStatic(url));
         store.add(new StoreDefaultStatic(url));
-        Assert.assertTrue(context.getDefaultStatic().isEmpty());
+        Assert.assertTrue(context.getDefaultStatics().getItems().isEmpty());
         int i = 0;
         for (final ScriptItem scriptItem : store)
         {
             scriptItem.execute(context);
-            Assert.assertEquals(url, context.getDefaultStatic().get(i));
+            Assert.assertTrue(context.getDefaultStatics().getItems().contains(url));
             i++;
         }
         // Set url
-        context.storeConfigItem(Constants.URL, "https://www.xceptance.com");
+        context.getDefaultItems().store(Constants.URL, "https://www.xceptance.com");
         final String configName = Constants.NAME;
         final String value = "TestName";
-        context.storeConfigItem(configName, value);
+        context.getDefaultItems().store(configName, value);
         final LightWeigthAction action = new LightWeigthAction();
         action.fillDefaultData(context);
         Assert.assertEquals(value, action.getName());
@@ -89,10 +88,10 @@ public class LightWeightActionTest
     public void testDefaultResponse()
     {
         // Set url
-        context.storeConfigItem(Constants.URL, "https://www.xceptance.com");
+        context.getDefaultItems().store(Constants.URL, "https://www.xceptance.com");
         final String configName = Constants.NAME;
         final String value = "TestName";
-        context.storeConfigItem(configName, value);
+        context.getDefaultItems().store(configName, value);
         final LightWeigthAction action = new LightWeigthAction();
         action.fillDefaultData(context);
 
@@ -105,10 +104,10 @@ public class LightWeightActionTest
     public void testDefaultName()
     {
         // Set url
-        context.storeConfigItem(Constants.URL, "https://www.xceptance.com");
+        context.getDefaultItems().store(Constants.URL, "https://www.xceptance.com");
         final String configName = Constants.NAME;
         final String value = "TestName";
-        context.storeConfigItem(configName, value);
+        context.getDefaultItems().store(configName, value);
         final LightWeigthAction action = new LightWeigthAction();
         action.fillDefaultData(context);
         Assert.assertEquals(value, action.getName());
@@ -118,12 +117,12 @@ public class LightWeightActionTest
     public void testResolveName()
     {
         // Set url
-        context.storeConfigItem(Constants.URL, "https://www.xceptance.com");
+        context.getDefaultItems().store(Constants.URL, "https://www.xceptance.com");
         final String configName = Constants.NAME;
         final String value = "${name}";
-        context.storeConfigItem(configName, value);
+        context.getDefaultItems().store(configName, value);
 
-        context.storeVariable("name", "TestName");
+        context.getVariables().store("name", "TestName");
 
         final LightWeigthAction action = new LightWeigthAction();
         action.fillDefaultData(context);

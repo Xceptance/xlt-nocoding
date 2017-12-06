@@ -25,7 +25,7 @@ public class HeaderSelectorTest extends SelectorTest
     {
         final String variableName = "variable_1";
         final String storeValue = "Set-Cookie";
-        context.storeVariable(variableName, storeValue);
+        context.getVariables().store(variableName, storeValue);
         final AbstractSelector selector = new HeaderSelector("${" + variableName + "}");
         selector.execute(context);
         final List<String> result = selector.getResult();

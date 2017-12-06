@@ -52,7 +52,7 @@ public class StoreDefaultHeaderTest extends StoreDefaultTest
         final ScriptItem deleteIt = new StoreDefaultHeader(Constants.HEADERS, Constants.DELETE);
         deleteIt.execute(context);
         Assert.assertNull(context.getDefaultHeaders().get("header_1"));
-        Assert.assertTrue(context.getDefaultHeaders().isEmpty());
+        Assert.assertTrue(context.getDefaultHeaders().getItems().isEmpty());
     }
 
     @Test

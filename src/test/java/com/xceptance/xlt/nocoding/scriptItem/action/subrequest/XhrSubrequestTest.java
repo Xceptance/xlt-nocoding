@@ -16,7 +16,6 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.Validator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.RegexpSelector;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.MockObjects;
-import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 public class XhrSubrequestTest
 {
@@ -28,7 +27,7 @@ public class XhrSubrequestTest
     public void init()
     {
         mockObjects = new MockObjects();
-        context = new Context(XltProperties.getInstance(), new DataStorage());
+        context = new Context(XltProperties.getInstance());
         context.getWebClient().setTimerName("Xhr-TimerName");
         mockObjects.loadResponse();
         context.setWebResponse(mockObjects.getResponse());

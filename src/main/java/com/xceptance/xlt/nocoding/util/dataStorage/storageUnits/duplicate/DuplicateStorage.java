@@ -32,7 +32,15 @@ public class DuplicateStorage implements StorageUnit
 
     public String get(final String key)
     {
-        return null;
+        String value = null;
+        for (final NameValuePair item : getItems())
+        {
+            if (item.getName().equals(key))
+            {
+                value = item.getValue();
+            }
+        }
+        return value;
     }
 
     public boolean remove(final String itemName)
@@ -43,6 +51,7 @@ public class DuplicateStorage implements StorageUnit
             if (item.getName().equals(itemName))
             {
                 removed = getItems().remove(item);
+                break;
             }
         }
         return removed;

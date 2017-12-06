@@ -17,9 +17,9 @@ public class StoreDefaultStaticTest extends StoreDefaultTest
     {
         final String url = "http://www.xceptance.net";
         final ScriptItem store = new StoreDefaultStatic(url);
-        Assert.assertTrue(context.getDefaultStatic().isEmpty());
+        Assert.assertTrue(context.getDefaultStatics().getItems().isEmpty());
         store.execute(context);
-        Assert.assertTrue(context.getDefaultStatic().contains(url));
+        Assert.assertTrue(context.getDefaultStatics().getItems().contains(url));
     }
 
     @Test
@@ -27,13 +27,13 @@ public class StoreDefaultStaticTest extends StoreDefaultTest
     {
         final String url = "http://www.xceptance.net";
         ScriptItem store = new StoreDefaultStatic(url);
-        Assert.assertTrue(context.getDefaultStatic().isEmpty());
+        Assert.assertTrue(context.getDefaultStatics().getItems().isEmpty());
         store.execute(context);
-        Assert.assertTrue(context.getDefaultStatic().contains(url));
+        Assert.assertTrue(context.getDefaultStatics().getItems().contains(url));
 
         store = new StoreDefaultStatic(Constants.DELETE);
         store.execute(context);
-        Assert.assertTrue(context.getDefaultStatic().isEmpty());
+        Assert.assertTrue(context.getDefaultStatics().getItems().isEmpty());
     }
 
     @Test
@@ -46,18 +46,18 @@ public class StoreDefaultStaticTest extends StoreDefaultTest
         store.add(new StoreDefaultStatic(url));
         store.add(new StoreDefaultStatic(url));
         store.add(new StoreDefaultStatic(url));
-        Assert.assertTrue(context.getDefaultStatic().isEmpty());
+        Assert.assertTrue(context.getDefaultStatics().getItems().isEmpty());
         int i = 0;
         for (final ScriptItem scriptItem : store)
         {
             scriptItem.execute(context);
-            Assert.assertEquals(url, context.getDefaultStatic().get(i));
+            Assert.assertTrue(context.getDefaultStatics().getItems().contains(url));
             i++;
         }
-        Assert.assertEquals(context.getDefaultStatic().size(), 5);
+        Assert.assertEquals(context.getDefaultStatics().getItems().size(), 5);
         final ScriptItem deleteIt = new StoreDefaultStatic(Constants.DELETE);
         deleteIt.execute(context);
-        Assert.assertTrue(context.getDefaultStatic().isEmpty());
+        Assert.assertTrue(context.getDefaultStatics().getItems().isEmpty());
     }
 
 }

@@ -4,7 +4,6 @@ import org.junit.Before;
 
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.util.Context;
-import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 public abstract class StoreDefaultTest
 {
@@ -14,7 +13,7 @@ public abstract class StoreDefaultTest
     @Before
     public void init()
     {
-        context = new Context(XltProperties.getInstance(), new DataStorage());
+        context = new Context(XltProperties.getInstance());
     }
 
 }

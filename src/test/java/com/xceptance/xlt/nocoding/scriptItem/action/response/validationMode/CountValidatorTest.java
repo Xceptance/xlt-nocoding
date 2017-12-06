@@ -28,7 +28,7 @@ public class CountValidatorTest extends ValidationModeTest
     {
         final String variableName = "count";
         final String value = "1";
-        context.storeVariable(variableName, value);
+        context.getVariables().store(variableName, value);
         final List<String> result = new ArrayList<>();
         result.add("test");
         final AbstractValidationMode mode = new CountValidator("${" + variableName + "}");

@@ -53,7 +53,7 @@ public class StoreDefaultParameterTest extends StoreDefaultTest
         final ScriptItem deleteIt = new StoreDefaultParameter(Constants.PARAMETERS, Constants.DELETE);
         deleteIt.execute(context);
         Assert.assertNull(context.getDefaultParameters().get("param_1"));
-        Assert.assertTrue(context.getDefaultParameters().isEmpty());
+        Assert.assertTrue(context.getDefaultParameters().getItems().isEmpty());
     }
 
 }

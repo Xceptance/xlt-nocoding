@@ -23,7 +23,7 @@ public class MatchesValidatorTest extends ValidationModeTest
     {
         final String variableName = "matches";
         final String value = "test";
-        context.storeVariable(variableName, value);
+        context.getVariables().store(variableName, value);
         final List<String> result = new ArrayList<>();
         result.add(value);
         final AbstractValidationMode mode = new MatchesValidator("${" + variableName + "}");

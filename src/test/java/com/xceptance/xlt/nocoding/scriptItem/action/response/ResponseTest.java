@@ -9,7 +9,6 @@ import org.junit.Test;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.MockObjects;
-import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 public class ResponseTest
 {
@@ -20,7 +19,7 @@ public class ResponseTest
     @Before
     public void init()
     {
-        context = new Context(XltProperties.getInstance(), new DataStorage());
+        context = new Context(XltProperties.getInstance());
         mockObjects = new MockObjects();
         mockObjects.loadResponse();
         context.setWebResponse(mockObjects.getResponse());

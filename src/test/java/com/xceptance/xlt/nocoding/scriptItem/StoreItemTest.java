@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.util.Context;
-import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 public class StoreItemTest
 {
@@ -15,40 +14,40 @@ public class StoreItemTest
     @Before
     public void init()
     {
-        context = new Context(XltProperties.getInstance(), new DataStorage());
+        context = new Context(XltProperties.getInstance());
     }
 
     @Test
     public void singleStore() throws Throwable
     {
         final ScriptItem store = new StoreItem("test", "text");
-        Assert.assertNull(context.getDataStorage().getVariableByKey("test"));
+        Assert.assertNull(context.getVariables().get("test"));
         store.execute(context);
-        Assert.assertEquals("text", context.getDataStorage().getVariableByKey("test"));
+        Assert.assertEquals("text", context.getVariables().get("test"));
     }
 
     @Test
     public void overwriteStore() throws Throwable
     {
         ScriptItem store = new StoreItem("test", "text");
-        Assert.assertNull(context.getDataStorage().getVariableByKey("test"));
+        Assert.assertNull(context.getVariables().get("test"));
         store.execute(context);
-        Assert.assertEquals("text", context.getDataStorage().getVariableByKey("test"));
+        Assert.assertEquals("text", context.getVariables().get("test"));
         store = new StoreItem("test", "newValue");
         store.execute(context);
-        Assert.assertEquals("newValue", context.getDataStorage().getVariableByKey("test"));
+        Assert.assertEquals("newValue", context.getVariables().get("test"));
     }
 
     @Test
     public void resolveStore() throws Throwable
     {
         ScriptItem store = new StoreItem("var_1", "val_1");
-        Assert.assertNull(context.getDataStorage().getVariableByKey("var_1"));
+        Assert.assertNull(context.getVariables().get("var_1"));
         store.execute(context);
-        Assert.assertEquals("val_1", context.getDataStorage().getVariableByKey("var_1"));
+        Assert.assertEquals("val_1", context.getVariables().get("var_1"));
         store = new StoreItem("var_2", "${var_1}");
         store.execute(context);
-        Assert.assertEquals("val_1", context.getDataStorage().getVariableByKey("var_2"));
+        Assert.assertEquals("val_1", context.getVariables().get("var_2"));
     }
 
 }

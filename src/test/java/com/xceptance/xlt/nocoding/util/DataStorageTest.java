@@ -6,9 +6,6 @@ import org.junit.Test;
 
 import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.xceptance.xlt.api.util.XltProperties;
-import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.Context;
-import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.DefaultValue;
 
 public class DataStorageTest
@@ -21,7 +18,7 @@ public class DataStorageTest
     @Before
     public void init()
     {
-        this.context = new Context(XltProperties.getInstance(), new DataStorage());
+        this.context = new Context(XltProperties.getInstance());
     }
 
     @Test

@@ -19,7 +19,6 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMode.Matc
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMode.TextValidator;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.MockObjects;
-import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 public class ValidatorTest
 {
@@ -30,7 +29,7 @@ public class ValidatorTest
     @Before
     public void init()
     {
-        context = new Context(XltProperties.getInstance(), new DataStorage());
+        context = new Context(XltProperties.getInstance());
         mockObjects = new MockObjects();
         mockObjects.loadResponse();
         context.setWebResponse(mockObjects.getResponse());
@@ -133,7 +132,7 @@ public class ValidatorTest
     {
         final String variableName = "validationName";
         final String validationName = "Regexp Validation";
-        context.storeVariable(variableName, validationName);
+        context.getVariables().store(variableName, validationName);
         // Build Validator with ExistsModule
         final AbstractSelector selector = new RegexpSelector(mockObjects.regexString);
         final AbstractValidationMode mode = new ExistsValidator();

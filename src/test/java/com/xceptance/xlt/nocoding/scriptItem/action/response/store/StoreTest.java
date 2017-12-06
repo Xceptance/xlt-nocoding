@@ -18,10 +18,7 @@ import com.xceptance.xlt.nocoding.XltMockWebConnection;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.CookieSelector;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.HeaderSelector;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.RegexpSelector;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.store.AbstractResponseStore;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.store.ResponseStore;
 import com.xceptance.xlt.nocoding.util.Context;
-import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 public class StoreTest
 {
@@ -47,7 +44,7 @@ public class StoreTest
         List<NameValuePair> headers;
         String name;
         String value;
-        this.context = new Context(XltProperties.getInstance(), new DataStorage());
+        this.context = new Context(XltProperties.getInstance());
         webConnection = new XltMockWebConnection(context.getWebClient());
         // Set answer to localhost/posters/
         url = new URL("https://localhost:8443/posters/");

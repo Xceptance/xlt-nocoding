@@ -26,7 +26,6 @@ import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultParameter;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.RecentKeyTreeMap;
-import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 /**
  * Tests the functionality of buildWebRequest() of the Request class
@@ -44,7 +43,7 @@ public class RequestTest
     @Before
     public void init()
     {
-        context = new Context(XltProperties.getInstance(), new DataStorage());
+        context = new Context(XltProperties.getInstance());
     }
 
     @Test
@@ -66,7 +65,7 @@ public class RequestTest
         request.setEncodeParameters(encodeParameters.toString());
         request.setHeaders(headers);
         request.setXhr(xhr.toString());
-        webRequest = request.buildWebRequest();
+        webRequest = request.buildWebRequest(context);
         // URL, Method
         final WebRequest expected = new WebRequest(new URL(url), method);
         // Parameters
@@ -107,16 +106,14 @@ public class RequestTest
         final Map<String, String> headers = new HashMap<String, String>();
         final Boolean xhr = false;
 
-        context.getDataStorage().storeVariable(Constants.URL, url);
-        context.getDataStorage().storeVariable(Constants.METHOD, method.toString());
+        context.getVariables().store(Constants.URL, url);
+        context.getVariables().store(Constants.METHOD, method.toString());
         // We need to store individual parameters
-        // propertyManager.getDataStorage().storeVariable(Constants.PARAMETERS, parameters);
-        context.getDataStorage().storeVariable(Constants.BODY, body);
-        context.getDataStorage().storeVariable(Constants.ENCODEBODY, encodeBody.toString());
-        context.getDataStorage().storeVariable(Constants.ENCODEPARAMETERS, encodeParameters.toString());
+        context.getVariables().store(Constants.BODY, body);
+        context.getVariables().store(Constants.ENCODEBODY, encodeBody.toString());
+        context.getVariables().store(Constants.ENCODEPARAMETERS, encodeParameters.toString());
         // Store single headers
-        // propertyManager.getDataStorage().storeVariable(Constants.ENCODEPARAMETERS, encodeParameters.toString());
-        context.getDataStorage().storeVariable(Constants.XHR, xhr.toString());
+        context.getVariables().store(Constants.XHR, xhr.toString());
         final String url_var = "${" + Constants.URL + "}";
         final String method_var = "${" + Constants.METHOD + "}";
         final List<NameValuePair> parameters_var = new ArrayList<NameValuePair>();
@@ -130,40 +127,40 @@ public class RequestTest
         key = "login";
         value = "john@doe.com";
         parameters.add(new NameValuePair(key, value));
-        context.getDataStorage().storeVariable("param1_key", key);
-        context.getDataStorage().storeVariable("param1_value", value);
+        context.getVariables().store("param1_key", key);
+        context.getVariables().store("param1_value", value);
         parameters_var.add(new NameValuePair("${param1_key}", "${param1_value}"));
         key = "password";
         value = "topsecret";
         parameters.add(new NameValuePair(key, value));
-        context.getDataStorage().storeVariable("param2_key", key);
-        context.getDataStorage().storeVariable("param2_value", value);
+        context.getVariables().store("param2_key", key);
+        context.getVariables().store("param2_value", value);
         parameters_var.add(new NameValuePair("${param2_key}", "${param2_value}"));
         key = "btnSignIn";
         value = "";
         parameters.add(new NameValuePair(key, value));
-        context.getDataStorage().storeVariable("param3_key", key);
-        context.getDataStorage().storeVariable("param3_value", value);
+        context.getVariables().store("param3_key", key);
+        context.getVariables().store("param3_value", value);
         parameters_var.add(new NameValuePair("${param3_key}", "${param3_value}"));
 
         // Headers
         key = "login";
         value = "john@doe.com";
         headers.put(key, value);
-        context.getDataStorage().storeVariable("header1_key", key);
-        context.getDataStorage().storeVariable("header1_value", value);
+        context.getVariables().store("header1_key", key);
+        context.getVariables().store("header1_value", value);
         headers_var.put("${header1_key}", "${header1_value}");
         key = "password";
         value = "topsecret";
         headers.put(key, value);
-        context.getDataStorage().storeVariable("header2_key", key);
-        context.getDataStorage().storeVariable("header2_value", value);
+        context.getVariables().store("header2_key", key);
+        context.getVariables().store("header2_value", value);
         headers_var.put("${header2_key}", "${header2_value}");
         key = "btnSignIn";
         value = "";
         headers.put(key, value);
-        context.getDataStorage().storeVariable("header3_key", key);
-        context.getDataStorage().storeVariable("header3_value", value);
+        context.getVariables().store("header3_key", key);
+        context.getVariables().store("header3_value", value);
         headers_var.put("${header3_key}", "${header3_value}");
 
         request = new Request(url_var);
@@ -177,7 +174,7 @@ public class RequestTest
 
         request.resolveValues(context);
 
-        webRequest = request.buildWebRequest();
+        webRequest = request.buildWebRequest(context);
         // URL, Method
         final WebRequest expected = new WebRequest(new URL(url), method);
         // Parameters
@@ -240,7 +237,7 @@ public class RequestTest
         newHeader.put("COOkIE", "cookieName=cookieValue");
         request.setHeaders(newHeader);
         request.fillDefaultData(context);
-        webRequest = request.buildWebRequest();
+        webRequest = request.buildWebRequest(context);
 
         final Map<String, String> actualHeader = webRequest.getAdditionalHeaders();
 
@@ -260,10 +257,10 @@ public class RequestTest
     @Test
     public void testDefaultData() throws InvalidArgumentException, MalformedURLException, UnsupportedEncodingException
     {
-        context.storeConfigItem(Constants.URL, url);
+        context.getDefaultItems().store(Constants.URL, url);
         request = new Request();
         request.fillDefaultData(context);
-        webRequest = request.buildWebRequest();
+        webRequest = request.buildWebRequest(context);
 
         // Normally, Method, Xhr, Encode-Parameters, and Encode-Body are set
         Assert.assertEquals(HttpMethod.GET, webRequest.getHttpMethod());
@@ -292,7 +289,7 @@ public class RequestTest
         }
         request = new Request(url);
         request.fillDefaultData(context);
-        webRequest = request.buildWebRequest();
+        webRequest = request.buildWebRequest(context);
 
         final Map<String, String> actualHeader = webRequest.getAdditionalHeaders();
 
@@ -326,7 +323,7 @@ public class RequestTest
         newHeader.put("Cookie", "cookieName=cookieValue");
         request.setHeaders(newHeader);
         request.fillDefaultData(context);
-        webRequest = request.buildWebRequest();
+        webRequest = request.buildWebRequest(context);
 
         final Map<String, String> actualHeader = webRequest.getAdditionalHeaders();
 
@@ -367,7 +364,7 @@ public class RequestTest
         }
         request = new Request(url);
         request.fillDefaultData(context);
-        webRequest = request.buildWebRequest();
+        webRequest = request.buildWebRequest(context);
 
         final List<NameValuePair> actualParameters = webRequest.getRequestParameters();
 
@@ -405,7 +402,7 @@ public class RequestTest
         parameters.add(new NameValuePair("param_1", "aDifferentValue"));
         parameters.add(new NameValuePair("param_5", "anotherDifferentValue"));
         request.fillDefaultData(context);
-        webRequest = request.buildWebRequest();
+        webRequest = request.buildWebRequest(context);
 
         final List<NameValuePair> actualParameters = webRequest.getRequestParameters();
 

@@ -23,7 +23,7 @@ public class TextValidatorTest extends ValidationModeTest
     {
         final String variableName = "text";
         final String value = "test";
-        context.storeVariable(variableName, value);
+        context.getVariables().store(variableName, value);
         final List<String> result = new ArrayList<>();
         result.add(value);
         final AbstractValidationMode mode = new TextValidator("${" + variableName + "}");

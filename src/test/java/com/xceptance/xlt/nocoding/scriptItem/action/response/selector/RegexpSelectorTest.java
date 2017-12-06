@@ -23,7 +23,7 @@ public class RegexpSelectorTest extends SelectorTest
     {
         final String variableName = "variable_1";
         final String storeValue = mockObjects.regexString;
-        context.storeVariable(variableName, storeValue);
+        context.getVariables().store(variableName, storeValue);
         final AbstractSelector selector = new RegexpSelector("${" + variableName + "}");
         selector.execute(context);
         final List<String> result = selector.getResult();
