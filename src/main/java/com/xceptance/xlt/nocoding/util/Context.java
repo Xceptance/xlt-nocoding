@@ -7,12 +7,16 @@ import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.data.GeneralDataProvider;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.engine.XltWebClient;
+import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.StorageUnit;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.duplicate.CookieStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.duplicate.DuplicateStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.duplicate.ParameterStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.single.SingleStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.single.StaticUrlStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.unique.DefaultKeyValueStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.unique.HeaderStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.unique.UniqueStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.unique.VariableStorage;
 import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
@@ -24,6 +28,8 @@ import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
  */
 public class Context
 {
+    protected final DataStorage dataStorage;
+
     protected final XltWebClient webClient;
 
     protected final VariableResolver resolver;
@@ -43,6 +49,7 @@ public class Context
      */
     public Context(final XltProperties xltProperties)
     {
+        this.dataStorage = new DataStorage();
         this.propertyAdmin = new NoCodingPropertyAdmin(xltProperties);
         this.webClient = new XltWebClient();
         this.resolver = new VariableResolver(GeneralDataProvider.getInstance());
@@ -57,6 +64,7 @@ public class Context
      */
     public Context(final Context context)
     {
+        this.dataStorage = context.getDataStorage();
         this.webClient = context.getWebClient();
         this.resolver = context.getResolver();
         this.webResponse = context.getWebResponse();
@@ -74,7 +82,7 @@ public class Context
     }
 
     /**
-     * Adds all {@link StorageUnit}s to the {@link #storages}.
+     * Initializes all {@link StorageUnit}s to the {@link #storages}.
      */
     private void initStorages()
     {
@@ -84,6 +92,11 @@ public class Context
         getStorages().add(new DefaultKeyValueStorage());
         getStorages().add(new HeaderStorage());
         getStorages().add(new VariableStorage());
+    }
+
+    public DataStorage getDataStorage()
+    {
+        return dataStorage;
     }
 
     /**
@@ -118,6 +131,40 @@ public class Context
     public NoCodingPropertyAdmin getPropertyAdmin()
     {
         return propertyAdmin;
+    }
+
+    /*
+     * Data Storage
+     */
+
+    public DuplicateStorage getDefaultCookies()
+    {
+        return getDataStorage().getDefaultCookies();
+    }
+
+    public DuplicateStorage getDefaultParameters()
+    {
+        return getDataStorage().getDefaultParameters();
+    }
+
+    public SingleStorage getDefaultStatics()
+    {
+        return getDataStorage().getDefaultStatics();
+    }
+
+    public UniqueStorage getDefaultHeaders()
+    {
+        return getDataStorage().getDefaultHeaders();
+    }
+
+    public UniqueStorage getVariables()
+    {
+        return getDataStorage().getVariables();
+    }
+
+    public DefaultKeyValueStorage getDefaultItems()
+    {
+        return getDataStorage().getDefaultItems();
     }
 
     /*
@@ -183,7 +230,7 @@ public class Context
      *            The class of the {@link StorageUnit}
      * @return The {@link StorageUnit} with the class classOfUnit
      */
-    public StorageUnit getStorageUnit(final Class classOfUnit)
+    private StorageUnit getStorageUnit(final Class classOfUnit)
     {
         StorageUnit unit = null;
         for (final StorageUnit storageUnit : storages)

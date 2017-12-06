@@ -3,7 +3,7 @@ package com.xceptance.xlt.nocoding.scriptItem.storeDefault;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
-import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.duplicate.ParameterStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.duplicate.DuplicateStorage;
 
 /**
  * Stores a default parameter.
@@ -36,7 +36,7 @@ public class StoreDefaultParameter extends StoreDefault
         // Resolve values
         super.resolveValues(context);
         // Get the appropriate storage
-        final ParameterStorage storage = ((ParameterStorage) context.getStorageUnit(ParameterStorage.class));
+        final DuplicateStorage storage = context.getDefaultParameters();
         // If the value is not "delete"
         if (!value.equals(Constants.DELETE))
         {

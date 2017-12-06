@@ -10,7 +10,7 @@ import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.StorageUnit;
  * 
  * @author ckeiner
  */
-public abstract class SingleStorage implements StorageUnit
+public class SingleStorage implements StorageUnit
 {
     private final List<String> items;
 

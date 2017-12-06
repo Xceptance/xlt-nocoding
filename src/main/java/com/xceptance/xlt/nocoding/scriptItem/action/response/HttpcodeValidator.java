@@ -52,7 +52,7 @@ public class HttpcodeValidator extends AbstractResponseItem
     {
         if (httpcode == null || httpcode.isEmpty())
         {
-            httpcode = context.getConfigItemByKey(Constants.HTTPCODE);
+            httpcode = context.getDefaultItems().get(Constants.HTTPCODE);
         }
     }
 

@@ -37,7 +37,7 @@ public class StoreDefaultItem extends StoreDefault
         // Resolve values
         super.resolveValues(context);
         // Get the appropriate storage
-        final DefaultKeyValueStorage storage = ((DefaultKeyValueStorage) context.getStorageUnit(DefaultKeyValueStorage.class));
+        final DefaultKeyValueStorage storage = context.getDefaultItems();
         // If the value is not Constants.DELETE
         if (!value.equals(Constants.DELETE))
         {

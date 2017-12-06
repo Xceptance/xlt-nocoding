@@ -3,7 +3,7 @@ package com.xceptance.xlt.nocoding.scriptItem.storeDefault;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
-import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.single.StaticUrlStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.single.SingleStorage;
 
 /**
  * Stores a default static request. This class does not use the variableName with the single exception of "Static:
@@ -38,7 +38,7 @@ public class StoreDefaultStatic extends StoreDefault
         // Resolve values
         super.resolveValues(context);
         // Get the appropriate storage
-        final StaticUrlStorage storage = ((StaticUrlStorage) context.getStorageUnit(StaticUrlStorage.class));
+        final SingleStorage storage = context.getDefaultStatics();
         // If the value is not "delete"
         if (!value.equals(Constants.DELETE))
         {

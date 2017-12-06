@@ -11,7 +11,7 @@ import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.StorageUnit;
  * 
  * @author ckeiner
  */
-public abstract class DuplicateStorage implements StorageUnit
+public class DuplicateStorage implements StorageUnit
 {
     private final List<NameValuePair> items;
 

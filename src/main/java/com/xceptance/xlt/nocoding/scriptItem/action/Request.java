@@ -208,25 +208,25 @@ public class Request extends AbstractActionItem
         // Set default URL if it isn't specified
         if (getUrl() == null || getUrl().isEmpty())
         {
-            setUrl(context.getConfigItemByKey(Constants.URL));
+            setUrl(context.getDefaultItems().get(Constants.URL));
         }
 
         // Set default HttpMethod if it isn't specified
         if (this.getHttpMethod() == null)
         {
-            setHttpMethod(context.getConfigItemByKey(Constants.METHOD));
+            setHttpMethod(context.getDefaultItems().get(Constants.METHOD));
         }
 
         // Set default Xhr if it isn't specified
         if (this.getXhr() == null)
         {
-            setXhr(context.getConfigItemByKey(Constants.XHR));
+            setXhr(context.getDefaultItems().get(Constants.XHR));
         }
 
         // Set default encodeParameters if it isn't specified
         if (this.getEncodeParameters() == null)
         {
-            setEncodeParameters(context.getConfigItemByKey(Constants.ENCODEPARAMETERS));
+            setEncodeParameters(context.getDefaultItems().get(Constants.ENCODEPARAMETERS));
         }
 
         /*
@@ -236,50 +236,40 @@ public class Request extends AbstractActionItem
         if (context.getDefaultParameters() != null)
         {
             // Get default parameters
-            final Map<String, String> defaultParameters = context.getDefaultParameters();
+            final List<NameValuePair> defaultParameters = context.getDefaultParameters().getItems();
             // Overwrite the default values with the current ones or add the current ones
             if (getParameters() != null)
             {
-                for (final NameValuePair parameters : getParameters())
+                for (final NameValuePair defaultParameter : defaultParameters)
                 {
-                    defaultParameters.put(parameters.getName(), parameters.getValue());
+                    if (!getParameters().contains(defaultParameter))
+                    {
+                        getParameters().add(defaultParameter);
+                    }
                 }
             }
-            // Create new list in which we store the all parameters
-            final List<NameValuePair> newParameters = new ArrayList<NameValuePair>(defaultParameters.size());
-            // Add all parameters from the map to the list newParameters
-            defaultParameters.forEach((key, value) -> {
-                newParameters.add(new NameValuePair(key, value));
-            });
-            // Assign newParameters to the parameters for this request
-            setParameters(newParameters);
         }
 
-        // /*
-        // * Set default cookies
-        // */
-        //
-        // if (context.getDefaultCookies() != null)
-        // {
-        // // Get default parameters
-        // final Map<String, String> defaultParameters = context.getDefaultParameters();
-        // // Overwrite the default values with the current ones or add the current ones
-        // if (getParameters() != null)
-        // {
-        // for (final NameValuePair parameters : getParameters())
-        // {
-        // defaultParameters.put(parameters.getName(), parameters.getValue());
-        // }
-        // }
-        // // Create new list in which we store the all parameters
-        // final List<NameValuePair> newParameters = new ArrayList<NameValuePair>(defaultParameters.size());
-        // // Add all parameters from the map to the list newParameters
-        // defaultParameters.forEach((key, value) -> {
-        // newParameters.add(new NameValuePair(key, value));
-        // });
-        // // Assign newParameters to the parameters for this request
-        // setParameters(newParameters);
-        // }
+        /*
+         * Set default cookies
+         */
+
+        if (context.getDefaultParameters() != null)
+        {
+            // Get default cookies
+            final List<NameValuePair> defaultCookies = context.getDefaultCookies().getItems();
+            // Overwrite the default values with the current ones or add the current ones
+            if (getCookies() != null)
+            {
+                for (final NameValuePair defaultCookie : defaultCookies)
+                {
+                    if (!getCookies().contains(defaultCookie))
+                    {
+                        getCookies().add(defaultCookie);
+                    }
+                }
+            }
+        }
 
         /*
          * Set default headers
@@ -290,7 +280,7 @@ public class Request extends AbstractActionItem
             // Create a tree map that is case insensitive (since headers are case insensitive
             final RecentKeyTreeMap<String, String> defaultHeaders = new RecentKeyTreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
             // Get the default headers
-            defaultHeaders.putAll(context.getDefaultHeaders());
+            defaultHeaders.putAll(context.getDefaultHeaders().getItems());
             // Overwrite the default values with the current ones and/or add the current ones
             if (getHeaders() != null)
             {
@@ -303,13 +293,13 @@ public class Request extends AbstractActionItem
         // Set default body if it isn't specified
         if (this.getBody() == null)
         {
-            setBody(context.getConfigItemByKey(Constants.BODY));
+            setBody(context.getDefaultItems().get(Constants.BODY));
         }
 
         // Set default encodeBody if it isn't specified
         if (this.getEncodeBody() == null)
         {
-            setEncodeBody(context.getConfigItemByKey(Constants.ENCODEBODY));
+            setEncodeBody(context.getDefaultItems().get(Constants.ENCODEBODY));
         }
 
     }
@@ -419,7 +409,7 @@ public class Request extends AbstractActionItem
         }
 
         // Build the WebRequest
-        final WebRequest webRequest = buildWebRequest();
+        final WebRequest webRequest = buildWebRequest(context);
 
         // Check that the webRequest isn't null
         if (webRequest != null)
@@ -434,12 +424,15 @@ public class Request extends AbstractActionItem
     /**
      * Builds the web request that is specified by this object
      * 
+     * @param context
+     *            The current {@link Context}
      * @return The {@link WebRequest} that is specified by this object
      * @throws MalformedURLException
      * @throws InvalidArgumentException
      * @throws UnsupportedEncodingException
      */
-    public WebRequest buildWebRequest() throws MalformedURLException, InvalidArgumentException, UnsupportedEncodingException
+    public WebRequest buildWebRequest(final Context context)
+        throws MalformedURLException, InvalidArgumentException, UnsupportedEncodingException
     {
         // Create a URL object
         final URL url = new URL(this.url);
@@ -478,6 +471,16 @@ public class Request extends AbstractActionItem
                 decodeBody();
             }
             webRequest.setRequestBody(body);
+        }
+
+        // Set default cookies
+        if (getCookies() != null && !getCookies().isEmpty())
+        {
+            for (final NameValuePair cookie : cookies)
+            {
+                final String cookieString = cookie.getName() + "=" + cookie.getValue();
+                context.getWebClient().addCookie(cookieString, webRequest.getUrl(), this);
+            }
         }
 
         // Return the webRequest

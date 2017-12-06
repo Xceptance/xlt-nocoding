@@ -93,15 +93,15 @@ public abstract class Action implements ScriptItem
     {
         if (name == null || name.isEmpty())
         {
-            name = context.getConfigItemByKey(Constants.NAME);
+            name = context.getDefaultItems().get(Constants.NAME);
         }
         ActionItemUtil.assertOrder(actionItems);
         ActionItemUtil.fillDefaultData(actionItems, context);
 
         // Add default static requests
-        if (context.getDefaultStatic() != null && !context.getDefaultStatic().isEmpty())
+        if (context.getDefaultStatics() != null && !context.getDefaultStatics().getItems().isEmpty())
         {
-            actionItems.add(new StaticSubrequest(context.getDefaultStatic()));
+            actionItems.add(new StaticSubrequest(context.getDefaultStatics().getItems()));
             XltLogger.runTimeLogger.debug("Added default static subrequests to Action " + name);
         }
     }

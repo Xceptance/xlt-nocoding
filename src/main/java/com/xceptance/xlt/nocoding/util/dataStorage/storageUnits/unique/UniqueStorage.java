@@ -10,7 +10,7 @@ import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.StorageUnit;
  * 
  * @author ckeiner
  */
-public abstract class UniqueStorage implements StorageUnit
+public class UniqueStorage implements StorageUnit
 {
 
     private final Map<String, String> items;

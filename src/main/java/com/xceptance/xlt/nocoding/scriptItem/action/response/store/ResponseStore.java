@@ -40,7 +40,7 @@ public class ResponseStore extends AbstractResponseStore
         // Execute the selector
         selector.execute(context);
         // Store the solution
-        context.storeVariable(getVariableName(), selector.getResult().get(0));
+        context.getVariables().store(getVariableName(), selector.getResult().get(0));
         XltLogger.runTimeLogger.info("Added Variable: " + variableName + " : " + selector.getResult().get(0));
     }
 

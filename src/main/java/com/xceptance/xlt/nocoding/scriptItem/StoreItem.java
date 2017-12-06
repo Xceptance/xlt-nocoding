@@ -3,7 +3,6 @@ package com.xceptance.xlt.nocoding.scriptItem;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
-import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.unique.VariableStorage;
 import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
 /**
@@ -44,7 +43,7 @@ public class StoreItem implements ScriptItem
         // Resolve values
         resolveValues(context);
         // Store the variable
-        ((VariableStorage) context.getStorageUnit(VariableStorage.class)).store(variableName, value);
+        context.getVariables().store(variableName, value);
         XltLogger.runTimeLogger.info("Added Variable: " + variableName + " : " + value);
     }
 

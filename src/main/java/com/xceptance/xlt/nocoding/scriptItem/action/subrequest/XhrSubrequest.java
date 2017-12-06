@@ -91,7 +91,7 @@ public class XhrSubrequest extends AbstractSubrequest
     {
         if (name == null || name.isEmpty())
         {
-            name = context.getConfigItemByKey(Constants.NAME);
+            name = context.getDefaultItems().get(Constants.NAME);
         }
         ActionItemUtil.fillDefaultData(actionItems, context);
     }
