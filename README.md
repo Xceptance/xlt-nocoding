@@ -29,7 +29,7 @@ Since the source is open and licensed under the Apache License V2.0, feel free t
 
 ***
 
-#### [Getting Started](https://github.com/Xceptance/testsuite-nocoding/wiki)
+#### [Getting Started](https://gitlab.xceptance.de/ckeiner/testsuite-nocoding/wikis/quickstart)
 
 ***
 
@@ -54,7 +54,7 @@ Since the source is open and licensed under the Apache License V2.0, feel free t
 
 To learn more, try one of the following links.
 
-* [Overview](https://github.com/Xceptance/testsuite-nocoding/wiki): In order to get an overview.
-* [Quickstart](https://github.com/Xceptance/testsuite-nocoding/wiki/Quickstart) : To get started.
-* [Examples](https://github.com/Xceptance/testsuite-nocoding/wiki/Examples): To see some examples.
+* [Overview](https://gitlab.xceptance.de/ckeiner/testsuite-nocoding/wikis/home): In order to get an overview.
+* [Quickstart](https://gitlab.xceptance.de/ckeiner/testsuite-nocoding/wiki/Quickstart) : To get started.
+* [Examples](https://gitlab.xceptance.de/ckeiner/testsuite-nocoding/wiki/Examples): To see some examples.
 
