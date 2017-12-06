@@ -9,6 +9,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.xceptance.xlt.api.data.GeneralDataProvider;
 import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.unique.VariableStorage;
 
 import bsh.EvalError;
 import bsh.Interpreter;
@@ -172,7 +173,7 @@ public class VariableResolver
     private String resolveVariable(final String variableName, final Context context)
     {
         // Try to resolve it in the dataStorage
-        String resolvedValue = context.getDataStorage().getVariableByKey(variableName);
+        String resolvedValue = ((VariableStorage) context.getStorageUnit(VariableStorage.class)).get(variableName);
         // If we didn't find it, let beanshell handle the variable
         if (resolvedValue == null && !variableName.equals("{") && !variableName.equals("}"))
         {

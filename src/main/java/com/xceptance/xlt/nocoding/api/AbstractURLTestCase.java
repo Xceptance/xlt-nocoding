@@ -17,7 +17,6 @@ import com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.NoCodingPropertyAdmin;
-import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 /**
  * Executes a xlt-nocoding test case by parsing the file specified in the properties and executing the parsed commands
@@ -50,7 +49,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
     public void initialize() throws Exception
     {
         // Instantiate the PropertyManager with a new DataStorage
-        context = new Context(XltProperties.getInstance(), new DataStorage());
+        context = new Context(XltProperties.getInstance());
         // Resolve the filePath to use
         final String pathToFile = getFilePath();
         // Create the appropriate parser

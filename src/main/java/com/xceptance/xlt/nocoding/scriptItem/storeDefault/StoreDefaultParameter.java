@@ -3,6 +3,7 @@ package com.xceptance.xlt.nocoding.scriptItem.storeDefault;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.duplicate.ParameterStorage;
 
 /**
  * Stores a default parameter.
@@ -34,11 +35,13 @@ public class StoreDefaultParameter extends StoreDefault
     {
         // Resolve values
         super.resolveValues(context);
+        // Get the appropriate storage
+        final ParameterStorage storage = ((ParameterStorage) context.getStorageUnit(ParameterStorage.class));
         // If the value is not "delete"
         if (!value.equals(Constants.DELETE))
         {
             // Store the default parameter
-            context.storeDefaultParameter(variableName, value);
+            storage.store(variableName, value);
             XltLogger.runTimeLogger.debug("Added " + variableName + "=" + value + " to default parameter storage");
         }
         else
@@ -46,13 +49,13 @@ public class StoreDefaultParameter extends StoreDefault
             // If the variableName is Constants.PARAMETERS, then we delete all default parameters
             if (variableName.equals(Constants.PARAMETERS))
             {
-                context.deleteDefaultParameter();
+                storage.clear();
                 XltLogger.runTimeLogger.debug("Removed all default parameters");
             }
             // else we simply delete the specified parameters
             else
             {
-                context.deleteDefaultParameter(variableName);
+                storage.remove(variableName);
                 XltLogger.runTimeLogger.debug("Removed " + variableName + " from default parameter storage");
             }
         }

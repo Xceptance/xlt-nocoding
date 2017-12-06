@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.StorageUnit;
 
 /**
  * A storage unit, that can have duplicate items.
  * 
  * @author ckeiner
  */
-public abstract class DuplicateStorage
+public abstract class DuplicateStorage implements StorageUnit
 {
     private final List<NameValuePair> items;
 

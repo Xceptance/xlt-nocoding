@@ -1,14 +1,19 @@
 package com.xceptance.xlt.nocoding.util;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
-import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.api.data.GeneralDataProvider;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.engine.XltWebClient;
-import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.StorageUnit;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.duplicate.CookieStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.duplicate.ParameterStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.single.StaticUrlStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.unique.DefaultKeyValueStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.unique.HeaderStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.unique.VariableStorage;
 import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
 /**
@@ -19,8 +24,6 @@ import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
  */
 public class Context
 {
-    protected final DataStorage dataStorage;
-
     protected final XltWebClient webClient;
 
     protected final VariableResolver resolver;
@@ -28,6 +31,8 @@ public class Context
     protected WebResponse webResponse;
 
     protected NoCodingPropertyAdmin propertyAdmin;
+
+    protected List<StorageUnit> storages;
 
     /**
      * Creates a new context, sets default Values in the dataStorage and configures the webClient according to the
@@ -39,27 +44,9 @@ public class Context
     public Context(final XltProperties xltProperties)
     {
         this.propertyAdmin = new NoCodingPropertyAdmin(xltProperties);
-        this.dataStorage = new DataStorage();
         this.webClient = new XltWebClient();
         this.resolver = new VariableResolver(GeneralDataProvider.getInstance());
-        initialize();
-    }
-
-    /**
-     * Creates a new context, sets default Values in the dataStorage and configures the webClient according to the
-     * xltProperties
-     * 
-     * @param xltProperties
-     *            The properties to use - normally XltProperties.getInstance()
-     * @param dataStorage
-     *            The data storage to use
-     */
-    public Context(final XltProperties xltProperties, final DataStorage dataStorage)
-    {
-        this.propertyAdmin = new NoCodingPropertyAdmin(xltProperties);
-        this.dataStorage = dataStorage;
-        this.webClient = new XltWebClient();
-        this.resolver = new VariableResolver(GeneralDataProvider.getInstance());
+        this.storages = new ArrayList<StorageUnit>();
         initialize();
     }
 
@@ -70,11 +57,11 @@ public class Context
      */
     public Context(final Context context)
     {
-        this.dataStorage = context.getDataStorage();
         this.webClient = context.getWebClient();
         this.resolver = context.getResolver();
         this.webResponse = context.getWebResponse();
         this.propertyAdmin = context.getPropertyAdmin();
+        this.storages = context.getStorages();
     }
 
     /**
@@ -82,16 +69,21 @@ public class Context
      */
     public void initialize()
     {
-        loadDefaultConfig();
+        initStorages();
         configureWebClient();
     }
 
     /**
-     * @return The {@link DataStorage} that has all variables, configItems/defaultItems in this context.
+     * Adds all {@link StorageUnit}s to the {@link #storages}.
      */
-    public DataStorage getDataStorage()
+    private void initStorages()
     {
-        return dataStorage;
+        getStorages().add(new CookieStorage());
+        getStorages().add(new ParameterStorage());
+        getStorages().add(new StaticUrlStorage());
+        getStorages().add(new DefaultKeyValueStorage());
+        getStorages().add(new HeaderStorage());
+        getStorages().add(new VariableStorage());
     }
 
     /**
@@ -126,234 +118,6 @@ public class Context
     public NoCodingPropertyAdmin getPropertyAdmin()
     {
         return propertyAdmin;
-    }
-
-    /*
-     * Data Storage Methods
-     */
-
-    /**
-     * Stores the key value pair as variable in the data storage
-     * 
-     * @param key
-     *            The variable name/key with which one accesses the value
-     * @param value
-     *            The value of the variable
-     */
-    public void storeVariable(final String key, final String value)
-    {
-        getDataStorage().storeVariable(key, value);
-    }
-
-    /**
-     * Stores a key value pair as configItem, thus as "default" item.
-     * 
-     * @param key
-     *            The variable name/key with which one accesses the value
-     * @param value
-     *            The value of the variable
-     */
-    public void storeConfigItem(final String key, final String value)
-    {
-        getDataStorage().storeConfigItem(key, value);
-    }
-
-    /**
-     * Stores a key value pair as configItem, thus as "default" item. If the configItem gets deleted, the fallback value is
-     * the set for the configItem
-     * 
-     * @param key
-     *            The variable name/key with which one accesses the value
-     * @param value
-     *            The value of the variable
-     * @param fallback
-     *            The value that is used when the key gets deleted
-     */
-    public void storeConfigItem(final String key, final String value, final String fallback)
-    {
-        getDataStorage().storeConfigItem(key, value, fallback);
-    }
-
-    /**
-     * Stores a key value pair as default header
-     * 
-     * @param header
-     *            The name of the header
-     * @param value
-     *            The value of the header
-     */
-    public void storeDefaultHeader(final String header, final String value)
-    {
-        getDataStorage().addDefaultHeader(header, value);
-    }
-
-    /**
-     * Stores a key value pair as default parameter
-     * 
-     * @param parameter
-     *            The name of the parameter
-     * @param value
-     *            The value of the parameter
-     */
-    public void storeDefaultParameter(final String parameter, final String value)
-    {
-        getDataStorage().addDefaultParameter(parameter, value);
-    }
-
-    /**
-     * Stores a url as default static request
-     * 
-     * @param url
-     *            The url of the static request as {@link String}
-     */
-    public void storeDefaultStatic(final String url)
-    {
-        getDataStorage().addDefaultStatic(url);
-    }
-
-    /**
-     * Stores a cookie in the default cookies
-     * 
-     * @param cookie
-     *            The name value pair of the cookie
-     */
-    public void storeDefaultCookie(final NameValuePair cookie)
-    {
-        getDataStorage().addDefaultCookie(cookie);
-    }
-
-    /**
-     * Removes a key value pair from the configItems. If a fallback value was specified for the configItem, it is going to
-     * be used from then on
-     * 
-     * @param key
-     *            The variable name/key to the corresponding value
-     */
-    public void deleteConfigItem(final String key)
-    {
-        getDataStorage().removeConfigItem(key);
-    }
-
-    /**
-     * Removes the specified default header
-     * 
-     * @param header
-     *            The name of the header
-     */
-    public void deleteDefaultHeader(final String header)
-    {
-        getDataStorage().deleteDefaultHeader(header);
-    }
-
-    /**
-     * Removes the specified default parameter
-     * 
-     * @param parameter
-     *            The name of the parameter
-     */
-    public void deleteDefaultParameter(final String parameter)
-    {
-        getDataStorage().deleteDefaultParameter(parameter);
-    }
-
-    /**
-     * Remov es a url out of the default static requests
-     * 
-     * @param url
-     *            The url of the static request as {@link String}
-     */
-    public void deleteDefaultStatic(final String url)
-    {
-        getDataStorage().deleteDefaultStatic(url);
-    }
-
-    /**
-     * Deletes a cookie in the default cookies
-     * 
-     * @param cookie
-     *            The name value pair of the cookie
-     */
-    public void deleteDefaultCookie(final String cookieName)
-    {
-        getDataStorage().deleteDefaultCookie(cookieName);
-    }
-
-    /**
-     * Removes all default header
-     */
-    public void deleteDefaultHeader()
-    {
-        getDataStorage().deleteDefaultHeader();
-    }
-
-    /**
-     * Removes all default parameter
-     * 
-     * @param parameter
-     *            The name of the parameter
-     */
-    public void deleteDefaultParameter()
-    {
-        getDataStorage().deleteDefaultParameter();
-    }
-
-    /**
-     * Deletes all static requests
-     */
-    public void deleteDefaultStatic()
-    {
-        getDataStorage().deleteDefaultStatic();
-    }
-
-    /**
-     * Deletes all cookies in the default cookies
-     */
-    public void deleteDefaultCookie()
-    {
-        getDataStorage().deleteDefaultCookie();
-    }
-
-    /*
-     * Data Storage Getter
-     */
-
-    /**
-     * Returns the config item with the specified key. If the key cannot be found, the method checks if a fallback is
-     * provided. If it still cannot be found, the method returns null.
-     * 
-     * @param key
-     *            The key you want to search for
-     * @return String - The value of the key; Null if the key is neither in the default values nor in configItems
-     */
-    public String getConfigItemByKey(final String key)
-    {
-        return getDataStorage().getConfigItemByKey(key);
-    }
-
-    public Map<String, String> getDefaultHeaders()
-    {
-        return getDataStorage().getHeaders();
-    }
-
-    public Map<String, String> getDefaultParameters()
-    {
-        return getDataStorage().getParameters();
-    }
-
-    /**
-     * Gets all static requests
-     */
-    public List<String> getDefaultStatic()
-    {
-        return getDataStorage().getStaticUrls();
-    }
-
-    /**
-     * Gets all static requests
-     */
-    public List<NameValuePair> getDefaultCookies()
-    {
-        return getDataStorage().getCookies();
     }
 
     /*
@@ -407,20 +171,38 @@ public class Context
         return getPropertyAdmin().getPropertyByKey(key, defaultValue);
     }
 
+    public List<StorageUnit> getStorages()
+    {
+        return this.storages;
+    }
+
+    /**
+     * Gets the first {@link StorageUnit} that has the specified class.
+     * 
+     * @param classOfUnit
+     *            The class of the {@link StorageUnit}
+     * @return The {@link StorageUnit} with the class classOfUnit
+     */
+    public StorageUnit getStorageUnit(final Class classOfUnit)
+    {
+        StorageUnit unit = null;
+        for (final StorageUnit storageUnit : storages)
+        {
+            if (classOfUnit.isInstance(storageUnit))
+            {
+                unit = storageUnit;
+                break;
+            }
+        }
+        return unit;
+    }
+
     /**
      * Configures the webClient as specified in the config, thus dis/enabling javascript, css, etc.
      */
     private void configureWebClient()
     {
         getPropertyAdmin().configWebClient(webClient);
-    }
-
-    /**
-     * Loads the default definitions
-     */
-    private void loadDefaultConfig()
-    {
-        getDataStorage().loadDefaultConfig();
     }
 
 }

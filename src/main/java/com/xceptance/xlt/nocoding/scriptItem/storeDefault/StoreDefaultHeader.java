@@ -3,6 +3,7 @@ package com.xceptance.xlt.nocoding.scriptItem.storeDefault;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.unique.HeaderStorage;
 
 /**
  * Stores a default header.
@@ -35,11 +36,13 @@ public class StoreDefaultHeader extends StoreDefault
     {
         // Resolve values
         super.resolveValues(context);
+        // Get the appropriate storage
+        final HeaderStorage storage = ((HeaderStorage) context.getStorageUnit(HeaderStorage.class));
         // If the value is not "delete"
         if (!value.equals(Constants.DELETE))
         {
             // Store the header as lowercase
-            context.storeDefaultHeader(variableName.toLowerCase(), value);
+            storage.store(variableName.toLowerCase(), value);
             XltLogger.runTimeLogger.debug("Added " + variableName.toLowerCase() + "=" + value + " to default header storage");
         }
         else
@@ -47,7 +50,7 @@ public class StoreDefaultHeader extends StoreDefault
             // If the variableName is Constants.HEADERS, then we delete all default headers
             if (variableName.equals(Constants.HEADERS))
             {
-                context.deleteDefaultHeader();
+                storage.clear();
                 XltLogger.runTimeLogger.debug("Removed all default headers");
             }
             // Else we simply delete the specified header
