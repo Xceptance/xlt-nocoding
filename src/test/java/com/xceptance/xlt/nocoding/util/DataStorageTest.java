@@ -26,11 +26,11 @@ public class DataStorageTest
     {
         final String key = "test";
         final String value = "t";
-        context.getDataStorage().storeVariable(key, value);
-        context.getDataStorage().storeConfigItem(key, value);
+        context.getVariables().store(key, value);
+        context.getDefaultItems().store(key, value);
 
-        Assert.assertEquals("t", context.getDataStorage().getVariableByKey(key));
-        Assert.assertEquals("t", context.getDataStorage().getConfigItemByKey(key));
+        Assert.assertEquals("t", context.getVariables().get(key));
+        Assert.assertEquals("t", context.getDefaultItems().get(key));
     }
 
     @Test
@@ -38,17 +38,17 @@ public class DataStorageTest
     {
         final String key = "test";
         final String value = "t";
-        context.getDataStorage().storeVariable(key, value);
+        context.getVariables().store(key, value);
 
-        Assert.assertEquals("t", context.getDataStorage().getVariableByKey(key));
-        Assert.assertEquals(null, context.getDataStorage().getConfigItemByKey(key));
+        Assert.assertEquals("t", context.getVariables().get(key));
+        Assert.assertNull(context.getDefaultItems().get(key));
 
         final String key2 = "testing";
         final String value2 = "testing";
-        context.getDataStorage().storeConfigItem(key2, value2);
+        context.getDefaultItems().store(key2, value2);
 
-        Assert.assertEquals(null, context.getDataStorage().getVariableByKey(key2));
-        Assert.assertEquals("testing", context.getDataStorage().getConfigItemByKey(key2));
+        Assert.assertNull(null, context.getVariables().get(key2));
+        Assert.assertEquals("testing", context.getDefaultItems().get(key2));
     }
 
     @Test
@@ -56,33 +56,33 @@ public class DataStorageTest
     {
         String key = "test";
         String value = "t";
-        context.getDataStorage().storeVariable(key, value);
-        context.getDataStorage().storeConfigItem(key, value);
+        context.getVariables().store(key, value);
+        context.getDefaultItems().store(key, value);
 
-        Assert.assertEquals("t", context.getDataStorage().getVariableByKey(key));
-        Assert.assertEquals("t", context.getDataStorage().getConfigItemByKey(key));
+        Assert.assertEquals("t", context.getVariables().get(key));
+        Assert.assertEquals("t", context.getDefaultItems().get(key));
 
         key = "test";
         value = "e";
-        context.getDataStorage().storeVariable(key, value);
-        context.getDataStorage().storeConfigItem(key, value);
+        context.getVariables().store(key, value);
+        context.getDefaultItems().store(key, value);
 
-        Assert.assertEquals("e", context.getDataStorage().getVariableByKey(key));
-        Assert.assertEquals("e", context.getDataStorage().getConfigItemByKey(key));
-        Assert.assertNotEquals("t", context.getDataStorage().getVariableByKey(key));
-        Assert.assertNotEquals("t", context.getDataStorage().getConfigItemByKey(key));
+        Assert.assertEquals("e", context.getVariables().get(key));
+        Assert.assertEquals("e", context.getDefaultItems().get(key));
+        Assert.assertNotEquals("t", context.getVariables().get(key));
+        Assert.assertNotEquals("t", context.getDefaultItems().get(key));
 
         key = "test";
         value = "s";
-        context.getDataStorage().storeVariable(key, value);
-        context.getDataStorage().storeConfigItem(key, value);
+        context.getVariables().store(key, value);
+        context.getDefaultItems().store(key, value);
 
-        Assert.assertEquals("s", context.getDataStorage().getVariableByKey(key));
-        Assert.assertEquals("s", context.getDataStorage().getConfigItemByKey(key));
-        Assert.assertNotEquals("t", context.getDataStorage().getVariableByKey(key));
-        Assert.assertNotEquals("t", context.getDataStorage().getConfigItemByKey(key));
-        Assert.assertNotEquals("e", context.getDataStorage().getVariableByKey(key));
-        Assert.assertNotEquals("e", context.getDataStorage().getConfigItemByKey(key));
+        Assert.assertEquals("s", context.getVariables().get(key));
+        Assert.assertEquals("s", context.getDefaultItems().get(key));
+        Assert.assertNotEquals("t", context.getVariables().get(key));
+        Assert.assertNotEquals("t", context.getDefaultItems().get(key));
+        Assert.assertNotEquals("e", context.getVariables().get(key));
+        Assert.assertNotEquals("e", context.getDefaultItems().get(key));
     }
 
     @Test
@@ -90,8 +90,8 @@ public class DataStorageTest
     {
         final String key = "test";
 
-        Assert.assertEquals(null, context.getDataStorage().getVariableByKey(key));
-        Assert.assertEquals(null, context.getDataStorage().getConfigItemByKey(key));
+        Assert.assertNull(context.getVariables().get(key));
+        Assert.assertNull(context.getDefaultItems().get(key));
 
     }
 
@@ -101,30 +101,28 @@ public class DataStorageTest
         final String key = "test";
         final String value = "t";
 
-        context.getDataStorage().storeConfigItem(key, value);
-        Assert.assertEquals(value, context.getDataStorage().getConfigItemByKey(key));
-        context.getDataStorage().removeConfigItem(key);
-        Assert.assertNotEquals(value, context.getDataStorage().getConfigItemByKey(key));
-        Assert.assertEquals(null, context.getDataStorage().getConfigItemByKey(key));
+        context.getDefaultItems().store(key, value);
+        Assert.assertEquals(value, context.getDefaultItems().get(key));
+        context.getDefaultItems().remove(key);
+        Assert.assertNotEquals(value, context.getDefaultItems().get(key));
+        Assert.assertEquals(null, context.getDefaultItems().get(key));
 
         final String fallback = "est";
-        context.getDataStorage().storeConfigItem(key, value, fallback);
-        Assert.assertEquals(value, context.getDataStorage().getConfigItemByKey(key));
-        context.getDataStorage().removeConfigItem(key);
-        Assert.assertEquals(fallback, context.getDataStorage().getConfigItemByKey(key));
+        context.getDefaultItems().store(key, value, fallback);
+        Assert.assertEquals(value, context.getDefaultItems().get(key));
+        context.getDefaultItems().remove(key);
+        Assert.assertEquals(fallback, context.getDefaultItems().get(key));
 
     }
 
     @Test
     public void loadDefaultValues()
     {
-        context.getDataStorage().loadDefaultConfig();
-
-        Assert.assertEquals(DefaultValue.METHOD, context.getDataStorage().getConfigItemByKey(Constants.METHOD));
-        Assert.assertEquals(DefaultValue.HTTPCODE, context.getDataStorage().getConfigItemByKey(Constants.HTTPCODE));
-        Assert.assertEquals(DefaultValue.ENCODEBODY, context.getDataStorage().getConfigItemByKey(Constants.ENCODEBODY));
-        Assert.assertEquals(DefaultValue.ENCODEPARAMETERS, context.getDataStorage().getConfigItemByKey(Constants.ENCODEPARAMETERS));
-        Assert.assertEquals(DefaultValue.XHR, context.getDataStorage().getConfigItemByKey(Constants.XHR));
+        Assert.assertEquals(DefaultValue.METHOD, context.getDefaultItems().get(Constants.METHOD));
+        Assert.assertEquals(DefaultValue.HTTPCODE, context.getDefaultItems().get(Constants.HTTPCODE));
+        Assert.assertEquals(DefaultValue.ENCODEBODY, context.getDefaultItems().get(Constants.ENCODEBODY));
+        Assert.assertEquals(DefaultValue.ENCODEPARAMETERS, context.getDefaultItems().get(Constants.ENCODEPARAMETERS));
+        Assert.assertEquals(DefaultValue.XHR, context.getDefaultItems().get(Constants.XHR));
 
     }
 
@@ -137,36 +135,35 @@ public class DataStorageTest
         final String encodeparameters = "true";
         final String xhr = "true";
 
-        context.getDataStorage().loadDefaultConfig();
-        Assert.assertEquals(DefaultValue.METHOD, context.getDataStorage().getConfigItemByKey(Constants.METHOD));
-        Assert.assertEquals(DefaultValue.HTTPCODE, context.getDataStorage().getConfigItemByKey(Constants.HTTPCODE));
-        Assert.assertEquals(DefaultValue.ENCODEBODY, context.getDataStorage().getConfigItemByKey(Constants.ENCODEBODY));
-        Assert.assertEquals(DefaultValue.ENCODEPARAMETERS, context.getDataStorage().getConfigItemByKey(Constants.ENCODEPARAMETERS));
-        Assert.assertEquals(DefaultValue.XHR, context.getDataStorage().getConfigItemByKey(Constants.XHR));
+        Assert.assertEquals(DefaultValue.METHOD, context.getDefaultItems().get(Constants.METHOD));
+        Assert.assertEquals(DefaultValue.HTTPCODE, context.getDefaultItems().get(Constants.HTTPCODE));
+        Assert.assertEquals(DefaultValue.ENCODEBODY, context.getDefaultItems().get(Constants.ENCODEBODY));
+        Assert.assertEquals(DefaultValue.ENCODEPARAMETERS, context.getDefaultItems().get(Constants.ENCODEPARAMETERS));
+        Assert.assertEquals(DefaultValue.XHR, context.getDefaultItems().get(Constants.XHR));
 
-        context.getDataStorage().storeConfigItem(Constants.METHOD, method);
-        context.getDataStorage().storeConfigItem(Constants.HTTPCODE, httpcode);
-        context.getDataStorage().storeConfigItem(Constants.ENCODEBODY, encodebody);
-        context.getDataStorage().storeConfigItem(Constants.ENCODEPARAMETERS, encodeparameters);
-        context.getDataStorage().storeConfigItem(Constants.XHR, xhr);
+        context.getDefaultItems().store(Constants.METHOD, method);
+        context.getDefaultItems().store(Constants.HTTPCODE, httpcode);
+        context.getDefaultItems().store(Constants.ENCODEBODY, encodebody);
+        context.getDefaultItems().store(Constants.ENCODEPARAMETERS, encodeparameters);
+        context.getDefaultItems().store(Constants.XHR, xhr);
 
-        Assert.assertEquals(method, context.getDataStorage().getConfigItemByKey(Constants.METHOD));
-        Assert.assertEquals(httpcode, context.getDataStorage().getConfigItemByKey(Constants.HTTPCODE));
-        Assert.assertEquals(encodebody, context.getDataStorage().getConfigItemByKey(Constants.ENCODEBODY));
-        Assert.assertEquals(encodeparameters, context.getDataStorage().getConfigItemByKey(Constants.ENCODEPARAMETERS));
-        Assert.assertEquals(xhr, context.getDataStorage().getConfigItemByKey(Constants.XHR));
+        Assert.assertEquals(method, context.getDefaultItems().get(Constants.METHOD));
+        Assert.assertEquals(httpcode, context.getDefaultItems().get(Constants.HTTPCODE));
+        Assert.assertEquals(encodebody, context.getDefaultItems().get(Constants.ENCODEBODY));
+        Assert.assertEquals(encodeparameters, context.getDefaultItems().get(Constants.ENCODEPARAMETERS));
+        Assert.assertEquals(xhr, context.getDefaultItems().get(Constants.XHR));
 
-        context.getDataStorage().removeConfigItem(Constants.METHOD);
-        context.getDataStorage().removeConfigItem(Constants.HTTPCODE);
-        context.getDataStorage().removeConfigItem(Constants.ENCODEBODY);
-        context.getDataStorage().removeConfigItem(Constants.ENCODEPARAMETERS);
-        context.getDataStorage().removeConfigItem(Constants.XHR);
+        context.getDefaultItems().remove(Constants.METHOD);
+        context.getDefaultItems().remove(Constants.HTTPCODE);
+        context.getDefaultItems().remove(Constants.ENCODEBODY);
+        context.getDefaultItems().remove(Constants.ENCODEPARAMETERS);
+        context.getDefaultItems().remove(Constants.XHR);
 
-        Assert.assertEquals(DefaultValue.METHOD, context.getDataStorage().getConfigItemByKey(Constants.METHOD));
-        Assert.assertEquals(DefaultValue.HTTPCODE, context.getDataStorage().getConfigItemByKey(Constants.HTTPCODE));
-        Assert.assertEquals(DefaultValue.ENCODEBODY, context.getDataStorage().getConfigItemByKey(Constants.ENCODEBODY));
-        Assert.assertEquals(DefaultValue.ENCODEPARAMETERS, context.getDataStorage().getConfigItemByKey(Constants.ENCODEPARAMETERS));
-        Assert.assertEquals(DefaultValue.XHR, context.getDataStorage().getConfigItemByKey(Constants.XHR));
+        Assert.assertEquals(DefaultValue.METHOD, context.getDefaultItems().get(Constants.METHOD));
+        Assert.assertEquals(DefaultValue.HTTPCODE, context.getDefaultItems().get(Constants.HTTPCODE));
+        Assert.assertEquals(DefaultValue.ENCODEBODY, context.getDefaultItems().get(Constants.ENCODEBODY));
+        Assert.assertEquals(DefaultValue.ENCODEPARAMETERS, context.getDefaultItems().get(Constants.ENCODEPARAMETERS));
+        Assert.assertEquals(DefaultValue.XHR, context.getDefaultItems().get(Constants.XHR));
 
     }
 
