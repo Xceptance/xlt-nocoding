@@ -35,6 +35,22 @@ public class Context
      * 
      * @param xltProperties
      *            The properties to use - normally XltProperties.getInstance()
+     */
+    public Context(final XltProperties xltProperties)
+    {
+        this.propertyAdmin = new NoCodingPropertyAdmin(xltProperties);
+        this.dataStorage = new DataStorage();
+        this.webClient = new XltWebClient();
+        this.resolver = new VariableResolver(GeneralDataProvider.getInstance());
+        initialize();
+    }
+
+    /**
+     * Creates a new context, sets default Values in the dataStorage and configures the webClient according to the
+     * xltProperties
+     * 
+     * @param xltProperties
+     *            The properties to use - normally XltProperties.getInstance()
      * @param dataStorage
      *            The data storage to use
      */

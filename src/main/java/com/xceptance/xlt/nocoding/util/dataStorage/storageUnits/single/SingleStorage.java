@@ -3,6 +3,11 @@ package com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.single;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A storage unit, that stores a {@link String} in a {@link List}.
+ * 
+ * @author ckeiner
+ */
 public abstract class SingleStorage
 {
     private final List<String> items;

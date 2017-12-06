@@ -3,6 +3,11 @@ package com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.unique;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A storage unit, that stores unique items in the sense of the key being unique.
+ * 
+ * @author ckeiner
+ */
 public abstract class UniqueStorage
 {
 

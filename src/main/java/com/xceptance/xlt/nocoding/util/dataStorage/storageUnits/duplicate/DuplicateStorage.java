@@ -5,6 +5,11 @@ import java.util.List;
 
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 
+/**
+ * A storage unit, that can have duplicate items.
+ * 
+ * @author ckeiner
+ */
 public abstract class DuplicateStorage
 {
     private final List<NameValuePair> items;
