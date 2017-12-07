@@ -431,4 +431,60 @@ public class RequestTest
         Assert.assertFalse(request.getHeaders().isEmpty());
     }
 
+    @Test
+    public void testSimpleCookie() throws InvalidArgumentException, MalformedURLException, UnsupportedEncodingException
+    {
+        final Request request = new Request(url);
+        request.fillDefaultData(context);
+        List<NameValuePair> cookies = null;
+        request.setCookies(cookies);
+        WebRequest webRequest = request.buildWebRequest(context);
+        Map<String, String> headers = webRequest.getAdditionalHeaders();
+        Assert.assertFalse(headers.containsKey(Constants.COOKIE));
+
+        cookies = new ArrayList<NameValuePair>();
+        cookies.add(new NameValuePair("headerCookie", "cookieValue"));
+        request.setCookies(cookies);
+        webRequest = request.buildWebRequest(context);
+        headers = webRequest.getAdditionalHeaders();
+        Assert.assertTrue(headers.containsKey(Constants.COOKIE));
+        final String cookieString = headers.get(Constants.COOKIE);
+        Assert.assertEquals("headerCookie=cookieValue;", cookieString);
+    }
+
+    @Test
+    public void testSetHeaderCookieAndSetCookie() throws InvalidArgumentException, MalformedURLException, UnsupportedEncodingException
+    {
+        final Request request = new Request(url);
+        request.fillDefaultData(context);
+        final List<NameValuePair> cookies = new ArrayList<NameValuePair>();
+        cookies.add(new NameValuePair("cookieName", "cookieValue"));
+        request.setCookies(cookies);
+        final Map<String, String> requestHeaders = new HashMap<String, String>();
+        requestHeaders.put(Constants.COOKIE, "headerCookie=headerValue");
+        request.setHeaders(requestHeaders);
+        final WebRequest webRequest = request.buildWebRequest(context);
+        final Map<String, String> headers = webRequest.getAdditionalHeaders();
+
+        Assert.assertTrue(headers.containsKey(Constants.COOKIE));
+        final String cookieString = headers.get(Constants.COOKIE);
+        Assert.assertEquals("headerCookie=headerValue;cookieName=cookieValue;", cookieString);
+    }
+
+    @Test
+    public void testSetHeaderCookie() throws InvalidArgumentException, MalformedURLException, UnsupportedEncodingException
+    {
+        final Request request = new Request(url);
+        request.fillDefaultData(context);
+        final Map<String, String> requestHeaders = new HashMap<String, String>();
+        requestHeaders.put(Constants.COOKIE, "headerCookie=headerValue");
+        request.setHeaders(requestHeaders);
+        final WebRequest webRequest = request.buildWebRequest(context);
+        final Map<String, String> headers = webRequest.getAdditionalHeaders();
+
+        Assert.assertTrue(headers.containsKey(Constants.COOKIE));
+        final String cookieString = headers.get(Constants.COOKIE);
+        Assert.assertEquals("headerCookie=headerValue", cookieString);
+    }
+
 }

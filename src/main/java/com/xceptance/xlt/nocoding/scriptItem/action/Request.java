@@ -473,20 +473,31 @@ public class Request extends AbstractActionItem
             webRequest.setRequestBody(body);
         }
 
-        // Set default cookies
+        // Set cookies
         if (getCookies() != null && !getCookies().isEmpty())
         {
-            String cookieString = webRequest.getAdditionalHeaders().get("Cookie");
-            // TODO find out if cookie string ends with ; or not
-            if (!cookieString.endsWith(";"))
+            // Get already defined cookies
+            String cookieString = webRequest.getAdditionalHeaders().get(Constants.COOKIE);
+            // If there are already cookies
+            if (cookieString != null)
             {
-                cookieString += ";";
+                // Make sure there is a semicolon at the end
+                if (!cookieString.endsWith(";"))
+                {
+                    cookieString += ";";
+                }
             }
+            // Else, make the string empty
+            else
+            {
+                cookieString = "";
+            }
+            // Append all cookies at the end
             for (final NameValuePair cookie : cookies)
             {
                 cookieString += cookie.getName() + "=" + cookie.getValue() + ";";
             }
-            webRequest.setAdditionalHeader("Cookie", cookieString);
+            webRequest.setAdditionalHeader(Constants.COOKIE, cookieString);
         }
 
         // Return the webRequest
