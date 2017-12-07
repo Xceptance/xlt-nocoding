@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.scriptItem.action.response.selector;
+package com.xceptance.xlt.nocoding.scriptItem.action.response.extractor;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -9,46 +9,46 @@ import com.xceptance.xlt.api.htmlunit.LightWeightPage;
 import com.xceptance.xlt.nocoding.util.Context;
 
 /**
- * Matches the pattern provided via {@link #getSelectionExpression()} and applies it to the
+ * Matches the pattern provided via {@link #getExtractionExpression()} and applies it to the
  * {@link LightWeightPage#getContent()} which is created with the {@link Context#getWebResponse()}. Then, stores the
  * match in {@link #addResult(String)}.
  * 
  * @author ckeiner
  */
-public class RegexpSelector extends AbstractSelector
+public class RegexpExtractor extends AbstractExtractor
 {
 
     private String group;
 
     /**
-     * Creates an instance of {@link RegexpSelector}, sets {@link #selectionExpression} and creates an {@link ArrayList} for
-     * {@link #result}.
+     * Creates an instance of {@link RegexpExtractor}, sets {@link #extractionExpression} and creates an {@link ArrayList}
+     * for {@link #result}.
      * 
-     * @param selectionExpression
+     * @param extractionExpression
      *            The regular expression to use on the content of the {@link WebResponse}.
      */
-    public RegexpSelector(final String selectionExpression)
+    public RegexpExtractor(final String extractionExpression)
     {
-        this(selectionExpression, null);
+        this(extractionExpression, null);
     }
 
     /**
-     * Creates an instance of {@link RegexpSelector}, sets {@link #selectionExpression} and creates an {@link ArrayList} for
-     * {@link #result}.
+     * Creates an instance of {@link RegexpExtractor}, sets {@link #extractionExpression} and creates an {@link ArrayList}
+     * for {@link #result}.
      * 
-     * @param selectionExpression
+     * @param extractionExpression
      *            The regular expression to use on the content of the {@link WebResponse}.
      * @param group
      *            The matching group to use
      */
-    public RegexpSelector(final String selectionExpression, final String group)
+    public RegexpExtractor(final String extractionExpression, final String group)
     {
-        super(selectionExpression);
+        super(extractionExpression);
         this.group = group;
     }
 
     /**
-     * Compiles the pattern provided via {@link #getSelectionExpression()} and applies it to the
+     * Compiles the pattern provided via {@link #getExtractionExpression()} and applies it to the
      * {@link LightWeightPage#getContent()} that is created with {@link Context#getWebResponse()}. If {@link #group} is
      * specified, it only stores this matching group. Else, it stores every group.
      */
@@ -63,7 +63,7 @@ public class RegexpSelector extends AbstractSelector
         // Read the content
         final String pageContent = page.getContent();
         // Create a matcher object, so we can save our found matches
-        final Matcher matcher = Pattern.compile(selectionExpression).matcher(pageContent);
+        final Matcher matcher = Pattern.compile(extractionExpression).matcher(pageContent);
 
         // If we don't have a group, add all matches
         if (this.group == null)
@@ -85,7 +85,7 @@ public class RegexpSelector extends AbstractSelector
     }
 
     /**
-     * Resolves the {@link #getSelectionExpression()} and {@link #group}.
+     * Resolves the {@link #getExtractionExpression()} and {@link #group}.
      */
     @Override
     protected void resolveValues(final Context context)

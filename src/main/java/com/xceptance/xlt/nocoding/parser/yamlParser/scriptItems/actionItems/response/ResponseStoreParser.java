@@ -8,9 +8,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xceptance.xlt.api.util.XltLogger;
-import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.response.selector.SelectorParser;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.AbstractSelector;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.RegexpSelector;
+import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.response.extractor.ExtractorParser;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.RegexpExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.store.AbstractResponseStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.store.ResponseStore;
 import com.xceptance.xlt.nocoding.util.Constants;
@@ -75,12 +75,12 @@ public class ResponseStoreParser
                 // Iterate over the content
                 if (name.hasNext())
                 {
-                    AbstractSelector selector = null;
-                    // Build a selector depending on the next element in the iterator
+                    AbstractExtractor extractor = null;
+                    // Build an extractor depending on the next element in the iterator
                     String nextName = name.next();
-                    if (Constants.isPermittedSelectionMode(nextName))
+                    if (Constants.isPermittedExtractionMode(nextName))
                     {
-                        selector = new SelectorParser(nextName).parse(storeContent);
+                        extractor = new ExtractorParser(nextName).parse(storeContent);
                         // If we have another name, it must be Constants.GROUP
                         if (name.hasNext())
                         {
@@ -88,8 +88,8 @@ public class ResponseStoreParser
                             // Verify the value of the nextName is the allowed field Constants.GROUP
                             if (nextName.equals(Constants.GROUP))
                             {
-                                // Verify the selector is a RegexpSelector, as no other AbstractSelector has a second argument
-                                if (!(selector instanceof RegexpSelector))
+                                // Verify the extractor is a RegexpExtractor, as no other AbstractExtractor has a second argument
+                                if (!(extractor instanceof RegexpExtractor))
                                 {
                                     throw new IllegalArgumentException("Not a permitted ResponseStore item : " + nextName);
                                 }
@@ -99,7 +99,7 @@ public class ResponseStoreParser
                                 throw new IllegalArgumentException("Unexpected argument " + nextName);
                             }
                         }
-                        responseStores.add(new ResponseStore(variableName, selector));
+                        responseStores.add(new ResponseStore(variableName, extractor));
                     }
                 }
 

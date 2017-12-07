@@ -1,7 +1,7 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response.store;
 
 import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseItem;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.AbstractSelector;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
 
 /**
  * The abstract class for every response item that interacts with the storage.
@@ -18,20 +18,20 @@ public abstract class AbstractResponseStore extends AbstractResponseItem
     /**
      * The selector for the value of the variable
      */
-    protected final AbstractSelector selector;
+    protected final AbstractExtractor extractor;
 
     /**
-     * Sets {@link #variableName} and {@link #selector}.
+     * Sets {@link #variableName} and {@link #extractor}.
      * 
      * @param variableName
      *            The name of the variable
-     * @param selector
+     * @param extractor
      *            The selector to use for the value
      */
-    public AbstractResponseStore(final String variableName, final AbstractSelector selector)
+    public AbstractResponseStore(final String variableName, final AbstractExtractor extractor)
     {
         this.variableName = variableName;
-        this.selector = selector;
+        this.extractor = extractor;
     }
 
     public String getVariableName()
@@ -39,9 +39,9 @@ public abstract class AbstractResponseStore extends AbstractResponseItem
         return variableName;
     }
 
-    public AbstractSelector getSelector()
+    public AbstractExtractor getExtractor()
     {
-        return selector;
+        return extractor;
     }
 
 }

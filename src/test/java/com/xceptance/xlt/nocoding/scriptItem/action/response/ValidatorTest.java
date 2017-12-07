@@ -8,15 +8,15 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.xceptance.xlt.api.util.XltProperties;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.AbstractSelector;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.CookieSelector;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.HeaderSelector;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.RegexpSelector;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMode.AbstractValidationMode;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMode.CountValidator;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMode.ExistsValidator;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMode.MatchesValidator;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMode.TextValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.CookieExtractor;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.HeaderExtractor;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.RegexpExtractor;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.AbstractValidationMethod;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.CountValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.ExistsValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.MatchesValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.TextValidator;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.MockObjects;
 
@@ -40,28 +40,28 @@ public class ValidatorTest
     {
         // Build Validator with ExistsModule
         final String validationName = "Cookie Validation";
-        AbstractSelector selector = new CookieSelector(mockObjects.cookieName1);
-        AbstractValidationMode mode = new ExistsValidator();
-        Validator validator = new Validator(validationName, selector, mode);
+        AbstractExtractor extractor = new CookieExtractor(mockObjects.cookieName1);
+        AbstractValidationMethod method = new ExistsValidator();
+        Validator validator = new Validator(validationName, extractor, method);
 
         executeRequest(validator);
 
         // Build Validator with TextModule
-        selector = new CookieSelector(mockObjects.cookieName1);
-        mode = new TextValidator(mockObjects.cookieValue1);
-        validator = new Validator(validationName, selector, mode);
+        extractor = new CookieExtractor(mockObjects.cookieName1);
+        method = new TextValidator(mockObjects.cookieValue1);
+        validator = new Validator(validationName, extractor, method);
         executeRequest(validator);
 
         // Build Validator with MatchesModule
-        selector = new CookieSelector(mockObjects.cookieName1);
-        mode = new MatchesValidator(mockObjects.cookieValue1);
-        validator = new Validator(validationName, selector, mode);
+        extractor = new CookieExtractor(mockObjects.cookieName1);
+        method = new MatchesValidator(mockObjects.cookieValue1);
+        validator = new Validator(validationName, extractor, method);
         executeRequest(validator);
 
         // Build Validator with MatchesModule
-        selector = new CookieSelector(mockObjects.cookieName1);
-        mode = new CountValidator("1");
-        validator = new Validator(validationName, selector, mode);
+        extractor = new CookieExtractor(mockObjects.cookieName1);
+        method = new CountValidator("1");
+        validator = new Validator(validationName, extractor, method);
         executeRequest(validator);
 
     }
@@ -71,28 +71,28 @@ public class ValidatorTest
     {
         // Build Validator with ExistsModule
         final String validationName = "Header Validation";
-        AbstractSelector selector = new HeaderSelector("Set-Cookie");
-        AbstractValidationMode mode = new ExistsValidator();
-        Validator validator = new Validator(validationName, selector, mode);
+        AbstractExtractor extractor = new HeaderExtractor("Set-Cookie");
+        AbstractValidationMethod method = new ExistsValidator();
+        Validator validator = new Validator(validationName, extractor, method);
 
         executeRequest(validator);
 
         // Build Validator with TextModule
-        selector = new HeaderSelector("Set-Cookie");
-        mode = new TextValidator(mockObjects.cookieName1 + "=" + mockObjects.cookieValue1);
-        validator = new Validator(validationName, selector, mode);
+        extractor = new HeaderExtractor("Set-Cookie");
+        method = new TextValidator(mockObjects.cookieName1 + "=" + mockObjects.cookieValue1);
+        validator = new Validator(validationName, extractor, method);
         executeRequest(validator);
 
         // Build Validator with MatchesModule
-        selector = new HeaderSelector("Set-Cookie");
-        mode = new MatchesValidator(mockObjects.cookieName1 + "=" + mockObjects.cookieValue1);
-        validator = new Validator(validationName, selector, mode);
+        extractor = new HeaderExtractor("Set-Cookie");
+        method = new MatchesValidator(mockObjects.cookieName1 + "=" + mockObjects.cookieValue1);
+        validator = new Validator(validationName, extractor, method);
         executeRequest(validator);
 
         // Build Validator with MatchesModule
-        selector = new HeaderSelector("Set-Cookie");
-        mode = new CountValidator("3");
-        validator = new Validator(validationName, selector, mode);
+        extractor = new HeaderExtractor("Set-Cookie");
+        method = new CountValidator("3");
+        validator = new Validator(validationName, extractor, method);
         executeRequest(validator);
 
     }
@@ -102,28 +102,28 @@ public class ValidatorTest
     {
         // Build Validator with ExistsModule
         final String validationName = "Regexp Validation";
-        AbstractSelector selector = new RegexpSelector(mockObjects.regexString);
-        AbstractValidationMode mode = new ExistsValidator();
-        Validator validator = new Validator(validationName, selector, mode);
+        AbstractExtractor extractor = new RegexpExtractor(mockObjects.regexString);
+        AbstractValidationMethod method = new ExistsValidator();
+        Validator validator = new Validator(validationName, extractor, method);
 
         executeRequest(validator);
 
         // Build Validator with TextModule
-        selector = new RegexpSelector(mockObjects.regexString);
-        mode = new TextValidator(mockObjects.regexStringExpected);
-        validator = new Validator(validationName, selector, mode);
+        extractor = new RegexpExtractor(mockObjects.regexString);
+        method = new TextValidator(mockObjects.regexStringExpected);
+        validator = new Validator(validationName, extractor, method);
         executeRequest(validator);
 
         // Build Validator with MatchesModule
-        selector = new RegexpSelector(mockObjects.regexString);
-        mode = new MatchesValidator(mockObjects.regexStringExpected);
-        validator = new Validator(validationName, selector, mode);
+        extractor = new RegexpExtractor(mockObjects.regexString);
+        method = new MatchesValidator(mockObjects.regexStringExpected);
+        validator = new Validator(validationName, extractor, method);
         executeRequest(validator);
 
         // Build Validator with MatchesModule
-        selector = new RegexpSelector(mockObjects.regexString);
-        mode = new CountValidator("1");
-        validator = new Validator(validationName, selector, mode);
+        extractor = new RegexpExtractor(mockObjects.regexString);
+        method = new CountValidator("1");
+        validator = new Validator(validationName, extractor, method);
         executeRequest(validator);
     }
 
@@ -134,9 +134,9 @@ public class ValidatorTest
         final String validationName = "Regexp Validation";
         context.getVariables().store(variableName, validationName);
         // Build Validator with ExistsModule
-        final AbstractSelector selector = new RegexpSelector(mockObjects.regexString);
-        final AbstractValidationMode mode = new ExistsValidator();
-        final Validator validator = new Validator("${" + variableName + "}", selector, mode);
+        final AbstractExtractor extractor = new RegexpExtractor(mockObjects.regexString);
+        final AbstractValidationMethod method = new ExistsValidator();
+        final Validator validator = new Validator("${" + variableName + "}", extractor, method);
         executeRequest(validator);
         Assert.assertNotEquals(validationName, validator.getValidationName());
     }
@@ -146,12 +146,12 @@ public class ValidatorTest
     {
         final String validationName = "Regexp Validation";
         // Build Validator with ExistsModule
-        final AbstractSelector selector = new RegexpSelector(mockObjects.regexString, "0");
-        final AbstractValidationMode mode = new ExistsValidator();
-        final Validator validator = new Validator(validationName, selector, mode);
+        final AbstractExtractor extractor = new RegexpExtractor(mockObjects.regexString, "0");
+        final AbstractValidationMethod method = new ExistsValidator();
+        final Validator validator = new Validator(validationName, extractor, method);
         executeRequest(validator);
-        Assert.assertTrue(selector instanceof RegexpSelector);
-        Assert.assertEquals("0", ((RegexpSelector) selector).getGroup());
+        Assert.assertTrue(extractor instanceof RegexpExtractor);
+        Assert.assertEquals("0", ((RegexpExtractor) extractor).getGroup());
     }
 
     /*

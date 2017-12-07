@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.scriptItem.action.response.validationMode;
+package com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod;
 
 import org.junit.Assert;
 
@@ -9,7 +9,7 @@ import com.xceptance.xlt.nocoding.util.Context;
  * 
  * @author ckeiner
  */
-public class ExistsValidator extends AbstractValidationMode
+public class ExistsValidator extends AbstractValidationMethod
 {
 
     /**

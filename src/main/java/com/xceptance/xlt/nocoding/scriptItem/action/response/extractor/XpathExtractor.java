@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.scriptItem.action.response.selector;
+package com.xceptance.xlt.nocoding.scriptItem.action.response.extractor;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,11 +12,9 @@ import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.util.Context;
 
-public class XpathSelector extends AbstractSelector
+public class XpathExtractor extends AbstractExtractor
 {
     private SgmlPage htmlPage;
-
-    private WebResponse webResponse;
 
     /**
      * Contains all the supported mime types. Supported mime types so far:
@@ -43,9 +41,9 @@ public class XpathSelector extends AbstractSelector
         HEADERCONTENTTYPES.put(TEXTAPPLICATION, HTML);
     }
 
-    public XpathSelector(final String selectionExpression)
+    public XpathExtractor(final String extractionExpression)
     {
-        super(selectionExpression);
+        super(extractionExpression);
     }
 
     @Override

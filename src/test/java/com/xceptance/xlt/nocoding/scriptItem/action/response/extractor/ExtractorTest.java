@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.scriptItem.action.response.selector;
+package com.xceptance.xlt.nocoding.scriptItem.action.response.extractor;
 
 import org.junit.Before;
 
@@ -6,7 +6,7 @@ import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.MockObjects;
 
-public abstract class SelectorTest
+public abstract class ExtractorTest
 {
     protected Context context;
 

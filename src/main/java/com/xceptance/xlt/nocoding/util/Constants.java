@@ -162,7 +162,7 @@ public class Constants
      * <li>{@link #COOKIE}
      * </ul>
      */
-    public final static Set<String> PERMITTEDSELECTIONMODE = new HashSet<>();
+    public final static Set<String> PERMITTEDEXTRACTIONMODE = new HashSet<>();
 
     /**
      * Supported validation modes:
@@ -173,7 +173,7 @@ public class Constants
      * <li>{@link #EXISTS}
      * </ul>
      */
-    public final static Set<String> PERMITTEDVALIDATIONMODE = new HashSet<>();
+    public final static Set<String> PERMITTEDVALIDATIONMETHOD = new HashSet<>();
 
     static
     {
@@ -216,15 +216,15 @@ public class Constants
         PERMITTEDSUBREQUESTITEMS.add(XHR);
         PERMITTEDSUBREQUESTITEMS.add(STATIC);
 
-        PERMITTEDSELECTIONMODE.add(XPATH);
-        PERMITTEDSELECTIONMODE.add(REGEXP);
-        PERMITTEDSELECTIONMODE.add(HEADER);
-        PERMITTEDSELECTIONMODE.add(COOKIE);
+        PERMITTEDEXTRACTIONMODE.add(XPATH);
+        PERMITTEDEXTRACTIONMODE.add(REGEXP);
+        PERMITTEDEXTRACTIONMODE.add(HEADER);
+        PERMITTEDEXTRACTIONMODE.add(COOKIE);
 
-        PERMITTEDVALIDATIONMODE.add(TEXT);
-        PERMITTEDVALIDATIONMODE.add(MATCHES);
-        PERMITTEDVALIDATIONMODE.add(COUNT);
-        PERMITTEDVALIDATIONMODE.add(EXISTS);
+        PERMITTEDVALIDATIONMETHOD.add(TEXT);
+        PERMITTEDVALIDATIONMETHOD.add(MATCHES);
+        PERMITTEDVALIDATIONMETHOD.add(COUNT);
+        PERMITTEDVALIDATIONMETHOD.add(EXISTS);
     }
 
     public static boolean isPermittedListItem(final String s)
@@ -252,14 +252,14 @@ public class Constants
         return PERMITTEDSUBREQUESTITEMS.contains(s);
     }
 
-    public static boolean isPermittedSelectionMode(final String s)
+    public static boolean isPermittedExtractionMode(final String s)
     {
-        return PERMITTEDSELECTIONMODE.contains(s);
+        return PERMITTEDEXTRACTIONMODE.contains(s);
     }
 
-    public static boolean isPermittedValidationMode(final String s)
+    public static boolean isPermittedValidationMethod(final String s)
     {
-        return PERMITTEDVALIDATIONMODE.contains(s);
+        return PERMITTEDVALIDATIONMETHOD.contains(s);
     }
 
 }

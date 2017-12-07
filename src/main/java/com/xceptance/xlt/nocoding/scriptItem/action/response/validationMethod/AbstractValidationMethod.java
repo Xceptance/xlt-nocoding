@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.scriptItem.action.response.validationMode;
+package com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import com.xceptance.xlt.nocoding.util.Context;
  * 
  * @author ckeiner
  */
-public abstract class AbstractValidationMode
+public abstract class AbstractValidationMethod
 {
 
     /**
@@ -18,7 +18,7 @@ public abstract class AbstractValidationMode
     private List<String> expressionToValidate;
 
     /**
-     * Executes the validation mode. Therefore, this method should use at least one assertion.
+     * Executes the validation method. Therefore, this method should use at least one assertion.
      * 
      * @param context
      *            The {@link Context} to use

@@ -1,14 +1,14 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response;
 
 import com.xceptance.xlt.api.util.XltLogger;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.AbstractSelector;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.RegexpSelector;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMode.AbstractValidationMode;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMode.ExistsValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.RegexpExtractor;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.AbstractValidationMethod;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.ExistsValidator;
 import com.xceptance.xlt.nocoding.util.Context;
 
 /**
- * Uses an {@link AbstractSelector} and {@link AbstractValidationMode} to validate the result of the selection.
+ * Uses an {@link AbstractExtractor} and {@link AbstractValidationMethod} to validate the result of the extraction.
  * 
  * @author ckeiner
  */
@@ -21,57 +21,58 @@ public class Validator extends AbstractResponseItem
     private final String validationName;
 
     /**
-     * The selector to use
+     * The extractor to use
      */
-    private final AbstractSelector selector;
+    private final AbstractExtractor extractor;
 
     /**
      * The validation method
      */
-    private AbstractValidationMode mode;
+    private AbstractValidationMethod method;
 
     /**
-     * Creates an instance of {@link Validator} that sets the {@link #validationName}, {@link #selector} and {@link #mode}.
+     * Creates an instance of {@link Validator} that sets the {@link #validationName}, {@link #extractor} and
+     * {@link #method}.
      * 
      * @param validationName
      *            The name of the validation
-     * @param selector
-     *            The selector to use
-     * @param mode
+     * @param extractor
+     *            The extractor to use
+     * @param method
      *            The validation method
      */
-    public Validator(final String validationName, final AbstractSelector selector, final AbstractValidationMode mode)
+    public Validator(final String validationName, final AbstractExtractor extractor, final AbstractValidationMethod method)
     {
         this.validationName = validationName;
-        this.selector = selector;
-        this.mode = mode;
+        this.extractor = extractor;
+        this.method = method;
     }
 
     /**
-     * Executes the validator by setting {@link #group} if it is specified and {@link #selector} is a
-     * {@link RegexpSelector}. The executes the {@link #selector}. Then, if {@link #mode} is null, it sets it to
-     * {@link ExistsValidator}. Finally, it sets {@link AbstractValidationMode#setExpressionToValidate(java.util.List)} with
-     * {@link AbstractSelector#getResult()} and executes the {@link #mode}.
+     * Executes the validator by setting {@link #group} if it is specified and {@link #extractor} is a
+     * {@link RegexpExtractor}. Then executes the {@link #extractor}. Then, if {@link #method} is null, it sets it to
+     * {@link ExistsValidator}. Finally, it sets {@link AbstractValidationMethod#setExpressionToValidate(java.util.List)}
+     * with {@link AbstractExtractor#getResult()} and executes the {@link #method}.
      */
     @Override
     public void execute(final Context context) throws Exception
     {
-        // Execute the selector
-        selector.execute(context);
+        // Execute the extractor
+        extractor.execute(context);
 
-        // If we don't have a mode, then we simply want to confirm the existence of a solution
-        if (mode == null)
+        // If we don't have a validation method, then we simply want to confirm the existence of a solution
+        if (method == null)
         {
-            mode = new ExistsValidator();
+            method = new ExistsValidator();
         }
-        // Set the result of the execution as expression to validate in Validator
-        mode.setExpressionToValidate(selector.getResult());
+        // Set the result of the execution as expressionToValidate in the ValidationMethod
+        method.setExpressionToValidate(extractor.getResult());
         // Try to validate and catch any Exception and AssertionErrors so the validationName can be added to the
         // Exception/AssertionError
         try
         {
             // Validate the solution of the selector
-            mode.execute(context);
+            method.execute(context);
         }
         catch (final Exception e)
         {
@@ -92,14 +93,14 @@ public class Validator extends AbstractResponseItem
         return validationName;
     }
 
-    public AbstractSelector getSelector()
+    public AbstractExtractor getExtractor()
     {
-        return selector;
+        return extractor;
     }
 
-    public AbstractValidationMode getMode()
+    public AbstractValidationMethod getMethod()
     {
-        return mode;
+        return method;
     }
 
 }

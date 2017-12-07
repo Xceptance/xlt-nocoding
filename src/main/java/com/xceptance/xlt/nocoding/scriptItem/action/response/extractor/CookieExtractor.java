@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.scriptItem.action.response.selector;
+package com.xceptance.xlt.nocoding.scriptItem.action.response.extractor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,30 +7,30 @@ import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.util.Context;
 
 /**
- * Stores the specified cookie from the headers located in {@link Context#getWebResponse()}. The cookie is selected via
- * name provided by {@link #getSelectionExpression()}. The value of the cookie is then accessible with
+ * Extracts the specified cookie from the headers located in {@link Context#getWebResponse()}. The cookie is extracted
+ * via name provided by {@link #getExtractionExpression()}. The value of the cookie is then accessible with
  * {@link #getResult()}.
  * 
  * @author ckeiner
  */
-public class CookieSelector extends AbstractSelector
+public class CookieExtractor extends AbstractExtractor
 {
 
     /**
-     * Creates an instance of {@link CookieSelector}, sets {@link #selectionExpression} and creates an {@link ArrayList} for
-     * {@link #result}.
+     * Creates an instance of {@link CookieExtractor}, sets {@link #extractionExpression} and creates an {@link ArrayList}
+     * for {@link #result}.
      * 
-     * @param selectionExpression
+     * @param extractionExpression
      *            The name of the cookie
      */
-    public CookieSelector(final String selectionExpression)
+    public CookieExtractor(final String extractionExpression)
     {
-        super(selectionExpression);
+        super(extractionExpression);
     }
 
     /**
-     * Iterates over the headers in {@link Context#getWebResponse()} and selects the cookie with the name provided by
-     * {@link #getSelectionExpression()}. Finally, it stores the value in the results via {@link #addResult(String)}.
+     * Iterates over the headers in {@link Context#getWebResponse()} and extracts the cookie with the name provided by
+     * {@link #getExtractionExpression()}. Finally, it stores the value in the results via {@link #addResult(String)}.
      * 
      * @param context
      *            The {@link Context} to use
@@ -54,8 +54,8 @@ public class CookieSelector extends AbstractSelector
                 String cookieName = header.getValue().substring(0, equalSignPosition);
                 // Remove possible whitespaces at the beginning
                 cookieName = cookieName.trim();
-                // and compare it with the selectionExpression
-                if (cookieName.equals(getSelectionExpression()))
+                // and compare it with the extractionExpression
+                if (cookieName.equals(getExtractionExpression()))
                 {
                     String cookieContent = null;
                     // Get the end position of the cookie content, which is at the first semicolon
@@ -73,6 +73,7 @@ public class CookieSelector extends AbstractSelector
                     }
                     // Remove possible whitespaces at the beginning or end
                     cookieContent = cookieContent.trim();
+                    // Add it to the results
                     addResult(cookieContent);
                 }
             }

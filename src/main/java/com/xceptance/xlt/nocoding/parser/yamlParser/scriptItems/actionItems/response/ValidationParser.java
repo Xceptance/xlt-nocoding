@@ -8,13 +8,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xceptance.xlt.api.util.XltLogger;
-import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.response.selector.SelectorParser;
-import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.response.validators.ValidationModeParser;
+import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.response.extractor.ExtractorParser;
+import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.response.validators.ValidationMethodParser;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Validator;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.AbstractSelector;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.RegexpSelector;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMode.AbstractValidationMode;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.RegexpExtractor;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.AbstractValidationMethod;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
@@ -60,8 +60,8 @@ public class ValidationParser
             {
                 // The current fieldName is the name of the validation
                 validationName = fieldName.next();
-                AbstractSelector selector = null;
-                AbstractValidationMode validation = null;
+                AbstractExtractor extractor = null;
+                AbstractValidationMethod validation = null;
 
                 /*
                  * Substructure of a validation
@@ -84,15 +84,15 @@ public class ValidationParser
                     // Get the next fieldName
                     final String nextName = name.next();
 
-                    // If it is a permitted selection mode
-                    if (Constants.isPermittedSelectionMode(nextName))
+                    // If it is a permitted extraction mode
+                    if (Constants.isPermittedExtractionMode(nextName))
                     {
-                        // Check that the selector is the first item and no other selector was defined already
-                        if (validation == null && selector == null)
+                        // Check that the extractor is the first item and no other extractor was defined already
+                        if (validation == null && extractor == null)
                         {
-                            // Parse the selector
-                            XltLogger.runTimeLogger.debug("Selection Mode is " + selector);
-                            selector = new SelectorParser(nextName).parse(validationContent);
+                            // Parse the extractor
+                            XltLogger.runTimeLogger.debug("Extraction Mode is " + extractor);
+                            extractor = new ExtractorParser(nextName).parse(validationContent);
                         }
                         else
                         {
@@ -100,36 +100,36 @@ public class ValidationParser
                             String errorMessage = null;
                             if (validation != null)
                             {
-                                errorMessage = "Selection must be parsed before the Validation Mode!";
+                                errorMessage = "Extraction must be parsed before the Validation Method!";
                             }
-                            else if (selector != null)
+                            else if (extractor != null)
                             {
-                                errorMessage = "Cannot parse two selections!";
+                                errorMessage = "Cannot parse two extractors!";
                             }
                             throw new IllegalArgumentException(errorMessage);
                         }
                     }
-                    // If it is a permitted validation mode
-                    else if (Constants.isPermittedValidationMode(nextName))
+                    // If it is a permitted validation method
+                    else if (Constants.isPermittedValidationMethod(nextName))
                     {
                         // Check that the validation is the second item and no other validation was defined already
-                        if (selector != null && validation == null)
+                        if (extractor != null && validation == null)
                         {
-                            // Parse the validation mode
-                            XltLogger.runTimeLogger.debug("Validation Mode is " + selector);
-                            validation = new ValidationModeParser(nextName).parse(validationContent);
+                            // Parse the validation method
+                            XltLogger.runTimeLogger.debug("Validation Method is " + extractor);
+                            validation = new ValidationMethodParser(nextName).parse(validationContent);
                         }
                         else
                         {
                             // Throw an error depending on why the parsing failed
                             String errorMessage = null;
-                            if (selector == null)
+                            if (extractor == null)
                             {
-                                errorMessage = "Validation Mode must be parsed after selection!";
+                                errorMessage = "Validation Method must be parsed after the extractor!";
                             }
                             else if (validation != null)
                             {
-                                errorMessage = "Cannot parse two validation modes!";
+                                errorMessage = "Cannot parse two validation method!";
                             }
                             throw new IllegalArgumentException(errorMessage);
                         }
@@ -137,10 +137,10 @@ public class ValidationParser
                     // If it is group
                     else if (nextName.equals(Constants.GROUP))
                     {
-                        if (!(selector instanceof RegexpSelector))
+                        if (!(extractor instanceof RegexpExtractor))
                         {
-                            throw new IllegalArgumentException("Group cannot be specified unless selector is RegexpSelector, but is "
-                                                               + selector.getClass().getSimpleName());
+                            throw new IllegalArgumentException("Group cannot be specified unless selector is RegexpExtractor, but is "
+                                                               + extractor.getClass().getSimpleName());
                         }
                     }
                     // If it is none of the above, nextName was not a permitted validation item
@@ -149,8 +149,8 @@ public class ValidationParser
                         throw new IllegalArgumentException("Unknown Validation Item " + nextName);
                     }
                 }
-                // Add the new validator to the validator list
-                validator.add(new Validator(validationName, selector, validation));
+                // Add the new validator to the list of validators
+                validator.add(new Validator(validationName, extractor, validation));
                 // Print a debug statement
                 XltLogger.runTimeLogger.debug("Added " + validationName + " to Validations");
             }

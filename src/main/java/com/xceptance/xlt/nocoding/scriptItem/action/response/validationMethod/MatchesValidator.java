@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.scriptItem.action.response.validationMode;
+package com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,7 +13,7 @@ import com.xceptance.xlt.nocoding.util.Context;
  * 
  * @author ckeiner
  */
-public class MatchesValidator extends AbstractValidationMode
+public class MatchesValidator extends AbstractValidationMethod
 {
 
     /**

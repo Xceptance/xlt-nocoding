@@ -15,9 +15,9 @@ import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.XltMockWebConnection;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.CookieSelector;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.HeaderSelector;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.RegexpSelector;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.CookieExtractor;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.HeaderExtractor;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.RegexpExtractor;
 import com.xceptance.xlt.nocoding.util.Context;
 
 public class StoreTest
@@ -94,7 +94,7 @@ public class StoreTest
         // Define the header you want to check for
         final String header = "Cache-Control";
         // Build the store unit that searches for the header
-        store = new ResponseStore("header", new HeaderSelector(header));
+        store = new ResponseStore("header", new HeaderExtractor(header));
 
         context.setWebResponse(webResponse);
         // Execute
@@ -124,7 +124,7 @@ public class StoreTest
         final String cookie = "NINJA_FLASH";
         // Define the content of the cookie
         // Build the store unit that searches only for the cookie
-        store = new ResponseStore("cookie", new CookieSelector(cookie));
+        store = new ResponseStore("cookie", new CookieExtractor(cookie));
         context.setWebResponse(webResponse);
         // Execute
         store.execute(context);
@@ -149,7 +149,7 @@ public class StoreTest
         final String text = "class=\"userMenuHeader\">Welcome: Guest</li>";
 
         // Build a validator, that searches for the pattern and verifies text is the first match
-        store = new ResponseStore("firstClass", new RegexpSelector(pattern));
+        store = new ResponseStore("firstClass", new RegexpExtractor(pattern));
         context.setWebResponse(webResponse);
         // Execute
         store.execute(context);
@@ -160,7 +160,7 @@ public class StoreTest
         // Define the group the text should be in
         final String group = "1";
         // Build a validator, that searches for the pattern and verifies text is the match in the matching group of group
-        store = new ResponseStore("firstClassWithGroup", new RegexpSelector(pattern, group));
+        store = new ResponseStore("firstClassWithGroup", new RegexpExtractor(pattern, group));
         context.setWebResponse(webResponse);
         // Execute
         store.execute(context);

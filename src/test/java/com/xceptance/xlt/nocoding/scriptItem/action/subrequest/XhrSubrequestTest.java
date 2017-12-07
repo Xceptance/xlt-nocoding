@@ -13,7 +13,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseIte
 import com.xceptance.xlt.nocoding.scriptItem.action.response.HttpcodeValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Validator;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.selector.RegexpSelector;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.RegexpExtractor;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.MockObjects;
 
@@ -42,7 +42,7 @@ public class XhrSubrequestTest
 
         final List<AbstractResponseItem> responseItems = new ArrayList<AbstractResponseItem>();
         responseItems.add(new HttpcodeValidator("200"));
-        final AbstractResponseItem responseItem = new Validator("Validate Title", new RegexpSelector(mockObjects.regexStringExpected),
+        final AbstractResponseItem responseItem = new Validator("Validate Title", new RegexpExtractor(mockObjects.regexStringExpected),
                                                                 null);
         responseItems.add(responseItem);
         actionItem = new Response(responseItems);
