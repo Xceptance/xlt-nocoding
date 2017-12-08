@@ -197,11 +197,12 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
     {
         synchronized (DATA_CACHE)
         {
-            List<ScriptItem> result = DATA_CACHE.get(parser.getFile().getAbsolutePath());
+            final String filePath = parser.getFile().getAbsolutePath();
+            List<ScriptItem> result = DATA_CACHE.get(filePath);
             if (result == null)
             {
                 result = parser.parse();
-                DATA_CACHE.put(parser.getFile().getAbsolutePath(), result);
+                DATA_CACHE.put(filePath, result);
             }
             return result;
         }
