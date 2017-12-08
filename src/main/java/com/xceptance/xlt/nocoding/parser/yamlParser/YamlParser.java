@@ -64,69 +64,71 @@ public class YamlParser extends Parser
         final JsonNode root = mapper.readTree(parser);
 
         // Check that the root, which consists of the list items, is an ArrayNode
-        if (root != null && !(root instanceof ArrayNode))
-        {
-            throw new IllegalArgumentException("Expected list items to be of type ArrayNode but is of type "
-                                               + root.getClass().getSimpleName());
-        }
-
-        // If we have a root, extract its elements
         if (root != null)
         {
-            // Get an iterator over the elements
-            final Iterator<JsonNode> nodes = root.elements();
-            // Count the number of list items we have
-            int numberObject = 0;
-
-            // Iterate over all tokens
-            while (nodes.hasNext())
+            if (!(root instanceof ArrayNode))
             {
-                // Get the next element
-                final JsonNode node = nodes.next();
-                // final String currentName;
-                final String currentName = node.fieldNames().next();
-                // Increase the counter
-                numberObject++;
+                throw new IllegalArgumentException("Expected list items to be of type ArrayNode but is of type "
+                                                   + root.getClass().getSimpleName());
+            }
+            // If root is an ArrayNode
+            else
+            {
+                // Get an iterator over the elements
+                final Iterator<JsonNode> nodes = root.elements();
+                // Count the number of list items we have
+                int numberObject = 0;
 
-                // Check if we have a permitted list item
-                if (Constants.isPermittedListItem(currentName))
+                // Iterate over all tokens
+                while (nodes.hasNext())
                 {
-                    XltLogger.runTimeLogger.info(numberObject + ".th ScriptItem: " + currentName);
+                    // Get the next element
+                    final JsonNode node = nodes.next();
+                    // final String currentName;
+                    final String currentName = node.fieldNames().next();
+                    // Increase the counter
+                    numberObject++;
 
-                    // Try and catch, so we can use a JsonParseException, which prints the line/column number
-                    try
+                    // Check if we have a permitted list item
+                    if (Constants.isPermittedListItem(currentName))
                     {
-                        // Differentiate between Store, Action and default definitions
-                        AbstractScriptItemParser scriptItemParser = null;
-                        if (currentName.equals(Constants.STORE))
-                        {
-                            // Set parser to StoreItemParser
-                            scriptItemParser = new StoreItemParser();
-                        }
-                        else if (currentName.equals(Constants.ACTION))
-                        {
-                            // Set parser to ActionItemParser
-                            scriptItemParser = new ActionItemParser();
-                        }
-                        else
-                        {
-                            // Set parser to DefaultItemParser
-                            scriptItemParser = new StoreDefaultParser();
-                        }
-                        // Parse the scriptItem
-                        scriptItems.addAll(scriptItemParser.parse(node));
+                        XltLogger.runTimeLogger.info(numberObject + ".th ScriptItem: " + currentName);
 
+                        // Try and catch, so we can use a JsonParseException, which prints the line/column number
+                        try
+                        {
+                            // Differentiate between Store, Action and default definitions
+                            AbstractScriptItemParser scriptItemParser = null;
+                            switch (currentName)
+                            {
+                                case Constants.STORE:
+                                    // Set parser to StoreItemParser
+                                    scriptItemParser = new StoreItemParser();
+                                    break;
+                                case Constants.ACTION:
+                                    // Set parser to ActionItemParser
+                                    scriptItemParser = new ActionItemParser();
+                                    break;
+
+                                default:
+                                    // Set parser to DefaultItemParser
+                                    scriptItemParser = new StoreDefaultParser();
+                                    break;
+                            }
+                            // Parse the scriptItem
+                            scriptItems.addAll(scriptItemParser.parse(node));
+                        }
+                        // Catch any exception while parsing, so we can print the current line/column number with the error
+                        catch (final Exception e)
+                        {
+                            throw new JsonParseException(parser, e.getMessage(), e);
+                        }
                     }
-                    // Catch any exception while parsing, so we can print the current line/column number with the error
-                    catch (final Exception e)
+                    // If the item wasn't a permitted list item, throw an exception
+                    else
                     {
-                        throw new JsonParseException(parser, e.getMessage(), e);
+                        throw new JsonParseException(parser, "No permitted list item: " + parser.getText());
                     }
-                }
-                // If the item wasn't a permitted list item, throw an exception
-                else
-                {
-                    throw new JsonParseException(parser, "No permitted list item: " + parser.getText());
                 }
             }
         }
