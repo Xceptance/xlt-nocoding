@@ -1,8 +1,5 @@
 package com.xceptance.xlt.nocoding.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.data.GeneralDataProvider;
 import com.xceptance.xlt.api.util.XltProperties;
@@ -10,7 +7,6 @@ import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.DuplicateStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.SingleStorage;
-import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.StorageUnit;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage.DefaultKeyValueStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage.UniqueStorage;
 import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
@@ -32,8 +28,6 @@ public class Context
     protected WebResponse webResponse;
 
     protected NoCodingPropertyAdmin propertyAdmin;
-
-    protected List<StorageUnit> storages;
 
     /**
      * Creates a new context, sets default Values in the dataStorage and configures the webClient according to the
@@ -62,7 +56,6 @@ public class Context
         this.propertyAdmin = new NoCodingPropertyAdmin(xltProperties);
         this.webClient = new XltWebClient();
         this.resolver = new VariableResolver(GeneralDataProvider.getInstance());
-        this.storages = new ArrayList<StorageUnit>();
         initialize();
     }
 

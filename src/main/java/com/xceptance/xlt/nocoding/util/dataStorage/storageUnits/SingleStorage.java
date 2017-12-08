@@ -8,7 +8,7 @@ import java.util.List;
  * 
  * @author ckeiner
  */
-public class SingleStorage implements StorageUnit
+public class SingleStorage
 {
     /**
      * Stores all items in a {@link List}<{@link String}>

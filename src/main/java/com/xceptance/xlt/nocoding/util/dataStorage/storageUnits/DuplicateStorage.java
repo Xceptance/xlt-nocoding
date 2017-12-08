@@ -10,7 +10,7 @@ import com.gargoylesoftware.htmlunit.util.NameValuePair;
  * 
  * @author ckeiner
  */
-public class DuplicateStorage implements StorageUnit
+public class DuplicateStorage
 {
     /**
      * Stores all items in a {@link List}<{@link NameValuePair}>
