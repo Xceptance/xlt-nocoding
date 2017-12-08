@@ -12,8 +12,9 @@ import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage.Un
 import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
 /**
- * The context for the execution. Thus, the context has methods for handling the data storage, web client, resolving
- * variables, storing the current WebResponse and managing properties.
+ * The context for the execution. Thus, the context has methods for handling the {@link DataStorage},
+ * {@link XltWebClient}, resolving variables, storing/accessing the current {@link WebResponse} and accessing
+ * properties.
  * 
  * @author ckeiner
  */
@@ -206,7 +207,7 @@ public class Context
     }
 
     /**
-     * Configures the webClient as specified in the config, thus dis/enabling javascript, css, etc.
+     * Configures the webClient as specified in the config, thus dis-/enabling javascript, css, etc.
      */
     private void configureWebClient()
     {
