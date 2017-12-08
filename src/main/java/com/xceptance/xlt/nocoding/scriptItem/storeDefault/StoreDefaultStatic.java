@@ -3,7 +3,7 @@ package com.xceptance.xlt.nocoding.scriptItem.storeDefault;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
-import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.single.SingleStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.SingleStorage;
 
 /**
  * Stores a default static request. This class does not use the variableName with the single exception of "Static:

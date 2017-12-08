@@ -1,9 +1,7 @@
-package com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.single;
+package com.xceptance.xlt.nocoding.util.dataStorage.storageUnits;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.StorageUnit;
 
 /**
  * A storage unit, that stores a {@link String} in a {@link List}.

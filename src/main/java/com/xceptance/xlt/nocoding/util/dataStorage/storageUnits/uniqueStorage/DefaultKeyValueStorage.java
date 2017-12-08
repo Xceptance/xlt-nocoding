@@ -1,10 +1,10 @@
-package com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.unique;
+package com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.dataStorage.DefaultValue;
+import com.xceptance.xlt.nocoding.util.dataStorage.DefaultValues;
 
 /**
  * A storage unit, that stores simple key value pairs for default values. However, some have a fallback value.
@@ -24,11 +24,11 @@ public class DefaultKeyValueStorage extends UniqueStorage
 
     public void initialize()
     {
-        this.store(Constants.METHOD, DefaultValue.METHOD, DefaultValue.METHOD);
-        this.store(Constants.XHR, DefaultValue.XHR, DefaultValue.XHR);
-        this.store(Constants.ENCODEPARAMETERS, DefaultValue.ENCODEPARAMETERS, DefaultValue.ENCODEPARAMETERS);
-        this.store(Constants.ENCODEBODY, DefaultValue.ENCODEBODY, DefaultValue.ENCODEBODY);
-        this.store(Constants.HTTPCODE, DefaultValue.HTTPCODE, DefaultValue.HTTPCODE);
+        this.store(Constants.METHOD, DefaultValues.METHOD, DefaultValues.METHOD);
+        this.store(Constants.XHR, DefaultValues.XHR, DefaultValues.XHR);
+        this.store(Constants.ENCODEPARAMETERS, DefaultValues.ENCODEPARAMETERS, DefaultValues.ENCODEPARAMETERS);
+        this.store(Constants.ENCODEBODY, DefaultValues.ENCODEBODY, DefaultValues.ENCODEBODY);
+        this.store(Constants.HTTPCODE, DefaultValues.HTTPCODE, DefaultValues.HTTPCODE);
 
     }
 

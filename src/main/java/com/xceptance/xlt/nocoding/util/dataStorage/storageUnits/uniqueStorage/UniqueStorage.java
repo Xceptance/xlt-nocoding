@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.unique;
+package com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage;
 
 import java.util.HashMap;
 import java.util.Map;

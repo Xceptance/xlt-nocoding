@@ -1,9 +1,9 @@
 package com.xceptance.xlt.nocoding.util.dataStorage;
 
-import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.duplicate.DuplicateStorage;
-import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.single.SingleStorage;
-import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.unique.DefaultKeyValueStorage;
-import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.unique.UniqueStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.DuplicateStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.SingleStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage.DefaultKeyValueStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage.UniqueStorage;
 
 /**
  * Handles all data storage related matters. This means, the class saves variables, default

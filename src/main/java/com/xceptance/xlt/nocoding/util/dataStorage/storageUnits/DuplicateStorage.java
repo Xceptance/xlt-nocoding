@@ -1,10 +1,9 @@
-package com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.duplicate;
+package com.xceptance.xlt.nocoding.util.dataStorage.storageUnits;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
-import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.StorageUnit;
 
 /**
  * A storage unit, that can have duplicate items.
