@@ -7,7 +7,7 @@ import com.gargoylesoftware.htmlunit.HttpMethod;
  * 
  * @author ckeiner
  */
-public class DefaultValue
+public class DefaultValues
 {
     /**
      * Request Block

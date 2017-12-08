@@ -1,7 +1,9 @@
 package com.xceptance.xlt.nocoding.api;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.NotImplementedException;
@@ -25,6 +27,10 @@ import com.xceptance.xlt.nocoding.util.NoCodingPropertyAdmin;
  */
 public abstract class AbstractURLTestCase extends AbstractTestCase
 {
+    /**
+     * Cache of all parsed data.
+     */
+    private static final Map<String, List<ScriptItem>> DATA_CACHE = new HashMap<>();
 
     /**
      * The parser to use for parsing
@@ -55,7 +61,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
         // Create the appropriate parser
         this.parser = decideParser(pathToFile);
         // Get or parse the file
-        itemList = parser.parse();
+        itemList = getOrParse();
     }
 
     /**
@@ -185,6 +191,21 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
             throw new IllegalArgumentException("Failed to find a script file for file path: " + pathToFile);
         }
         return parser;
+    }
+
+    public List<ScriptItem> getOrParse() throws Exception
+    {
+        synchronized (DATA_CACHE)
+        {
+            final String filePath = parser.getFile().getAbsolutePath();
+            List<ScriptItem> result = DATA_CACHE.get(filePath);
+            if (result == null)
+            {
+                result = parser.parse();
+                DATA_CACHE.put(filePath, result);
+            }
+            return result;
+        }
     }
 
 }

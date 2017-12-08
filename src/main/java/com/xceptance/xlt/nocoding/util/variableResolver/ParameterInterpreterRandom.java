@@ -1,5 +1,5 @@
 /**
- *  Copyright 2014 the original author or authors.
+ *  Copyright 2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,10 +21,14 @@ import org.apache.commons.lang3.RandomStringUtils;
 import com.xceptance.xlt.api.util.XltRandom;
 
 /**
- * Provide a simple interface to some often used functions to get random data. All just for convenience.
- * ${RANDOM.String(x)} : a random string with length x. Contains [A-Za-z]. ${RANDOM.String(s, x)} : a random string with
- * length x. Contains letters from s. ${RANDOM.Number(max)} : returns an integer between 0 (inclusive) and max
- * (inclusive) ${RANDOM.Number(min, max)} : returns an integer between min (inclusive) and max (inclusive)
+ * Provides an interface to some often used functions to get random data. Methods can be accessed by using
+ * ${RANDOM.methodName(arg1, ...)}. For example:
+ * <ul>
+ * <li><b>${RANDOM.String(x)}</b> : a random string with length x. Contains [A-Za-z].
+ * <li><b>${RANDOM.String(s, x)}</b> : a random string with length x. Contains letters from s.
+ * <li><b>${RANDOM.Number(max)}</b> : returns an integer between 0 (inclusive) and max (inclusive)
+ * <li><b>${RANDOM.Number(min, max)}</b> : returns an integer between min (inclusive) and max (inclusive)
+ * </ul>
  */
 public class ParameterInterpreterRandom
 {

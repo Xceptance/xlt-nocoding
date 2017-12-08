@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.xceptance.xlt.api.util.XltProperties;
-import com.xceptance.xlt.nocoding.util.dataStorage.DefaultValue;
+import com.xceptance.xlt.nocoding.util.dataStorage.DefaultValues;
 
 public class DataStorageTest
 {
@@ -118,11 +118,11 @@ public class DataStorageTest
     @Test
     public void loadDefaultValues()
     {
-        Assert.assertEquals(DefaultValue.METHOD, context.getDefaultItems().get(Constants.METHOD));
-        Assert.assertEquals(DefaultValue.HTTPCODE, context.getDefaultItems().get(Constants.HTTPCODE));
-        Assert.assertEquals(DefaultValue.ENCODEBODY, context.getDefaultItems().get(Constants.ENCODEBODY));
-        Assert.assertEquals(DefaultValue.ENCODEPARAMETERS, context.getDefaultItems().get(Constants.ENCODEPARAMETERS));
-        Assert.assertEquals(DefaultValue.XHR, context.getDefaultItems().get(Constants.XHR));
+        Assert.assertEquals(DefaultValues.METHOD, context.getDefaultItems().get(Constants.METHOD));
+        Assert.assertEquals(DefaultValues.HTTPCODE, context.getDefaultItems().get(Constants.HTTPCODE));
+        Assert.assertEquals(DefaultValues.ENCODEBODY, context.getDefaultItems().get(Constants.ENCODEBODY));
+        Assert.assertEquals(DefaultValues.ENCODEPARAMETERS, context.getDefaultItems().get(Constants.ENCODEPARAMETERS));
+        Assert.assertEquals(DefaultValues.XHR, context.getDefaultItems().get(Constants.XHR));
 
     }
 
@@ -135,11 +135,11 @@ public class DataStorageTest
         final String encodeparameters = "true";
         final String xhr = "true";
 
-        Assert.assertEquals(DefaultValue.METHOD, context.getDefaultItems().get(Constants.METHOD));
-        Assert.assertEquals(DefaultValue.HTTPCODE, context.getDefaultItems().get(Constants.HTTPCODE));
-        Assert.assertEquals(DefaultValue.ENCODEBODY, context.getDefaultItems().get(Constants.ENCODEBODY));
-        Assert.assertEquals(DefaultValue.ENCODEPARAMETERS, context.getDefaultItems().get(Constants.ENCODEPARAMETERS));
-        Assert.assertEquals(DefaultValue.XHR, context.getDefaultItems().get(Constants.XHR));
+        Assert.assertEquals(DefaultValues.METHOD, context.getDefaultItems().get(Constants.METHOD));
+        Assert.assertEquals(DefaultValues.HTTPCODE, context.getDefaultItems().get(Constants.HTTPCODE));
+        Assert.assertEquals(DefaultValues.ENCODEBODY, context.getDefaultItems().get(Constants.ENCODEBODY));
+        Assert.assertEquals(DefaultValues.ENCODEPARAMETERS, context.getDefaultItems().get(Constants.ENCODEPARAMETERS));
+        Assert.assertEquals(DefaultValues.XHR, context.getDefaultItems().get(Constants.XHR));
 
         context.getDefaultItems().store(Constants.METHOD, method);
         context.getDefaultItems().store(Constants.HTTPCODE, httpcode);
@@ -159,11 +159,11 @@ public class DataStorageTest
         context.getDefaultItems().remove(Constants.ENCODEPARAMETERS);
         context.getDefaultItems().remove(Constants.XHR);
 
-        Assert.assertEquals(DefaultValue.METHOD, context.getDefaultItems().get(Constants.METHOD));
-        Assert.assertEquals(DefaultValue.HTTPCODE, context.getDefaultItems().get(Constants.HTTPCODE));
-        Assert.assertEquals(DefaultValue.ENCODEBODY, context.getDefaultItems().get(Constants.ENCODEBODY));
-        Assert.assertEquals(DefaultValue.ENCODEPARAMETERS, context.getDefaultItems().get(Constants.ENCODEPARAMETERS));
-        Assert.assertEquals(DefaultValue.XHR, context.getDefaultItems().get(Constants.XHR));
+        Assert.assertEquals(DefaultValues.METHOD, context.getDefaultItems().get(Constants.METHOD));
+        Assert.assertEquals(DefaultValues.HTTPCODE, context.getDefaultItems().get(Constants.HTTPCODE));
+        Assert.assertEquals(DefaultValues.ENCODEBODY, context.getDefaultItems().get(Constants.ENCODEBODY));
+        Assert.assertEquals(DefaultValues.ENCODEPARAMETERS, context.getDefaultItems().get(Constants.ENCODEPARAMETERS));
+        Assert.assertEquals(DefaultValues.XHR, context.getDefaultItems().get(Constants.XHR));
 
     }
 

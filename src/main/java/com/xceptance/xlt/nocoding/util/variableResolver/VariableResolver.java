@@ -9,6 +9,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.xceptance.xlt.api.data.GeneralDataProvider;
 import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 import bsh.EvalError;
 import bsh.Interpreter;
@@ -51,7 +52,7 @@ public class VariableResolver
      * 
      * @param toResolve
      * @param context
-     * @return
+     * @return The resolved string with no variables
      */
     public String resolveString(final String toResolve, final Context context)
     {
@@ -89,7 +90,7 @@ public class VariableResolver
      * @param expression
      * @param mustBeResolved
      * @param context
-     * @return
+     * @return A pair consisting of the resolved value and the length of the expression that was resolved
      */
     public Pair<String, Integer> resolveExpression(final String expression, final boolean mustBeResolved, final Context context)
     {
@@ -163,11 +164,14 @@ public class VariableResolver
     }
 
     /**
-     * Asks dataStorage etc for the value of the variable
+     * Asks the {@link DataStorage}, then beanshell, then the property files for the value of the variable. If none of these
+     * know the variable, it returns the variable with ${ at the beginning and } at the end
      * 
      * @param variableName
+     *            The name of the variable
      * @param context
-     * @return
+     * @return The value provided in either {@link DataStorage}, beanshell, or the property files. If no value was found,
+     *         returns "${variableName}"
      */
     private String resolveVariable(final String variableName, final Context context)
     {
