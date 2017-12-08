@@ -78,12 +78,6 @@
             <version>1.18</version>
         </dependency>
         <dependency>
-            <groupId>com.xceptance</groupId>
-            <artifactId>xlt</artifactId>
-            <version>4.9.2</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
         	<groupId>com.fasterxml.jackson.dataformat</groupId>
         	<artifactId>jackson-dataformat-csv</artifactId>
         	<version>2.9.0</version>
@@ -92,6 +86,12 @@
         	<groupId>com.fasterxml.jackson.dataformat</groupId>
         	<artifactId>jackson-dataformat-yaml</artifactId>
         	<version>2.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.xceptance</groupId>
+            <artifactId>xlt</artifactId>
+            <version>4.9.4</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

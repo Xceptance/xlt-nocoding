@@ -14,7 +14,7 @@ public class StoreItem implements ScriptItem
     /**
      * The name of the variable
      */
-    private String variableName;
+    private final String variableName;
 
     /**
      * The value of the variable
@@ -50,11 +50,6 @@ public class StoreItem implements ScriptItem
     public String getVariableName()
     {
         return variableName;
-    }
-
-    public void setVariableName(final String variableName)
-    {
-        this.variableName = variableName;
     }
 
     public String getValue()

@@ -59,4 +59,9 @@ public class TextValidator extends AbstractValidationMethod
         validationExpression = context.resolveString(validationExpression);
     }
 
+    public String getValidationExpression()
+    {
+        return validationExpression;
+    }
+
 }

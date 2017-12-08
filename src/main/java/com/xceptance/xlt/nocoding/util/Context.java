@@ -9,15 +9,10 @@ import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.StorageUnit;
-import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.duplicate.CookieStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.duplicate.DuplicateStorage;
-import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.duplicate.ParameterStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.single.SingleStorage;
-import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.single.StaticUrlStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.unique.DefaultKeyValueStorage;
-import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.unique.HeaderStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.unique.UniqueStorage;
-import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.unique.VariableStorage;
 import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
 /**
@@ -83,7 +78,6 @@ public class Context
         this.resolver = context.getResolver();
         this.webResponse = context.getWebResponse();
         this.propertyAdmin = context.getPropertyAdmin();
-        this.storages = context.getStorages();
     }
 
     /**
@@ -91,21 +85,7 @@ public class Context
      */
     public void initialize()
     {
-        initStorages();
         configureWebClient();
-    }
-
-    /**
-     * Initializes all {@link StorageUnit}s to the {@link #storages}.
-     */
-    private void initStorages()
-    {
-        getStorages().add(new CookieStorage());
-        getStorages().add(new ParameterStorage());
-        getStorages().add(new StaticUrlStorage());
-        getStorages().add(new DefaultKeyValueStorage());
-        getStorages().add(new HeaderStorage());
-        getStorages().add(new VariableStorage());
     }
 
     public DataStorage getDataStorage()
@@ -230,32 +210,6 @@ public class Context
     public long getPropertyByKey(final String key, final long defaultValue)
     {
         return getPropertyAdmin().getPropertyByKey(key, defaultValue);
-    }
-
-    public List<StorageUnit> getStorages()
-    {
-        return this.storages;
-    }
-
-    /**
-     * Gets the first {@link StorageUnit} that has the specified class.
-     * 
-     * @param classOfUnit
-     *            The class of the {@link StorageUnit}
-     * @return The {@link StorageUnit} with the class classOfUnit
-     */
-    private StorageUnit getStorageUnit(final Class classOfUnit)
-    {
-        StorageUnit unit = null;
-        for (final StorageUnit storageUnit : storages)
-        {
-            if (classOfUnit.isInstance(storageUnit))
-            {
-                unit = storageUnit;
-                break;
-            }
-        }
-        return unit;
     }
 
     /**
