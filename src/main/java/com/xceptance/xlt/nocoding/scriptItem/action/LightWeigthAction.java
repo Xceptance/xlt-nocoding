@@ -54,8 +54,6 @@ public class LightWeigthAction extends Action
     {
         // Fill default data
         fillDefaultData(context);
-        // Resolve values
-        resolveName(context);
 
         // Define the WebAction with the doExecute-Method
         final WebAction action = new WebAction(name, context, getActionItems(), (final WebAction webAction) -> {

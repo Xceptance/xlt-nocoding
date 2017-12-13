@@ -15,16 +15,27 @@ import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultStatic;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 
+/**
+ * Tests {@link LightWeigthAction}
+ * 
+ * @author ckeiner
+ */
 public class LightWeightActionTest
 {
     Context context;
 
+    /**
+     * Creates a new {@link Context}
+     */
     @Before
     public void init()
     {
         context = new Context(XltProperties.getInstance());
     }
 
+    /**
+     * Verifies {@link LightWeigthAction} adds a default {@link Request} if no {@link Request} is specified
+     */
     @Test
     public void testDefaultRequest()
     {
@@ -45,6 +56,11 @@ public class LightWeightActionTest
         Assert.assertEquals(url, request.getUrl());
     }
 
+    /**
+     * Verifies {@link LightWeigthAction} adds default {@link StaticSubrequest}
+     * 
+     * @throws Throwable
+     */
     @Test
     public void testDefaultStatic() throws Throwable
     {
@@ -84,6 +100,9 @@ public class LightWeightActionTest
         }
     }
 
+    /**
+     * Verifies {@link LightWeigthAction} adds a default {@link Response} if no {@link Response} is specified
+     */
     @Test
     public void testDefaultResponse()
     {
@@ -100,6 +119,9 @@ public class LightWeightActionTest
         Assert.assertTrue(action.getActionItems().get(1) instanceof Response);
     }
 
+    /**
+     * Verifies {@link LightWeigthAction} adds a default {@link LightWeigthAction#getName()} if no name is specified
+     */
     @Test
     public void testDefaultName()
     {
@@ -113,8 +135,13 @@ public class LightWeightActionTest
         Assert.assertEquals(value, action.getName());
     }
 
+    /**
+     * Verifies {@link LightWeigthAction} does not resolve {@link LightWeigthAction#getName()}
+     * 
+     * @throws Throwable
+     */
     @Test
-    public void testResolveName()
+    public void testResolveName() throws Throwable
     {
         // Set url
         context.getDefaultItems().store(Constants.URL, "https://www.xceptance.com");
@@ -125,9 +152,8 @@ public class LightWeightActionTest
         context.getVariables().store("name", "TestName");
 
         final LightWeigthAction action = new LightWeigthAction();
-        action.fillDefaultData(context);
-        action.resolveName(context);
-        Assert.assertEquals("TestName", action.getName());
+        action.execute(context);
+        Assert.assertNotEquals("TestName", action.getName());
     }
 
 }

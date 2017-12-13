@@ -5,12 +5,19 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.AbstractValidationMethod;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.ExistsValidator;
-
+/**
+ * Tests {@link ExistsValidator}
+ * 
+ * @author ckeiner
+ */
 public class ExistsValidatorTest extends ValidationMethodTest
 {
 
+    /**
+     * Verifies {@link ExistsValidator} validates that the result list has an item in it
+     * 
+     * @throws Exception
+     */
     @Test
     public void testExistsValidator() throws Exception
     {
@@ -21,6 +28,11 @@ public class ExistsValidatorTest extends ValidationMethodTest
         method.execute(context);
     }
 
+    /**
+     * Verifies {@link ExistsValidator} throws an {@link AssertionError} if the result list is null
+     * 
+     * @throws Exception
+     */
     @Test(expected = AssertionError.class)
     public void testExistsValidatorNull() throws Exception
     {
@@ -29,6 +41,11 @@ public class ExistsValidatorTest extends ValidationMethodTest
         method.execute(context);
     }
 
+    /**
+     * Verifies {@link ExistsValidator} throws an {@link AssertionError} if the result list is empty
+     * 
+     * @throws Exception
+     */
     @Test(expected = AssertionError.class)
     public void testExistsValidatorEmptyList() throws Exception
     {

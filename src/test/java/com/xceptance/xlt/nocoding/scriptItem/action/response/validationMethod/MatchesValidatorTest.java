@@ -5,12 +5,19 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.AbstractValidationMethod;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.MatchesValidator;
-
+/**
+ * Tests {@link MatchesValidator}
+ * 
+ * @author ckeiner
+ */
 public class MatchesValidatorTest extends ValidationMethodTest
 {
 
+    /**
+     * Verifies {@link MatchesValidator} matches the content of the first result with the expected content
+     * 
+     * @throws Exception
+     */
     @Test
     public void testMatchesValidator() throws Exception
     {
@@ -21,6 +28,12 @@ public class MatchesValidatorTest extends ValidationMethodTest
         method.execute(context);
     }
 
+    /**
+     * Verifies {@link MatchesValidator} matches the content of the first result with the expected content, which is hidden
+     * behind a variable.
+     * 
+     * @throws Exception
+     */
     @Test
     public void testMatchesValidatorWithVariables() throws Exception
     {
@@ -34,6 +47,12 @@ public class MatchesValidatorTest extends ValidationMethodTest
         method.execute(context);
     }
 
+    /**
+     * Verifies {@link MatchesValidator} throws an {@link AssertionError} if the content and the expected content do not
+     * match
+     * 
+     * @throws Exception
+     */
     @Test(expected = AssertionError.class)
     public void testMatchesValidatorWrongText() throws Exception
     {
@@ -44,6 +63,11 @@ public class MatchesValidatorTest extends ValidationMethodTest
         method.execute(context);
     }
 
+    /**
+     * Verifies {@link MatchesValidator} throws an {@link AssertionError} when the result list is null
+     * 
+     * @throws Exception
+     */
     @Test(expected = AssertionError.class)
     public void testMatchesValidatorNull() throws Exception
     {
@@ -52,6 +76,11 @@ public class MatchesValidatorTest extends ValidationMethodTest
         method.execute(context);
     }
 
+    /**
+     * Verifies {@link MatchesValidator} throws an {@link AssertionError} when the result list is empty
+     * 
+     * @throws Exception
+     */
     @Test(expected = AssertionError.class)
     public void testMatchesValidatorEmptyList() throws Exception
     {

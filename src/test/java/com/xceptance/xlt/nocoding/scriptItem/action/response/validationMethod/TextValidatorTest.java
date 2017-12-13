@@ -5,12 +5,19 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.AbstractValidationMethod;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.TextValidator;
-
+/**
+ * Tests {@link TextValidator}
+ * 
+ * @author ckeiner
+ */
 public class TextValidatorTest extends ValidationMethodTest
 {
 
+    /**
+     * Verifies {@link TextValidator} validates the content of the first result
+     * 
+     * @throws Exception
+     */
     @Test
     public void testTextValidator() throws Exception
     {
@@ -21,6 +28,12 @@ public class TextValidatorTest extends ValidationMethodTest
         method.execute(context);
     }
 
+    /**
+     * Verifies {@link TextValidator} validates the content of the first result. The expected content is hidden behind a
+     * variable
+     * 
+     * @throws Exception
+     */
     @Test
     public void testTextValidatorWithVariables() throws Exception
     {
@@ -34,6 +47,11 @@ public class TextValidatorTest extends ValidationMethodTest
         method.execute(context);
     }
 
+    /**
+     * Verifies {@link TextValidator} throws an {@link AssertionError} if the content and the expected content are not equal
+     * 
+     * @throws Exception
+     */
     @Test(expected = AssertionError.class)
     public void testTextValidatorWrongText() throws Exception
     {
@@ -44,6 +62,11 @@ public class TextValidatorTest extends ValidationMethodTest
         method.execute(context);
     }
 
+    /**
+     * Verifies {@link TextValidator} throws an {@link AssertionError} when the result list is null
+     * 
+     * @throws Exception
+     */
     @Test(expected = AssertionError.class)
     public void testTextValidatorNull() throws Exception
     {
@@ -52,6 +75,11 @@ public class TextValidatorTest extends ValidationMethodTest
         method.execute(context);
     }
 
+    /**
+     * Verifies {@link TextValidator} throws an {@link AssertionError} when the result list is empty
+     * 
+     * @throws Exception
+     */
     @Test(expected = AssertionError.class)
     public void testTextValidatorEmptyList() throws Exception
     {

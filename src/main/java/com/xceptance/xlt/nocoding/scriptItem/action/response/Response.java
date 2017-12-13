@@ -65,7 +65,7 @@ public class Response extends AbstractActionItem
     /**
      * Adds a {@link HttpcodeValidator} to the {@link #responseItems} if none is specified
      */
-    public void fillDefaultData(final Context context)
+    void fillDefaultData(final Context context)
     {
         boolean hasHttpcodeValidator = false;
         // Look for an instance of HttpcodeValidator

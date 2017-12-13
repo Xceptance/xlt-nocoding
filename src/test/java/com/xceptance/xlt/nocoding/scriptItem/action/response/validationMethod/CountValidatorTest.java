@@ -5,12 +5,19 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.AbstractValidationMethod;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.CountValidator;
-
+/**
+ * Tests {@link CountValidator}
+ * 
+ * @author ckeiner
+ */
 public class CountValidatorTest extends ValidationMethodTest
 {
 
+    /**
+     * Verifies the {@link CountValidator} validates the correct amount of results
+     * 
+     * @throws Exception
+     */
     @Test
     public void testCountValidator() throws Exception
     {
@@ -26,6 +33,12 @@ public class CountValidatorTest extends ValidationMethodTest
         method.execute(context);
     }
 
+    /**
+     * Verifies the {@link CountValidator} validates the correct amount of results. The expected amount of results is hidden
+     * behind a variable
+     * 
+     * @throws Exception
+     */
     @Test
     public void testCountValidatorWithVariables() throws Exception
     {
@@ -39,6 +52,11 @@ public class CountValidatorTest extends ValidationMethodTest
         method.execute(context);
     }
 
+    /**
+     * Verifies {@link CountValidator} throws an {@link AssertionError} if the wrong amount of items is specified
+     * 
+     * @throws Exception
+     */
     @Test(expected = AssertionError.class)
     public void testCountValidatorWrongCount() throws Exception
     {
@@ -49,6 +67,11 @@ public class CountValidatorTest extends ValidationMethodTest
         method.execute(context);
     }
 
+    /**
+     * Verifies {@link CountValidator} throws an error if it cannot convert to a number
+     * 
+     * @throws Exception
+     */
     @Test(expected = NumberFormatException.class)
     public void testCountValidatorNotConvertibleToInt() throws Exception
     {
@@ -59,6 +82,11 @@ public class CountValidatorTest extends ValidationMethodTest
         method.execute(context);
     }
 
+    /**
+     * Verifies {@link CountValidator} throws an error if there is no expression to validate
+     * 
+     * @throws Exception
+     */
     @Test(expected = IllegalStateException.class)
     public void testCountValidatorNull() throws Exception
     {
@@ -67,6 +95,11 @@ public class CountValidatorTest extends ValidationMethodTest
         method.execute(context);
     }
 
+    /**
+     * Verifies {@link CountValidator} can validate that there is no item in the result list
+     * 
+     * @throws Exception
+     */
     @Test
     public void testCountValidatorEmptyList() throws Exception
     {

@@ -7,7 +7,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.util.XltProperties;
+import com.xceptance.xlt.nocoding.scriptItem.StoreItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.CookieExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.HeaderExtractor;
@@ -20,12 +22,20 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.Te
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.MockObjects;
 
+/**
+ * Tests {@link Validator}
+ * 
+ * @author ckeiner
+ */
 public class ValidatorTest
 {
     public Context context;
 
     public MockObjects mockObjects;
 
+    /**
+     * Sets {@link WebResponse} via {@link MockObjects#loadResponse()} in {@link Context}
+     */
     @Before
     public void init()
     {
@@ -35,6 +45,11 @@ public class ValidatorTest
         context.setWebResponse(mockObjects.getResponse());
     }
 
+    /**
+     * Validates {@link CookieExtractor} with multiple {@link AbstractValidationMethod}.
+     * 
+     * @throws Exception
+     */
     @Test
     public void testValidationWithCookie() throws Throwable
     {
@@ -66,6 +81,11 @@ public class ValidatorTest
 
     }
 
+    /**
+     * Validates {@link HeaderExtractor} with multiple {@link AbstractValidationMethod}.
+     * 
+     * @throws Exception
+     */
     @Test
     public void testValidationWithHeader() throws Throwable
     {
@@ -97,6 +117,11 @@ public class ValidatorTest
 
     }
 
+    /**
+     * Validates {@link RegexpExtractor} with multiple {@link AbstractValidationMethod}.
+     * 
+     * @throws Exception
+     */
     @Test
     public void testValidationWithRegexp() throws Throwable
     {
@@ -127,11 +152,18 @@ public class ValidatorTest
         executeRequest(validator);
     }
 
+    /**
+     * Verifies the {@link Validator#getValidationName()} does not get resolved if it is a variable definition
+     * 
+     * @throws Throwable
+     */
     @Test
     public void testNoResolvingOfValidationName() throws Throwable
     {
         final String variableName = "validationName";
         final String validationName = "Regexp Validation";
+        final StoreItem store = new StoreItem("${" + variableName + "}", validationName);
+        store.execute(context);
         context.getVariables().store(variableName, validationName);
         // Build Validator with ExistsModule
         final AbstractExtractor extractor = new RegexpExtractor(mockObjects.regexString);
@@ -141,6 +173,11 @@ public class ValidatorTest
         Assert.assertNotEquals(validationName, validator.getValidationName());
     }
 
+    /**
+     * Verifies {@link RegexpExtractor} can extract a group
+     * 
+     * @throws Throwable
+     */
     @Test
     public void testGroupRegexpValidation() throws Throwable
     {
@@ -158,6 +195,12 @@ public class ValidatorTest
      * Helper Methods
      */
 
+    /**
+     * Creates a {@link Response} object out of the {@link Validator}. Then calls {@link Response#execute(Context)}
+     * 
+     * @param validator
+     * @throws Throwable
+     */
     public void executeRequest(final Validator validator) throws Throwable
     {
         // Build Response

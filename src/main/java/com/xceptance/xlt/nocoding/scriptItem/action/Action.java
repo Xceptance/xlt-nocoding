@@ -10,7 +10,6 @@ import com.xceptance.xlt.nocoding.util.ActionItemUtil;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
-import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
 /**
  * The abstract class for each Action. An Action consist of a {@link #name} and
@@ -65,20 +64,6 @@ public abstract class Action implements ScriptItem
     public String getName()
     {
         return name;
-    }
-
-    /**
-     * Resolves name
-     * 
-     * @param context
-     *            The {@link Context} with the {@link VariableResolver} and {@link DataStorage}
-     */
-    protected void resolveName(final Context context)
-    {
-        // Resolve name
-        final String resolvedValue = context.resolveString(getName());
-        // Set new name
-        setName(resolvedValue);
     }
 
     /**

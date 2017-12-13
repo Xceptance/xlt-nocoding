@@ -8,8 +8,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.xceptance.xlt.engine.XltWebClient;
-import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.Downloader;
 
+/**
+ * Tests {@link Downloader}
+ * 
+ * @author ckeiner
+ */
 public class DownloaderTest
 {
     private static XltWebClient client;
@@ -34,6 +38,9 @@ public class DownloaderTest
         urls.add("https://www.xceptance.com/js/jquery-1.11.1.min.js");
     }
 
+    /**
+     * Tests the constructor of {@link Downloader}
+     */
     @Test
     public void testConstructors()
     {
@@ -47,6 +54,9 @@ public class DownloaderTest
         Assert.assertEquals(userAgentUID, downloader.isUserAgentUID());
     }
 
+    /**
+     * Uses {@link Downloader} with an empty url list
+     */
     @Test
     public void testEmptyUrls()
     {
@@ -62,6 +72,11 @@ public class DownloaderTest
         }
     }
 
+    /**
+     * {@link Downloader} loads content linear
+     * 
+     * @throws Exception
+     */
     @Test
     public void testLinearDownload() throws Exception
     {
@@ -76,6 +91,11 @@ public class DownloaderTest
         downloader.loadRequests();
     }
 
+    /**
+     * {@link Downloader} loads content parallel
+     * 
+     * @throws Exception
+     */
     @Test
     public void testParallelDownload() throws Exception
     {
@@ -90,6 +110,12 @@ public class DownloaderTest
         downloader.loadRequests();
     }
 
+    /**
+     * Uses {@link Downloader} with {@link Downloader#Downloader(XltWebClient, int, boolean)} whereas the last argument
+     * (boolean userAgentUID) is true
+     * 
+     * @throws Exception
+     */
     @Test
     public void testWithUAUID() throws Exception
     {

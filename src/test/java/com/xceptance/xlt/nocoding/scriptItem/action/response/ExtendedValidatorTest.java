@@ -15,22 +15,29 @@ import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.XltMockWebConnection;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.CookieExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.HeaderExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.RegexpExtractor;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.AbstractValidationMethod;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.CountValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.ExistsValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.MatchesValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.TextValidator;
 import com.xceptance.xlt.nocoding.util.Context;
 
+/**
+ * Test {@link Validator} with all combinations of {@link AbstractExtractor} and {@link AbstractValidationMethod}
+ * 
+ * @author ckeiner
+ */
 public class ExtendedValidatorTest
 {
     private Context context;
 
     private XltMockWebConnection webConnection;
 
-    public Validator mode;
+    public Validator validator;
 
     /**
      * Instantiate the fields and set answers to localhost/posters/ and localhost/posters/POST
@@ -88,8 +95,13 @@ public class ExtendedValidatorTest
         webConnection.setResponse(url, content, statusCode, statusMessage, contentType, headers);
     }
 
+    /**
+     * Validates {@link HeaderExtractor} with multiple {@link AbstractValidationMethod}.
+     * 
+     * @throws Exception
+     */
     @Test
-    public void HeaderValidatorTest() throws Exception
+    public void HeaderValidationTest() throws Exception
     {
         // Build WebRequest with localhost/posters as url
         final URL url = new URL("https://localhost:8443/posters/");
@@ -104,26 +116,31 @@ public class ExtendedValidatorTest
         final String count = "1";
         // Build the validator that searches for the header
 
-        mode = new Validator("HeaderValidation Standard", new HeaderExtractor(header), null);
+        validator = new Validator("HeaderValidation Standard", new HeaderExtractor(header), null);
         context.setWebResponse(webResponse);
         // Execute
-        mode.execute(context);
+        validator.execute(context);
         // Assert that we validated with an exists validator
-        Assert.assertTrue(mode.getMethod() instanceof ExistsValidator);
+        Assert.assertTrue(validator.getMethod() instanceof ExistsValidator);
         // Build the validator, that validates the content of the header equals text
-        mode = new Validator("HeaderValidation Text", new HeaderExtractor(header), new TextValidator(text));
+        validator = new Validator("HeaderValidation Text", new HeaderExtractor(header), new TextValidator(text));
         context.setWebResponse(webResponse);
         // Execute
-        mode.execute(context);
+        validator.execute(context);
         // Build the validator that validates the number of occurences of the header equals count
-        mode = new Validator("HeaderValidation Count", new HeaderExtractor(header), new CountValidator(count));
+        validator = new Validator("HeaderValidation Count", new HeaderExtractor(header), new CountValidator(count));
         context.setWebResponse(webResponse);
         // Execute
-        mode.execute(context);
+        validator.execute(context);
     }
 
+    /**
+     * Validates {@link CookieExtractor} with multiple {@link AbstractValidationMethod}.
+     * 
+     * @throws Exception
+     */
     @Test
-    public void CookieValidatorTest() throws Exception
+    public void CookieValidationTest() throws Exception
     {
         // Build WebRequest with localhost/posters/login/POST as url
         final URL url = new URL("https://localhost:8443/posters/login/POST");
@@ -142,27 +159,32 @@ public class ExtendedValidatorTest
         // Define the content of the cookie
         final String text = "success=Login+successful.+Have+fun+in+our+shop%21";
         // Build the validator that searches only for the cookie
-        mode = new Validator("CookieValidation Standard", new CookieExtractor(cookie), null);
+        validator = new Validator("CookieValidation Standard", new CookieExtractor(cookie), null);
         context.setWebResponse(webResponse);
         // Execute
-        mode.execute(context);
+        validator.execute(context);
         // Assert that we validated with an exists validator
-        Assert.assertTrue(mode.getMethod() instanceof ExistsValidator);
+        Assert.assertTrue(validator.getMethod() instanceof ExistsValidator);
         // Build another validator that searches for the cookie and verifies the content equals text
-        mode = new Validator("CookieValidation Text", new CookieExtractor(cookie), new TextValidator(text));
+        validator = new Validator("CookieValidation Text", new CookieExtractor(cookie), new TextValidator(text));
         context.setWebResponse(webResponse);
         // Execute
-        mode.execute(context);
+        validator.execute(context);
         // Build another validator that searches for the cookie and verifies the content matches the text
         final String matches = "success=Login\\+successful.\\+Have\\+fun\\+in\\+our\\+shop%21";
-        mode = new Validator("CookieValidation Matches", new CookieExtractor(cookie), new MatchesValidator(matches));
+        validator = new Validator("CookieValidation Matches", new CookieExtractor(cookie), new MatchesValidator(matches));
         context.setWebResponse(webResponse);
         // Execute
-        mode.execute(context);
+        validator.execute(context);
     }
 
+    /**
+     * Validates {@link RegexpExtractor} with multiple {@link AbstractValidationMethod}.
+     * 
+     * @throws Exception
+     */
     @Test
-    public void RegExpValidatorTest() throws Exception
+    public void RegexpValidationTest() throws Exception
     {
         // Build WebRequest with localhost/posters as url
         final URL url = new URL("https://localhost:8443/posters/");
@@ -178,27 +200,32 @@ public class ExtendedValidatorTest
         final String group = "1";
 
         // Build a validator, that searches for the pattern
-        mode = new Validator("RegExpValidation Standard", new RegexpExtractor(pattern), null);
+        validator = new Validator("RegExpValidation Standard", new RegexpExtractor(pattern), null);
         context.setWebResponse(webResponse);
         // Execute
-        mode.execute(context);
+        validator.execute(context);
         // Assert that we validated with an exists validator
-        Assert.assertTrue(mode.getMethod() instanceof ExistsValidator);
+        Assert.assertTrue(validator.getMethod() instanceof ExistsValidator);
         // Build a validator, that searches for the pattern and verifies text is the first match
-        mode = new Validator("RegExpValidation Text", new RegexpExtractor(pattern), new TextValidator(text));
+        validator = new Validator("RegExpValidation Text", new RegexpExtractor(pattern), new TextValidator(text));
         context.setWebResponse(webResponse);
         // Execute
-        mode.execute(context);
+        validator.execute(context);
         ;
         // Build a validator, that searches for the pattern and verifies text is the match in the matching group of group
-        mode = new Validator("RegExpValidation Text+Group", new RegexpExtractor(pattern, group), new TextValidator(text));
+        validator = new Validator("RegExpValidation Text+Group", new RegexpExtractor(pattern, group), new TextValidator(text));
         context.setWebResponse(webResponse);
         // Execute
-        mode.execute(context);
+        validator.execute(context);
     }
 
+    /**
+     * Validates {@link HeaderExtractor} with multiple {@link AbstractValidationMethod}. Both have variables.
+     * 
+     * @throws Exception
+     */
     @Test
-    public void HeaderValidatorWithVariables() throws Exception
+    public void HeaderValidationWithVariables() throws Exception
     {
         // Store the header name
         context.getDataStorage().getVariables().store("header_1", "Cache-Control");
@@ -218,26 +245,31 @@ public class ExtendedValidatorTest
         // Define the count of occurences of the header
         final String count = "${count_1}";
 
-        mode = new Validator("HeaderValidation Standard", new HeaderExtractor(header), null);
+        validator = new Validator("HeaderValidation Standard", new HeaderExtractor(header), null);
         context.setWebResponse(webResponse);
         // Execute
-        mode.execute(context);
+        validator.execute(context);
         // Assert that we validated with an exists validator
-        Assert.assertTrue(mode.getMethod() instanceof ExistsValidator);
+        Assert.assertTrue(validator.getMethod() instanceof ExistsValidator);
         // Build the validator, that validates the content of the header equals text
-        mode = new Validator("HeaderValidation Text", new HeaderExtractor(header), new TextValidator(text));
+        validator = new Validator("HeaderValidation Text", new HeaderExtractor(header), new TextValidator(text));
         context.setWebResponse(webResponse);
         // Execute
-        mode.execute(context);
+        validator.execute(context);
         // Build the validator that validates the number of occurences of the header equals count
-        mode = new Validator("HeaderValidation Count", new HeaderExtractor(header), new CountValidator(count));
+        validator = new Validator("HeaderValidation Count", new HeaderExtractor(header), new CountValidator(count));
         context.setWebResponse(webResponse);
         // Execute
-        mode.execute(context);
+        validator.execute(context);
     }
 
+    /**
+     * Validates {@link CookieExtractor} with multiple {@link AbstractValidationMethod}. Both have variables.
+     * 
+     * @throws Exception
+     */
     @Test
-    public void CookieValidatorWithVariables() throws Exception
+    public void CookieValidationWithVariables() throws Exception
     {
         // Store the cookie name
         context.getDataStorage().getVariables().store("cookie", "NINJA_FLASH");
@@ -262,27 +294,32 @@ public class ExtendedValidatorTest
         // Define the content of the cookie
         final String text = "${cookie_content_name}=${cookie_content_value}";
 
-        mode = new Validator("CookieValidation Standard", new CookieExtractor(cookie), null);
+        validator = new Validator("CookieValidation Standard", new CookieExtractor(cookie), null);
         context.setWebResponse(webResponse);
         // Execute
-        mode.execute(context);
+        validator.execute(context);
         // Assert that we validated with an exists validator
-        Assert.assertTrue(mode.getMethod() instanceof ExistsValidator);
+        Assert.assertTrue(validator.getMethod() instanceof ExistsValidator);
         // Build another validator that searches for the cookie and verifies the content equals text
-        mode = new Validator("CookieValidation Text", new CookieExtractor(cookie), new TextValidator(text));
+        validator = new Validator("CookieValidation Text", new CookieExtractor(cookie), new TextValidator(text));
         context.setWebResponse(webResponse);
         // Execute
-        mode.execute(context);
+        validator.execute(context);
         // Build another validator that searches for the cookie and verifies the content matches the text
         final String matches = "success=Login\\+successful.\\+Have\\+fun\\+in\\+our\\+shop%21";
-        mode = new Validator("CookieValidation Matches", new CookieExtractor(cookie), new MatchesValidator(matches));
+        validator = new Validator("CookieValidation Matches", new CookieExtractor(cookie), new MatchesValidator(matches));
         context.setWebResponse(webResponse);
         // Execute
-        mode.execute(context);
+        validator.execute(context);
     }
 
+    /**
+     * Validates {@link RegexpExtractor} with multiple {@link AbstractValidationMethod}. Both have variables.
+     * 
+     * @throws Exception
+     */
     @Test
-    public void RegExpValidatorWithVariables() throws Exception
+    public void RegexpValidationWithVariables() throws Exception
     {
         // Store a pattern
         context.getDataStorage().getVariables().store("pattern", "class.*>");
@@ -304,23 +341,23 @@ public class ExtendedValidatorTest
         final String group = "${group}";
 
         // Build a validator, that searches for the pattern
-        mode = new Validator("RegExpValidation Standard", new RegexpExtractor(pattern), null);
+        validator = new Validator("RegExpValidation Standard", new RegexpExtractor(pattern), null);
         context.setWebResponse(webResponse);
         // Execute
-        mode.execute(context);
+        validator.execute(context);
         // Assert that we validated with an exists validator
-        Assert.assertTrue(mode.getMethod() instanceof ExistsValidator);
+        Assert.assertTrue(validator.getMethod() instanceof ExistsValidator);
         // Build a validator, that searches for the pattern and verifies text is the first match
-        mode = new Validator("RegExpValidation Text", new RegexpExtractor(pattern), new TextValidator(text));
+        validator = new Validator("RegExpValidation Text", new RegexpExtractor(pattern), new TextValidator(text));
         context.setWebResponse(webResponse);
         // Execute
-        mode.execute(context);
+        validator.execute(context);
         ;
         // Build a validator, that searches for the pattern and verifies text is the match in the matching group of group
-        mode = new Validator("RegExpValidation Text+Group", new RegexpExtractor(pattern, group), new TextValidator(text));
+        validator = new Validator("RegExpValidation Text+Group", new RegexpExtractor(pattern, group), new TextValidator(text));
         context.setWebResponse(webResponse);
         // Execute
-        mode.execute(context);
+        validator.execute(context);
     }
 
 }

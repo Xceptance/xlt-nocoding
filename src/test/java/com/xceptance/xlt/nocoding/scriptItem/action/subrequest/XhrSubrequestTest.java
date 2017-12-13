@@ -6,6 +6,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
@@ -17,12 +18,20 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.RegexpExt
 import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.MockObjects;
 
+/**
+ * Tests {@link XhrSubrequest}
+ * 
+ * @author ckeiner
+ */
 public class XhrSubrequestTest
 {
     private MockObjects mockObjects;
 
     private Context context;
 
+    /**
+     * Sets {@link WebResponse} via {@link MockObjects#loadResponse()} in {@link Context}
+     */
     @Before
     public void init()
     {
@@ -33,6 +42,11 @@ public class XhrSubrequestTest
         context.setWebResponse(mockObjects.getResponse());
     }
 
+    /**
+     * Creates an {@link XhrSubrequest} with request, response and executes the subrequest
+     * 
+     * @throws Throwable
+     */
     @Test
     public void testExecute() throws Throwable
     {

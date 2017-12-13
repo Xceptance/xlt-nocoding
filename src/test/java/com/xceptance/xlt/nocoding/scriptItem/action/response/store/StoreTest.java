@@ -20,6 +20,11 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.HeaderExt
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.RegexpExtractor;
 import com.xceptance.xlt.nocoding.util.Context;
 
+/**
+ * Tests {@link AbstractResponseStore}
+ * 
+ * @author ckeiner
+ */
 public class StoreTest
 {
     private Context context;
@@ -83,6 +88,11 @@ public class StoreTest
         webConnection.setResponse(url, content, statusCode, statusMessage, contentType, headers);
     }
 
+    /**
+     * Verifies a header can be stored
+     * 
+     * @throws Exception
+     */
     @Test
     public void HeaderStoreTest() throws Exception
     {
@@ -105,6 +115,11 @@ public class StoreTest
 
     }
 
+    /**
+     * Verifies a cookie can be stored
+     * 
+     * @throws Exception
+     */
     @Test
     public void CookieStoreTest() throws Exception
     {
@@ -134,6 +149,11 @@ public class StoreTest
         Assert.assertEquals(text, actual);
     }
 
+    /**
+     * Verifies a result found via regular expression can be stored
+     * 
+     * @throws Exception
+     */
     @Test
     public void RegExpStoreTest() throws Exception
     {

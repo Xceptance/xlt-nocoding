@@ -28,7 +28,7 @@ import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.RecentKeyTreeMap;
 
 /**
- * Tests the functionality of buildWebRequest() of the Request class
+ * Tests {@link Request}
  */
 public class RequestTest
 {
@@ -40,12 +40,22 @@ public class RequestTest
 
     private final String url = "https://localhost:8443/posters/";
 
+    /**
+     * Creates a new {@link Context}
+     */
     @Before
     public void init()
     {
         context = new Context(XltProperties.getInstance());
     }
 
+    /**
+     * Verifies {@link Request} builds the {@link WebRequest} correctly
+     * 
+     * @throws InvalidArgumentException
+     * @throws MalformedURLException
+     * @throws UnsupportedEncodingException
+     */
     @Test
     public void buildWebRequest() throws InvalidArgumentException, MalformedURLException, UnsupportedEncodingException
     {
@@ -92,6 +102,13 @@ public class RequestTest
 
     }
 
+    /**
+     * Verifies {@link Request} with variables builds the {@link WebRequest} correctly
+     * 
+     * @throws InvalidArgumentException
+     * @throws MalformedURLException
+     * @throws UnsupportedEncodingException
+     */
     @Test
     public void buildWebRequestWithVariables()
         throws InvalidArgumentException, MalformedURLException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
@@ -200,6 +217,15 @@ public class RequestTest
 
     }
 
+    /**
+     * Verifies a {@link Request} with no default url throws an {@link InvalidArgumentException}
+     * 
+     * @throws InvalidArgumentException
+     * @throws MalformedURLException
+     * @throws IllegalAccessException
+     * @throws IllegalArgumentException
+     * @throws InvocationTargetException
+     */
     @Test(expected = InvalidArgumentException.class)
     public void testEmptyRequest()
         throws InvalidArgumentException, MalformedURLException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
@@ -215,6 +241,11 @@ public class RequestTest
         }
     }
 
+    /**
+     * Verifies the headers in {@link Request} are case insensitive
+     * 
+     * @throws Throwable
+     */
     @Test
     public void testCaseInsensitiveHeaders() throws Throwable
     {
@@ -254,6 +285,13 @@ public class RequestTest
         });
     }
 
+    /**
+     * Verifies all default data is added, this means: Url, HttpMethod, Xhr, EncodeParameters, EncodeBody
+     * 
+     * @throws InvalidArgumentException
+     * @throws MalformedURLException
+     * @throws UnsupportedEncodingException
+     */
     @Test
     public void testDefaultData() throws InvalidArgumentException, MalformedURLException, UnsupportedEncodingException
     {
@@ -266,9 +304,14 @@ public class RequestTest
         Assert.assertEquals(HttpMethod.GET, webRequest.getHttpMethod());
         Assert.assertFalse(webRequest.isXHR());
         Assert.assertFalse(Boolean.getBoolean(request.getEncodeParameters()));
-        Assert.assertFalse(Boolean.getBoolean(request.getEncodeParameters()));
+        Assert.assertFalse(Boolean.getBoolean(request.getEncodeBody()));
     }
 
+    /**
+     * Verifies defaulöt headers are added correctly
+     * 
+     * @throws Throwable
+     */
     @Test
     public void testDefaultHeaders() throws Throwable
     {
@@ -299,6 +342,11 @@ public class RequestTest
         });
     }
 
+    /**
+     * Verifies default headers are overwritten when specified in {@link Request#getHeaders()}
+     * 
+     * @throws Throwable
+     */
     @Test
     public void testOverwriteDefaultHeaders() throws Throwable
     {
@@ -340,6 +388,11 @@ public class RequestTest
         });
     }
 
+    /**
+     * Verifies default parameters are added
+     * 
+     * @throws Throwable
+     */
     @Test
     public void testDefaultParameters() throws Throwable
     {
@@ -375,6 +428,11 @@ public class RequestTest
         }
     }
 
+    /**
+     * Verifies default parameters are added and not overwritten
+     * 
+     * @throws Throwable
+     */
     @Test
     public void testOverwriteDefaultParameters() throws Throwable
     {
@@ -388,11 +446,12 @@ public class RequestTest
             scriptItems.add(new StoreDefaultParameter(key, value));
         });
 
+        // Execute all store default parameters
         for (final ScriptItem scriptItem : scriptItems)
         {
             scriptItem.execute(context);
         }
-
+        // Execute all store default parameters again
         for (final ScriptItem scriptItem : scriptItems)
         {
             scriptItem.execute(context);
@@ -406,6 +465,7 @@ public class RequestTest
 
         final List<NameValuePair> actualParameters = webRequest.getRequestParameters();
 
+        // TODO verify all parameters are added
         for (final NameValuePair parameter : actualParameters)
         {
             if (!parameters.contains(parameter))
@@ -416,6 +476,10 @@ public class RequestTest
         }
     }
 
+    /**
+     * Verifies {@link Request#setHeaders(Map)} does not change the type of {@link Request#getHeaders()}, so it stay
+     * {@link RecentKeyTreeMap}
+     */
     @Test
     public void testSetHeaders()
     {
@@ -431,6 +495,13 @@ public class RequestTest
         Assert.assertFalse(request.getHeaders().isEmpty());
     }
 
+    /**
+     * Verifies cookies can be set
+     * 
+     * @throws InvalidArgumentException
+     * @throws MalformedURLException
+     * @throws UnsupportedEncodingException
+     */
     @Test
     public void testSimpleCookie() throws InvalidArgumentException, MalformedURLException, UnsupportedEncodingException
     {
@@ -452,6 +523,14 @@ public class RequestTest
         Assert.assertEquals("headerCookie=cookieValue;", cookieString);
     }
 
+    /**
+     * Cookies can be set with {@link Request#setHeaders(Map)} and via {@link Request#setCookies(List)}. This test case
+     * verifies, that ,regardless of how the cookies are set, all cookies of both methods are in the {@link WebRequest}.
+     * 
+     * @throws InvalidArgumentException
+     * @throws MalformedURLException
+     * @throws UnsupportedEncodingException
+     */
     @Test
     public void testSetHeaderCookieAndSetCookie() throws InvalidArgumentException, MalformedURLException, UnsupportedEncodingException
     {
@@ -471,6 +550,13 @@ public class RequestTest
         Assert.assertEquals("headerCookie=headerValue;cookieName=cookieValue;", cookieString);
     }
 
+    /**
+     * Verifies that cookies set via {@link Request#setHeaders(Map)} are in {@link WebRequest}.
+     * 
+     * @throws InvalidArgumentException
+     * @throws MalformedURLException
+     * @throws UnsupportedEncodingException
+     */
     @Test
     public void testSetHeaderCookie() throws InvalidArgumentException, MalformedURLException, UnsupportedEncodingException
     {
