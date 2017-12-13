@@ -34,6 +34,8 @@ public class MockObjects
 {
     public final String regexString = "<title>[\\s\\S]*?</title>";
 
+    public final String regexStringNoResult = "Not<title>foundRegExp<title>";
+
     public final String regexStringExpected = "<title>A demo html site for this test suite</title>";
 
     public final String xPathString = "//div[@id='divId']/p";
@@ -45,6 +47,8 @@ public class MockObjects
     public final String cookieName2 = "session-id-time";
 
     public final String cookieName3 = "x-wl-uid";
+
+    public final String nonExistentCookie = "nonExistentCookie";
 
     public final String cookieValue1 = "11111";
 

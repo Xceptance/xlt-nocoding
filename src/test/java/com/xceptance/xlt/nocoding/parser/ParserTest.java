@@ -7,6 +7,9 @@ package com.xceptance.xlt.nocoding.parser;
  */
 public abstract class ParserTest
 {
+    /**
+     * The path to the test scripts
+     */
     protected final String path = "./target/test-classes/test-scripts/";
 
 }
