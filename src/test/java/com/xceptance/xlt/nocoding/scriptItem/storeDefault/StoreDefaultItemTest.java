@@ -6,9 +6,19 @@ import org.junit.Test;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.util.Constants;
 
+/**
+ * Tests {@link StoreDefaultItem}
+ * 
+ * @author ckeiner
+ */
 public class StoreDefaultItemTest extends StoreDefaultTest
 {
 
+    /**
+     * Verifies {@link StoreDefaultItem} can store one default item
+     * 
+     * @throws Throwable
+     */
     @Test
     public void singleStore() throws Throwable
     {
@@ -18,6 +28,11 @@ public class StoreDefaultItemTest extends StoreDefaultTest
         Assert.assertEquals("text", context.getDefaultItems().get("test"));
     }
 
+    /**
+     * Verifies {@link StoreDefaultItem} can delete one default item
+     * 
+     * @throws Throwable
+     */
     @Test
     public void deleteStore() throws Throwable
     {
@@ -30,8 +45,13 @@ public class StoreDefaultItemTest extends StoreDefaultTest
         Assert.assertNull(context.getDefaultItems().get("test"));
     }
 
+    /**
+     * Verifies {@link StoreDefaultItem} can delete a default item. However, the fallback value is still there
+     * 
+     * @throws Throwable
+     */
     @Test
-    public void deleteDefault() throws Throwable
+    public void deleteDefaultWithFallback() throws Throwable
     {
         ScriptItem store = new StoreDefaultItem(Constants.METHOD, Constants.METHOD_POST);
         Assert.assertEquals(Constants.METHOD_GET, context.getDefaultItems().get(Constants.METHOD));

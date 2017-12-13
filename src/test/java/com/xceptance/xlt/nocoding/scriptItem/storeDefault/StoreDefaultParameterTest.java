@@ -9,9 +9,19 @@ import org.junit.Test;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.util.Constants;
 
+/**
+ * Tests {@link StoreDefaultParameter}
+ * 
+ * @author ckeiner
+ */
 public class StoreDefaultParameterTest extends StoreDefaultTest
 {
 
+    /**
+     * Verifies {@link StoreDefaultParameter} can store one default parameter
+     * 
+     * @throws Throwable
+     */
     @Test
     public void singleStore() throws Throwable
     {
@@ -21,6 +31,11 @@ public class StoreDefaultParameterTest extends StoreDefaultTest
         Assert.assertEquals("value", context.getDefaultParameters().get("header_1").get(0));
     }
 
+    /**
+     * Verifies {@link StoreDefaultParameter} can delete one default parameter
+     * 
+     * @throws Throwable
+     */
     @Test
     public void deleteStore() throws Throwable
     {
@@ -33,6 +48,11 @@ public class StoreDefaultParameterTest extends StoreDefaultTest
         Assert.assertTrue(context.getDefaultParameters().get("param_1").isEmpty());
     }
 
+    /**
+     * Verifies {@link StoreDefaultParameter} can delete all default parameter
+     * 
+     * @throws Throwable
+     */
     @Test
     public void deleteAllDefaultParameters() throws Throwable
     {

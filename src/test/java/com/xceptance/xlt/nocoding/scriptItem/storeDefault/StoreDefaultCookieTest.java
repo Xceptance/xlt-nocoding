@@ -9,9 +9,19 @@ import org.junit.Test;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.util.Constants;
 
+/**
+ * Tests {@link StoreDefaultCookie}
+ * 
+ * @author ckeiner
+ */
 public class StoreDefaultCookieTest extends StoreDefaultTest
 {
 
+    /**
+     * Verifies {@link StoreDefaultCookie} can store one default cookie
+     * 
+     * @throws Throwable
+     */
     @Test
     public void singleStore() throws Throwable
     {
@@ -22,6 +32,11 @@ public class StoreDefaultCookieTest extends StoreDefaultTest
         Assert.assertEquals("value_1", context.getDefaultCookies().get("name_1").get(0));
     }
 
+    /**
+     * Verifies {@link StoreDefaultCookie} can delete a specified cookie
+     * 
+     * @throws Throwable
+     */
     @Test
     public void deleteStore() throws Throwable
     {
@@ -35,6 +50,11 @@ public class StoreDefaultCookieTest extends StoreDefaultTest
         Assert.assertTrue(context.getDefaultCookies().get("name_1").isEmpty());
     }
 
+    /**
+     * Verifies {@link StoreDefaultCookie} can delete all cookies
+     * 
+     * @throws Throwable
+     */
     @Test
     public void deleteAllDefaultCookies() throws Throwable
     {

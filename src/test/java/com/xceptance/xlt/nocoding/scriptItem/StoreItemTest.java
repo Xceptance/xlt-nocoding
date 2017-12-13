@@ -7,16 +7,29 @@ import org.junit.Test;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.util.Context;
 
+/**
+ * Tests {@link StoreItem}
+ * 
+ * @author ckeiner
+ */
 public class StoreItemTest
 {
     public Context context;
 
+    /**
+     * Creates a new {@link Context}
+     */
     @Before
     public void init()
     {
         context = new Context(XltProperties.getInstance());
     }
 
+    /**
+     * Verifies {@link StoreItem} can store a single item
+     * 
+     * @throws Throwable
+     */
     @Test
     public void singleStore() throws Throwable
     {
@@ -26,6 +39,11 @@ public class StoreItemTest
         Assert.assertEquals("text", context.getVariables().get("test"));
     }
 
+    /**
+     * Verifies {@link StoreItem} can overwrite a stored item
+     * 
+     * @throws Throwable
+     */
     @Test
     public void overwriteStore() throws Throwable
     {
@@ -38,6 +56,11 @@ public class StoreItemTest
         Assert.assertEquals("newValue", context.getVariables().get("test"));
     }
 
+    /**
+     * Verifies {@link StoreItem#getValue()} is resolved before storing the variable with its value
+     * 
+     * @throws Throwable
+     */
     @Test
     public void resolveStore() throws Throwable
     {

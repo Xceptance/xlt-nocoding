@@ -9,8 +9,18 @@ import org.junit.Test;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.util.Constants;
 
+/**
+ * Tests {@link StoreDefaultHeader}
+ * 
+ * @author ckeiner
+ */
 public class StoreDefaultHeaderTest extends StoreDefaultTest
 {
+    /**
+     * Verifies {@link StoreDefaultHeader} can store one default header
+     * 
+     * @throws Throwable
+     */
     @Test
     public void singleStore() throws Throwable
     {
@@ -20,6 +30,11 @@ public class StoreDefaultHeaderTest extends StoreDefaultTest
         Assert.assertEquals("value", context.getDefaultHeaders().get("header_1"));
     }
 
+    /**
+     * Verifies {@link StoreDefaultHeader} can delete a specified header
+     * 
+     * @throws Throwable
+     */
     @Test
     public void deleteStore() throws Throwable
     {
@@ -32,6 +47,11 @@ public class StoreDefaultHeaderTest extends StoreDefaultTest
         Assert.assertNull(context.getDefaultHeaders().get("header_1"));
     }
 
+    /**
+     * Verifies {@link StoreDefaultHeader} can delete all headers
+     * 
+     * @throws Throwable
+     */
     @Test
     public void deleteAllDefaultHeaders() throws Throwable
     {
@@ -55,6 +75,11 @@ public class StoreDefaultHeaderTest extends StoreDefaultTest
         Assert.assertTrue(context.getDefaultHeaders().getItems().isEmpty());
     }
 
+    /**
+     * Verifies headers stored via {@link StoreDefaultHeader} are stored case insensitive
+     * 
+     * @throws Throwable
+     */
     @Test
     public void storeCaseInsensitiveHeaders() throws Throwable
     {
