@@ -10,11 +10,16 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
-import com.xceptance.xlt.nocoding.util.ParserUtils;
 
+/**
+ * Tests {@link ParserUtils}
+ * 
+ * @author ckeiner
+ */
 public class ParserUtilsTest
 {
 
@@ -42,6 +47,11 @@ public class ParserUtilsTest
                                              + "    element_3 : \n" + "    element_4 : null\n" + "    element_5 : string\n"
                                              + "    element_6 : 123\n";
 
+    /**
+     * Verifies that {@link ParserUtils#getNodeAt(JsonParser)} returns the correct node
+     * 
+     * @throws IOException
+     */
     @Test
     public void testGetNodeAt() throws IOException
     {
@@ -58,6 +68,11 @@ public class ParserUtilsTest
         Assert.assertFalse(elements.hasNext());
     }
 
+    /**
+     * Verifies {@link ParserUtils#getNodeAt(String, JsonParser)} gets the correct node
+     * 
+     * @throws IOException
+     */
     @Test
     public void testGetNodeAtFieldName() throws IOException
     {
@@ -77,6 +92,11 @@ public class ParserUtilsTest
 
     }
 
+    /**
+     * Verifies {@link ParserUtils#getArrayNodeAsMap(JsonNode)} returns a correct {@link Map}
+     * 
+     * @throws IOException
+     */
     @Test
     public void testGetArrayNodeAsMap() throws IOException
     {
@@ -100,6 +120,12 @@ public class ParserUtilsTest
         Assert.assertEquals("value_2", map.get("element_2"));
     }
 
+    /**
+     * Verifies {@link ParserUtils#getArrayNodeAsNameValuePair(JsonNode)} returns a correct
+     * {@link List}<{@link NameValuePair}>
+     * 
+     * @throws IOException
+     */
     @Test
     public void testGetArrayNodeAsNameValuePair() throws IOException
     {
@@ -123,6 +149,12 @@ public class ParserUtilsTest
         Assert.assertEquals("value_2", nvp.get(1).getValue());
     }
 
+    /**
+     * Reads an {@link ArrayNode} with {@link ParserUtils#getArrayNodeAsMap(JsonNode)}. Verifies an {@link ArrayNode} with
+     * different values stored in the node can be read.
+     * 
+     * @throws IOException
+     */
     @Test
     public void testGetArrayNodeAsMapMixed() throws IOException
     {
@@ -154,6 +186,12 @@ public class ParserUtilsTest
         Assert.assertEquals("123", map.get("element_6"));
     }
 
+    /**
+     * Reads an {@link ArrayNode} with {@link ParserUtils#getArrayNodeAsNameValuePair(JsonNode)}. Verifies an
+     * {@link ArrayNode} with different values stored in the node can be read
+     * 
+     * @throws IOException
+     */
     @Test
     public void testGetArrayNodeAsNameValuePairMixed() throws IOException
     {
@@ -185,6 +223,11 @@ public class ParserUtilsTest
         Assert.assertEquals("123", nvp.get(5).getValue());
     }
 
+    /**
+     * Verifies a boolean can be read
+     * 
+     * @throws IOException
+     */
     @Test
     public void testReadSingleBooleanValue() throws IOException
     {
@@ -204,8 +247,13 @@ public class ParserUtilsTest
         Assert.assertEquals("true", data);
     }
 
+    /**
+     * Verifies a single decimal can be read
+     * 
+     * @throws IOException
+     */
     @Test
-    public void testReadSingleSingleDecimalValue() throws IOException
+    public void testReadSingleDecimalValue() throws IOException
     {
         final YAMLFactory yaml = new YAMLFactory();
         final JsonParser parser = yaml.createParser(singleDecimalString);
@@ -223,6 +271,11 @@ public class ParserUtilsTest
         Assert.assertEquals("1", data);
     }
 
+    /**
+     * Verifies a decimal with at least two digits can be read
+     * 
+     * @throws IOException
+     */
     @Test
     public void testReadSingleMultipleDecimalValue() throws IOException
     {
@@ -242,6 +295,11 @@ public class ParserUtilsTest
         Assert.assertEquals("123", data);
     }
 
+    /**
+     * Verifies an empty string can be read
+     * 
+     * @throws IOException
+     */
     @Test
     public void testReadSingleEmptyStringValue() throws IOException
     {
@@ -261,6 +319,11 @@ public class ParserUtilsTest
         Assert.assertEquals("", data);
     }
 
+    /**
+     * Verifies a string can be read
+     * 
+     * @throws IOException
+     */
     @Test
     public void testReadSingleSimpleStringValue() throws IOException
     {
@@ -280,6 +343,11 @@ public class ParserUtilsTest
         Assert.assertEquals("string", data);
     }
 
+    /**
+     * Verifies an {@link ObjectNode} is correctly read
+     * 
+     * @throws IOException
+     */
     @Test
     public void testReadObjectValue() throws IOException
     {
@@ -298,25 +366,6 @@ public class ParserUtilsTest
         Assert.assertEquals("value_1", data);
         data = ParserUtils.readValue(node, "element_2");
         Assert.assertEquals("value_2", data);
-    }
-
-    @Test
-    public void testReadSingleDecimalValue() throws IOException
-    {
-        final YAMLFactory yaml = new YAMLFactory();
-        final JsonParser parser = yaml.createParser(singleDecimalString);
-        final ObjectNode objectNode = ParserUtils.getNodeAt(parser);
-        final Iterator<JsonNode> elements = objectNode.elements();
-        Assert.assertEquals("singleDecimalString", objectNode.fieldNames().next());
-        Assert.assertNotNull(elements);
-        Assert.assertTrue(elements.hasNext());
-
-        final JsonNode node = elements.next();
-        Assert.assertFalse(elements.hasNext());
-        Assert.assertTrue(node.isInt());
-
-        final String data = ParserUtils.readSingleValue(node);
-        Assert.assertEquals("1", data);
     }
 
 }

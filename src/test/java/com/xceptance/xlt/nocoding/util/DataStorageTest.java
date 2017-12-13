@@ -6,14 +6,20 @@ import org.junit.Test;
 
 import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.xceptance.xlt.api.util.XltProperties;
+import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.DefaultValues;
 
+/**
+ * Tests {@link DataStorage}
+ * 
+ * @author ckeiner
+ */
 public class DataStorageTest
 {
     private Context context;
 
     /**
-     * Instantiate the fields and set answers to localhost/posters/ and localhost/posters/POST
+     * Creates a new {@link Context}
      */
     @Before
     public void init()
@@ -31,24 +37,6 @@ public class DataStorageTest
 
         Assert.assertEquals("t", context.getVariables().get(key));
         Assert.assertEquals("t", context.getDefaultItems().get(key));
-    }
-
-    @Test
-    public void storageNotShared()
-    {
-        final String key = "test";
-        final String value = "t";
-        context.getVariables().store(key, value);
-
-        Assert.assertEquals("t", context.getVariables().get(key));
-        Assert.assertNull(context.getDefaultItems().get(key));
-
-        final String key2 = "testing";
-        final String value2 = "testing";
-        context.getDefaultItems().store(key2, value2);
-
-        Assert.assertNull(null, context.getVariables().get(key2));
-        Assert.assertEquals("testing", context.getDefaultItems().get(key2));
     }
 
     @Test
@@ -115,6 +103,9 @@ public class DataStorageTest
 
     }
 
+    /**
+     * Verifies that default values are set
+     */
     @Test
     public void loadDefaultValues()
     {
@@ -126,6 +117,10 @@ public class DataStorageTest
 
     }
 
+    /**
+     * Verifies default values can be overwritten. Furthermore verifies, when the values are deleted, these default values
+     * are used again
+     */
     @Test
     public void overwriteDefaultValues()
     {

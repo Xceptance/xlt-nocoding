@@ -21,10 +21,16 @@ import java.util.Random;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.xceptance.xlt.nocoding.util.variableResolver.ParameterInterpreterNow;
-
+/**
+ * Tests {@link ParameterInterpreterNow}
+ * 
+ * @author ckeiner
+ */
 public class ParameterInterpreterNowTest
 {
+    /**
+     * Verifies {@link ParameterInterpreterNow#toString()} returns the current time
+     */
     @Test
     public final void testToString()
     {
@@ -34,6 +40,9 @@ public class ParameterInterpreterNowTest
         Assert.assertTrue(Long.parseLong(NOW.toString()) >= now);
     }
 
+    /**
+     * Verifies {@link ParameterInterpreterNow#toString()} returns differnent results when called twice
+     */
     @Test
     public final void testChange() throws InterruptedException
     {

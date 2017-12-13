@@ -2,11 +2,17 @@ package com.xceptance.xlt.nocoding.util.variableResolver;
 
 import org.junit.Test;
 
-import com.xceptance.xlt.nocoding.util.variableResolver.ParameterInterpreterRandom;
-
+/**
+ * Tests {@link ParameterInterpreterRandom}
+ * 
+ * @author ckeiner
+ */
 public class ParameterInterpreterRandomTest
 {
 
+    /**
+     * Tests the constructor
+     */
     @Test
     public void testConstructor()
     {
@@ -14,6 +20,9 @@ public class ParameterInterpreterRandomTest
         final ParameterInterpreterRandom pir = new ParameterInterpreterRandom();
     }
 
+    /**
+     * Calls {@link ParameterInterpreterRandom#Email()}
+     */
     @Test
     public void testEmail()
     {
