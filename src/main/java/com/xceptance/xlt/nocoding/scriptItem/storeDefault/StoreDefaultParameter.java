@@ -42,7 +42,7 @@ public class StoreDefaultParameter extends StoreDefault
         {
             // Store the default parameter
             storage.store(variableName, value);
-            XltLogger.runTimeLogger.debug("Added " + variableName + "=" + value + " to default parameter storage");
+            XltLogger.runTimeLogger.debug("Added \"" + variableName + "\" with the value \"" + value + "\" to default parameter storage");
         }
         else
         {
@@ -56,7 +56,7 @@ public class StoreDefaultParameter extends StoreDefault
             else
             {
                 storage.remove(variableName);
-                XltLogger.runTimeLogger.debug("Removed " + variableName + " from default parameter storage");
+                XltLogger.runTimeLogger.debug("Removed \"" + variableName + "\" from default parameter storage");
             }
         }
     }

@@ -18,12 +18,13 @@ public class StoreDefaultCookie extends StoreDefault
         // Resolve values
         super.resolveValues(context);
         // Get the appropriate storage
-        final DuplicateStorage storage = context.getDefaultParameters();
+        final DuplicateStorage storage = context.getDefaultCookies();
         // If the value is not "delete"
         if (!value.equals(Constants.DELETE))
         {
             storage.store(variableName, value);
-            XltLogger.runTimeLogger.debug("Added " + variableName.toLowerCase() + "=" + value + " to default cookies");
+            XltLogger.runTimeLogger.debug("Added \"" + variableName.toLowerCase() + "\" with the value \"" + value
+                                          + "\" to default cookies");
         }
         else
         {
@@ -38,7 +39,7 @@ public class StoreDefaultCookie extends StoreDefault
             else
             {
                 storage.remove(variableName);
-                XltLogger.runTimeLogger.debug("Removed " + variableName + " from default cookies");
+                XltLogger.runTimeLogger.debug("Removed \"" + variableName + "\" from default cookies");
             }
         }
     }

@@ -43,13 +43,13 @@ public class StoreDefaultItem extends StoreDefault
         {
             // Store the item in ConfigItems
             storage.store(variableName, value);
-            XltLogger.runTimeLogger.debug("Added " + variableName + "=" + value + " to default storage");
+            XltLogger.runTimeLogger.debug("Added \"" + variableName + "\" with the value \"" + value + "\" to default storage");
         }
         else
         {
             // Delete the specified ConfigItem
             storage.remove(variableName);
-            XltLogger.runTimeLogger.debug("Removed " + variableName + " from default storage");
+            XltLogger.runTimeLogger.debug("Removed \"" + variableName + "\" from default storage");
         }
     }
 

@@ -43,7 +43,8 @@ public class StoreDefaultHeader extends StoreDefault
         {
             // Store the header as lowercase
             storage.store(variableName.toLowerCase(), value);
-            XltLogger.runTimeLogger.debug("Added " + variableName.toLowerCase() + "=" + value + " to default header storage");
+            XltLogger.runTimeLogger.debug("Added \"" + variableName.toLowerCase() + "\" with the value \"" + value
+                                          + "\" to default header storage");
         }
         else
         {
@@ -57,7 +58,7 @@ public class StoreDefaultHeader extends StoreDefault
             else
             {
                 storage.remove(variableName);
-                XltLogger.runTimeLogger.debug("Removed " + variableName + " from default header storage");
+                XltLogger.runTimeLogger.debug("Removed \"" + variableName + "\" from default header storage");
             }
         }
     }

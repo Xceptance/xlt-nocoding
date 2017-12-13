@@ -193,6 +193,13 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
         return parser;
     }
 
+    /**
+     * On the first execution, it gets the {@link List}<{@link ScriptItem}> from the parser and saves it in
+     * {@link #DATA_CACHE}. Then, it gets the {@link List}<{@link ScriptItem}> out of the {@link #DATA_CACHE}
+     * 
+     * @return {@link List}<{@link ScriptItem}> defined in the file located at {@link #getFilePath()}
+     * @throws Exception
+     */
     public List<ScriptItem> getOrParse() throws Exception
     {
         synchronized (DATA_CACHE)

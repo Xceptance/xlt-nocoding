@@ -44,7 +44,7 @@ public class StoreDefaultStatic extends StoreDefault
         {
             // Store the URL
             storage.store(value);
-            XltLogger.runTimeLogger.debug("Added " + variableName + "=" + value + " to default static request storage");
+            XltLogger.runTimeLogger.debug("Added url \"" + value + "\" to default static request storage");
         }
         else
         {

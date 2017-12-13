@@ -431,8 +431,7 @@ public class Request extends AbstractActionItem
      * @throws InvalidArgumentException
      * @throws UnsupportedEncodingException
      */
-    public WebRequest buildWebRequest(final Context context)
-        throws MalformedURLException, InvalidArgumentException, UnsupportedEncodingException
+    WebRequest buildWebRequest(final Context context) throws MalformedURLException, InvalidArgumentException, UnsupportedEncodingException
     {
         // Create a URL object
         final URL url = new URL(this.url);
