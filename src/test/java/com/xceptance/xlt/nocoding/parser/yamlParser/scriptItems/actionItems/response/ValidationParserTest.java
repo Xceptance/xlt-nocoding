@@ -10,14 +10,25 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.Validator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.CookieExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.HeaderExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.RegexpExtractor;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.AbstractValidationMethod;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.CountValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.MatchesValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.TextValidator;
 import com.xceptance.xlt.nocoding.util.Constants;
 
+/**
+ * Tests for parsing the "Validate" tag beneath "Response"
+ * 
+ * @author ckeiner
+ */
 public class ValidationParserTest
 {
 
+    /**
+     * Verifies an error is thrown if two validation modes are found
+     * 
+     * @throws Exception
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testSyntaxErrorResponseValidationTwoValidationModes() throws Exception
     {
@@ -34,8 +45,13 @@ public class ValidationParserTest
         new ValidationParser().parse(validate);
     }
 
+    /**
+     * Verifies an error is thrown if two extractors are found
+     * 
+     * @throws Exception
+     */
     @Test(expected = IllegalArgumentException.class)
-    public void testSyntaxErrorResponseValidationTwoSelections() throws Exception
+    public void testSyntaxErrorResponseValidationTwoExtractors() throws Exception
     {
         final JsonNodeFactory jf = new JsonNodeFactory(false);
         final ObjectNode content = jf.objectNode();
@@ -50,6 +66,11 @@ public class ValidationParserTest
         new ValidationParser().parse(validate);
     }
 
+    /**
+     * Verifies an error is thrown if a group is parsed but the extractor is not a {@link RegexpExtractor}
+     * 
+     * @throws Exception
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidGroupValidation() throws Exception
     {
@@ -66,6 +87,11 @@ public class ValidationParserTest
         new ValidationParser().parse(validate);
     }
 
+    /**
+     * Verifies {@link RegexpExtractor} and {@link MatchesValidator} can be parsed
+     * 
+     * @throws Exception
+     */
     @Test
     public void testRegExpMatchesGroupValidation() throws Exception
     {
@@ -90,6 +116,11 @@ public class ValidationParserTest
         Assert.assertEquals(validationExpression, ((MatchesValidator) validator.getMethod()).getValidationExpression());
     }
 
+    /**
+     * Verifies {@link CookieExtractor} and {@link TextValidator} can be parsed
+     * 
+     * @throws Exception
+     */
     @Test
     public void testCookieTextValidation() throws Exception
     {
@@ -113,8 +144,13 @@ public class ValidationParserTest
 
     }
 
+    /**
+     * Verifies {@link HeaderExtractor} and no {@link AbstractValidationMethod} can be parsed
+     * 
+     * @throws Exception
+     */
     @Test
-    public void testHeaderExistsValidation() throws Exception
+    public void testHeaderValidation() throws Exception
     {
         final String extractionExpression = "HeaderName";
         final JsonNodeFactory jf = new JsonNodeFactory(false);
@@ -131,6 +167,11 @@ public class ValidationParserTest
         Assert.assertNull(validator.getMethod());
     }
 
+    /**
+     * Validates {@link HeaderExtractor} and {@link CountValidator} can be parsed
+     * 
+     * @throws Exception
+     */
     @Test
     public void testHeaderCountValidation() throws Exception
     {

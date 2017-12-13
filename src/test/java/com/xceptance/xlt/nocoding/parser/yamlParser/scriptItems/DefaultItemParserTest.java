@@ -30,6 +30,11 @@ import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultParameter;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultStatic;
 import com.xceptance.xlt.nocoding.util.Constants;
 
+/**
+ * Tests for parsing default items
+ * 
+ * @author ckeiner
+ */
 public class DefaultItemParserTest extends ParserTest
 {
 
@@ -37,6 +42,11 @@ public class DefaultItemParserTest extends ParserTest
 
     protected final String fileTmp = path + "tmp.yml";
 
+    /**
+     * Verifies Name and Url can be parsed on root level
+     * 
+     * @throws Exception
+     */
     @Test
     public void testFileTmpParsing() throws Exception
     {
@@ -57,6 +67,11 @@ public class DefaultItemParserTest extends ParserTest
 
     }
 
+    /**
+     * Verifies all default tags are parsed properly
+     * 
+     * @throws Exception
+     */
     @Test
     public void testTestDataParsing() throws Exception
     {
@@ -94,12 +109,16 @@ public class DefaultItemParserTest extends ParserTest
         listOfDefaults.add(new NameValuePair("variable_1", "value_1"));
         listOfDefaults.add(new NameValuePair("variable_2", "value_2"));
 
+        // This is cookie item
+        listOfDefaults.add(new NameValuePair("cookieName_1", "cookieValue_1"));
+        listOfDefaults.add(new NameValuePair("cookieName_2", "cookieValue_2"));
+
         listOfDefaults.add(new NameValuePair("Name", "Delete"));
         listOfDefaults.add(new NameValuePair("Url", "Delete"));
         listOfDefaults.add(new NameValuePair("Httpcode", "Delete"));
+        // Next item is index 20
         listOfDefaults.add(new NameValuePair("Method", "Delete"));
         listOfDefaults.add(new NameValuePair("Body", "Delete"));
-        // Next item is index 20
         listOfDefaults.add(new NameValuePair("Xhr", "Delete"));
         listOfDefaults.add(new NameValuePair("Headers", "Delete"));
         listOfDefaults.add(new NameValuePair("Parameters", "Delete"));
@@ -141,12 +160,17 @@ public class DefaultItemParserTest extends ParserTest
             }
             else
             {
-                Assert.assertFalse("Neither StoreDefault nor StoreItem.", true);
+                throw new IllegalArgumentException("Neither StoreDefault nor StoreItem.");
             }
         }
 
     }
 
+    /**
+     * Verifies default cookies can be parsed
+     * 
+     * @throws Exception
+     */
     @Test
     public void testDefaultCookieParsing() throws Exception
     {
@@ -164,6 +188,11 @@ public class DefaultItemParserTest extends ParserTest
         Assert.assertEquals(value, storeDefault.getValue());
     }
 
+    /**
+     * Verifies default parameters can be parsed
+     * 
+     * @throws Exception
+     */
     @Test
     public void testDefaultParameterParsing() throws Exception
     {
@@ -181,6 +210,11 @@ public class DefaultItemParserTest extends ParserTest
         Assert.assertEquals(value, storeDefault.getValue());
     }
 
+    /**
+     * Verifies default headers can be parsed
+     * 
+     * @throws Exception
+     */
     @Test
     public void testDefaultHeaderParsing() throws Exception
     {
@@ -198,6 +232,11 @@ public class DefaultItemParserTest extends ParserTest
         Assert.assertEquals(value, storeDefault.getValue());
     }
 
+    /**
+     * Verifies default static urls can be parsed
+     * 
+     * @throws Exception
+     */
     @Test
     public void testDefaultStaticParsing() throws Exception
     {
@@ -216,6 +255,11 @@ public class DefaultItemParserTest extends ParserTest
         Assert.assertEquals(url, storeDefault.getValue());
     }
 
+    /**
+     * Verifies default items can be parsed
+     * 
+     * @throws Exception
+     */
     @Test
     public void testDefaultItemParsing() throws Exception
     {

@@ -1,5 +1,5 @@
 - Action :
   Response :
     Store :
-      - validation_name :
+      - variable_name :
         - Regex : .*

@@ -11,6 +11,11 @@ import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.ParserTest;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 
+/**
+ * Tests for parsing multiple tags, i.e. "Store" and "Action"
+ * 
+ * @author ckeiner
+ */
 public class YamlParserTest extends ParserTest
 {
     protected final String fileEmptyFile = path + "emptyFile.yml";
@@ -21,6 +26,11 @@ public class YamlParserTest extends ParserTest
 
     protected final String fileSyntaxErrorRootObjectNotArray = path + "syntaxErrorRootObjectNotArray.yml";
 
+    /**
+     * Verifies an empty file can be parsed
+     * 
+     * @throws Exception
+     */
     @Test
     public void testEmptyFileParsing() throws Exception
     {
@@ -30,6 +40,11 @@ public class YamlParserTest extends ParserTest
         Assert.assertTrue(scriptItems.isEmpty());
     }
 
+    /**
+     * Verifies an error is thrown if the file is not found
+     * 
+     * @throws Exception
+     */
     @Test(expected = FileNotFoundException.class)
     public void testNotExistingFileParsing() throws Exception
     {
@@ -38,6 +53,11 @@ public class YamlParserTest extends ParserTest
         Assert.assertTrue(scriptItems.isEmpty());
     }
 
+    /**
+     * Verifies an error is thrown when an invalid list item is found
+     * 
+     * @throws Exception
+     */
     @Test(expected = JsonParseException.class)
     public void testSyntaxErrorRootParsing() throws Exception
     {
@@ -46,6 +66,11 @@ public class YamlParserTest extends ParserTest
         final List<ScriptItem> scriptItems = parser.parse();
     }
 
+    /**
+     * Verifies an error is thrown when the list items are objects and not in an array
+     * 
+     * @throws Exception
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testSyntaxErrorRootObjectNotArrayParsing() throws Exception
     {

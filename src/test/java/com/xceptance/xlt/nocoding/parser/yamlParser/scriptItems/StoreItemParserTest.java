@@ -12,12 +12,22 @@ import com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.StoreItem;
 
+/**
+ * Tests for parsing the "Store" tag
+ * 
+ * @author ckeiner
+ */
 public class StoreItemParserTest extends ParserTest
 {
     protected final String fileStore = path + "store.yml";
 
     protected final String fileStoreObjectNotArray = path + "syntaxErrorStoreObjectNotArray.yml";
 
+    /**
+     * Verifies two store items can be parsed
+     * 
+     * @throws Exception
+     */
     @Test
     public void testStoreParsing() throws Exception
     {
@@ -64,6 +74,11 @@ public class StoreItemParserTest extends ParserTest
 
     }
 
+    /**
+     * Verifies an error happens when "Store" has objects beneath it and not an array
+     * 
+     * @throws Exception
+     */
     @Test(expected = JsonParseException.class)
     public void testStoreObjectParse() throws Exception
     {

@@ -25,6 +25,11 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.store.AbstractRespo
 import com.xceptance.xlt.nocoding.scriptItem.action.response.store.ResponseStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.MatchesValidator;
 
+/**
+ * Tests for parsing the "Action" tag
+ * 
+ * @author ckeiner
+ */
 public class ActionItemParserTest extends ParserTest
 {
     /*
@@ -37,18 +42,25 @@ public class ActionItemParserTest extends ParserTest
 
     protected final String fileEmptyAction = path + "emptyAction.yml";
 
+    protected final String fileActionNameNull = path + "actionNameNull.yml";
+
     /*
      * Error cases
      */
 
     protected final String fileSyntaxErrorAction = path + "syntaxErrorAction.yml";
 
-    protected final String fileActionNameNull = path + "actionNameNull.yml";
-
     protected final String fileSyntaxErrorActionArrayNotObject = path + "syntaxErrorActionArrayNotObject.yml";
 
     protected final String fileWrongOrderAction = path + "wrongOrderAction.yml";
 
+    protected final String fileWrongOrder = path + "wrongOrder.yml";
+
+    /**
+     * Verifies an action is parsed correctly
+     * 
+     * @throws Exception
+     */
     @Test
     public void testSingleActionNoDefaultsParsing() throws Exception
     {
@@ -123,14 +135,23 @@ public class ActionItemParserTest extends ParserTest
         Assert.assertEquals("xpath_2", store.getExtractor().getExtractionExpression());
     }
 
+    /**
+     * Verifies all tags can be parsed
+     * 
+     * @throws Exception
+     */
     @Test
     public void testComplexTestCaseParsing() throws Exception
     {
         final Parser parser = new YamlParser(fileComplexTestCase);
-        @SuppressWarnings("unused")
-        final List<ScriptItem> scriptItems = parser.parse();
+        parser.parse();
     }
 
+    /**
+     * Verifies "Action: " with nothing in it can be parsed
+     * 
+     * @throws Exception
+     */
     @Test
     public void testEmptyActionParsing() throws Exception
     {
@@ -139,18 +160,11 @@ public class ActionItemParserTest extends ParserTest
         Assert.assertTrue(scriptItems.get(0) instanceof LightWeigthAction);
     }
 
-    /*
-     * Error cases
+    /**
+     * Verifies no error is thrown when "Name" beneath "Action" is empty
+     * 
+     * @throws Exception
      */
-
-    @Test(expected = JsonParseException.class)
-    public void testSyntaxErrorActionParsing() throws Exception
-    {
-        final Parser parser = new YamlParser(fileSyntaxErrorAction);
-        @SuppressWarnings("unused")
-        final List<ScriptItem> scriptItems = parser.parse();
-    }
-
     @Test
     public void testActionNameNullParsing() throws Exception
     {
@@ -159,6 +173,28 @@ public class ActionItemParserTest extends ParserTest
         final List<ScriptItem> scriptItems = parser.parse();
     }
 
+    /*
+     * Error cases
+     */
+
+    /**
+     * Verifies an error happens when "Action" has an invalid tag
+     * 
+     * @throws Exception
+     */
+    @Test(expected = JsonParseException.class)
+    public void testSyntaxErrorActionParsing() throws Exception
+    {
+        final Parser parser = new YamlParser(fileSyntaxErrorAction);
+        @SuppressWarnings("unused")
+        final List<ScriptItem> scriptItems = parser.parse();
+    }
+
+    /**
+     * Verifies an error happens when "Action" has an array beneath it and not objects
+     * 
+     * @throws Exception
+     */
     @Test(expected = JsonParseException.class)
     public void testSyntaxErrorActionArrayNotObjectParsing() throws Exception
     {
@@ -167,10 +203,28 @@ public class ActionItemParserTest extends ParserTest
         final List<ScriptItem> scriptItems = parser.parse();
     }
 
+    /**
+     * Verifies an error happens when "Response" is defined before "Request"
+     * 
+     * @throws Exception
+     */
     @Test(expected = JsonParseException.class)
     public void testWrongOrderActionParsing() throws Exception
     {
         final Parser parser = new YamlParser(fileWrongOrderAction);
+        @SuppressWarnings("unused")
+        final List<ScriptItem> scriptItems = parser.parse();
+    }
+
+    /**
+     * Verifies an error happens when "Subrequests" is defined before "Request"
+     * 
+     * @throws Throwable
+     */
+    @Test(expected = JsonParseException.class)
+    public void testWrongOrderParsing() throws Throwable
+    {
+        final Parser parser = new YamlParser(fileWrongOrder);
         @SuppressWarnings("unused")
         final List<ScriptItem> scriptItems = parser.parse();
     }

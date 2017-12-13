@@ -2,11 +2,10 @@ package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.storeDefault;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefault;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultCookie;
 import com.xceptance.xlt.nocoding.util.Constants;
@@ -38,12 +37,11 @@ public class StoreDefaultCookieParser extends AbstractStoreDefaultParser
         else
         {
             // Parse headers with the header parser
-            final Map<String, String> cookies = new HashMap<>();
-            cookies.putAll(ParserUtils.getArrayNodeAsMap(node));
-            for (final Map.Entry<String, String> cookie : cookies.entrySet())
+            final List<NameValuePair> cookies = ParserUtils.getArrayNodeAsNameValuePair(node);
+            for (final NameValuePair cookie : cookies)
             {
                 // Create a StoreDefaultHeader for every header key value pair
-                defaultItems.add(new StoreDefaultCookie(cookie.getKey(), cookie.getValue()));
+                defaultItems.add(new StoreDefaultCookie(cookie.getName(), cookie.getValue()));
             }
         }
         // Return all default items
