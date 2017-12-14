@@ -11,7 +11,6 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.xceptance.xlt.nocoding.parser.Parser;
-import com.xceptance.xlt.nocoding.parser.csvParser.scriptItems.AbstractScriptItemParser;
 import com.xceptance.xlt.nocoding.parser.csvParser.scriptItems.ActionItemParser;
 import com.xceptance.xlt.nocoding.parser.csvParser.scriptItems.StaticItemParser;
 import com.xceptance.xlt.nocoding.parser.csvParser.scriptItems.XhrItemParser;
@@ -63,7 +62,6 @@ public class CsvParserNocoding extends Parser
                     String type = CsvConstants.TYPE_DEFAULT;
                     // If type is defined, use the defined type
                     final JsonNode typeNode = element.get(CsvConstants.TYPE);
-                    AbstractScriptItemParser itemParser = null;
                     if (typeNode != null)
                     {
                         type = ParserUtils.readSingleValue(typeNode);
@@ -71,18 +69,19 @@ public class CsvParserNocoding extends Parser
                     switch (type)
                     {
                         case CsvConstants.TYPE_ACTION:
-                            itemParser = new ActionItemParser();
+                            scriptItems.addAll(new ActionItemParser().parse(element));
                             break;
                         case CsvConstants.TYPE_STATIC:
-                            itemParser = new StaticItemParser();
+                            scriptItems.addAll(new StaticItemParser().parse(element));
                             break;
                         case CsvConstants.TYPE_XHR_ACTION:
-                            itemParser = new XhrItemParser();
+                            final List<ScriptItem> xhrItem = new XhrItemParser().parse(element);
+                            // TODO Manipulate last Action?
                             break;
                         default:
-                            break;
+                            throw new IllegalArgumentException("Unknown Type: " + type);
                     }
-                    scriptItems.addAll(itemParser.parse(element));
+
                 }
                 else
                 {
