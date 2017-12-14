@@ -36,6 +36,7 @@ public class StaticSubrequest extends AbstractSubrequest
     @Override
     public void execute(final Context context) throws Exception
     {
+        // Resolve urls
         resolveValues(context);
         // Get the number of threads in the properties
         final String numberThreads = context.getPropertyByKey("com.xceptance.xlt.staticContent.downloadThreads");

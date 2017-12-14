@@ -76,6 +76,12 @@ public class LightWeightAction extends Action
             action.run();
             setLightWeightPage(new LightWeightPage(action.getContext().getWebResponse(), action.getTimerName()));
         }
+        catch (final Exception e)
+        {
+            XltLogger.runTimeLogger.error("Execution Step failed : " + getName());
+            e.printStackTrace();
+            throw new Exception(e);
+        }
         // And always append the page to the result browser
         finally
         {
