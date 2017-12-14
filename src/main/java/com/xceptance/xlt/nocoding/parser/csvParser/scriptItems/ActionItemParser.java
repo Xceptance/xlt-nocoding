@@ -20,10 +20,9 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractE
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.AbstractValidationMethod;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
-public class ActionItemParser extends AbstractScriptItemParser
+public class ActionItemParser
 {
 
-    @Override
     public Action parse(final JsonNode node)
     {
         final Iterator<String> fieldNames = node.fieldNames();
@@ -47,22 +46,37 @@ public class ActionItemParser extends AbstractScriptItemParser
                         break;
                     case CsvConstants.NAME:
                         name = ParserUtils.readValue(node, fieldName);
+                        break;
                     case CsvConstants.URL:
                         url = ParserUtils.readValue(node, fieldName);
+                        url = url.trim();
+                        final String quotationMark = "\"";
+                        if (url.startsWith(quotationMark) && url.endsWith(quotationMark))
+                        {
+                            url = url.substring(1, url.length() - 1);
+                        }
+                        break;
                     case CsvConstants.METHOD:
                         method = ParserUtils.readValue(node, fieldName);
+                        break;
                     case CsvConstants.PARAMETERS:
                         parameters = readParameters(node);
+                        break;
                     case CsvConstants.RESPONSECODE:
                         responsecode = ParserUtils.readValue(node, fieldName);
+                        break;
                     case CsvConstants.XPATH:
                         extractor = readExtractor(node);
+                        break;
                     case CsvConstants.REGEXP:
                         extractor = readExtractor(node);
+                        break;
                     case CsvConstants.TEXT:
                         textValidator = readValidationMethod(node);
+                        break;
                     case CsvConstants.ENCODED:
                         encoded = ParserUtils.readValue(node, fieldName);
+                        break;
 
                     default:
                         break;
@@ -70,8 +84,7 @@ public class ActionItemParser extends AbstractScriptItemParser
             }
         }
 
-        final Request request = new Request();
-        request.setUrl(url);
+        final Request request = new Request(url);
         request.setHttpMethod(method);
         request.setParameters(parameters);
         request.setEncodeBody(encoded);

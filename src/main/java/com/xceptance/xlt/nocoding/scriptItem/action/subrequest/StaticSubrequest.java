@@ -1,5 +1,6 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.subrequest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.xceptance.xlt.nocoding.util.Context;
@@ -15,7 +16,7 @@ public class StaticSubrequest extends AbstractSubrequest
     /**
      * The list of all URLs that are to be downloaded
      */
-    private final List<String> urls;
+    private List<String> urls;
 
     /**
      * Creates an instance of {@link StaticSubrequest} that sets {@link #urls}.
@@ -35,6 +36,7 @@ public class StaticSubrequest extends AbstractSubrequest
     @Override
     public void execute(final Context context) throws Exception
     {
+        resolveValues(context);
         // Get the number of threads in the properties
         final String numberThreads = context.getPropertyByKey("com.xceptance.xlt.staticContent.downloadThreads");
         // Get the UID in the properties
@@ -60,6 +62,21 @@ public class StaticSubrequest extends AbstractSubrequest
     {
         // No need to do anything since there are default static subrequests but no default static urls
 
+    }
+
+    /**
+     * Resolves each static url
+     * 
+     * @param context
+     */
+    public void resolveValues(final Context context)
+    {
+        final List<String> newUrls = new ArrayList<String>();
+        for (final String url : urls)
+        {
+            newUrls.add(context.resolveString(url));
+        }
+        urls = newUrls;
     }
 
 }

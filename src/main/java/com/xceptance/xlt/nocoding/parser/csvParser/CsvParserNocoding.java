@@ -15,6 +15,7 @@ import com.xceptance.xlt.nocoding.parser.csvParser.scriptItems.ActionItemParser;
 import com.xceptance.xlt.nocoding.parser.csvParser.scriptItems.StaticItemParser;
 import com.xceptance.xlt.nocoding.parser.csvParser.scriptItems.XhrItemParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
+import com.xceptance.xlt.nocoding.scriptItem.action.Action;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
@@ -53,10 +54,11 @@ public class CsvParserNocoding extends Parser
         final Iterator<JsonNode> elements = root.elements();
         try
         {
+            Action lastAction = null;
             while (elements.hasNext())
             {
                 final JsonNode element = elements.next();
-                if (element.isContainerNode())
+                if (true)
                 {
                     // Set type to default
                     String type = CsvConstants.TYPE_DEFAULT;
@@ -64,24 +66,31 @@ public class CsvParserNocoding extends Parser
                     final JsonNode typeNode = element.get(CsvConstants.TYPE);
                     if (typeNode != null)
                     {
-                        type = ParserUtils.readSingleValue(typeNode);
+                        final String value = ParserUtils.readSingleValue(typeNode);
+                        if (!value.isEmpty())
+                        {
+                            type = value.trim();
+                        }
                     }
                     switch (type)
                     {
                         case CsvConstants.TYPE_ACTION:
-                            scriptItems.add(new ActionItemParser().parse(element));
+                            lastAction = new ActionItemParser().parse(element);
+                            if (!lastAction.getActionItems().isEmpty() && lastAction.getName() != null && !lastAction.getName().isEmpty())
+                            {
+                                scriptItems.add(lastAction);
+                            }
                             break;
                         case CsvConstants.TYPE_STATIC:
-                            scriptItems.add(new StaticItemParser().parse(element));
+                            lastAction.getActionItems().add(new StaticItemParser().parse(element));
                             break;
                         case CsvConstants.TYPE_XHR_ACTION:
-                            final ScriptItem xhrItem = new XhrItemParser().parse(element);
+                            lastAction.getActionItems().add(new XhrItemParser().parse(element));
                             // TODO Manipulate last Action?
                             break;
                         default:
                             throw new IllegalArgumentException("Unknown Type: " + type);
                     }
-
                 }
                 else
                 {
