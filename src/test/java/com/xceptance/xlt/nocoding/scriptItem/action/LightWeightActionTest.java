@@ -16,7 +16,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.Context;
 
 /**
- * Tests {@link LightWeigthAction}
+ * Tests {@link LightWeightAction}
  * 
  * @author ckeiner
  */
@@ -34,7 +34,7 @@ public class LightWeightActionTest
     }
 
     /**
-     * Verifies {@link LightWeigthAction} adds a default {@link Request} if no {@link Request} is specified
+     * Verifies {@link LightWeightAction} adds a default {@link Request} if no {@link Request} is specified
      */
     @Test
     public void testDefaultRequest()
@@ -46,7 +46,7 @@ public class LightWeightActionTest
         final String value = "TestName";
         context.getDefaultItems().store(configName, value);
 
-        final LightWeigthAction action = new LightWeigthAction();
+        final LightWeightAction action = new LightWeightAction();
         action.fillDefaultData(context);
         Assert.assertNotNull(action.getActionItems());
         Assert.assertFalse(action.getActionItems().isEmpty());
@@ -57,7 +57,7 @@ public class LightWeightActionTest
     }
 
     /**
-     * Verifies {@link LightWeigthAction} adds default {@link StaticSubrequest}
+     * Verifies {@link LightWeightAction} adds default {@link StaticSubrequest}
      * 
      * @throws Throwable
      */
@@ -84,7 +84,7 @@ public class LightWeightActionTest
         final String configName = Constants.NAME;
         final String value = "TestName";
         context.getDefaultItems().store(configName, value);
-        final LightWeigthAction action = new LightWeigthAction();
+        final LightWeightAction action = new LightWeightAction();
         action.fillDefaultData(context);
         Assert.assertEquals(value, action.getName());
 
@@ -101,7 +101,7 @@ public class LightWeightActionTest
     }
 
     /**
-     * Verifies {@link LightWeigthAction} adds a default {@link Response} if no {@link Response} is specified
+     * Verifies {@link LightWeightAction} adds a default {@link Response} if no {@link Response} is specified
      */
     @Test
     public void testDefaultResponse()
@@ -111,7 +111,7 @@ public class LightWeightActionTest
         final String configName = Constants.NAME;
         final String value = "TestName";
         context.getDefaultItems().store(configName, value);
-        final LightWeigthAction action = new LightWeigthAction();
+        final LightWeightAction action = new LightWeightAction();
         action.fillDefaultData(context);
 
         Assert.assertEquals(2, action.getActionItems().size());
@@ -120,7 +120,7 @@ public class LightWeightActionTest
     }
 
     /**
-     * Verifies {@link LightWeigthAction} adds a default {@link LightWeigthAction#getName()} if no name is specified
+     * Verifies {@link LightWeightAction} adds a default {@link LightWeightAction#getName()} if no name is specified
      */
     @Test
     public void testDefaultName()
@@ -130,13 +130,13 @@ public class LightWeightActionTest
         final String configName = Constants.NAME;
         final String value = "TestName";
         context.getDefaultItems().store(configName, value);
-        final LightWeigthAction action = new LightWeigthAction();
+        final LightWeightAction action = new LightWeightAction();
         action.fillDefaultData(context);
         Assert.assertEquals(value, action.getName());
     }
 
     /**
-     * Verifies {@link LightWeigthAction} does not resolve {@link LightWeigthAction#getName()}
+     * Verifies {@link LightWeightAction} does not resolve {@link LightWeightAction#getName()}
      * 
      * @throws Throwable
      */
@@ -151,7 +151,7 @@ public class LightWeightActionTest
 
         context.getVariables().store("name", "TestName");
 
-        final LightWeigthAction action = new LightWeigthAction();
+        final LightWeightAction action = new LightWeightAction();
         action.execute(context);
         Assert.assertNotEquals("TestName", action.getName());
     }

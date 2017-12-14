@@ -13,7 +13,7 @@ import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.ParserTest;
 import com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
-import com.xceptance.xlt.nocoding.scriptItem.action.LightWeigthAction;
+import com.xceptance.xlt.nocoding.scriptItem.action.LightWeightAction;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.HttpcodeValidator;
@@ -70,8 +70,8 @@ public class ActionItemParserTest extends ParserTest
         Assert.assertEquals(1, scriptItems.size());
 
         // Assert it's an action
-        Assert.assertTrue(scriptItems.get(0) instanceof LightWeigthAction);
-        final LightWeigthAction action = (LightWeigthAction) scriptItems.get(0);
+        Assert.assertTrue(scriptItems.get(0) instanceof LightWeightAction);
+        final LightWeightAction action = (LightWeightAction) scriptItems.get(0);
         Assert.assertEquals("name", action.getName());
         Assert.assertEquals(2, action.getActionItems().size());
 
@@ -157,7 +157,7 @@ public class ActionItemParserTest extends ParserTest
     {
         final Parser parser = new YamlParser(fileEmptyAction);
         final List<ScriptItem> scriptItems = parser.parse();
-        Assert.assertTrue(scriptItems.get(0) instanceof LightWeigthAction);
+        Assert.assertTrue(scriptItems.get(0) instanceof LightWeightAction);
     }
 
     /**

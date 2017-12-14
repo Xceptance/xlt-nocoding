@@ -69,13 +69,13 @@ public class CsvParserNocoding extends Parser
                     switch (type)
                     {
                         case CsvConstants.TYPE_ACTION:
-                            scriptItems.addAll(new ActionItemParser().parse(element));
+                            scriptItems.add(new ActionItemParser().parse(element));
                             break;
                         case CsvConstants.TYPE_STATIC:
-                            scriptItems.addAll(new StaticItemParser().parse(element));
+                            scriptItems.add(new StaticItemParser().parse(element));
                             break;
                         case CsvConstants.TYPE_XHR_ACTION:
-                            final List<ScriptItem> xhrItem = new XhrItemParser().parse(element);
+                            final ScriptItem xhrItem = new XhrItemParser().parse(element);
                             // TODO Manipulate last Action?
                             break;
                         default:

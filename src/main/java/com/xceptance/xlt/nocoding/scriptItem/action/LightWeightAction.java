@@ -17,7 +17,7 @@ import com.xceptance.xlt.nocoding.util.WebAction;
  * 
  * @author ckeiner
  */
-public class LightWeigthAction extends Action
+public class LightWeightAction extends Action
 {
     /**
      * The light weight page that is built by this action
@@ -25,28 +25,28 @@ public class LightWeigthAction extends Action
     private LightWeightPage lightWeightPage;
 
     /**
-     * Creates an instance of {@link LightWeigthAction} that sets {@link #actionItems} to an {@link ArrayList} of size 1.
+     * Creates an instance of {@link LightWeightAction} that sets {@link #actionItems} to an {@link ArrayList} of size 1.
      */
-    public LightWeigthAction()
+    public LightWeightAction()
     {
         super();
     }
 
     /**
-     * Creates an instance of {@link LightWeigthAction} that sets {@link #name} and {@link #actionItems}.
+     * Creates an instance of {@link LightWeightAction} that sets {@link #name} and {@link #actionItems}.
      * 
      * @param name
      *            The name of the action
      * @param actionItems
      *            A {@link List}<{@link AbstractActionItem}>
      */
-    public LightWeigthAction(final String name, final List<AbstractActionItem> actionItems)
+    public LightWeightAction(final String name, final List<AbstractActionItem> actionItems)
     {
         super(name, actionItems);
     }
 
     /**
-     * Executes the {@link LightWeigthAction} by building a {@link WebAction}, running it and then validating the answer. In
+     * Executes the {@link LightWeightAction} by building a {@link WebAction}, running it and then validating the answer. In
      * the end, the page gets appended to the result browser.
      */
     @Override
