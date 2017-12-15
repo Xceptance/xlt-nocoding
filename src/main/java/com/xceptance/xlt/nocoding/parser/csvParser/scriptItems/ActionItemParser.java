@@ -3,9 +3,9 @@ package com.xceptance.xlt.nocoding.parser.csvParser.scriptItems;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.NullNode;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.parser.csvParser.CsvConstants;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
@@ -17,7 +17,10 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.HttpcodeValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Validator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.RegexpExtractor;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.XpathExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.AbstractValidationMethod;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.TextValidator;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 public class ActionItemParser
@@ -37,7 +40,8 @@ public class ActionItemParser
         while (fieldNames.hasNext())
         {
             final String fieldName = fieldNames.next();
-            if (!(node.get(fieldName) instanceof NullNode) && !node.get(fieldName).isNull())
+            final String value = ParserUtils.readValue(node, fieldName);
+            if (value != null && !value.isEmpty())
             {
                 switch (fieldName)
                 {
@@ -45,10 +49,10 @@ public class ActionItemParser
                         // Do nothing
                         break;
                     case CsvConstants.NAME:
-                        name = ParserUtils.readValue(node, fieldName);
+                        name = value;
                         break;
                     case CsvConstants.URL:
-                        url = ParserUtils.readValue(node, fieldName);
+                        url = value;
                         url = url.trim();
                         final String quotationMark = "\"";
                         if (url.startsWith(quotationMark) && url.endsWith(quotationMark))
@@ -57,25 +61,25 @@ public class ActionItemParser
                         }
                         break;
                     case CsvConstants.METHOD:
-                        method = ParserUtils.readValue(node, fieldName);
+                        method = value;
                         break;
                     case CsvConstants.PARAMETERS:
-                        parameters = readParameters(node);
+                        parameters = readParameters(value);
                         break;
                     case CsvConstants.RESPONSECODE:
-                        responsecode = ParserUtils.readValue(node, fieldName);
+                        responsecode = value;
                         break;
                     case CsvConstants.XPATH:
-                        extractor = readExtractor(node);
+                        extractor = new XpathExtractor(value);
                         break;
                     case CsvConstants.REGEXP:
-                        extractor = readExtractor(node);
+                        extractor = new RegexpExtractor(value);
                         break;
                     case CsvConstants.TEXT:
-                        textValidator = readValidationMethod(node);
+                        textValidator = new TextValidator(value);
                         break;
                     case CsvConstants.ENCODED:
-                        encoded = ParserUtils.readValue(node, fieldName);
+                        encoded = value;
                         break;
 
                     default:
@@ -102,22 +106,42 @@ public class ActionItemParser
         return action;
     }
 
-    private List<NameValuePair> readParameters(final JsonNode node)
+    private List<NameValuePair> readParameters(final String parameterString)
     {
+        final List<NameValuePair> parameterList = new ArrayList<NameValuePair>();
+        final StringTokenizer tokenizer = new StringTokenizer(parameterString, "&");
+        while (tokenizer.hasMoreTokens())
+        {
+            final String parameter = tokenizer.nextToken();
 
-        return null;
-    }
+            // the future pair
+            String name = null;
+            String value = null;
 
-    private AbstractExtractor readExtractor(final JsonNode node)
-    {
-
-        return null;
-    }
-
-    private AbstractValidationMethod readValidationMethod(final JsonNode node)
-    {
-
-        return null;
+            // Get index of =
+            final int pos = parameter.indexOf("=");
+            // If there is an = sign
+            if (pos >= 0)
+            {
+                // Get the name
+                name = parameter.substring(0, pos);
+                // If there is still something left in the parameter
+                if (pos < parameter.length() - 1)
+                {
+                    // Save the rest to value
+                    value = parameter.substring(pos + 1);
+                }
+            }
+            else
+            {
+                name = parameter;
+            }
+            if (name != null)
+            {
+                parameterList.add(new NameValuePair(name, value));
+            }
+        }
+        return parameterList;
     }
 
 }
