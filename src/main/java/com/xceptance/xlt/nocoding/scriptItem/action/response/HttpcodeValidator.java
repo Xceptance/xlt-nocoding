@@ -38,8 +38,8 @@ public class HttpcodeValidator extends AbstractResponseItem
     @Override
     public void execute(final Context context) throws Exception
     {
-        resolveValues(context);
         fillDefaultData(context);
+        resolveValues(context);
         // TODO test
         Assert.assertEquals(Integer.parseInt(this.httpcode), context.getWebResponse().getStatusCode());
     }

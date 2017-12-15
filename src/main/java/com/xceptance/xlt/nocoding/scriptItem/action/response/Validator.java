@@ -76,13 +76,13 @@ public class Validator extends AbstractResponseItem
         }
         catch (final Exception e)
         {
-            final String message = "\"" + validationName + "\" could not validate: " + e.getMessage();
+            final String message = "Validation Step \"" + validationName + "\" could not validate: " + e.getMessage();
             XltLogger.runTimeLogger.error(message);
             throw new Exception(message, e);
         }
         catch (final AssertionError e)
         {
-            final String message = "\"" + validationName + "\" could not validate: " + e.getMessage();
+            final String message = "Validation Step \"" + validationName + "\" could not validate: " + e.getMessage();
             XltLogger.runTimeLogger.error(message);
             throw new AssertionError(message, e);
         }

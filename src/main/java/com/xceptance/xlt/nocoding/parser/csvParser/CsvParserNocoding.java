@@ -27,16 +27,28 @@ import com.xceptance.xlt.nocoding.util.ParserUtils;
 public class CsvParserNocoding extends Parser
 {
 
+    /**
+     * Creates a new instance of {@link CsvParserNocoding}
+     * 
+     * @param pathToFile
+     *            The path to the file
+     */
     public CsvParserNocoding(final String pathToFile)
     {
         super(pathToFile);
     }
 
+    /**
+     * Creates a {@link JsonNode} out of the Csv file with the first (not commented) line as fieldNames. Then uses these
+     * {@link JsonNode}s to parse the data to a {@link List}<{@link ScriptItem}>
+     */
     @Override
     public List<ScriptItem> parse() throws Exception
     {
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
+
         final CsvMapper mapper = new CsvMapper();
+        // Configure mapper:
 
         // Needed so we read everything with readTree
         mapper.enable(CsvParser.Feature.WRAP_AS_ARRAY);
@@ -54,55 +66,63 @@ public class CsvParserNocoding extends Parser
         final Iterator<JsonNode> elements = root.elements();
         try
         {
+            // Save the last action, so we can still manipulate it
             Action lastAction = null;
             while (elements.hasNext())
             {
+                // Get the next node
                 final JsonNode element = elements.next();
-                if (true)
+
+                // Set type to default
+                String type = CsvConstants.TYPE_DEFAULT;
+
+                // If type is defined, use the defined type
+                if (element.has(CsvConstants.TYPE))
                 {
-                    // Set type to default
-                    String type = CsvConstants.TYPE_DEFAULT;
-                    // If type is defined, use the defined type
-                    final JsonNode typeNode = element.get(CsvConstants.TYPE);
-                    if (typeNode != null)
+                    final String value = ParserUtils.readSingleValue(element.get(CsvConstants.TYPE));
+                    if (value != null && !value.isEmpty())
                     {
-                        final String value = ParserUtils.readSingleValue(typeNode);
-                        if (!value.isEmpty())
-                        {
-                            type = value.trim();
-                        }
-                    }
-                    switch (type)
-                    {
-                        case CsvConstants.TYPE_ACTION:
-                            lastAction = new ActionItemParser().parse(element);
-                            if (!lastAction.getActionItems().isEmpty() && lastAction.getName() != null && !lastAction.getName().isEmpty())
-                            {
-                                scriptItems.add(lastAction);
-                            }
-                            break;
-                        case CsvConstants.TYPE_STATIC:
-                            lastAction.getActionItems().add(new StaticItemParser().parse(element));
-                            break;
-                        case CsvConstants.TYPE_XHR_ACTION:
-                            lastAction.getActionItems().add(new XhrItemParser().parse(element));
-                            // TODO Manipulate last Action?
-                            break;
-                        default:
-                            throw new IllegalArgumentException("Unknown Type: " + type);
+                        // Remove whitespaces in the beginning and end
+                        type = value.trim();
                     }
                 }
-                else
+
+                // Differentiate between the different types
+                switch (type)
                 {
-                    // We got an empty line
+                    case CsvConstants.TYPE_ACTION:
+                        // Create a new action with the ActionItemParser
+                        lastAction = new ActionItemParser().parse(element);
+                        // Verify, that lastAction was not an empty line, by asserting that: the action has action items, has a name, and
+                        // that name is not null
+                        if (!lastAction.getActionItems().isEmpty() && lastAction.getName() != null && !lastAction.getName().isEmpty())
+                        {
+                            // Add the action to the scriptitems
+                            scriptItems.add(lastAction);
+                        }
+                        break;
+                    case CsvConstants.TYPE_STATIC:
+                        // Add a static subrequest to the last Action
+                        lastAction.getActionItems().add(new StaticItemParser().parse(element));
+                        break;
+                    case CsvConstants.TYPE_XHR_ACTION:
+                        // Add an XhrSubrequest to the last Action
+                        lastAction.getActionItems().add(new XhrItemParser().parse(element));
+                        break;
+                    default:
+                        // Everything else is unknown
+                        throw new IllegalArgumentException("Unknown Type: " + type);
                 }
 
             }
         }
         catch (final Exception e)
         {
+            // TODO find better error
             throw new IllegalStateException("Unknown error: " + e.getMessage(), e);
         }
+
+        // Return all scriptItems
         return scriptItems;
     }
 

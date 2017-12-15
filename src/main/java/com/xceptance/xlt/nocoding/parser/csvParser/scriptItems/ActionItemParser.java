@@ -19,16 +19,30 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.Validator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.RegexpExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.XpathExtractor;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.store.AbstractResponseStore;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.store.ResponseStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.AbstractValidationMethod;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.TextValidator;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
+/**
+ * Parses an action item to {@link Action}.
+ * 
+ * @author ckeiner
+ */
 public class ActionItemParser
 {
 
+    /**
+     * Parses the action content in a node to an {@link Action}
+     * 
+     * @param node
+     *            The node the actionItem is at
+     * @return
+     */
     public Action parse(final JsonNode node)
     {
-        final Iterator<String> fieldNames = node.fieldNames();
+        // Initialize all needed variables
         String name = null;
         String url = null;
         String method = null;
@@ -37,10 +51,18 @@ public class ActionItemParser
         AbstractExtractor extractor = null;
         AbstractValidationMethod textValidator = null;
         String encoded = null;
+        final List<AbstractResponseStore> responseStores = new ArrayList<AbstractResponseStore>();
+
+        // Get an iterator over the fieldNames
+        final Iterator<String> fieldNames = node.fieldNames();
+        // While there are still fieldNames available
         while (fieldNames.hasNext())
         {
+            // Get the next fieldName
             final String fieldName = fieldNames.next();
-            final String value = ParserUtils.readValue(node, fieldName);
+            // Get the value without whitespaces in the beginning and end
+            final String value = ParserUtils.readValue(node, fieldName).trim();
+            // If there really is a value and it is not empty
             if (value != null && !value.isEmpty())
             {
                 switch (fieldName)
@@ -53,8 +75,8 @@ public class ActionItemParser
                         break;
                     case CsvConstants.URL:
                         url = value;
-                        url = url.trim();
                         final String quotationMark = "\"";
+                        // Remove quotation marks at the beginning and end of the url
                         if (url.startsWith(quotationMark) && url.endsWith(quotationMark))
                         {
                             url = url.substring(1, url.length() - 1);
@@ -83,7 +105,18 @@ public class ActionItemParser
                         break;
 
                     default:
-                        break;
+                        // If the fieldName contains either REGEXP_GETTER_PREFIX or XPATH_GETTER_PREFIX
+                        if (fieldName.contains(CsvConstants.REGEXP_GETTER_PREFIX) || fieldName.contains(CsvConstants.XPATH_GETTER_PREFIX))
+                        {
+                            // Create a response store
+                            responseStores.add(handleStore(fieldName, value));
+                        }
+                        // In every other case, throw an error
+                        else
+                        {
+                            // Throw an exception
+                            throw new IllegalArgumentException("Unknown header: " + fieldName);
+                        }
                 }
             }
         }
@@ -93,11 +126,19 @@ public class ActionItemParser
         request.setParameters(parameters);
         request.setEncodeBody(encoded);
         request.setEncodeParameters(encoded);
+
         final List<AbstractResponseItem> responseItems = new ArrayList<AbstractResponseItem>();
-        responseItems.add(new HttpcodeValidator(responsecode));
-        final Validator validator = new Validator(null, extractor, textValidator);
-        responseItems.add(validator);
-        final Response response = new Response();
+
+        if (responsecode != null)
+        {
+            responseItems.add(new HttpcodeValidator(responsecode));
+        }
+        if (extractor != null)
+        {
+            final Validator validator = new Validator(null, extractor, textValidator);
+            responseItems.add(validator);
+        }
+        final Response response = new Response(responseItems);
 
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
         actionItems.add(request);
@@ -106,19 +147,30 @@ public class ActionItemParser
         return action;
     }
 
+    /**
+     * Converts the given string to a {@link List}<{@link NameValuePair}> according to http parameters
+     * 
+     * @param parameterString
+     *            The string to turn into {@link List}<{@link NameValuePair}>
+     * @return
+     */
     private List<NameValuePair> readParameters(final String parameterString)
     {
+        // Create an empty parameter list
         final List<NameValuePair> parameterList = new ArrayList<NameValuePair>();
+        // Split the String at '&' and save each in tokens
         final StringTokenizer tokenizer = new StringTokenizer(parameterString, "&");
+        // While we have tokens
         while (tokenizer.hasMoreTokens())
         {
+            // Get the next token
             final String parameter = tokenizer.nextToken();
 
-            // the future pair
+            // Instantiate name and value
             String name = null;
             String value = null;
 
-            // Get index of =
+            // Get index of '='
             final int pos = parameter.indexOf("=");
             // If there is an = sign
             if (pos >= 0)
@@ -132,16 +184,68 @@ public class ActionItemParser
                     value = parameter.substring(pos + 1);
                 }
             }
+            // If there is no '=', save the whole parameter as name
             else
             {
                 name = parameter;
             }
+            // If we have a name
             if (name != null)
             {
+                // Save it in the list
                 parameterList.add(new NameValuePair(name, value));
             }
         }
         return parameterList;
+    }
+
+    /**
+     * Creates an {@link AbstractResponseStore} depending on the fieldName
+     * 
+     * @param fieldName
+     *            The name of the field
+     * @param value
+     *            The value of the field
+     * @return An {@link AbstractResponseStore} with the variableName of fieldName and the proper {@link AbstractExtractor}
+     *         with the extractionExpression of value
+     */
+    private AbstractResponseStore handleStore(final String fieldName, final String value)
+    {
+        // Create an empty AbstractExtractor
+        AbstractExtractor storeExtractor = null;
+        // If the fieldName contains CsvConstants.REGEXP_GETTER_PREFIX
+        if (fieldName.contains(CsvConstants.REGEXP_GETTER_PREFIX))
+        {
+            // And the rest of the string is numbers
+            if (fieldName.substring(CsvConstants.REGEXP_GETTER_PREFIX.length()).matches("[0-9]+"))
+            {
+                // Create an AbstractExtractor
+                storeExtractor = new RegexpExtractor(value);
+            }
+            else
+            {
+                // Throw an error
+                throw new IllegalArgumentException(fieldName + " must be " + CsvConstants.REGEXP_GETTER_PREFIX + " a number");
+            }
+        }
+        // If the fieldName contains CsvConstants.XPATH_GETTER_PREFIX
+        else if (fieldName.contains(CsvConstants.XPATH_GETTER_PREFIX))
+        {
+            // And the rest of the string is numbers
+            if (fieldName.substring(CsvConstants.XPATH_GETTER_PREFIX.length()).matches("[0-9]+"))
+            {
+                // Create an AbstractExtractor
+                storeExtractor = new XpathExtractor(value);
+            }
+            else
+            {
+                // Throw an error
+                throw new IllegalArgumentException(fieldName + " must be " + CsvConstants.XPATH_GETTER_PREFIX + " a number");
+            }
+        }
+
+        // Return the new ResponseStore
+        return new ResponseStore(fieldName, storeExtractor);
     }
 
 }
