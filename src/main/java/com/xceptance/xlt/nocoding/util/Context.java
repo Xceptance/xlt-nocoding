@@ -1,7 +1,13 @@
 package com.xceptance.xlt.nocoding.util;
 
+import java.io.IOException;
+
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
+import com.gargoylesoftware.htmlunit.Page;
+import com.gargoylesoftware.htmlunit.SgmlPage;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.data.GeneralDataProvider;
+import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
@@ -27,6 +33,8 @@ public class Context
     protected final VariableResolver resolver;
 
     protected WebResponse webResponse;
+
+    protected SgmlPage sgmlPage;
 
     protected NoCodingPropertyAdmin propertyAdmin;
 
@@ -103,9 +111,47 @@ public class Context
         return webResponse;
     }
 
+    /**
+     * Sets {@link #webResponse} to parameter and sets {@link #sgmlPage} to <code>null</code>
+     * 
+     * @param webResponse
+     */
     public void setWebResponse(final WebResponse webResponse)
     {
         this.webResponse = webResponse;
+        setSgmlPage(null);
+    }
+
+    /**
+     * Builds a {@link SgmlPage} if {@link #sgmlPage} is null, else returns {@link #sgmlPage}
+     * 
+     * @return The {@link SgmlPage} corresponding to {@link #webResponse}.
+     */
+    public SgmlPage getSgmlPage()
+    {
+        if (sgmlPage == null)
+        {
+            XltLogger.runTimeLogger.debug("Generating new SgmlPage...");
+            try
+            {
+                final Page page = getWebClient().loadWebResponseInto(getWebResponse(), getWebClient().getCurrentWindow());
+                if (page instanceof SgmlPage)
+                {
+                    sgmlPage = (SgmlPage) page;
+                    XltLogger.runTimeLogger.debug("SgmlPage built");
+                }
+            }
+            catch (FailingHttpStatusCodeException | IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        return sgmlPage;
+    }
+
+    public void setSgmlPage(final SgmlPage sgmlPage)
+    {
+        this.sgmlPage = sgmlPage;
     }
 
     public VariableResolver getResolver()

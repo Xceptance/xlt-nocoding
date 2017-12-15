@@ -7,7 +7,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractE
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.CookieExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.HeaderExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.RegexpExtractor;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.XpathExtractor;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.xpath.XpathExtractor;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 

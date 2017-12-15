@@ -18,7 +18,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Validator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.RegexpExtractor;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.XpathExtractor;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.xpath.XpathExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.store.AbstractResponseStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.store.ResponseStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.AbstractValidationMethod;

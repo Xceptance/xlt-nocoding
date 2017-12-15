@@ -1,18 +1,16 @@
-package com.xceptance.xlt.nocoding.scriptItem.action.response.extractor;
+package com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.xpath;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.NotImplementedException;
-
 import com.gargoylesoftware.htmlunit.SgmlPage;
-import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.xceptance.xlt.api.util.XltLogger;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
 import com.xceptance.xlt.nocoding.util.Context;
 
-public class XpathExtractor extends AbstractExtractor
+public class HtmlTextXpathExtractor extends AbstractExtractor
 {
     private SgmlPage htmlPage;
 
@@ -28,7 +26,6 @@ public class XpathExtractor extends AbstractExtractor
      */
     static final Map<String, String> HEADERCONTENTTYPES = new HashMap<>();
 
-    // TODO reicht eigentlich wenn htmlunit instance of sgmlpage stimmt oder so
     static final String HTML = "html";
 
     static final String TEXTHTML = "text/html";
@@ -41,7 +38,7 @@ public class XpathExtractor extends AbstractExtractor
         HEADERCONTENTTYPES.put(TEXTAPPLICATION, HTML);
     }
 
-    public XpathExtractor(final String extractionExpression)
+    public HtmlTextXpathExtractor(final String extractionExpression)
     {
         super(extractionExpression);
     }
@@ -49,39 +46,14 @@ public class XpathExtractor extends AbstractExtractor
     @Override
     public void execute(final Context context)
     {
-        throw new NotImplementedException("XPathSelector not yet implemented!");
-
-        // webResponse = context.getWebResponse();
-        // if (isParsable(webResponse))
-        // {
-        // // TODO Do this in the context, don't forget to delete when next action
-        // if (htmlPage == null)
-        // {
-        // try
-        // {
-        // final Page page = context.getWebClient().loadWebResponseInto(context.getWebResponse(),
-        // context.getWebClient().getCurrentWindow());
-        // if (page instanceof SgmlPage)
-        // {
-        // htmlPage = (SgmlPage) page;
-        // }
-        // }
-        // catch (FailingHttpStatusCodeException | IOException e)
-        // {
-        // // TODO Auto-generated catch block
-        // e.printStackTrace();
-        // }
-        //
-        // // htmlPage = new HtmlPage(webResponse, context.getWebClient().loadWebResponseInto(webResponse, webWindow));
-        // }
-        // final List<DomNode> htmlElements = getHtmlElementListByXPath(getSelectionExpression());
-        // for (final DomNode htmlElement : htmlElements)
-        // {
-        // final String elementAsString = getStringFromHtmlElement(htmlElement);
-        // XltLogger.runTimeLogger.debug("Found Element: " + elementAsString);
-        // addResult(elementAsString);
-        // }
-        // }
+        htmlPage = context.getSgmlPage();
+        final List<DomNode> htmlElements = getHtmlElementListByXPath(getExtractionExpression());
+        for (final DomNode htmlElement : htmlElements)
+        {
+            final String elementAsString = getStringFromHtmlElement(htmlElement);
+            XltLogger.runTimeLogger.debug("Found Element: " + elementAsString);
+            addResult(elementAsString);
+        }
 
     }
 
@@ -97,12 +69,6 @@ public class XpathExtractor extends AbstractExtractor
             throw new IllegalArgumentException("Failed to parse DomNode: " + node.getLocalName() + " of type: " + node.getNodeType()
                                                + " to String because: " + e.getMessage());
         }
-    }
-
-    private boolean isParsable(final WebResponse webResponse)
-    {
-        final String contentType = webResponse.getContentType();
-        return HEADERCONTENTTYPES.containsKey(contentType);
     }
 
     private List<DomNode> getHtmlElementListByXPath(final String xPath)
