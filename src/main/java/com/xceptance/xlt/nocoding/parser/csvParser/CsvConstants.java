@@ -5,9 +5,16 @@ import java.util.Set;
 
 import org.apache.commons.csv.CSVFormat;
 
+/**
+ * Has all important constants for parsing a csv file
+ * 
+ * @author ckeiner
+ */
 public class CsvConstants
 {
-    // dynamic parameters
+    /*
+     * Dynamic Parameters
+     */
     public static final String XPATH_GETTER_PREFIX = "xpath";
 
     public static final String REGEXP_GETTER_PREFIX = "regexp";
