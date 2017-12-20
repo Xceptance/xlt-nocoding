@@ -3,7 +3,7 @@ package com.xceptance.xlt.nocoding.scriptItem.action.response.store;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.RegexpExtractor;
-import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Takes an {@link AbstractExtractor} and stores the result via {@link Context#storeVariable(String, String)}.

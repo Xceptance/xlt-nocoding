@@ -24,7 +24,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.Co
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.ExistsValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.MatchesValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.TextValidator;
-import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Test {@link Validator} with all combinations of {@link AbstractExtractor} and {@link AbstractValidationMethod}

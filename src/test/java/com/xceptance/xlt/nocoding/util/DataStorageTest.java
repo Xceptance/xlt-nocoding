@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.xceptance.xlt.api.util.XltProperties;
+import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.DefaultValues;
 

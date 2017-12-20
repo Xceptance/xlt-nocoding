@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.xceptance.xlt.api.util.XltProperties;
-import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Tests {@link StoreItem}

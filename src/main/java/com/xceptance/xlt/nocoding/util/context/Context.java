@@ -1,17 +1,13 @@
-package com.xceptance.xlt.nocoding.util;
+package com.xceptance.xlt.nocoding.util.context;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.SgmlPage;
+import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.data.GeneralDataProvider;
-import com.xceptance.xlt.api.util.XltLogger;
+import com.xceptance.xlt.api.htmlunit.LightWeightPage;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.engine.XltWebClient;
+import com.xceptance.xlt.nocoding.util.NoCodingPropertyAdmin;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.DuplicateStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.SingleStorage;
@@ -26,7 +22,7 @@ import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
  * 
  * @author ckeiner
  */
-public class Context
+public abstract class Context
 {
     protected final DataStorage dataStorage;
 
@@ -36,12 +32,17 @@ public class Context
 
     protected WebResponse webResponse;
 
-    /**
-     * Cache of the SgmlPage
-     */
-    protected final Map<WebResponse, SgmlPage> sgmlPages = new HashMap<>();
-
     protected NoCodingPropertyAdmin propertyAdmin;
+
+    /**
+     * LightWeightPage
+     */
+    protected LightWeightPage lightWeightPage;
+
+    /**
+     * LightWeightPage
+     */
+    protected SgmlPage sgmlPage;
 
     /**
      * Creates a new context, sets default Values in the dataStorage and configures the webClient according to the
@@ -126,43 +127,6 @@ public class Context
         this.webResponse = webResponse;
     }
 
-    /**
-     * @return The {@link Map} that maps {@link WebResponse} to {@link SgmlPage}
-     */
-    public Map<WebResponse, SgmlPage> getSgmlPages()
-    {
-        return sgmlPages;
-    }
-
-    /**
-     * Returns <code>sgmlPages.get(webResponse)</code> if it is not <code>null</code>, else builds a {@link SgmlPage}
-     * 
-     * @return The {@link SgmlPage} corresponding to the {@link #webResponse}.
-     */
-    public SgmlPage getSgmlPage(final WebResponse webResponse)
-    {
-        SgmlPage sgmlPage = sgmlPages.get(webResponse);
-        if (sgmlPage == null)
-        {
-            XltLogger.runTimeLogger.debug("Generating new SgmlPage...");
-            try
-            {
-                final Page page = getWebClient().loadWebResponseInto(getWebResponse(), getWebClient().getCurrentWindow());
-                if (page instanceof SgmlPage)
-                {
-                    sgmlPage = (SgmlPage) page;
-                    XltLogger.runTimeLogger.debug("SgmlPage built");
-                    sgmlPages.put(webResponse, sgmlPage);
-                }
-            }
-            catch (FailingHttpStatusCodeException | IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
-        return sgmlPage;
-    }
-
     public VariableResolver getResolver()
     {
         return resolver;
@@ -175,6 +139,14 @@ public class Context
     {
         return propertyAdmin;
     }
+
+    public abstract LightWeightPage getLightWeightPage();
+
+    public abstract void setLightWeightPage(final LightWeightPage lightWeightPage);
+
+    public abstract SgmlPage getSgmlPage();
+
+    public abstract void setSgmlPage(final SgmlPage sgmlPage);
 
     /*
      * Data Storage
@@ -268,5 +240,11 @@ public class Context
     {
         getPropertyAdmin().configWebClient(webClient);
     }
+
+    public abstract void loadWebResponse(final WebRequest webRequest) throws Exception;
+
+    public abstract void appendToResultBrowser(final String name) throws Exception;
+
+    public abstract Context buildNewContext();
 
 }

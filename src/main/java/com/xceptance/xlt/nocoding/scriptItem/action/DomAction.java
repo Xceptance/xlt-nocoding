@@ -6,8 +6,8 @@ import java.util.List;
 import org.apache.commons.lang3.NotImplementedException;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.WebAction;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * The {@link Action} in dom mode, but not implemented yet.

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
-import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Extracts all headers with the name provided by {@link #getExtractionExpression()}. Headers are located in

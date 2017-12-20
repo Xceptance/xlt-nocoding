@@ -1,6 +1,6 @@
 package com.xceptance.xlt.nocoding.scriptItem;
 
-import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * This interface defines all script item. A script item is either an "Action", "Store", or default definitions.

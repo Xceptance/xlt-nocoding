@@ -1,7 +1,7 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.subrequest;
 
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
-import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * The abstract class for every subrequest.

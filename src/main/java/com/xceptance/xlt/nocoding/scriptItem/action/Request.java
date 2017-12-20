@@ -1,6 +1,5 @@
 package com.xceptance.xlt.nocoding.scriptItem.action;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -18,8 +17,8 @@ import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.RecentKeyTreeMap;
+import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
@@ -391,11 +390,10 @@ public class Request extends AbstractActionItem
      * 
      * @param context
      *            The {@link Context} with the {@link DataStorage}, {@link VariableResolver} and {@link XltWebClient}
-     * @throws IOException
-     * @throws InvalidArgumentException
+     * @throws Exception
      */
     @Override
-    public void execute(final Context context) throws InvalidArgumentException, IOException
+    public void execute(final Context context) throws Exception
     {
         // fill in the default data if the attribute is not specified
         fillDefaultData(context);
@@ -414,10 +412,8 @@ public class Request extends AbstractActionItem
         // Check that the webRequest isn't null
         if (webRequest != null)
         {
-            // Load the response
-            final WebResponse webResponse = context.getWebClient().loadWebResponse(webRequest);
-            // And set it in the context
-            context.setWebResponse(webResponse);
+            // Load the webResponse
+            context.loadWebResponse(webRequest);
         }
     }
 

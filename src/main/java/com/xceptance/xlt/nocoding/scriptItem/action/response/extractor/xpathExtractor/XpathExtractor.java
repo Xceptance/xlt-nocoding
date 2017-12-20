@@ -1,7 +1,7 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.xpathExtractor;
 
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
-import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Decides which XpathExtractor is to be used and stores the result in {@link #getResult()}

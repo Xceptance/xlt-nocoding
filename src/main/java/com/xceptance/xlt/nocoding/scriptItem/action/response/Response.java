@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
-import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * The expected response to a request. A response has a list of response items, which validate or store something of the

@@ -8,6 +8,7 @@ import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.common.lang.ReflectionUtils;
 import com.xceptance.xlt.api.actions.AbstractWebAction;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * The WebAction extends the AbstractWebAction of the XLT framework. Therefore, this is the interface to XLT. A

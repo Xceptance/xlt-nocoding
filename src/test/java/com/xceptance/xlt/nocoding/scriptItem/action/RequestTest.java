@@ -24,8 +24,8 @@ import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultHeader;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultParameter;
 import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.RecentKeyTreeMap;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Tests {@link Request}

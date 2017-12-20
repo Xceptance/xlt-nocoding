@@ -1,6 +1,6 @@
 package com.xceptance.xlt.nocoding.scriptItem.action;
 
-import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * The wrapper class for every action item, i.e. request, response.

@@ -4,8 +4,8 @@ import org.junit.Before;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.util.XltProperties;
-import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.MockObjects;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Abstract class for extractor tests. Stores the {@link WebResponse} from {@link MockObjects#loadResponse()} in

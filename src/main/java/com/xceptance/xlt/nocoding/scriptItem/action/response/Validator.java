@@ -5,7 +5,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractE
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.RegexpExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.AbstractValidationMethod;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.ExistsValidator;
-import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Uses an {@link AbstractExtractor} and {@link AbstractValidationMethod} to validate the result of the extraction.

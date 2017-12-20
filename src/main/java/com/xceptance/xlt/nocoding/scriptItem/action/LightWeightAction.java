@@ -4,13 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
-import com.xceptance.xlt.api.engine.Session;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
 import com.xceptance.xlt.api.util.XltLogger;
-import com.xceptance.xlt.engine.LightWeightPageImpl;
-import com.xceptance.xlt.engine.SessionImpl;
-import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.WebAction;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * The {@link Action} in light mode, which means the {@link WebResponse} is parsed to a {@link LightWeightPage}.
@@ -82,12 +79,9 @@ public class LightWeightAction extends Action
         finally
         {
             // Append the page to the result browser
-            if (action.getContext().getWebResponse() != null)
+            if (context.getWebResponse() != null)
             {
-                ((SessionImpl) Session.getCurrent()).getRequestHistory()
-                                                    .add(new LightWeightPageImpl(action.getContext().getWebResponse(),
-                                                                                 action.getTimerName(),
-                                                                                 action.getContext().getWebClient()));
+                context.appendToResultBrowser(getName());
             }
         }
     }

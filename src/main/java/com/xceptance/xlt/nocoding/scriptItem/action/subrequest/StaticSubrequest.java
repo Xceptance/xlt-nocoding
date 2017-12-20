@@ -3,7 +3,8 @@ package com.xceptance.xlt.nocoding.scriptItem.action.subrequest;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.NoCodingPropertyAdmin;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Creates a static subrequest, that downloads all specified URLs. The amount of parallel download is specified in the
@@ -39,7 +40,7 @@ public class StaticSubrequest extends AbstractSubrequest
         // Resolve urls
         resolveValues(context);
         // Get the number of threads in the properties
-        final String numberThreads = context.getPropertyByKey("com.xceptance.xlt.staticContent.downloadThreads");
+        final String numberThreads = context.getPropertyByKey(NoCodingPropertyAdmin.DOWNLOADTHREADS);
         // Get the UID in the properties
         final String userAgentUID = context.getPropertyByKey("userAgent.UID");
         // Create a Downloader

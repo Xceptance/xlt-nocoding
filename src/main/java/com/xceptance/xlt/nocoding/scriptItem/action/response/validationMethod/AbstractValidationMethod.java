@@ -2,7 +2,7 @@ package com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod;
 
 import java.util.List;
 
-import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * The abstract class for every response item that specifies how to validate the {@link #expressionToValidate}.

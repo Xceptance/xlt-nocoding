@@ -7,7 +7,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.util.ActionItemUtil;
 import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Creates a {@link XhrSubrequest} that has a name and consists of a {@link Request}, {@link Response} and maybe
@@ -50,7 +50,7 @@ public class XhrSubrequest extends AbstractSubrequest
     public void execute(final Context context) throws Throwable
     {
         // Create a new local context, so we do not overwrite the old context
-        final Context localContext = new Context(context);
+        final Context localContext = context.buildNewContext();
 
         // Assert that the order of Request, Response, Subrequest is correct
         ActionItemUtil.assertOrder(actionItems);

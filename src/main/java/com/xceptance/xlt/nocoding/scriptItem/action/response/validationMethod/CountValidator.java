@@ -2,7 +2,7 @@ package com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod;
 
 import org.junit.Assert;
 
-import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Validates that {@link #getExpressionToValidate()} has a size of the {@link Integer} value of {@link #count}.

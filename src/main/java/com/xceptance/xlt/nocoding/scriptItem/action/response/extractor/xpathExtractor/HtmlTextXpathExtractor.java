@@ -8,7 +8,9 @@ import com.gargoylesoftware.htmlunit.SgmlPage;
 import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
-import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.context.Context;
+import com.xceptance.xlt.nocoding.util.context.DomContext;
+import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 public class HtmlTextXpathExtractor extends AbstractExtractor
 {
@@ -46,7 +48,19 @@ public class HtmlTextXpathExtractor extends AbstractExtractor
     @Override
     public void execute(final Context context)
     {
-        htmlPage = context.getSgmlPage(context.getWebResponse());
+        if (context instanceof LightWeightContext)
+        {
+            htmlPage = ((LightWeightContext) context).getSgmlPage(context.getWebResponse());
+        }
+        else if (context instanceof DomContext)
+        {
+            htmlPage = context.getSgmlPage();
+        }
+        else
+        {
+            throw new IllegalStateException("Context must be " + LightWeightContext.class.getSimpleName() + " or "
+                                            + DomContext.class.getSimpleName() + " but is " + context.getClass().getSimpleName());
+        }
         final List<DomNode> htmlElements = getHtmlElementListByXPath(getExtractionExpression());
         for (final DomNode htmlElement : htmlElements)
         {

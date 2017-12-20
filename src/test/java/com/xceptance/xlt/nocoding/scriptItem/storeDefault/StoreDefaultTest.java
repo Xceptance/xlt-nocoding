@@ -3,7 +3,7 @@ package com.xceptance.xlt.nocoding.scriptItem.storeDefault;
 import org.junit.Before;
 
 import com.xceptance.xlt.api.util.XltProperties;
-import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Abstract class for all store default tests. Creates a new {@link Context}.

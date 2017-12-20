@@ -23,7 +23,7 @@ import org.xml.sax.SAXException;
 
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
-import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 public class XmlJsonXpathExtractor extends AbstractExtractor
 {

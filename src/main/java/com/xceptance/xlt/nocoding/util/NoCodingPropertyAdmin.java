@@ -33,13 +33,17 @@ public class NoCodingPropertyAdmin
 
     public static final String DIRECTORY = "com.xceptance.xlt.nocoding.directory";
 
-    public static final String MODE = "com.xceptance.xlt.nocoding.mode";
-
     public static final String USERAGENTUID = "userAgent.UID";
 
     public static final String DOWNLOADTHREADS = "com.xceptance.xlt.staticContent.downloadThreads";
 
     public static final String TLSVERSION = "com.xceptance.xlt.nocoding.TLSVersion";
+
+    public static final String MODE = "com.xceptance.xlt.nocoding.mode";
+
+    public static final String LIGHTWEIGHT = "light";
+
+    public static final String DOM = "dom";
 
     public NoCodingPropertyAdmin(final XltProperties xltProperties)
     {

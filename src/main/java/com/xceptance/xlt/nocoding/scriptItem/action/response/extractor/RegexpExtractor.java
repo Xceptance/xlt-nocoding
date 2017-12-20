@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
-import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Matches the pattern provided via {@link #getExtractionExpression()} and applies it to the

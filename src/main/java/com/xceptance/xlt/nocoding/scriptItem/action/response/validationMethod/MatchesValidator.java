@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 import org.junit.Assert;
 
-import com.xceptance.xlt.nocoding.util.Context;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Validates that the first result in {@link #getExpressionToValidate()} matches the {@link Pattern} provided by

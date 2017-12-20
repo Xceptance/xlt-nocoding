@@ -17,8 +17,10 @@ import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.csvParser.CsvParserNocoding;
 import com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
-import com.xceptance.xlt.nocoding.util.Context;
 import com.xceptance.xlt.nocoding.util.NoCodingPropertyAdmin;
+import com.xceptance.xlt.nocoding.util.context.Context;
+import com.xceptance.xlt.nocoding.util.context.DomContext;
+import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
  * Executes a xlt-nocoding test case by parsing the file specified in the properties and executing the parsed commands
@@ -55,7 +57,22 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
     public void initialize() throws Exception
     {
         // Instantiate the PropertyManager with a new DataStorage
-        context = new Context(XltProperties.getInstance());
+        final XltProperties properties = XltProperties.getInstance();
+        final String mode = properties.getProperty(NoCodingPropertyAdmin.MODE);
+        switch (mode)
+        {
+            case NoCodingPropertyAdmin.LIGHTWEIGHT:
+                context = new LightWeightContext(properties);
+                break;
+
+            case NoCodingPropertyAdmin.DOM:
+                context = new DomContext(properties);
+                break;
+
+            default:
+                throw new IllegalStateException("Mode must be " + NoCodingPropertyAdmin.LIGHTWEIGHT + " or " + NoCodingPropertyAdmin.DOM
+                                                + " but is " + mode);
+        }
         // Resolve the filePath to use
         final String pathToFile = getFilePath();
         // Create the appropriate parser
