@@ -19,10 +19,6 @@ import com.xceptance.xlt.nocoding.util.WebAction;
  */
 public class LightWeightAction extends Action
 {
-    /**
-     * The light weight page that is built by this action
-     */
-    private LightWeightPage lightWeightPage;
 
     /**
      * Creates an instance of {@link LightWeightAction} that sets {@link #actionItems} to an {@link ArrayList} of size 1.
@@ -74,7 +70,6 @@ public class LightWeightAction extends Action
         {
             // Execute the requests, responses and subrequests via xlt api
             action.run();
-            setLightWeightPage(new LightWeightPage(action.getContext().getWebResponse(), action.getTimerName()));
         }
         catch (final Exception e)
         {
@@ -126,15 +121,5 @@ public class LightWeightAction extends Action
                 actionItem.execute(context);
             }
         }
-    }
-
-    public LightWeightPage getLightWeightPage()
-    {
-        return lightWeightPage;
-    }
-
-    public void setLightWeightPage(final LightWeightPage lightWeightPage)
-    {
-        this.lightWeightPage = lightWeightPage;
     }
 }

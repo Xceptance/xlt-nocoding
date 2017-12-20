@@ -46,7 +46,7 @@ public class HtmlTextXpathExtractor extends AbstractExtractor
     @Override
     public void execute(final Context context)
     {
-        htmlPage = context.getSgmlPage();
+        htmlPage = context.getSgmlPage(context.getWebResponse());
         final List<DomNode> htmlElements = getHtmlElementListByXPath(getExtractionExpression());
         for (final DomNode htmlElement : htmlElements)
         {

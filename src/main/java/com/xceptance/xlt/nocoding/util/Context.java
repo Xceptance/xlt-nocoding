@@ -1,6 +1,8 @@
 package com.xceptance.xlt.nocoding.util;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.Page;
@@ -34,7 +36,10 @@ public class Context
 
     protected WebResponse webResponse;
 
-    protected SgmlPage sgmlPage;
+    /**
+     * Cache of the SgmlPage
+     */
+    protected final Map<WebResponse, SgmlPage> sgmlPages = new HashMap<>();
 
     protected NoCodingPropertyAdmin propertyAdmin;
 
@@ -112,23 +117,31 @@ public class Context
     }
 
     /**
-     * Sets {@link #webResponse} to parameter and sets {@link #sgmlPage} to <code>null</code>
+     * Sets {@link #webResponse}
      * 
      * @param webResponse
      */
     public void setWebResponse(final WebResponse webResponse)
     {
         this.webResponse = webResponse;
-        setSgmlPage(null);
     }
 
     /**
-     * Builds a {@link SgmlPage} if {@link #sgmlPage} is null, else returns {@link #sgmlPage}
-     * 
-     * @return The {@link SgmlPage} corresponding to {@link #webResponse}.
+     * @return The {@link Map} that maps {@link WebResponse} to {@link SgmlPage}
      */
-    public SgmlPage getSgmlPage()
+    public Map<WebResponse, SgmlPage> getSgmlPages()
     {
+        return sgmlPages;
+    }
+
+    /**
+     * Returns <code>sgmlPages.get(webResponse)</code> if it is not <code>null</code>, else builds a {@link SgmlPage}
+     * 
+     * @return The {@link SgmlPage} corresponding to the {@link #webResponse}.
+     */
+    public SgmlPage getSgmlPage(final WebResponse webResponse)
+    {
+        SgmlPage sgmlPage = sgmlPages.get(webResponse);
         if (sgmlPage == null)
         {
             XltLogger.runTimeLogger.debug("Generating new SgmlPage...");
@@ -139,6 +152,7 @@ public class Context
                 {
                     sgmlPage = (SgmlPage) page;
                     XltLogger.runTimeLogger.debug("SgmlPage built");
+                    sgmlPages.put(webResponse, sgmlPage);
                 }
             }
             catch (FailingHttpStatusCodeException | IOException e)
@@ -147,11 +161,6 @@ public class Context
             }
         }
         return sgmlPage;
-    }
-
-    public void setSgmlPage(final SgmlPage sgmlPage)
-    {
-        this.sgmlPage = sgmlPage;
     }
 
     public VariableResolver getResolver()
