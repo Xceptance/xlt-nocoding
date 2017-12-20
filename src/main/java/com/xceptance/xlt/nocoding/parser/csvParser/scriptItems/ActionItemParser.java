@@ -22,7 +22,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.xpathExtr
 import com.xceptance.xlt.nocoding.scriptItem.action.response.store.AbstractResponseStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.store.ResponseStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.AbstractValidationMethod;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.TextValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.MatchesValidator;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
@@ -98,7 +98,7 @@ public class ActionItemParser
                         extractor = new RegexpExtractor(value);
                         break;
                     case CsvConstants.TEXT:
-                        textValidator = new TextValidator(value);
+                        textValidator = new MatchesValidator(value);
                         break;
                     case CsvConstants.ENCODED:
                         encoded = value;

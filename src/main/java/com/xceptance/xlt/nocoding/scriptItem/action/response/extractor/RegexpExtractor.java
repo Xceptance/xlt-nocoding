@@ -58,10 +58,11 @@ public class RegexpExtractor extends AbstractExtractor
         final WebResponse webResponse = context.getWebResponse();
         // Resolve variables
         resolveValues(context);
-        // Build a page with the content
-        final LightWeightPage page = new LightWeightPage(webResponse, context.getWebClient().getTimerName());
-        // Read the content
-        final String pageContent = page.getContent();
+        // // Build a page with the content
+        // final LightWeightPage page = new LightWeightPage(webResponse, context.getWebClient().getTimerName());
+        // // Read the content
+        // final String pageContent = page.getContent();
+        final String pageContent = webResponse.getContentAsString();
         // Create a matcher object, so we can save our found matches
         final Matcher matcher = Pattern.compile(extractionExpression).matcher(pageContent);
 
@@ -73,6 +74,7 @@ public class RegexpExtractor extends AbstractExtractor
             {
                 addResult(matcher.group());
             }
+
         }
         // Else, simply add the group
         else

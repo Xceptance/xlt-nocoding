@@ -59,9 +59,10 @@ public class LightWeightAction extends Action
             }
             catch (final Throwable e)
             {
-                XltLogger.runTimeLogger.error("Execution Step failed : " + getName());
+                final String errorMessage = "Execution Step \"" + getName() + "\" failed: " + e.getMessage();
+                XltLogger.runTimeLogger.error(errorMessage);
                 e.printStackTrace();
-                throw new Exception(e);
+                throw new Exception(errorMessage, e);
             }
         });
 
