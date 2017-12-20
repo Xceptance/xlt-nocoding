@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.xpath;
+package com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.xpathExtractor;
 
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
 import com.xceptance.xlt.nocoding.util.Context;

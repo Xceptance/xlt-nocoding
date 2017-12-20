@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.xpath;
+package com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.xpathExtractor;
 
 import java.util.HashMap;
 import java.util.List;
