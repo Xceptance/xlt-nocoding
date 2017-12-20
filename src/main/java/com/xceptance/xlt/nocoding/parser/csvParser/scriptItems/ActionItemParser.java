@@ -135,7 +135,8 @@ public class ActionItemParser
         }
         if (extractor != null)
         {
-            final Validator validator = new Validator(null, extractor, textValidator);
+            final String validationName = "Validate " + name;
+            final Validator validator = new Validator(validationName, extractor, textValidator);
             responseItems.add(validator);
         }
         final Response response = new Response(responseItems);

@@ -25,7 +25,7 @@ public class XhrItemParser
         // Execute ActionItemParser and save it in action
         final Action action = new ActionItemParser().parse(node);
         // Build a new XhrSubrequest with the actionItems of the action
-        return new XhrSubrequest(null, action.getActionItems());
+        return new XhrSubrequest("XhrSubrequest " + action.getName(), action.getActionItems());
     }
 
 }

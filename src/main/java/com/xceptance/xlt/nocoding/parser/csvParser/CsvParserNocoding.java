@@ -40,7 +40,8 @@ public class CsvParserNocoding extends Parser
 
     /**
      * Creates a {@link JsonNode} out of the Csv file with the first (not commented) line as fieldNames. Then uses these
-     * {@link JsonNode}s to parse the data to a {@link List}<{@link ScriptItem}>
+     * {@link JsonNode}s to parse the data to a {@link List}<{@link ScriptItem}>. Keep in mind, that each second
+     * {@link JsonNode} is an empty node
      */
     @Override
     public List<ScriptItem> parse() throws Exception
@@ -92,12 +93,14 @@ public class CsvParserNocoding extends Parser
                 {
                     case CsvConstants.TYPE_ACTION:
                         // Create a new action with the ActionItemParser
-                        lastAction = new ActionItemParser().parse(element);
+                        final Action currentAction = new ActionItemParser().parse(element);
                         // Verify, that lastAction was not an empty line, by asserting that: the action has action items, has a name, and
                         // that name is not null
-                        if (!lastAction.getActionItems().isEmpty() && lastAction.getName() != null && !lastAction.getName().isEmpty())
+                        if (!currentAction.getActionItems().isEmpty() && currentAction.getName() != null
+                            && !currentAction.getName().isEmpty())
                         {
                             // Add the action to the scriptitems
+                            lastAction = currentAction;
                             scriptItems.add(lastAction);
                         }
                         break;
