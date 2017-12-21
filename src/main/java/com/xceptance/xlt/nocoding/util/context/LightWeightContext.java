@@ -15,8 +15,14 @@ import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.engine.LightWeightPageImpl;
 import com.xceptance.xlt.engine.SessionImpl;
+import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
+/**
+ * The {@link Context} used in the LightWeight mode of the execution.
+ * 
+ * @author ckeiner
+ */
 public class LightWeightContext extends Context
 {
     /**
@@ -24,23 +30,44 @@ public class LightWeightContext extends Context
      */
     protected final Map<WebResponse, SgmlPage> sgmlPages = new HashMap<>();
 
+    /**
+     * Creates a new {@link LightWeightContext} out of the old {@link LightWeightContext}
+     * 
+     * @param context
+     */
     public LightWeightContext(final Context context)
     {
         super(context);
     }
 
+    /**
+     * Creates a new {@link LightWeightContext}, sets default Values in the {@link DataStorage} and configures the
+     * {@link XltWebClient} according to the {@link XltProperties}
+     * 
+     * @param xltProperties
+     *            The properties to use - normally {@link XltProperties#getInstance()}
+     * @param dataStorage
+     *            The {@link DataStorage} you want to use
+     */
     public LightWeightContext(final XltProperties xltProperties, final DataStorage dataStorage)
     {
         super(xltProperties, dataStorage);
     }
 
+    /**
+     * Creates a new {@link LightWeightContext}, sets default Values in the {@link DataStorage} and configures the
+     * {@link XltWebClient} according to the {@link XltProperties}
+     * 
+     * @param xltProperties
+     *            The properties to use - normally {@link XltProperties#getInstance()}
+     */
     public LightWeightContext(final XltProperties xltProperties)
     {
         super(xltProperties);
     }
 
     /**
-     * @return The {@link Map} that maps {@link WebResponse} to {@link SgmlPage}
+     * @return {@link #sgmlPages} - The {@link Map} that maps {@link WebResponse} to {@link SgmlPage}
      */
     public Map<WebResponse, SgmlPage> getSgmlPages()
     {
@@ -76,12 +103,18 @@ public class LightWeightContext extends Context
         return sgmlPage;
     }
 
+    /**
+     * @return The current {@link LightWeightPage}
+     */
     @Override
     public LightWeightPage getLightWeightPage()
     {
         return lightWeightPage;
     }
 
+    /**
+     * Sets the {@link LightWeightPage}
+     */
     @Override
     public void setLightWeightPage(final LightWeightPage lightWeightPage)
     {
@@ -89,7 +122,11 @@ public class LightWeightContext extends Context
     }
 
     /**
-     * Sets {@link #webResponse}
+     * Loads the {@link WebResponse} corresponding to the {@link WebRequest}. <br>
+     * If {@link WebRequest#isXHR()} is <code>false</code>, it loads the {@link WebResponse} via
+     * {@link XltWebClient#getLightWeightPage(WebRequest)}. <br>
+     * If {@link WebRequest#isXHR()} is <code>true</code>, it loads the {@link WebResponse} via
+     * {@link XltWebClient#loadWebResponse(WebRequest)}.
      * 
      * @param webResponse
      * @throws IOException
@@ -109,18 +146,29 @@ public class LightWeightContext extends Context
         }
     }
 
+    /**
+     * A SgmlPage cannot exist, therefore it throws an {@link IllegalStateException}
+     */
     @Override
     public SgmlPage getSgmlPage()
     {
         throw new IllegalStateException("Cannot get SgmlPage in LightWeightMode");
     }
 
+    /**
+     * A SgmlPage cannot exist, therefore it throws an {@link IllegalStateException}
+     */
     @Override
     public void setSgmlPage(final SgmlPage sgmlPage)
     {
         throw new IllegalStateException("Cannot set SgmlPage in LightWeightMode");
     }
 
+    /**
+     * Appends the {@link #getLightWeightPage()} to the result browser, if {@link #getLightWeightPage()} is not
+     * <code>null</code>. <br>
+     * Else creates a new {@link LightWeightPage}.
+     */
     @Override
     public void appendToResultBrowser() throws Exception
     {
@@ -136,6 +184,9 @@ public class LightWeightContext extends Context
         }
     }
 
+    /**
+     * @return {@link #LightWeightContext(Context)}
+     */
     @Override
     public Context buildNewContext()
     {

@@ -17,8 +17,7 @@ import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
 /**
  * The context for the execution. Thus, the context has methods for handling the {@link DataStorage},
- * {@link XltWebClient}, resolving variables, storing/accessing the current {@link WebResponse} and accessing
- * properties.
+ * {@link XltWebClient}, resolving variables, creating the current {@link WebResponse} and accessing properties.
  * 
  * @author ckeiner
  */
@@ -45,11 +44,11 @@ public abstract class Context
     protected SgmlPage sgmlPage;
 
     /**
-     * Creates a new context, sets default Values in the dataStorage and configures the webClient according to the
-     * xltProperties
+     * Creates a new {@link Context}, sets default Values in the {@link DataStorage} and configures the {@link XltWebClient}
+     * according to the {@link XltProperties}
      * 
      * @param xltProperties
-     *            The properties to use - normally XltProperties.getInstance()
+     *            The properties to use - normally {@link XltProperties#getInstance()}
      */
     public Context(final XltProperties xltProperties)
     {
@@ -57,11 +56,11 @@ public abstract class Context
     }
 
     /**
-     * Creates a new context, sets default Values in the dataStorage and configures the webClient according to the
-     * xltProperties
+     * Creates a new {@link Context}, sets default Values in the {@link DataStorage} and configures the {@link XltWebClient}
+     * according to the {@link XltProperties}
      * 
      * @param xltProperties
-     *            The properties to use - normally XltProperties.getInstance()
+     *            The properties to use - normally {@link XltProperties#getInstance()}
      * @param dataStorage
      *            The {@link DataStorage} you want to use
      */
@@ -75,11 +74,11 @@ public abstract class Context
     }
 
     /**
-     * Creates a new context out of the old context
+     * Creates a new {@link Context} out of the old {@link Context}
      * 
      * @param context
      */
-    public Context(final Context context)
+    protected Context(final Context context)
     {
         this.dataStorage = context.getDataStorage();
         this.webClient = context.getWebClient();
@@ -241,10 +240,27 @@ public abstract class Context
         getPropertyAdmin().configWebClient(webClient);
     }
 
+    /**
+     * Defines how the {@link WebResponse} is loaded
+     * 
+     * @param webRequest
+     *            The {@link WebRequest} for the {@link WebResponse}
+     * @throws Exception
+     */
     public abstract void loadWebResponse(final WebRequest webRequest) throws Exception;
 
+    /**
+     * Defines how the {@link #webResponse} is appended to the Xlt Result Browser
+     * 
+     * @throws Exception
+     */
     public abstract void appendToResultBrowser() throws Exception;
 
+    /**
+     * Defines how a new {@link Context} gets created out of the old one
+     * 
+     * @return
+     */
     public abstract Context buildNewContext();
 
 }
