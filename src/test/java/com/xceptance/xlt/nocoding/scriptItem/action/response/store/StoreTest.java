@@ -19,6 +19,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.CookieExt
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.HeaderExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.RegexpExtractor;
 import com.xceptance.xlt.nocoding.util.context.Context;
+import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
  * Tests {@link AbstractResponseStore}
@@ -49,7 +50,7 @@ public class StoreTest
         List<NameValuePair> headers;
         String name;
         String value;
-        this.context = new Context(XltProperties.getInstance());
+        this.context = new LightWeightContext(XltProperties.getInstance());
         webConnection = new XltMockWebConnection(context.getWebClient());
         // Set answer to localhost/posters/
         url = new URL("https://localhost:8443/posters/");

@@ -22,6 +22,7 @@ import org.junit.Test;
 
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.util.context.Context;
+import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
  * Tests {@link VariableResolver}
@@ -38,7 +39,7 @@ public class ParameterInterpreterTest
     @Before
     public void setup()
     {
-        context = new Context(XltProperties.getInstance());
+        context = new LightWeightContext(XltProperties.getInstance());
         interpreter = context.getResolver();
     }
 

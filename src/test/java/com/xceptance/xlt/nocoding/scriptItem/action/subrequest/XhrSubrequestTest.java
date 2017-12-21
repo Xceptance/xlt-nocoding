@@ -17,6 +17,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.Validator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.RegexpExtractor;
 import com.xceptance.xlt.nocoding.util.MockObjects;
 import com.xceptance.xlt.nocoding.util.context.Context;
+import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
  * Tests {@link XhrSubrequest}
@@ -36,7 +37,7 @@ public class XhrSubrequestTest
     public void init()
     {
         mockObjects = new MockObjects();
-        context = new Context(XltProperties.getInstance());
+        context = new LightWeightContext(XltProperties.getInstance());
         context.getWebClient().setTimerName("Xhr-TimerName");
         mockObjects.loadResponse();
         context.setWebResponse(mockObjects.getResponse());

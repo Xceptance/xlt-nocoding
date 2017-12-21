@@ -25,6 +25,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.Ex
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.MatchesValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.TextValidator;
 import com.xceptance.xlt.nocoding.util.context.Context;
+import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
  * Test {@link Validator} with all combinations of {@link AbstractExtractor} and {@link AbstractValidationMethod}
@@ -55,7 +56,7 @@ public class ExtendedValidatorTest
         List<NameValuePair> headers;
         String name;
         String value;
-        this.context = new Context(XltProperties.getInstance());
+        this.context = new LightWeightContext(XltProperties.getInstance());
         webConnection = new XltMockWebConnection(context.getWebClient());
 
         // Set answer to localhost/posters/

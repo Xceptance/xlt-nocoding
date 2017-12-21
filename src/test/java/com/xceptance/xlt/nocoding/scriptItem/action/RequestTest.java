@@ -26,6 +26,7 @@ import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultParameter;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.RecentKeyTreeMap;
 import com.xceptance.xlt.nocoding.util.context.Context;
+import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
  * Tests {@link Request}
@@ -46,7 +47,7 @@ public class RequestTest
     @Before
     public void init()
     {
-        context = new Context(XltProperties.getInstance());
+        context = new LightWeightContext(XltProperties.getInstance());
     }
 
     /**
@@ -220,15 +221,10 @@ public class RequestTest
     /**
      * Verifies a {@link Request} with no default url throws an {@link InvalidArgumentException}
      * 
-     * @throws InvalidArgumentException
-     * @throws MalformedURLException
-     * @throws IllegalAccessException
-     * @throws IllegalArgumentException
-     * @throws InvocationTargetException
+     * @throws Exception
      */
     @Test(expected = InvalidArgumentException.class)
-    public void testEmptyRequest()
-        throws InvalidArgumentException, MalformedURLException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
+    public void testEmptyRequest() throws Exception
     {
         request = new Request(null);
         try

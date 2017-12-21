@@ -14,6 +14,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultStatic;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.context.Context;
+import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
  * Tests {@link LightWeightAction}
@@ -30,7 +31,7 @@ public class LightWeightActionTest
     @Before
     public void init()
     {
-        context = new Context(XltProperties.getInstance());
+        context = new LightWeightContext(XltProperties.getInstance());
     }
 
     /**

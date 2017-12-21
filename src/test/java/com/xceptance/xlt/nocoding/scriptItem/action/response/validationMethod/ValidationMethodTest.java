@@ -4,6 +4,7 @@ import org.junit.Before;
 
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.util.context.Context;
+import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
  * Prepares {@link AbstractValidationMethod} tests by creating a new context
@@ -20,7 +21,7 @@ public abstract class ValidationMethodTest
     @Before
     public void init()
     {
-        context = new Context(XltProperties.getInstance());
+        context = new LightWeightContext(XltProperties.getInstance());
     }
 
 }
