@@ -81,7 +81,7 @@ public class LightWeightAction extends Action
             // Append the page to the result browser
             if (context.getWebResponse() != null)
             {
-                context.appendToResultBrowser(getName());
+                context.appendToResultBrowser();
             }
         }
     }

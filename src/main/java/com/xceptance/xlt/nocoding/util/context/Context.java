@@ -243,7 +243,7 @@ public abstract class Context
 
     public abstract void loadWebResponse(final WebRequest webRequest) throws Exception;
 
-    public abstract void appendToResultBrowser(final String name) throws Exception;
+    public abstract void appendToResultBrowser() throws Exception;
 
     public abstract Context buildNewContext();
 

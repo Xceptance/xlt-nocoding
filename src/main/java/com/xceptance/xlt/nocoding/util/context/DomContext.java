@@ -55,13 +55,21 @@ public class DomContext extends Context
     @Override
     public void loadWebResponse(final WebRequest webRequest) throws Exception
     {
-        setSgmlPage(this.getWebClient().getPage(webRequest));
-        setWebResponse(getSgmlPage().getWebResponse());
+        if (!webRequest.isXHR())
+        {
+            setSgmlPage(this.getWebClient().getPage(webRequest));
+            setWebResponse(getSgmlPage().getWebResponse());
+        }
+        else
+        {
+            webResponse = this.getWebClient().getPage(webRequest).getWebResponse();
+        }
     }
 
     @Override
-    public void appendToResultBrowser(final String name) throws Exception
+    public void appendToResultBrowser() throws Exception
     {
+        final String name = getWebClient().getTimerName();
         if (getSgmlPage() instanceof HtmlPage)
         {
             ((SessionImpl) Session.getCurrent()).getRequestHistory().add(name, (HtmlPage) sgmlPage);

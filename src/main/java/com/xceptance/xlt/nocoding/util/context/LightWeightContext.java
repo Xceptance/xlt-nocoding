@@ -13,6 +13,7 @@ import com.xceptance.xlt.api.engine.Session;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.api.util.XltProperties;
+import com.xceptance.xlt.engine.LightWeightPageImpl;
 import com.xceptance.xlt.engine.SessionImpl;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
@@ -97,8 +98,15 @@ public class LightWeightContext extends Context
     @Override
     public void loadWebResponse(final WebRequest webRequest) throws FailingHttpStatusCodeException, IOException
     {
-        this.setLightWeightPage(this.getWebClient().getLightWeightPage(webRequest));
-        webResponse = this.getLightWeightPage().getWebResponse();
+        if (!webRequest.isXHR())
+        {
+            this.setLightWeightPage(this.getWebClient().getLightWeightPage(webRequest));
+            webResponse = this.getLightWeightPage().getWebResponse();
+        }
+        else
+        {
+            webResponse = this.getWebClient().loadWebResponse(webRequest);
+        }
     }
 
     @Override
@@ -114,9 +122,18 @@ public class LightWeightContext extends Context
     }
 
     @Override
-    public void appendToResultBrowser(final String name) throws Exception
+    public void appendToResultBrowser() throws Exception
     {
-        ((SessionImpl) Session.getCurrent()).getRequestHistory().add(getLightWeightPage());
+        final String name = getWebClient().getTimerName();
+        if (getLightWeightPage() != null)
+        {
+            ((SessionImpl) Session.getCurrent()).getRequestHistory().add(getLightWeightPage());
+        }
+        else
+        {
+            ((SessionImpl) Session.getCurrent()).getRequestHistory().add(new LightWeightPageImpl(getWebResponse(), name, getWebClient()));
+
+        }
     }
 
     @Override
