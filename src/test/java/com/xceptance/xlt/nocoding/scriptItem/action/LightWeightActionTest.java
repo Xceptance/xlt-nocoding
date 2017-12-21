@@ -73,12 +73,10 @@ public class LightWeightActionTest
         store.add(new StoreDefaultStatic(url));
         store.add(new StoreDefaultStatic(url));
         Assert.assertTrue(context.getDefaultStatics().getItems().isEmpty());
-        int i = 0;
         for (final ScriptItem scriptItem : store)
         {
             scriptItem.execute(context);
             Assert.assertTrue(context.getDefaultStatics().getItems().contains(url));
-            i++;
         }
         // Set url
         context.getDefaultItems().store(Constants.URL, "https://www.xceptance.com");
