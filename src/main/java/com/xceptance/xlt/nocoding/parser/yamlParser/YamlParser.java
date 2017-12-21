@@ -1,6 +1,7 @@
 package com.xceptance.xlt.nocoding.parser.yamlParser;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -45,9 +46,10 @@ public class YamlParser extends Parser
      * Parses the file and returns a list of ScriptItem
      * 
      * @return {@link List}<{@link ScriptItem}>
+     * @throws IOException
      */
     @Override
-    public List<ScriptItem> parse() throws Exception
+    public List<ScriptItem> parse() throws IOException
     {
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
         // Build the factory

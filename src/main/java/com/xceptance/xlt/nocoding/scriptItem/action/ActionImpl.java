@@ -39,6 +39,8 @@ public class ActionImpl extends Action
     /**
      * Executes the {@link ActionImpl} by building a {@link WebAction}, running it and then validating the answer. In the
      * end, the page gets appended to the result browser.
+     * 
+     * @throws Throwable
      */
     @Override
     public void execute(final Context context) throws Throwable

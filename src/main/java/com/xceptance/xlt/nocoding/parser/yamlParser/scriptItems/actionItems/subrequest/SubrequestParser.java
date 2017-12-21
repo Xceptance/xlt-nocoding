@@ -1,6 +1,5 @@
 package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.subrequest;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -29,10 +28,9 @@ public class SubrequestParser extends AbstractActionItemParser
      * @param node
      *            The ArrayNode the item starts at
      * @return A list with all specified subrequest under that subrequest block
-     * @throws IOException
      */
     @Override
-    public List<AbstractActionItem> parse(final JsonNode node) throws IOException
+    public List<AbstractActionItem> parse(final JsonNode node)
     {
         // Verify that we have an ArrayNode
         if (!(node instanceof ArrayNode))

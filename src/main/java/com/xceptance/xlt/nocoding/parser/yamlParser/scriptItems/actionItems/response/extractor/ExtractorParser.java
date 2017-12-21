@@ -12,17 +12,15 @@ import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
- * Takes an identifier (which is an element of {@link JsonNode#fieldNames()}) of a {@link JsonNode} with the extraction
- * item in it and parses it to an {@link AbstractExtractor}. Also checks if a {@link Constants#GROUP} is specified at
- * the {@link JsonNode} and if {@link Constants#GROUP} is specified, verifies the {@link AbstractExtractor} is a
- * {@link RegexpExtractor}.
+ * Takes an identifier (which is an element of {@link JsonNode#fieldNames()}) of a <code>JsonNode</code> with the
+ * extraction item in it and parses it to an {@link AbstractExtractor}.
  * 
  * @author ckeiner
  */
 public class ExtractorParser
 {
     /**
-     * The identifier of the extraction item, must be in {@link Constants#PERMITTEDEXTRACTIONMODE}.
+     * The identifier of the extraction item
      */
     final String identifier;
 
@@ -32,12 +30,14 @@ public class ExtractorParser
     }
 
     /**
-     * Parses the extraction item in the {@link JsonNode} to an {@link AbstractExtractor}. Also checks if a group is
-     * specified and verifies it is at a {@link RegexpExtractor}.
+     * Parses the extraction item in the {@link JsonNode} to an {@link AbstractExtractor}. Also checks if
+     * {@link Constants#GROUP} is specified in the item at the <code>JsonNode</code> and if <code>Constants#GROUP</code> is
+     * specified, verifies the <code>AbstractExtractor</code> is a {@link RegexpExtractor}.
      * 
      * @param node
-     *            The node of the extraction item
-     * @return The specified {@link AbstractExtractor}
+     *            The <code>JsonNode</code> of the extraction item
+     * @return The <code>AbstractExtractor</code> corresponding to the identifier. <br>
+     *         For example, {@link Constants#REGEXP} is parsed to a <code>RegexpExtractor</code>.
      */
     public AbstractExtractor parse(final JsonNode node)
     {

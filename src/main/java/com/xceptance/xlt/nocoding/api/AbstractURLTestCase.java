@@ -1,6 +1,7 @@
 package com.xceptance.xlt.nocoding.api;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ import com.xceptance.xlt.nocoding.util.context.DomContext;
 import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
- * Executes a xlt-nocoding test case by parsing the file specified in the properties and executing the parsed commands
+ * Executes a xlt-nocoding test case by parsing the file specified in the properties and executing the parsed commands.
  * 
  * @author ckeiner
  */
@@ -40,24 +41,27 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
     private Parser parser;
 
     /**
-     * The list of script items, created by using the parser.parse()-Method
+     * The list of {@link ScriptItem}s
      */
     private List<ScriptItem> itemList;
 
     /**
-     * The Context of all ScriptItems. Handles Properties, Storage, etc.
+     * The {@link Context} of all <code>ScriptItems</code>
      */
     private Context context;
 
     /**
-     * Prepares the test case by: Instantiating the Context, loading the default configuration, and parsing the definition
-     * file
+     * Prepares a test case by parsing the file
+     * 
+     * @throws IOException
+     *             is thrown, for example, when the file is not found, or the parser encounters an error
      */
     @Before
-    public void initialize() throws Exception
+    public void initialize() throws IOException
     {
         // Instantiate the PropertyManager with a new DataStorage
         final XltProperties properties = XltProperties.getInstance();
+        // Get the mode and create the corresponding Context
         final String mode = properties.getProperty(NoCodingPropertyAdmin.MODE);
         switch (mode)
         {
@@ -85,6 +89,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
      * Executes the test case
      * 
      * @throws Throwable
+     *             Most Throwable that happen during execution
      */
     @Test
     public void executeTest() throws Throwable
@@ -125,9 +130,10 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
     }
 
     /**
-     * Gets the path to the file as string
+     * Gets the file path, that is the path with the name of the file. <br>
+     * Uses {@value File#separatorChar} between the directory and the filename.
      * 
-     * @return The path to the file
+     * @return String that describes the path to the file
      */
     protected String getFilePath()
     {
@@ -146,11 +152,12 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
     }
 
     /**
-     * Creates the correct parser depending on the file extension, i.e. creates the YamlParser for yml/yaml files.
+     * Creates the correct parser depending on the file extension. For example creates a {@link YamlParser} for yml/yaml
+     * files and a {@link CsvParserNocoding} for csv files.
      * 
      * @param pathToFile
      *            The path to the file with or without the extension.
-     * @return The parser that should be used for the specified file.
+     * @return The {@link Parser} that should be used for the specified file.
      */
     protected Parser decideParser(String pathToFile)
     {
@@ -212,13 +219,15 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
     }
 
     /**
-     * On the first execution, it gets the {@link List}<{@link ScriptItem}> from the parser and saves it in
-     * {@link #DATA_CACHE}. Then, it gets the {@link List}<{@link ScriptItem}> out of the {@link #DATA_CACHE}
+     * Gets the list of <code>ScriptItem</code>s either by parsing them or from the cache. <br>
+     * On the first execution, it gets the list from the parser and saves it in {@link #DATA_CACHE}. Then, it gets the list
+     * out of the {@link #DATA_CACHE}.
      * 
-     * @return {@link List}<{@link ScriptItem}> defined in the file located at {@link #getFilePath()}
-     * @throws Exception
+     * @return A list of <code>ScriptItem</code>s generated from the file located at {@link #getFilePath()}
+     * @throws IOException
+     *             is thrown, for example, when the file is not found, or the parser encounters an error
      */
-    public List<ScriptItem> getOrParse() throws Exception
+    public List<ScriptItem> getOrParse() throws IOException
     {
         synchronized (DATA_CACHE)
         {

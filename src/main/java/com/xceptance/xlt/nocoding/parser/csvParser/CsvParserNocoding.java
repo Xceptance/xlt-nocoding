@@ -1,6 +1,7 @@
 package com.xceptance.xlt.nocoding.parser.csvParser;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -42,9 +43,11 @@ public class CsvParserNocoding extends Parser
      * Creates a {@link JsonNode} out of the Csv file with the first (not commented) line as fieldNames. Then uses these
      * {@link JsonNode}s to parse the data to a {@link List}<{@link ScriptItem}>. Keep in mind, that each second
      * {@link JsonNode} is an empty node
+     * 
+     * @throws IOException
      */
     @Override
-    public List<ScriptItem> parse() throws Exception
+    public List<ScriptItem> parse() throws IOException
     {
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
 

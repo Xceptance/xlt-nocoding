@@ -1,6 +1,5 @@
 package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.request;
 
-import java.io.IOException;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -8,7 +7,7 @@ import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
- * Parses a parameter item to a {@link List}<{@link NameValuePair}>
+ * The class for parsing the parameter items to a list of {@link NameValuePair}s
  * 
  * @author ckeiner
  */
@@ -16,14 +15,13 @@ public class ParameterParser
 {
 
     /**
-     * Parses the parameter item to a {@link List}<{@link NameValuePair}>
+     * Parses a parameter item to a list of <code>NameValuePair</code>s
      * 
      * @param node
-     *            The node the item starts at
-     * @return A List containing the parameters
-     * @throws IOException
+     *            The {@link JsonNode} with the parameters in it
+     * @return A list containing the parsed parameters
      */
-    public List<NameValuePair> parse(final JsonNode node) throws IOException
+    public List<NameValuePair> parse(final JsonNode node)
     {
         // Transform the JsonNode to a List of NameValuePairs
         final List<NameValuePair> parameters = ParserUtils.getArrayNodeAsNameValuePair(node);

@@ -1,6 +1,5 @@
 package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems;
 
-import java.io.IOException;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -20,8 +19,7 @@ public abstract class AbstractActionItemParser
      * @param node
      *            The node the item starts at
      * @return {@link List}<{@link AbstractActionItem}>
-     * @throws IOException
      */
-    public abstract List<AbstractActionItem> parse(JsonNode node) throws IOException;
+    public abstract List<AbstractActionItem> parse(JsonNode node);
 
 }

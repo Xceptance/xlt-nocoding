@@ -1,6 +1,7 @@
 package com.xceptance.xlt.nocoding.parser;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
@@ -32,9 +33,9 @@ public abstract class Parser
      * Interface method, that uses a file to parse the content as a list of ScriptItems
      * 
      * @return The list of ScriptItems that are to be executed in that exact order
-     * @throws Exception
+     * @throws IOException
      */
-    public abstract List<ScriptItem> parse() throws Exception;
+    public abstract List<ScriptItem> parse() throws IOException;
 
     public File getFile()
     {

@@ -1,6 +1,5 @@
 package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.subrequest;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -24,9 +23,8 @@ public class StaticSubrequestParser
      * @param node
      *            The ArrayNode the item starts at
      * @return A {@link StaticSubrequest} with the specified URLs
-     * @throws IOException
      */
-    public StaticSubrequest parse(final JsonNode node) throws IOException
+    public StaticSubrequest parse(final JsonNode node)
     {
         final List<String> urls = new ArrayList<>();
         if (!(node instanceof ArrayNode))

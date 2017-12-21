@@ -30,7 +30,7 @@ public class ParserUtils
      * 
      * @param jsonNode
      *            The ArrayNode consisting of ObjectNodes
-     * @return
+     * @return A map of the parsed content
      */
     public static Map<String, String> getArrayNodeAsMap(final JsonNode jsonNode)
     {

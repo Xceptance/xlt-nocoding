@@ -1,6 +1,5 @@
 package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.subrequest;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -33,9 +32,8 @@ public class XhrSubrequestParser
      * @param node
      *            The ObjectNode the item starts at
      * @return The {@link XhrSubrequest}
-     * @throws IOException
      */
-    public XhrSubrequest parse(final JsonNode node) throws IOException
+    public XhrSubrequest parse(final JsonNode node)
     {
         // Verify the node is an ObjectNode
         if (!(node instanceof NullNode) && !(node instanceof ObjectNode))
@@ -94,7 +92,7 @@ public class XhrSubrequestParser
                         }
                         else
                         {
-                            throw new IOException("Could not convert Request Item to Request Object: " + fieldName);
+                            throw new IllegalStateException("Could not convert Request Item to Request Object: " + fieldName);
                         }
                         break;
                     }

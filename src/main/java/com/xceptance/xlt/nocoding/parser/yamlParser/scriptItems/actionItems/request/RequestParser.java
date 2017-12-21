@@ -1,6 +1,5 @@
 package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.request;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -20,7 +19,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
- * Parses a request item to a {@link Request} wrapped in a {@link List}<{@link AbstractActionItem}>.
+ * The class for parsing request items to {@link Request}s wrapped in a list of {@link AbstractActionItem}s.
  * 
  * @author ckeiner
  */
@@ -28,14 +27,14 @@ public class RequestParser extends AbstractActionItemParser
 {
 
     /**
-     * Parses a JsonNode to a {@link Request}.
+     * Parses a request item to a <code>Request</code>.
      * 
      * @param node
-     *            The node of the Request
-     * @return The {@link Request} wrapped in a {@link List}<{@link AbstractActionItem}>.
+     *            The {@link JsonNode} with the request in it
+     * @return The <code>Request</code> wrapped in a list of <code>AbstractActionItem</code>s.
      */
     @Override
-    public List<AbstractActionItem> parse(final JsonNode node) throws IOException
+    public List<AbstractActionItem> parse(final JsonNode node)
     {
         // Verify that an object was used and not an array
         if (!(node instanceof ObjectNode))
