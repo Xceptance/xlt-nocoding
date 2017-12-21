@@ -138,11 +138,11 @@ public class LightWeightContext extends Context
         if (!webRequest.isXHR())
         {
             this.setLightWeightPage(this.getWebClient().getLightWeightPage(webRequest));
-            webResponse = this.getLightWeightPage().getWebResponse();
+            setWebResponse(this.getLightWeightPage().getWebResponse());
         }
         else
         {
-            webResponse = this.getWebClient().loadWebResponse(webRequest);
+            setWebResponse(this.getWebClient().loadWebResponse(webRequest));
         }
     }
 

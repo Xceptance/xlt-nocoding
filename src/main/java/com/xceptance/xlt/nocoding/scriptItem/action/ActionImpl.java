@@ -3,44 +3,42 @@ package com.xceptance.xlt.nocoding.scriptItem.action;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gargoylesoftware.htmlunit.WebResponse;
-import com.xceptance.xlt.api.htmlunit.LightWeightPage;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.util.WebAction;
 import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
- * The {@link Action} in light mode, which means the {@link WebResponse} is parsed to a {@link LightWeightPage}.
+ * An implementation of {@link Action}.
  * 
  * @author ckeiner
  */
-public class LightWeightAction extends Action
+public class ActionImpl extends Action
 {
 
     /**
-     * Creates an instance of {@link LightWeightAction} that sets {@link #actionItems} to an {@link ArrayList} of size 1.
+     * Creates an instance of {@link ActionImpl} that sets {@link #actionItems} to an {@link ArrayList} of size 1.
      */
-    public LightWeightAction()
+    public ActionImpl()
     {
         super();
     }
 
     /**
-     * Creates an instance of {@link LightWeightAction} that sets {@link #name} and {@link #actionItems}.
+     * Creates an instance of {@link ActionImpl} that sets {@link #name} and {@link #actionItems}.
      * 
      * @param name
      *            The name of the action
      * @param actionItems
      *            A {@link List}<{@link AbstractActionItem}>
      */
-    public LightWeightAction(final String name, final List<AbstractActionItem> actionItems)
+    public ActionImpl(final String name, final List<AbstractActionItem> actionItems)
     {
         super(name, actionItems);
     }
 
     /**
-     * Executes the {@link LightWeightAction} by building a {@link WebAction}, running it and then validating the answer. In
-     * the end, the page gets appended to the result browser.
+     * Executes the {@link ActionImpl} by building a {@link WebAction}, running it and then validating the answer. In the
+     * end, the page gets appended to the result browser.
      */
     @Override
     public void execute(final Context context) throws Throwable

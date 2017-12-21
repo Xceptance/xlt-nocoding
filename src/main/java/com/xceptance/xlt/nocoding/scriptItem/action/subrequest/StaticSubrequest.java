@@ -44,7 +44,15 @@ public class StaticSubrequest extends AbstractSubrequest
         // Get the UID in the properties
         final String userAgentUID = context.getPropertyByKey("userAgent.UID");
         // Create a Downloader
-        final Downloader downloader = new Downloader(context.getWebClient(), Integer.valueOf(numberThreads), Boolean.valueOf(userAgentUID));
+        Downloader downloader = null;
+        if (numberThreads != null && userAgentUID != null)
+        {
+            downloader = new Downloader(context.getWebClient(), Integer.valueOf(numberThreads), Boolean.valueOf(userAgentUID));
+        }
+        else
+        {
+            downloader = new Downloader(context.getWebClient());
+        }
         // Add all URLs to the Downloader
         for (final String url : urls)
         {

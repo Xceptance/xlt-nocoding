@@ -10,7 +10,7 @@ import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.parser.csvParser.CsvConstants;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.Action;
-import com.xceptance.xlt.nocoding.scriptItem.action.LightWeightAction;
+import com.xceptance.xlt.nocoding.scriptItem.action.ActionImpl;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.HttpcodeValidator;
@@ -144,8 +144,8 @@ public class ActionItemParser
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
         actionItems.add(request);
         actionItems.add(response);
-        final LightWeightAction action = new LightWeightAction(name, actionItems);
-        return action;
+        final ActionImpl impl = new ActionImpl(name, actionItems);
+        return impl;
     }
 
     /**

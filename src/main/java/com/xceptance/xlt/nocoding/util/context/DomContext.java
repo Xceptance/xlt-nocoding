@@ -117,7 +117,7 @@ public class DomContext extends Context
         }
         else
         {
-            webResponse = this.getWebClient().getPage(webRequest).getWebResponse();
+            setWebResponse(this.getWebClient().getPage(webRequest).getWebResponse());
         }
     }
 
