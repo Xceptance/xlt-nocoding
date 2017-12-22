@@ -1,6 +1,5 @@
 package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.storeDefault;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +11,7 @@ import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultParameter;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
- * Parses the Parameters list item to a {@link List}<{@link StoreDefault}> which consists of multiple
- * {@link StoreDefaultParameter}.
+ * The Class for parsing default parameters.
  * 
  * @author ckeiner
  */
@@ -21,16 +19,15 @@ public class StoreDefaultParameterParser extends AbstractStoreDefaultParser
 {
 
     /**
-     * Parses the Parameters list item to a {@link List}<{@link StoreDefault}> which consists of multiple
-     * {@link StoreDefaultParameter}
+     * Parses the parameter list item to a list of {@link StoreDefault}s which consists of multiple
+     * {@link StoreDefaultParameter}.
      * 
      * @param node
-     *            The node the default item starts at
-     * @return A {@link List}<{@link StoreDefault}> which consists of multiple {@link StoreDefaultParameter}
-     * @throws IOException
+     *            The {@link JsonNode} the default parameters start at
+     * @return A list of <code>StoreDefault</code>s with the parsed default parameters.
      */
     @Override
-    public List<StoreDefault> parse(final JsonNode node) throws IOException
+    public List<StoreDefault> parse(final JsonNode node)
     {
         // Create list of defaultItems
         final List<StoreDefault> defaultItems = new ArrayList<>();

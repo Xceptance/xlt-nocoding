@@ -11,8 +11,8 @@ import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
- * Takes an identifier (which is an element of {@link JsonNode#fieldNames()}) of a {@link JsonNode} with the validation
- * method in it and parses it to an {@link AbstractValidationMethod}.
+ * Class for parsing the validation method. Takes an identifier (which is an element of {@link JsonNode#fieldNames()})
+ * of a {@link JsonNode} with the validation method and parses it to an {@link AbstractValidationMethod}.
  * 
  * @author ckeiner
  */
@@ -29,11 +29,11 @@ public class ValidationMethodParser
     }
 
     /**
-     * Parses the validation method in the {@link JsonNode} to an {@link AbstractValidationMethod}
+     * Parses the validation method in the {@link JsonNode} to an {@link AbstractValidationMethod}.
      * 
      * @param node
-     *            The node of the validation method
-     * @return The specified {@link AbstractValidationMethod}
+     *            The <code>JsonNode</code> with the validation method
+     * @return An <code>AbstractValidationMethod</code> with the parsed data
      */
     public AbstractValidationMethod parse(final JsonNode node)
     {

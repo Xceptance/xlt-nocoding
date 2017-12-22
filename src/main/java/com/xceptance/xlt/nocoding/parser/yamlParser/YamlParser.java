@@ -43,10 +43,11 @@ public class YamlParser extends Parser
     }
 
     /**
-     * Parses the file and returns a list of ScriptItem
+     * Parses the file in {@link #getFile()} and returns a list of {@link ScriptItem}s
      * 
-     * @return {@link List}<{@link ScriptItem}>
+     * @return A list of {@link ScriptItem}s.
      * @throws IOException
+     *             If a {@link JsonParser} cannot be created or the file cannot be mapped to a {@link JsonNode}.
      */
     @Override
     public List<ScriptItem> parse() throws IOException

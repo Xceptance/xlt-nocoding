@@ -16,7 +16,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.store.ResponseStore
 import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
- * Parses a store item in the response block to a {@link List}<{@link AbstractResponseStore}>.
+ * The class for parsing store items in the response item.
  * 
  * @author ckeiner
  */
@@ -24,14 +24,13 @@ public class ResponseStoreParser
 {
 
     /**
-     * Parses the store item in the response block to a {@link List}<{@link AbstractResponseStore}>
+     * Parses the store item in the response block to a list of {@link AbstractResponseStore}
      * 
      * @param node
-     *            The node the store item starts at
-     * @return A list of the specified store items
-     * @throws IllegalArgumentException
+     *            The {@link JsonNode} the store item starts at
+     * @return A list of all <code>AbstractResponseStore</code>s with the parsed content
      */
-    public List<AbstractResponseStore> parse(final JsonNode node) throws IllegalArgumentException
+    public List<AbstractResponseStore> parse(final JsonNode node)
     {
         // Verify that an array was used and not an object
         if (!(node instanceof ArrayNode))

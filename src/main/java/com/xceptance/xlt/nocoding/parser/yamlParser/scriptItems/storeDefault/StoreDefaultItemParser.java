@@ -1,6 +1,5 @@
 package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.storeDefault;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +10,8 @@ import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
- * Parses a simple key-value-item that is neither {@link Constants#HEADERS}, nor {@link Constants#PARAMETERS}, nor
+ * The class for parsing single, default key-value items. <br>
+ * Therefore, it does not parse {@link Constants#HEADERS}, nor {@link Constants#PARAMETERS}, nor
  * {@link Constants#STATIC}.
  * 
  * @author ckeiner
@@ -20,15 +20,14 @@ public class StoreDefaultItemParser extends AbstractStoreDefaultParser
 {
 
     /**
-     * Parses the key-value-pair to a {@link List}<{@link StoreDefault}>
+     * Parses the headers list item to a list of {@link StoreDefault}s which consists of a single {@link StoreDefaultItem}.
      * 
      * @param node
-     *            The {@link JsonNode} the default item starts at
-     * @return A {@link List}<{@link StoreDefault}> containing a single {@link StoreDefaultItem}.
-     * @throws IOException
+     *            The {@link JsonNode} the default key-value item start at
+     * @return A list of <code>StoreDefault</code>s with the parsed default key-value item.
      */
     @Override
-    public List<StoreDefault> parse(final JsonNode node) throws IOException
+    public List<StoreDefault> parse(final JsonNode node)
     {
         // Create new default items list
         final List<StoreDefault> defaultItems = new ArrayList<>();

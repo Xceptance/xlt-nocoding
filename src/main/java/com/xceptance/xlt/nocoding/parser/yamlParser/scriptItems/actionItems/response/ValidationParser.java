@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.response.extractor.ExtractorParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.response.validators.ValidationMethodParser;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Validator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.RegexpExtractor;
@@ -18,7 +17,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.Ab
 import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
- * Parses the validation block to a {@link List}<{@link AbstractResponseItem}> which consists of {@link Validator}.
+ * The class for parsing validations.
  * 
  * @author ckeiner
  */
@@ -26,14 +25,13 @@ public class ValidationParser
 {
 
     /**
-     * Parses the validation items in the response block to List<AbstractValidator> which consists of {@link Validator}.
+     * Parses the validation items in the response block to a list of {@link Validator}.
      * 
      * @param node
-     *            The node the item starts at
-     * @return A List<AbstractValidator> which consists of {@link Validator}.
-     * @throws IllegalArgumentException
+     *            The {@link JsonNode} with the validation item
+     * @return A list of <code>Validator</code>
      */
-    public List<Validator> parse(final JsonNode node) throws IllegalArgumentException
+    public List<Validator> parse(final JsonNode node)
     {
         // Verify that an array was used and not an object
         if (!(node instanceof ArrayNode))

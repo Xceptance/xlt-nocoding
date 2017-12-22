@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 
 /**
- * Parses an ActionItem and returns a list of it (since a subrequest can consist of multiple ActionItem)
+ * The class for parsing action items.
  * 
  * @author ckeiner
  */
@@ -17,8 +17,8 @@ public abstract class AbstractActionItemParser
      * Parses the defined action item at the node.
      * 
      * @param node
-     *            The node the item starts at
-     * @return {@link List}<{@link AbstractActionItem}>
+     *            The {@link JsonNode} the item starts at
+     * @return A list of {@link AbstractActionItem}> since the subrequest block can have multiple action items
      */
     public abstract List<AbstractActionItem> parse(JsonNode node);
 

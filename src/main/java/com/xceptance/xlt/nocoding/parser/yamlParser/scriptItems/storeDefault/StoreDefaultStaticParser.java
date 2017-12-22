@@ -1,6 +1,5 @@
 package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.storeDefault;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -12,8 +11,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
- * Parses the Static list item to a {@link List}<{@link StoreDefault}> which consists of multiple
- * {@link StoreDefaultStatic}.
+ * The class for parsing default static subrequests.
  * 
  * @author ckeiner
  */
@@ -21,16 +19,15 @@ public class StoreDefaultStaticParser extends AbstractStoreDefaultParser
 {
 
     /**
-     * Parses the Static list item to a {@link List}<{@link StoreDefault}> which consists of multiple
-     * {@link StoreDefaultStatic}
+     * Parses the static subrequest list item to a list of {@link StoreDefault}s which consists of multiple
+     * {@link StoreDefaultStatic}.
      * 
      * @param node
-     *            The node the default item starts at
-     * @return A {@link List}<{@link StoreDefault}> which consists of multiple {@link StoreDefaultStatic}
-     * @throws IOException
+     *            The {@link JsonNode} the default static subrequests start at
+     * @return A list of <code>StoreDefault</code>s with the parsed default static subrequests.
      */
     @Override
-    public List<StoreDefault> parse(final JsonNode node) throws IOException
+    public List<StoreDefault> parse(final JsonNode node)
     {
         // Create list of defaultItems
         final List<StoreDefault> defaultItems = new ArrayList<>();

@@ -10,7 +10,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
- * Creates a {@link StaticSubrequest} out of the URLs at the specified node.
+ * The class for parsing static subrequests.
  * 
  * @author ckeiner
  */
@@ -21,8 +21,8 @@ public class StaticSubrequestParser
      * Parses the static subrequest item in the static block to a {@link StaticSubrequest}.
      * 
      * @param node
-     *            The ArrayNode the item starts at
-     * @return A {@link StaticSubrequest} with the specified URLs
+     *            The {@link JsonNode} the item starts at
+     * @return A <code>StaticSubrequest</code> with the parsed URLs
      */
     public StaticSubrequest parse(final JsonNode node)
     {

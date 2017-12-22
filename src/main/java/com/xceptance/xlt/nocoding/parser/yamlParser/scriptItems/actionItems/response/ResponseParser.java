@@ -1,6 +1,5 @@
 package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.response;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -19,7 +18,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
- * Parses a response item to a {@link Response} wrapped in a {@link List}<{@link AbstractActionItem}>.
+ * The class for parsing the response.
  * 
  * @author ckeiner
  */
@@ -27,15 +26,14 @@ public class ResponseParser extends AbstractActionItemParser
 {
 
     /**
-     * Parses the response item to a {@link Response}.
+     * Parses the response item to a {@link Response} wrapped in a list of {@link AbstractActionItem}s.
      * 
      * @param node
-     *            The node the item starts at
-     * @return The {@link Response} wrapped in a {@link List}<{@link AbstractActionItem}>
-     * @throws IOException
+     *            The {@link JsonNode} with the response item
+     * @return The <code>Response</code> wrapped in a list of <code>AbstractActionItem</code>s
      */
     @Override
-    public List<AbstractActionItem> parse(final JsonNode node) throws IllegalArgumentException
+    public List<AbstractActionItem> parse(final JsonNode node)
     {
         // Verify that an object was used and not an array
         if (!(node instanceof ObjectNode))

@@ -1,6 +1,5 @@
 package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.storeDefault;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,11 +10,24 @@ import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultCookie;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
+/**
+ * The class for parsing default cookie data.
+ * 
+ * @author ckeiner
+ */
 public class StoreDefaultCookieParser extends AbstractStoreDefaultParser
 {
 
+    /**
+     * Parses the cookies list item to a list of {@link StoreDefault}s which consists of multiple
+     * {@link StoreDefaultCookie}.
+     * 
+     * @param node
+     *            The {@link JsonNode} the default cookies start at
+     * @return A list of <code>StoreDefault</code>s with the parsed default cookie data.
+     */
     @Override
-    public List<StoreDefault> parse(final JsonNode node) throws IOException
+    public List<StoreDefault> parse(final JsonNode node)
     {
         // Create list of defaultItems
         final List<StoreDefault> defaultItems = new ArrayList<>();

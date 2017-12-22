@@ -1,6 +1,5 @@
 package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -23,7 +22,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
- * Parses the action block to a {@link List}<{@link ScriptItem}>.
+ * The class for parsing an action item.
  * 
  * @author ckeiner
  */
@@ -31,15 +30,14 @@ public class ActionItemParser extends AbstractScriptItemParser
 {
 
     /**
-     * Parses the action block to a {@link List}<{@link ScriptItem}>.
+     * Parses the action item to a list of {@link ScriptItem}s.
      * 
      * @param root
-     *            The node the action block starts at
-     * @return A list of {@link ScriptItem}s containing a single action.
-     * @throws IOException
+     *            The {@link JsonNode} with the the action item
+     * @return A list of <code>ScriptItem</code>s containing a single {@link Action}.
      */
     @Override
-    public List<ScriptItem> parse(final JsonNode root) throws IOException
+    public List<ScriptItem> parse(final JsonNode root)
     {
         // Initialize variables
         String name = null;
@@ -144,8 +142,6 @@ public class ActionItemParser extends AbstractScriptItemParser
         }
         // Add the action to the script items
         scriptItems.add(new ActionImpl(name, actionItems));
-
-        // TODO check mode here and create DomAction or LightWeightAction - or simply remove this
 
         // Return all scriptItems
         return scriptItems;

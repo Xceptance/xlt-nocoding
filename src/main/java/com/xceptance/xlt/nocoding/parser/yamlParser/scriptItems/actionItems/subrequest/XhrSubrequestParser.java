@@ -19,7 +19,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
- * Parses the XHR block to a {@link XhrSubrequest}.
+ * The class for parsing the Xhr Subrequest item.
  * 
  * @author ckeiner
  */
@@ -27,11 +27,11 @@ public class XhrSubrequestParser
 {
 
     /**
-     * Parses the XHR block to a {@link XhrSubrequest}.
+     * Parses the Xhr item to a {@link XhrSubrequest}.
      * 
      * @param node
-     *            The ObjectNode the item starts at
-     * @return The {@link XhrSubrequest}
+     *            The {@link JsonNode} with the xhr subrequest item
+     * @return The <code>XhrSubrequest</code> with the parsed data
      */
     public XhrSubrequest parse(final JsonNode node)
     {

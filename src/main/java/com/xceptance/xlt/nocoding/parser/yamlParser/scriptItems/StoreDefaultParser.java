@@ -1,6 +1,5 @@
 package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +14,8 @@ import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefault;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
- * Parses a default item to a {@link List}<{@link ScriptItem}>. Default items are defined in
- * {@link Constants#PERMITTEDLISTITEMS} and neither {@link Constants#ACTION} nor {@link Constants#STORE}.
+ * The class for parsing default items. Default items are defined in {@link Constants#PERMITTEDLISTITEMS} and neither
+ * {@link Constants#ACTION} nor {@link Constants#STORE}.
  * 
  * @author ckeiner
  */
@@ -24,15 +23,14 @@ public class StoreDefaultParser extends AbstractScriptItemParser
 {
 
     /**
-     * Parses the default item at {@link JsonNode} root to a {@link List}<{@link ScriptItem}>.
+     * Parses the default item at the {@link JsonNode} to a list of {@link ScriptItem}s.
      * 
      * @param root
-     *            The node the default item starts at
-     * @return A {@link List}<{@link ScriptItem}> with the specified {@link StoreDefault}.
-     * @throws IOException
+     *            The {@link JsonNode} the default item starts at
+     * @return A list of <code>ScriptItem</code>s with the specified {@link StoreDefault}s.
      */
     @Override
-    public List<ScriptItem> parse(final JsonNode root) throws IOException
+    public List<ScriptItem> parse(final JsonNode root)
     {
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
         // Get the name of the item
@@ -43,6 +41,7 @@ public class StoreDefaultParser extends AbstractScriptItemParser
         {
             throw new IllegalArgumentException("Not a permitted list item: " + variableName);
         }
+        // Since it was a permitted action item, differentiate between the name of the item
         if (variableName.equals(Constants.HEADERS))
         {
             scriptItems.addAll(new StoreDefaultHeaderParser().parse(root.get(Constants.HEADERS)));
@@ -63,9 +62,6 @@ public class StoreDefaultParser extends AbstractScriptItemParser
         {
             // We get simple name value pairs, as such we simply want to read a single value
             scriptItems.addAll(new StoreDefaultItemParser().parse(root));
-            // final JsonNode jsonNode = root.get(variableName);
-            // value = ParserUtils.readSingleValue(jsonNode);
-            // scriptItems.add(new StoreDefaultItem(variableName, value));
         }
 
         return scriptItems;

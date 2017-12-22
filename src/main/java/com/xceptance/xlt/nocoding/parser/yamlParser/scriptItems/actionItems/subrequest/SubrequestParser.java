@@ -14,8 +14,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubreques
 import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
- * Parses the Subrequests item in the action block to {@link List}<{@link AbstractSubrequest}> since there can be
- * multiple {@link AbstractSubrequest} in the Subrequests block.
+ * The class for parsing subrequests.
  * 
  * @author ckeiner
  */
@@ -23,11 +22,12 @@ public class SubrequestParser extends AbstractActionItemParser
 {
 
     /**
-     * Parses the subrequest item in the action block to {@link List}<{@link AbstractSubrequest}>
+     * Parses the subrequest item in the action block to a list of {@link AbstractSubrequest}s. A subrequest item can
+     * consist of multiple subrequests.
      * 
      * @param node
-     *            The ArrayNode the item starts at
-     * @return A list with all specified subrequest under that subrequest block
+     *            The {@link JsonNode} the subrequest item starts at
+     * @return A list with all specified subrequest in the node
      */
     @Override
     public List<AbstractActionItem> parse(final JsonNode node)

@@ -1,6 +1,5 @@
 package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +12,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
- * Parses the Store block to a {@link List}<{@link ScriptItem}>.
+ * The class for parsing store items.
  * 
  * @author ckeiner
  */
@@ -21,15 +20,14 @@ public class StoreItemParser extends AbstractScriptItemParser
 {
 
     /**
-     * Parses the Store block to a {@link List}<{@link ScriptItem}>.
+     * Parses the store item to a list of {@link ScriptItem}s.
      * 
      * @param root
-     *            The {@link JsonNode} the Store block starts at
-     * @return {@link List}<{@link ScriptItem}> with all {@link StoreItem}
-     * @throws IOException
+     *            The {@link JsonNode} with the store item
+     * @return A list of <code>ScriptItem</code>s with all specified {@link StoreItem}s.
      */
     @Override
-    public List<ScriptItem> parse(final JsonNode root) throws IOException
+    public List<ScriptItem> parse(final JsonNode root)
     {
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
 
