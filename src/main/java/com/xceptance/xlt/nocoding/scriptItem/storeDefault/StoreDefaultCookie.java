@@ -28,8 +28,7 @@ public class StoreDefaultCookie extends StoreDefault
         }
         else
         {
-            // TODO remove cookies?
-            // If the variableName is Constants.HEADERS, then we delete all default headers
+            // If the variableName is Constants.COOKIES, then we delete all default cookies
             if (variableName.equals(Constants.COOKIES))
             {
                 storage.clear();

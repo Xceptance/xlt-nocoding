@@ -122,10 +122,9 @@ public class CsvParserNocoding extends Parser
 
             }
         }
-        catch (final Exception e)
+        catch (final RuntimeException e)
         {
-            // TODO find better error
-            throw new IllegalStateException("Unknown error: " + e.getMessage(), e);
+            throw new IllegalStateException("Error while parsing: " + e.getMessage(), e);
         }
 
         // Return all scriptItems

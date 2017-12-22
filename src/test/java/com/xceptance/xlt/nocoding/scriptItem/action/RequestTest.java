@@ -461,7 +461,6 @@ public class RequestTest
 
         final List<NameValuePair> actualParameters = webRequest.getRequestParameters();
 
-        // TODO verify all parameters are added
         for (final NameValuePair parameter : actualParameters)
         {
             if (!parameters.contains(parameter))

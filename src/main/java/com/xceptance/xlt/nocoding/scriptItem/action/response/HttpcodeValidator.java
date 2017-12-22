@@ -40,7 +40,6 @@ public class HttpcodeValidator extends AbstractResponseItem
     {
         fillDefaultData(context);
         resolveValues(context);
-        // TODO test
         Assert.assertEquals(Integer.parseInt(this.httpcode), context.getWebResponse().getStatusCode());
     }
 
