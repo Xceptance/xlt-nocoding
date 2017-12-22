@@ -72,6 +72,7 @@ public class CsvParserNocoding extends Parser
         {
             // Save the last action, so we can still manipulate it
             Action lastAction = null;
+            int numberAction = 0;
             while (elements.hasNext())
             {
                 // Get the next node
@@ -103,7 +104,12 @@ public class CsvParserNocoding extends Parser
                             && !currentAction.getName().isEmpty())
                         {
                             // Add the action to the scriptitems
+                            numberAction++;
                             lastAction = currentAction;
+                            if (lastAction.getName() == null)
+                            {
+                                lastAction.setName("Action-" + numberAction);
+                            }
                             scriptItems.add(lastAction);
                         }
                         break;
