@@ -11,16 +11,6 @@ import com.xceptance.xlt.nocoding.util.context.DomContext;
 public class HtmlTextXpathExtractorTest extends ExtractorTest
 {
 
-    @Test(expected = IllegalStateException.class)
-    public void testLightContextSetHtmlPage()
-    {
-        context.setSgmlPage(mockObjects.getHtmlPage());
-        final HtmlTextXpathExtractor xpathExtractor = new HtmlTextXpathExtractor(mockObjects.xPathString);
-        xpathExtractor.execute(context);
-        final List<String> results = xpathExtractor.getResult();
-        Assert.assertEquals(mockObjects.xpathStringExpected, results.get(0));
-    }
-
     @Test
     public void testGetByXPath()
     {
