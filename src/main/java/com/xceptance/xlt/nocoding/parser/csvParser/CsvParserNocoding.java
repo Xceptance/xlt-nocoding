@@ -114,13 +114,27 @@ public class CsvParserNocoding extends Parser
                         }
                         break;
                     case CsvConstants.TYPE_STATIC:
-                        // Add a static subrequest to the last Action
-                        lastAction.getActionItems().add(new StaticItemParser().parse(element));
-                        break;
+                        if (lastAction != null)
+                        {
+                            // Add a static subrequest to the last Action
+                            lastAction.getActionItems().add(new StaticItemParser().parse(element));
+                            break;
+                        }
+                        else
+                        {
+                            throw new IllegalArgumentException("Cannot start with a Static Request!");
+                        }
                     case CsvConstants.TYPE_XHR_ACTION:
-                        // Add an XhrSubrequest to the last Action
-                        lastAction.getActionItems().add(new XhrItemParser().parse(element));
-                        break;
+                        if (lastAction != null)
+                        {
+                            // Add an XhrSubrequest to the last Action
+                            lastAction.getActionItems().add(new XhrItemParser().parse(element));
+                            break;
+                        }
+                        else
+                        {
+                            throw new IllegalArgumentException("Cannot start with a XHR!");
+                        }
                     default:
                         // Everything else is unknown
                         throw new IllegalArgumentException("Unknown Type: " + type);
