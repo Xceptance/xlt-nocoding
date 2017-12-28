@@ -30,17 +30,17 @@ import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 public class Request extends AbstractActionItem
 {
     /**
-     * The URL as {@link String}
+     * The URL as String
      */
     private String url;
 
     /**
-     * The HttpMethod for the {@link WebRequest}. Defaults to "GET"
+     * The HttpMethod for the WebRequest. Defaults to "GET"
      */
     private String httpMethod;
 
     /**
-     * Sets the {@link WebRequest} as Xhr request. Defaults to "false"
+     * Sets the WebRequest as Xhr request. Defaults to "false"
      */
     private String xhr;
 
@@ -531,7 +531,7 @@ public class Request extends AbstractActionItem
         setParameters(decodedParameters);
     }
 
-    /*
+    /**
      * Provides the url and method used
      */
     public String toSimpleDebugString()

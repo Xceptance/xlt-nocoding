@@ -41,8 +41,8 @@ public abstract class AbstractExtractor
     }
 
     /**
-     * Executes the extractor. Normally, it should look into the {@link WebResponse} located in {@link Context}. Then sets
-     * the extracted expression via {@link #addResult(String)}.
+     * Executes the extractor. Looks into the {@link WebResponse} located in {@link Context}. Then sets the extracted
+     * expression via {@link #addResult(String)}.
      * 
      * @param context
      *            The {@link Context} to use

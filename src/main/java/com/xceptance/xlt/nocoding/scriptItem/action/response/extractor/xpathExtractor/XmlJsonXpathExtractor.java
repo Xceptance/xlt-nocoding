@@ -25,6 +25,11 @@ import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
 import com.xceptance.xlt.nocoding.util.context.Context;
 
+/**
+ * Extractor for json and xml content types
+ * 
+ * @author ckeiner
+ */
 public class XmlJsonXpathExtractor extends AbstractExtractor
 {
     private XPath xPath;
@@ -57,8 +62,6 @@ public class XmlJsonXpathExtractor extends AbstractExtractor
     @Override
     public void execute(final Context context)
     {
-        // throw new NotImplementedException(this.getClass().getSimpleName() + " not yet implemented!");
-
         try
         {
             getResult().addAll(getByXPathFromInputSource(context));

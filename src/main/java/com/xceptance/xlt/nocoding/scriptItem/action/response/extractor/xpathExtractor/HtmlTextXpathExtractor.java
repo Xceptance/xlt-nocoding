@@ -12,6 +12,11 @@ import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.context.DomContext;
 import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
+/**
+ * XPath Extractor for "html/text" content type
+ * 
+ * @author ckeiner
+ */
 public class HtmlTextXpathExtractor extends AbstractExtractor
 {
     private SgmlPage htmlPage;

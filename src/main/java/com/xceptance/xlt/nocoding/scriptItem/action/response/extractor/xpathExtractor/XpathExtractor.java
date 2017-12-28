@@ -1,5 +1,6 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.xpathExtractor;
 
+import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
 import com.xceptance.xlt.nocoding.util.context.Context;
 
@@ -18,7 +19,20 @@ public class XpathExtractor extends AbstractExtractor
     @Override
     public void execute(final Context context)
     {
-        // throw new NotImplementedException(this.getClass().getSimpleName() + " not yet implemented!");
+        final AbstractExtractor extractor = getExtractor(context);
+        extractor.execute(context);
+        result.addAll(extractor.getResult());
+    }
+
+    /**
+     * Checks the type of the {@link WebResponse} and chooses the appropriate XPathExtractor
+     * 
+     * @param context
+     *            The {@link Context} with the WebResponse in it
+     * @return {@link HtmlTextXpathExtractor} or {@link XmlJsonXpathExtractor}, depending on the content type
+     */
+    AbstractExtractor getExtractor(final Context context)
+    {
         final String content = context.getWebResponse().getContentType();
         AbstractExtractor extractor = null;
         if (HtmlTextXpathExtractor.HEADERCONTENTTYPES.containsKey(content))
@@ -29,8 +43,11 @@ public class XpathExtractor extends AbstractExtractor
         {
             extractor = new XmlJsonXpathExtractor(getExtractionExpression());
         }
-        extractor.execute(context);
-        result.addAll(extractor.getResult());
+        else
+        {
+            throw new IllegalStateException("Content type not supported: " + content);
+        }
+        return extractor;
     }
 
 }
