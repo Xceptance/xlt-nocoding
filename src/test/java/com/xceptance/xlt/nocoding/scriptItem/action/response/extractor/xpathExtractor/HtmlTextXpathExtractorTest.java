@@ -11,8 +11,11 @@ import com.xceptance.xlt.nocoding.util.context.DomContext;
 public class HtmlTextXpathExtractorTest extends ExtractorTest
 {
 
+    /**
+     * Verifies the extractor works
+     */
     @Test
-    public void testGetByXPath()
+    public void testXPathExtraction()
     {
         context = new DomContext(context);
         mockObjects.loadHtmlPage();
