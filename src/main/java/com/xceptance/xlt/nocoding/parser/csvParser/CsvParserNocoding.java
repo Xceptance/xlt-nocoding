@@ -101,13 +101,14 @@ public class CsvParserNocoding extends Parser
                     case CsvConstants.TYPE_ACTION:
                         // Create a new action with the ActionItemParser
                         final Action currentAction = new ActionItemParser().parse(element);
-                        if (currentAction.getName() == null)
-                        {
-                            currentAction.setName("Action-" + (numberAction + 1));
-                        }
+                        // if (currentAction.getName() == null)
+                        // {
+                        // currentAction.setName("Action-" + (numberAction + 1));
+                        // }
                         // Verify, that lastAction was not an empty line, by asserting that: the action has action items, has a name that is
                         // not empty
-                        if (!currentAction.getActionItems().isEmpty() && !currentAction.getName().isEmpty())
+                        if (!currentAction.getActionItems().isEmpty() && currentAction.getName() != null
+                            && !currentAction.getName().isEmpty())
                         {
                             // Add the action to the scriptitems
                             numberAction++;
