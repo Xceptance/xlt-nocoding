@@ -139,6 +139,10 @@ public class ActionItemParser
             final Validator validator = new Validator(validationName, extractor, textValidator);
             responseItems.add(validator);
         }
+        if (responseStores != null && !responseStores.isEmpty())
+        {
+            responseItems.addAll(responseStores);
+        }
         final Response response = new Response(responseItems);
 
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
