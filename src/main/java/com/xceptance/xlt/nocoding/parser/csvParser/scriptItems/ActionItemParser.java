@@ -52,6 +52,8 @@ public class ActionItemParser
         AbstractValidationMethod textValidator = null;
         String encoded = null;
         final List<AbstractResponseStore> responseStores = new ArrayList<AbstractResponseStore>();
+        boolean hasXpath = false;
+        boolean hasRegexp = false;
 
         // Get an iterator over the fieldNames
         final Iterator<String> fieldNames = node.fieldNames();
@@ -92,11 +94,27 @@ public class ActionItemParser
                         responsecode = value;
                         break;
                     case CsvConstants.XPATH:
-                        extractor = new XpathExtractor(value);
-                        break;
+                        if (!hasRegexp)
+                        {
+                            extractor = new XpathExtractor(value);
+                            hasXpath = true;
+                            break;
+                        }
+                        else
+                        {
+                            throw new IllegalArgumentException("Cannot use Xpath and Regexp together!");
+                        }
                     case CsvConstants.REGEXP:
-                        extractor = new RegexpExtractor(value);
-                        break;
+                        if (!hasXpath)
+                        {
+                            extractor = new RegexpExtractor(value);
+                            hasRegexp = true;
+                            break;
+                        }
+                        else
+                        {
+                            throw new IllegalArgumentException("Cannot use Xpath and Regexp together!");
+                        }
                     case CsvConstants.TEXT:
                         textValidator = new MatchesValidator(value);
                         break;

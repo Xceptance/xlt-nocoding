@@ -96,4 +96,9 @@ public class XhrSubrequest extends AbstractSubrequest
         ActionItemUtil.fillDefaultData(actionItems, context);
     }
 
+    public List<AbstractActionItem> getActionItems()
+    {
+        return actionItems;
+    }
+
 }

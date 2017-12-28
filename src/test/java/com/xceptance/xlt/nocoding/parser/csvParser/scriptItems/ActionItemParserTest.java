@@ -24,6 +24,7 @@ public class ActionItemParserTest extends AbstractScriptItemParserTest
     @Test
     public void testFullParse()
     {
+        final String type = CsvConstants.TYPE_ACTION;
         final String name = "TestAction";
         final String url = "url";
         final String method = "GET";
@@ -37,7 +38,7 @@ public class ActionItemParserTest extends AbstractScriptItemParserTest
         final String xpath3 = "./h3";
         final JsonNodeFactory nodeFactory = new JsonNodeFactory(false);
         final ObjectNode actionNodeContent = nodeFactory.objectNode();
-        actionNodeContent.put(CsvConstants.TYPE, CsvConstants.TYPE_ACTION);
+        actionNodeContent.put(CsvConstants.TYPE, type);
         actionNodeContent.put(CsvConstants.NAME, name);
         actionNodeContent.put(CsvConstants.URL, url);
         actionNodeContent.put(CsvConstants.METHOD, method);
@@ -95,5 +96,22 @@ public class ActionItemParserTest extends AbstractScriptItemParserTest
         responseStore = (ResponseStore) response.getResponseItems().get(3);
         Assert.assertTrue(responseStore.getExtractor() instanceof XpathExtractor);
         Assert.assertEquals(xpath3, responseStore.getExtractor().getExtractionExpression());
+    }
+
+    /**
+     * Verifies that you cannot use XPath and RegExp as header
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testTwoValidations()
+    {
+        final String xpath = "./h1";
+        final String regExp = "<title>";
+        final JsonNodeFactory nodeFactory = new JsonNodeFactory(false);
+        final ObjectNode actionNodeContent = nodeFactory.objectNode();
+        actionNodeContent.put(CsvConstants.REGEXP, regExp);
+        actionNodeContent.put(CsvConstants.XPATH, xpath);
+
+        final ActionItemParser parser = new ActionItemParser();
+        parser.parse(actionNodeContent);
     }
 }
