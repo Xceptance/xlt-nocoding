@@ -139,11 +139,13 @@ public class ActionItemParser
             }
         }
 
+        final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
         final Request request = new Request(url);
         request.setHttpMethod(method);
         request.setParameters(parameters);
         request.setEncodeBody(encoded);
         request.setEncodeParameters(encoded);
+        actionItems.add(request);
 
         final List<AbstractResponseItem> responseItems = new ArrayList<AbstractResponseItem>();
 
@@ -161,11 +163,11 @@ public class ActionItemParser
         {
             responseItems.addAll(responseStores);
         }
-        final Response response = new Response(responseItems);
+        if (responseItems != null && !responseItems.isEmpty())
+        {
+            actionItems.add(new Response(responseItems));
+        }
 
-        final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
-        actionItems.add(request);
-        actionItems.add(response);
         final ActionImpl impl = new ActionImpl(name, actionItems);
         return impl;
     }

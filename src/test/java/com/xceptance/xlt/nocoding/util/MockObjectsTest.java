@@ -6,7 +6,7 @@ import org.junit.Test;
 
 public class MockObjectsTest
 {
-    String urlString = "http://localhost:8080";
+    String urlString = "http://localhost:8443";
 
     String urlStringGoogle = "https://www.google.de";
 
