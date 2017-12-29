@@ -135,8 +135,6 @@ public class CsvParserNocodingTest extends ParserTest
         final CsvMapper mapper = new CsvMapper();
 
         // Configure mapper:
-        // Needed so we read everything with readTree
-        // Needed so the comments are skipped
         mapper.enable(Feature.ALLOW_YAML_COMMENTS);
         mapper.enable(CsvParser.Feature.SKIP_EMPTY_LINES);
         mapper.enable(CsvParser.Feature.WRAP_AS_ARRAY);
