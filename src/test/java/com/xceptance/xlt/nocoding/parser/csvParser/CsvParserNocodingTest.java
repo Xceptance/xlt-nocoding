@@ -79,16 +79,15 @@ public class CsvParserNocodingTest extends ParserTest
     }
 
     /**
-     * Verifies CsvFeature.SKIP_EMTPY_LINES works, cannot work due to
-     * https://github.com/FasterXML/jackson-dataformats-text/issues/15
+     * Verifies CsvFeature.SKIP_EMTPY_LINES skips empty lines<br>
+     * Fails until https://github.com/FasterXML/jackson-dataformats-text/issues/15 is closed
      * 
      * @throws IOException
      */
     @Test
-    public void testSkipEmtpyLines() throws IOException
+    public void testSkipEmtpyLinesWithNewLine() throws IOException
     {
         final String csv = "Name, URL, RegExp\n" + "#Some comment\n" + "\n" + "ActionName, ActionUrl, ActionRegExp";
-
         final CsvMapper mapper = new CsvMapper();
 
         // Configure mapper:
@@ -110,13 +109,58 @@ public class CsvParserNocodingTest extends ParserTest
         {
             final JsonNode node = iterator.next();
             final Iterator<String> fieldNames = node.fieldNames();
+            int nodeCount = 0;
             while (fieldNames.hasNext())
             {
                 final String fieldName = fieldNames.next();
-                Assert.assertFalse("Empty name node found", node.get(fieldName).asText().isEmpty());
+                if (nodeCount == 0)
+                {
+                    Assert.assertFalse("Empty name node found", node.get(fieldName).asText().isEmpty());
+                }
             }
+            nodeCount++;
         }
+    }
 
+    /**
+     * Verifies CsvFeature.SKIP_EMTPY_LINES doesn't skip fully defined empty lines<br>
+     * Fails until https://github.com/FasterXML/jackson-dataformats-text/issues/15 is closed
+     * 
+     * @throws IOException
+     */
+    @Test
+    public void testSkipEmtpyLinesWithEmptyData() throws IOException
+    {
+        final String csv = "Name, URL, RegExp\n" + "#Some comment\n" + ",,,\n" + "ActionName, ActionUrl, ActionRegExp";
+        final CsvMapper mapper = new CsvMapper();
+
+        // Configure mapper:
+        // Needed so we read everything with readTree
+        // Needed so the comments are skipped
+        mapper.enable(Feature.ALLOW_YAML_COMMENTS);
+        mapper.enable(CsvParser.Feature.SKIP_EMPTY_LINES);
+        mapper.enable(CsvParser.Feature.WRAP_AS_ARRAY);
+
+        // Create a schema that uses the first line as header
+        final CsvSchema schema = mapper.schemaWithHeader();
+        // mapper.setPropertyNamingStrategy(s);
+        final MappingIterator<JsonNode> iterator = mapper.readerFor(JsonNode.class).with(schema).readValues(csv);
+
+        int nodeCount = 0;
+        while (iterator.hasNext())
+        {
+            final JsonNode node = iterator.next();
+            final Iterator<String> fieldNames = node.fieldNames();
+            while (fieldNames.hasNext())
+            {
+                final String fieldName = fieldNames.next();
+                if (nodeCount != 0)
+                {
+                    Assert.assertFalse("Empty name node found", node.get(fieldName).asText().isEmpty());
+                }
+            }
+            nodeCount++;
+        }
     }
 
 }
