@@ -54,6 +54,7 @@ public class XhrSubrequest extends AbstractSubrequest
 
         // Assert that the order of Request, Response, Subrequest is correct
         ActionItemUtil.assertOrder(actionItems);
+        fillDefaultData(localContext);
 
         // Get the request
         final Request request = ((Request) actionItems.iterator().next());
