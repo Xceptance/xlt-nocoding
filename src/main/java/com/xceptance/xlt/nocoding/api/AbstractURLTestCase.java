@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -201,8 +202,8 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
             if (new File(csvPath).isFile())
             {
                 pathToFile = csvPath;
-                parser = new CsvParserNocoding(pathToFile);
-                // throw new NotImplementedException("Csv not yet implemented.");
+                // parser = new CsvParserNocoding(pathToFile);
+                throw new NotImplementedException("Csv not yet implemented.");
             }
         }
         else
