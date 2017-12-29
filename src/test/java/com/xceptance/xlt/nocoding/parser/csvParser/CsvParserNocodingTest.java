@@ -1,10 +1,18 @@
 package com.xceptance.xlt.nocoding.parser.csvParser;
 
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonParser.Feature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.MappingIterator;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvParser;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.ParserTest;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
@@ -68,6 +76,47 @@ public class CsvParserNocodingTest extends ParserTest
         {
             Assert.assertEquals(url, urlOfList);
         }
+    }
+
+    /**
+     * Verifies CsvFeature.SKIP_EMTPY_LINES works, cannot work due to
+     * https://github.com/FasterXML/jackson-dataformats-text/issues/15
+     * 
+     * @throws IOException
+     */
+    @Test
+    public void testSkipEmtpyLines() throws IOException
+    {
+        final String csv = "Name, URL, RegExp\n" + "#Some comment\n" + "\n" + "ActionName, ActionUrl, ActionRegExp";
+
+        final CsvMapper mapper = new CsvMapper();
+
+        // Configure mapper:
+        // Needed so we read everything with readTree
+        // Needed so the comments are skipped
+        mapper.enable(Feature.ALLOW_YAML_COMMENTS);
+        // mapper.enable(CsvParser.Feature.SKIP_EMPTY_LINES);
+        mapper.enable(CsvParser.Feature.WRAP_AS_ARRAY);
+
+        // Create a schema that uses the first line as header
+        final CsvSchema schema = mapper.schemaWithHeader();
+        // mapper.setPropertyNamingStrategy(s);
+        final MappingIterator<JsonNode> iterator = mapper.readerFor(JsonNode.class)
+                                                         .with(CsvParser.Feature.SKIP_EMPTY_LINES)
+                                                         .with(schema)
+                                                         .readValues(csv);
+
+        while (iterator.hasNext())
+        {
+            final JsonNode node = iterator.next();
+            final Iterator<String> fieldNames = node.fieldNames();
+            while (fieldNames.hasNext())
+            {
+                final String fieldName = fieldNames.next();
+                Assert.assertFalse("Empty name node found", node.get(fieldName).asText().isEmpty());
+            }
+        }
+
     }
 
 }

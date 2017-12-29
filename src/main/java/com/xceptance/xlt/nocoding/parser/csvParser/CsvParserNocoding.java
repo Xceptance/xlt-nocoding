@@ -58,8 +58,9 @@ public class CsvParserNocoding extends Parser
         // Needed so we read everything with readTree
         mapper.enable(CsvParser.Feature.WRAP_AS_ARRAY);
         // Needed so the comments are skipped
-        mapper.configure(Feature.ALLOW_YAML_COMMENTS, true);
-        mapper.configure(CsvParser.Feature.SKIP_EMPTY_LINES, true);
+        mapper.enable(Feature.ALLOW_YAML_COMMENTS);
+        // Feature exists but not implemented, see https://github.com/FasterXML/jackson-dataformats-text/issues/15
+        mapper.enable(CsvParser.Feature.SKIP_EMPTY_LINES);
 
         // Create a schema that uses the first line as header
         final CsvSchema schema = mapper.schemaWithHeader();
