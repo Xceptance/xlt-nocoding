@@ -44,6 +44,7 @@ public class ActionItemParser extends AbstractScriptItemParser
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>(3);
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>(1);
 
+        // TODO root.elements? wieso? -> durch fieldNames ersetzen?
         // Create a jsonNode iterator so we can iterate over the ArrayNode
         final Iterator<JsonNode> iterator = root.elements();
 

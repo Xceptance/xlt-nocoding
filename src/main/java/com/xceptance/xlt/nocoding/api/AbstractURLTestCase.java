@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +15,8 @@ import com.xceptance.xlt.api.tests.AbstractTestCase;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.parser.Parser;
+import com.xceptance.xlt.nocoding.parser.csvParser.CsvParserNocoding;
+import com.xceptance.xlt.nocoding.parser.csvParser.apache.ApacheCsvParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.util.NoCodingPropertyAdmin;
@@ -201,8 +202,9 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
             if (new File(csvPath).isFile())
             {
                 pathToFile = csvPath;
+                parser = new ApacheCsvParser(pathToFile);
                 // parser = new CsvParserNocoding(pathToFile);
-                throw new NotImplementedException("Csv not yet implemented.");
+                // throw new NotImplementedException("Csv not yet implemented.");
             }
         }
         else

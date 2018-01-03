@@ -27,7 +27,6 @@ public class StaticItemParser
     {
         // Initialize variables
         final List<String> urls = new ArrayList<String>();
-        String encoded = null;
 
         // Get an iterator over the fieldNames
         final Iterator<String> fieldNames = node.fieldNames();
@@ -52,9 +51,6 @@ public class StaticItemParser
                         }
                         // Add the url to the list of urls
                         urls.add(url);
-                        break;
-                    case CsvConstants.ENCODED:
-                        encoded = ParserUtils.readValue(node, fieldName);
                         break;
 
                     default:
