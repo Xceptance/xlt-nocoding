@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.parser.csvParser.apache;
+package com.xceptance.xlt.nocoding.parser.csvParser;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -10,18 +10,17 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 
 import com.xceptance.xlt.nocoding.parser.Parser;
-import com.xceptance.xlt.nocoding.parser.csvParser.CsvConstants;
-import com.xceptance.xlt.nocoding.parser.csvParser.apache.scriptItems.ActionItemParser;
-import com.xceptance.xlt.nocoding.parser.csvParser.apache.scriptItems.StaticItemParser;
-import com.xceptance.xlt.nocoding.parser.csvParser.apache.scriptItems.XhrItemParser;
+import com.xceptance.xlt.nocoding.parser.csvParser.scriptItems.ActionItemParser;
+import com.xceptance.xlt.nocoding.parser.csvParser.scriptItems.StaticItemParser;
+import com.xceptance.xlt.nocoding.parser.csvParser.scriptItems.XhrItemParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.Action;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
 
-public class ApacheCsvParser extends Parser
+public class CsvParser extends Parser
 {
 
-    public ApacheCsvParser(final String pathToFile)
+    public CsvParser(final String pathToFile)
     {
         super(pathToFile);
     }

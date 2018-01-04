@@ -15,8 +15,7 @@ import com.xceptance.xlt.api.tests.AbstractTestCase;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.parser.Parser;
-import com.xceptance.xlt.nocoding.parser.csvParser.JacksonCsvParser;
-import com.xceptance.xlt.nocoding.parser.csvParser.apache.ApacheCsvParser;
+import com.xceptance.xlt.nocoding.parser.csvParser.CsvParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.util.NoCodingPropertyAdmin;
@@ -202,8 +201,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
             if (new File(csvPath).isFile())
             {
                 pathToFile = csvPath;
-                parser = new ApacheCsvParser(pathToFile);
-                // parser = new CsvParserNocoding(pathToFile);
+                parser = new CsvParser(pathToFile);
                 // throw new NotImplementedException("Csv not yet implemented.");
             }
         }

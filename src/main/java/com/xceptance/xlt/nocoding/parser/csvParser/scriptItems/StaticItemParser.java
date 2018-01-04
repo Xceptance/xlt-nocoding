@@ -4,61 +4,45 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import org.apache.commons.csv.CSVRecord;
+
 import com.xceptance.xlt.nocoding.parser.csvParser.CsvConstants;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
-import com.xceptance.xlt.nocoding.util.ParserUtils;
 
-/**
- * Parses a node to a {@link StaticSubrequest}
- * 
- * @author ckeiner
- */
 public class StaticItemParser
 {
 
-    /**
-     * Parses the node to a {@link StaticSubrequest}
-     * 
-     * @param node
-     * @return
-     */
-    public StaticSubrequest parse(final JsonNode node)
+    public StaticSubrequest parse(final CSVRecord record)
     {
         // Initialize variables
         final List<String> urls = new ArrayList<String>();
 
-        // Get an iterator over the fieldNames
-        final Iterator<String> fieldNames = node.fieldNames();
-        // While there are still fieldNames
-        while (fieldNames.hasNext())
+        // Build an iterator over the headers
+        final Iterator<String> headerIterator = record.toMap().keySet().iterator();
+        while (headerIterator.hasNext())
         {
-            // Get the next fieldName
-            final String fieldName = fieldNames.next();
-            // Ignore every field that is null
-            if (!node.get(fieldName).isNull())
-            {
-                switch (fieldName)
-                {
-                    case CsvConstants.URL:
-                        // Read the value and save it in url
-                        String url = ParserUtils.readValue(node, fieldName).trim();
-                        // Remove quotation marks in the beginning and end
-                        final String quotationMark = "\"";
-                        if (url.startsWith(quotationMark) && url.endsWith(quotationMark))
-                        {
-                            url = url.substring(1, url.length() - 1);
-                        }
-                        // Add the url to the list of urls
-                        urls.add(url);
-                        break;
+            final String header = headerIterator.next();
+            final String value = record.get(header);
 
-                    default:
-                        break;
-                }
+            switch (header)
+            {
+                case CsvConstants.URL:
+                    // Read the value and save it in url
+                    String url = value.trim();
+                    // Remove quotation marks in the beginning and end
+                    final String quotationMark = "\"";
+                    if (url.startsWith(quotationMark) && url.endsWith(quotationMark))
+                    {
+                        url = url.substring(1, url.length() - 1);
+                    }
+                    // Add the url to the list of urls
+                    urls.add(url);
+                    break;
+
+                default:
+                    break;
             }
         }
-        // Return the StaticSubrequest
         return new StaticSubrequest(urls);
     }
 

@@ -5,7 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import org.apache.commons.csv.CSVRecord;
+
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.parser.csvParser.CsvConstants;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
@@ -23,24 +24,11 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.store.AbstractRespo
 import com.xceptance.xlt.nocoding.scriptItem.action.response.store.ResponseStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.AbstractValidationMethod;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.MatchesValidator;
-import com.xceptance.xlt.nocoding.util.ParserUtils;
 
-/**
- * Parses an action item to {@link Action}.
- * 
- * @author ckeiner
- */
 public class ActionItemParser
 {
 
-    /**
-     * Parses the action content in a node to an {@link Action}
-     * 
-     * @param node
-     *            The node the actionItem is at
-     * @return
-     */
-    public Action parse(final JsonNode node)
+    public Action parse(final CSVRecord record)
     {
         // Initialize all needed variables
         String name = null;
@@ -55,90 +43,119 @@ public class ActionItemParser
         boolean hasXpath = false;
         boolean hasRegexp = false;
 
-        // Get an iterator over the fieldNames
-        final Iterator<String> fieldNames = node.fieldNames();
-        // While there are still fieldNames available
-        while (fieldNames.hasNext())
+        // Build an iterator over the headers
+        final Iterator<String> headerIterator = record.toMap().keySet().iterator();
+        while (headerIterator.hasNext())
         {
-            // Get the next fieldName
-            final String fieldName = fieldNames.next();
-            // Get the value without whitespaces in the beginning and end
-            final String value = ParserUtils.readValue(node, fieldName).trim();
-            // If there really is a value and it is not empty
-            if (value != null && !value.isEmpty())
+            // Get the next header
+            final String header = headerIterator.next();
+            // Verify that the header is permitted
+            if (!CsvConstants.isPermittedHeaderField(header))
             {
-                switch (fieldName)
-                {
-                    case CsvConstants.TYPE:
-                        // Do nothing
+                throw new IllegalArgumentException(header + "isn't an allowed header!");
+            }
+            // Get the value
+            final String value = record.get(header);
+            // If the value is null or empty, discard it
+            if (value == null || value.isEmpty())
+            {
+                continue;
+            }
+
+            // Differentiate between the headers
+            switch (header)
+            {
+                case CsvConstants.TYPE:
+                    // Do nothing
+                    break;
+                case CsvConstants.NAME:
+                    name = value;
+                    break;
+                case CsvConstants.URL:
+                    url = value;
+                    final String quotationMark = "\"";
+                    // Remove quotation marks at the beginning and end of the url
+                    if (url.startsWith(quotationMark) && url.endsWith(quotationMark))
+                    {
+                        url = url.substring(1, url.length() - 1);
+                    }
+                    break;
+                case CsvConstants.METHOD:
+                    method = value;
+                    break;
+                case CsvConstants.PARAMETERS:
+                    parameters = readParameters(value);
+                    break;
+                case CsvConstants.RESPONSECODE:
+                    responsecode = value;
+                    break;
+                case CsvConstants.XPATH:
+                    if (!hasRegexp)
+                    {
+                        extractor = new XpathExtractor(value);
+                        hasXpath = true;
                         break;
-                    case CsvConstants.NAME:
-                        name = value;
+                    }
+                    else
+                    {
+                        throw new IllegalArgumentException("Cannot use Xpath and Regexp together!");
+                    }
+                case CsvConstants.REGEXP:
+                    if (!hasXpath)
+                    {
+                        extractor = new RegexpExtractor(value);
+                        hasRegexp = true;
                         break;
-                    case CsvConstants.URL:
-                        url = value;
-                        final String quotationMark = "\"";
-                        // Remove quotation marks at the beginning and end of the url
-                        if (url.startsWith(quotationMark) && url.endsWith(quotationMark))
-                        {
-                            url = url.substring(1, url.length() - 1);
-                        }
-                        break;
-                    case CsvConstants.METHOD:
-                        method = value;
-                        break;
-                    case CsvConstants.PARAMETERS:
-                        parameters = readParameters(value);
-                        break;
-                    case CsvConstants.RESPONSECODE:
-                        responsecode = value;
-                        break;
-                    case CsvConstants.XPATH:
-                        if (!hasRegexp)
-                        {
-                            extractor = new XpathExtractor(value);
-                            hasXpath = true;
-                            break;
-                        }
-                        else
-                        {
-                            throw new IllegalArgumentException("Cannot use Xpath and Regexp together!");
-                        }
-                    case CsvConstants.REGEXP:
+                    }
+                    else
+                    {
+                        throw new IllegalArgumentException("Cannot use Xpath and Regexp together!");
+                    }
+                case CsvConstants.TEXT:
+                    textValidator = new MatchesValidator(value);
+                    break;
+                case CsvConstants.ENCODED:
+                    encoded = value;
+                    break;
+
+                default:
+                    // If the fieldName contains either REGEXP_GETTER_PREFIX and XPath isn't used
+                    if (header.contains(CsvConstants.REGEXP_GETTER_PREFIX) && !hasXpath)
+                    {
                         if (!hasXpath)
                         {
-                            extractor = new RegexpExtractor(value);
+                            responseStores.add(handleStore(header, value));
                             hasRegexp = true;
-                            break;
                         }
                         else
                         {
                             throw new IllegalArgumentException("Cannot use Xpath and Regexp together!");
                         }
-                    case CsvConstants.TEXT:
-                        textValidator = new MatchesValidator(value);
-                        break;
-                    case CsvConstants.ENCODED:
-                        encoded = value;
-                        break;
-
-                    default:
-                        // If the fieldName contains either REGEXP_GETTER_PREFIX or XPATH_GETTER_PREFIX
-                        if (fieldName.contains(CsvConstants.REGEXP_GETTER_PREFIX) || fieldName.contains(CsvConstants.XPATH_GETTER_PREFIX))
+                    }
+                    // If the fieldName contains either XPATH_GETTER_PREFIX and Regexp isn't used
+                    else if (header.contains(CsvConstants.XPATH_GETTER_PREFIX) && !hasRegexp)
+                    {
+                        // Create a response store
+                        if (!hasRegexp)
                         {
-                            // Create a response store
-                            responseStores.add(handleStore(fieldName, value));
+                            responseStores.add(handleStore(header, value));
+                            hasXpath = true;
                         }
-                        // In every other case, throw an error
                         else
                         {
-                            // Throw an exception
-                            throw new IllegalArgumentException("Unknown header: " + fieldName);
+                            throw new IllegalArgumentException("Cannot use Xpath and Regexp together!");
                         }
-                }
+                    }
+                    // In every other case, throw an error
+                    else
+                    {
+                        // Throw an exception
+                        throw new IllegalArgumentException("Unknown or illegal header: " + header);
+                    }
             }
         }
 
+        // Build an action with the data
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
         final Request request = new Request(url);
         request.setHttpMethod(method);
@@ -168,6 +185,10 @@ public class ActionItemParser
             actionItems.add(new Response(responseItems));
         }
 
+        if (name == null || name.isEmpty())
+        {
+            name = "Action-" + record.getRecordNumber();
+        }
         final ActionImpl impl = new ActionImpl(name, actionItems);
         return impl;
     }
