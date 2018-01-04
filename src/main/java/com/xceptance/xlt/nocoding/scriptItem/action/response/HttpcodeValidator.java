@@ -36,7 +36,7 @@ public class HttpcodeValidator extends AbstractResponseItem
      * {@link HttpResponseCodeValidator}.
      */
     @Override
-    public void execute(final Context context) throws Exception
+    public void execute(final Context<?> context) throws Exception
     {
         fillDefaultData(context);
         resolveValues(context);
@@ -47,7 +47,7 @@ public class HttpcodeValidator extends AbstractResponseItem
      * Uses the default data for httpcode if {@link #httpcode} is null or empty
      */
     @Override
-    protected void fillDefaultData(final Context context)
+    protected void fillDefaultData(final Context<?> context)
     {
         if (httpcode == null || httpcode.isEmpty())
         {
@@ -60,7 +60,7 @@ public class HttpcodeValidator extends AbstractResponseItem
      * 
      * @param context
      */
-    private void resolveValues(final Context context)
+    private void resolveValues(final Context<?> context)
     {
         httpcode = context.resolveString(httpcode);
     }

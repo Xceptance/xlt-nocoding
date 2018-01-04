@@ -74,7 +74,7 @@ public abstract class Action implements ScriptItem
      * @param context
      *            The {@link Context} with the {@link DataStorage}.
      */
-    protected void fillDefaultData(final Context context)
+    protected void fillDefaultData(final Context<?> context)
     {
         if (name == null || name.isEmpty())
         {

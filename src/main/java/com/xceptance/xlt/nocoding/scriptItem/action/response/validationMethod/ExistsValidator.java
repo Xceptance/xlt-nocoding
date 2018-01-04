@@ -16,7 +16,7 @@ public class ExistsValidator extends AbstractValidationMethod
      * Validates that {@link #getExpressionToValidate()} is neither null nor empty.
      */
     @Override
-    public void execute(final Context context)
+    public void execute(final Context<?> context)
     {
         resolveValues(context);
         Assert.assertNotNull("Expression is null", getExpressionToValidate());
@@ -27,7 +27,7 @@ public class ExistsValidator extends AbstractValidationMethod
      * Does not resolve anything but must be overridden.
      */
     @Override
-    protected void resolveValues(final Context context)
+    protected void resolveValues(final Context<?> context)
     {
         // We do not need to resolve anything here
     }

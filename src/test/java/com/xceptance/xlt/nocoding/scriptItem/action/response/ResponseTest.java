@@ -21,7 +21,7 @@ import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
  */
 public class ResponseTest
 {
-    Context context;
+    Context<?> context;
 
     MockObjects mockObjects;
 

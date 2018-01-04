@@ -33,7 +33,7 @@ public class TextValidator extends AbstractValidationMethod
      * result in {@link #getExpressionToValidate()} equals {@link #validationExpression}
      */
     @Override
-    public void execute(final Context context)
+    public void execute(final Context<?> context)
     {
         // Resolve values
         resolveValues(context);
@@ -54,7 +54,7 @@ public class TextValidator extends AbstractValidationMethod
      * Resolves {@link #validationExpression}
      */
     @Override
-    protected void resolveValues(final Context context)
+    protected void resolveValues(final Context<?> context)
     {
         validationExpression = context.resolveString(validationExpression);
     }

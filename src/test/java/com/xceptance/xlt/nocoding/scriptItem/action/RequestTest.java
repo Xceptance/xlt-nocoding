@@ -37,7 +37,7 @@ public class RequestTest
 
     public WebRequest webRequest;
 
-    public Context context;
+    public Context<?> context;
 
     private final String url = "https://localhost:8443/posters/";
 

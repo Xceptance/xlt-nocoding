@@ -31,7 +31,7 @@ public class ParameterInterpreterTest
 {
     private VariableResolver interpreter;
 
-    private Context context;
+    private Context<?> context;
 
     /**
      * Creates a new {@link Context} and stores the {@link Context#getResolver()} in {@link #interpreter}

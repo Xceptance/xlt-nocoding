@@ -18,7 +18,7 @@ import com.xceptance.xlt.nocoding.util.dataStorage.DefaultValues;
  */
 public class DataStorageTest
 {
-    private Context context;
+    private Context<?> context;
 
     /**
      * Creates a new {@link Context}

@@ -22,7 +22,7 @@ public class WebAction extends AbstractWebAction
     /**
      * The context in the current WebAction
      */
-    private final Context context;
+    private final Context<?> context;
 
     /**
      * The main request in this action
@@ -47,7 +47,7 @@ public class WebAction extends AbstractWebAction
      * @param function
      *            A {@link ThrowingConsumer<{@link WebAction}>}
      */
-    public WebAction(final String timerName, final Context context, final List<AbstractActionItem> actionItems,
+    public WebAction(final String timerName, final Context<?> context, final List<AbstractActionItem> actionItems,
         final ThrowingConsumer<WebAction> function)
     {
         super(timerName);
@@ -105,7 +105,7 @@ public class WebAction extends AbstractWebAction
         this.function = function;
     }
 
-    public Context getContext()
+    public Context<?> getContext()
     {
         return context;
     }

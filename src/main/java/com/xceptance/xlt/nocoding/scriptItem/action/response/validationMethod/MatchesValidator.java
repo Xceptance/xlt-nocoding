@@ -38,7 +38,7 @@ public class MatchesValidator extends AbstractValidationMethod
      * it verifies there is at least one result.
      */
     @Override
-    public void execute(final Context context)
+    public void execute(final Context<?> context)
     {
         // Resolve values
         resolveValues(context);
@@ -59,7 +59,7 @@ public class MatchesValidator extends AbstractValidationMethod
      * Resolves {@link #validationExpression}
      */
     @Override
-    protected void resolveValues(final Context context)
+    protected void resolveValues(final Context<?> context)
     {
         validationExpression = context.resolveString(validationExpression);
     }

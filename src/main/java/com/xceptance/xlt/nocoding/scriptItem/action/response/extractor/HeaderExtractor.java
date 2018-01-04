@@ -32,7 +32,7 @@ public class HeaderExtractor extends AbstractExtractor
      * {@link #getExtractionExpression()} via {@link #addResult(String)}.
      */
     @Override
-    public void execute(final Context context)
+    public void execute(final Context<?> context)
     {
         // Resolve variables
         resolveValues(context);

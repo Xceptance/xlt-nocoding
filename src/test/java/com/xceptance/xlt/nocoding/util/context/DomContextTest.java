@@ -8,7 +8,7 @@ import com.xceptance.xlt.api.util.XltProperties;
 public class DomContextTest
 {
 
-    public Context context;
+    public Context<?> context;
 
     @Before
     public void init()
@@ -16,28 +16,16 @@ public class DomContextTest
         context = new DomContext(XltProperties.getInstance());
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void testGetLightWeightPage()
-    {
-        context.getLightWeightPage();
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void testSetLightWeightPage()
-    {
-        context.setLightWeightPage(null);
-    }
-
     @Test
     public void testGetSgmlPage()
     {
-        context.getSgmlPage();
+        context.getPage();
     }
 
     @Test
     public void testSetSgmlPage()
     {
-        context.setSgmlPage(null);
+        context.setPage(null);
     }
 
 }

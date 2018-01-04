@@ -34,7 +34,7 @@ import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
  */
 public class ExtendedValidatorTest
 {
-    private Context context;
+    private Context<?> context;
 
     private XltMockWebConnection webConnection;
 

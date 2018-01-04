@@ -43,7 +43,7 @@ public class ActionImpl extends Action
      * @throws Throwable
      */
     @Override
-    public void execute(final Context context) throws Throwable
+    public void execute(final Context<?> context) throws Throwable
     {
         // Fill default data
         fillDefaultData(context);
@@ -97,7 +97,7 @@ public class ActionImpl extends Action
     public void doExecute(final WebAction action) throws Throwable
     {
         // Extract the context
-        final Context context = action.getContext();
+        final Context<?> context = action.getContext();
         // Extract the action items
         final List<AbstractActionItem> actionItems = action.getActionItems();
 

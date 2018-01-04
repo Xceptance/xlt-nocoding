@@ -47,10 +47,10 @@ public class XhrSubrequest extends AbstractSubrequest
      * the {@link #actionItems}.
      */
     @Override
-    public void execute(final Context context) throws Throwable
+    public void execute(final Context<?> context) throws Throwable
     {
         // Create a new local context, so we do not overwrite the old context
-        final Context localContext = context.buildNewContext();
+        final Context<?> localContext = context.buildNewContext();
 
         // Assert that the order of Request, Response, Subrequest is correct
         ActionItemUtil.assertOrder(actionItems);
@@ -88,7 +88,7 @@ public class XhrSubrequest extends AbstractSubrequest
      * Sets name and request to the default name and request if they aren't not specified
      */
     @Override
-    public void fillDefaultData(final Context context)
+    public void fillDefaultData(final Context<?> context)
     {
         if (name == null || name.isEmpty())
         {

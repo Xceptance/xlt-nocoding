@@ -13,7 +13,7 @@ public class StoreDefaultCookie extends StoreDefault
     }
 
     @Override
-    public void execute(final Context context) throws Throwable
+    public void execute(final Context<?> context) throws Throwable
     {
         // Resolve values
         super.resolveValues(context);

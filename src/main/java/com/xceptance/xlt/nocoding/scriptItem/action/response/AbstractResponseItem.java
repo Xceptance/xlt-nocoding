@@ -19,9 +19,9 @@ public abstract class AbstractResponseItem
      *            The context with the last {@link WebResponse} and {@link DataStorage}
      * @throws Exception
      */
-    public abstract void execute(final Context context) throws Exception;
+    public abstract void execute(final Context<?> context) throws Exception;
 
-    protected void fillDefaultData(final Context context)
+    protected void fillDefaultData(final Context<?> context)
     {
 
     }

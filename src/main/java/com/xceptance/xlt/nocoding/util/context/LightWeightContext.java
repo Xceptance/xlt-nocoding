@@ -23,7 +23,7 @@ import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
  * 
  * @author ckeiner
  */
-public class LightWeightContext extends Context
+public class LightWeightContext extends Context<LightWeightPage>
 {
     /**
      * Cache of the SgmlPage
@@ -35,7 +35,7 @@ public class LightWeightContext extends Context
      * 
      * @param context
      */
-    public LightWeightContext(final Context context)
+    public LightWeightContext(final Context<?> context)
     {
         super(context);
     }
@@ -107,18 +107,18 @@ public class LightWeightContext extends Context
      * @return The current {@link LightWeightPage}
      */
     @Override
-    public LightWeightPage getLightWeightPage()
+    public LightWeightPage getPage()
     {
-        return lightWeightPage;
+        return page;
     }
 
     /**
      * Sets the {@link LightWeightPage}
      */
     @Override
-    public void setLightWeightPage(final LightWeightPage lightWeightPage)
+    public void setPage(final LightWeightPage lightWeightPage)
     {
-        this.lightWeightPage = lightWeightPage;
+        this.page = lightWeightPage;
     }
 
     /**
@@ -137,31 +137,13 @@ public class LightWeightContext extends Context
     {
         if (!webRequest.isXHR())
         {
-            this.setLightWeightPage(this.getWebClient().getLightWeightPage(webRequest));
-            setWebResponse(this.getLightWeightPage().getWebResponse());
+            this.setPage(this.getWebClient().getLightWeightPage(webRequest));
+            setWebResponse(this.getPage().getWebResponse());
         }
         else
         {
             setWebResponse(this.getWebClient().loadWebResponse(webRequest));
         }
-    }
-
-    /**
-     * A SgmlPage cannot exist, therefore it throws an {@link IllegalStateException}
-     */
-    @Override
-    public SgmlPage getSgmlPage()
-    {
-        throw new IllegalStateException("Cannot get SgmlPage in LightWeightMode");
-    }
-
-    /**
-     * A SgmlPage cannot exist, therefore it throws an {@link IllegalStateException}
-     */
-    @Override
-    public void setSgmlPage(final SgmlPage sgmlPage)
-    {
-        throw new IllegalStateException("Cannot set SgmlPage in LightWeightMode");
     }
 
     /**
@@ -173,9 +155,9 @@ public class LightWeightContext extends Context
     public void appendToResultBrowser() throws Exception
     {
         final String name = getWebClient().getTimerName();
-        if (getLightWeightPage() != null)
+        if (getPage() != null)
         {
-            ((SessionImpl) Session.getCurrent()).getRequestHistory().add(getLightWeightPage());
+            ((SessionImpl) Session.getCurrent()).getRequestHistory().add(getPage());
         }
         else
         {
@@ -188,7 +170,7 @@ public class LightWeightContext extends Context
      * @return {@link #LightWeightContext(Context)}
      */
     @Override
-    public Context buildNewContext()
+    public Context<?> buildNewContext()
     {
         return new LightWeightContext(this);
     }

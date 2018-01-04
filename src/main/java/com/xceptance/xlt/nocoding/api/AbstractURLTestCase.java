@@ -48,7 +48,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
     /**
      * The {@link Context} of all <code>ScriptItems</code>
      */
-    private Context context;
+    private Context<?> context;
 
     /**
      * Prepares a test case by parsing the file
@@ -124,7 +124,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
         return itemList;
     }
 
-    public Context getContext()
+    public Context<?> getContext()
     {
         return context;
     }

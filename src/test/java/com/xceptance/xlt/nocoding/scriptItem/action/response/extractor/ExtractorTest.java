@@ -16,7 +16,7 @@ import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
  */
 public abstract class ExtractorTest
 {
-    protected Context context;
+    protected Context<?> context;
 
     protected MockObjects mockObjects;
 

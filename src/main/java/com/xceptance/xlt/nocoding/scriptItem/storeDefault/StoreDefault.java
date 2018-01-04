@@ -53,7 +53,7 @@ public abstract class StoreDefault implements ScriptItem
      * @param context
      *            The {@link Context} with the {@link VariableResolver} and {@link DataStorage}
      */
-    protected void resolveValues(final Context context)
+    protected void resolveValues(final Context<?> context)
     {
         value = context.resolveString(getValue());
     }

@@ -202,7 +202,7 @@ public class Request extends AbstractActionItem
      * @param context
      *            The {@link Context} with the {@link DataStorage}
      */
-    void fillDefaultData(final Context context)
+    void fillDefaultData(final Context<?> context)
     {
         // Set default URL if it isn't specified
         if (getUrl() == null || getUrl().isEmpty())
@@ -310,7 +310,7 @@ public class Request extends AbstractActionItem
      *            The {@link Context} with the {@link DataStorage}
      * @throws InvalidArgumentException
      */
-    void resolveValues(final Context context) throws InvalidArgumentException
+    void resolveValues(final Context<?> context) throws InvalidArgumentException
     {
         String resolvedValue;
 
@@ -393,7 +393,7 @@ public class Request extends AbstractActionItem
      * @throws Exception
      */
     @Override
-    public void execute(final Context context) throws Exception
+    public void execute(final Context<?> context) throws Exception
     {
         // fill in the default data if the attribute is not specified
         fillDefaultData(context);
@@ -427,7 +427,7 @@ public class Request extends AbstractActionItem
      * @throws InvalidArgumentException
      * @throws UnsupportedEncodingException
      */
-    WebRequest buildWebRequest(final Context context) throws MalformedURLException, InvalidArgumentException, UnsupportedEncodingException
+    WebRequest buildWebRequest(final Context<?> context) throws MalformedURLException, InvalidArgumentException, UnsupportedEncodingException
     {
         // Create a URL object
         final URL url = new URL(this.url);

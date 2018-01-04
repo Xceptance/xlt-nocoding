@@ -47,7 +47,7 @@ public abstract class AbstractExtractor
      * @param context
      *            The {@link Context} to use
      */
-    public abstract void execute(Context context);
+    public abstract void execute(Context<?> context);
 
     /**
      * Adds a string to the result list.
@@ -66,7 +66,7 @@ public abstract class AbstractExtractor
      * @param context
      *            The {@link Context} with the {@link VariableResolver} and {@link DataStorage}.
      */
-    protected void resolveValues(final Context context)
+    protected void resolveValues(final Context<?> context)
     {
         extractionExpression = context.resolveString(extractionExpression);
     }

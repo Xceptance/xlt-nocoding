@@ -60,7 +60,7 @@ public class XmlJsonXpathExtractor extends AbstractExtractor
     }
 
     @Override
-    public void execute(final Context context)
+    public void execute(final Context<?> context)
     {
         try
         {
@@ -72,7 +72,7 @@ public class XmlJsonXpathExtractor extends AbstractExtractor
         }
     }
 
-    private List<String> getByXPathFromInputSource(final Context context)
+    private List<String> getByXPathFromInputSource(final Context<?> context)
         throws XPathExpressionException, ParserConfigurationException, SAXException, IOException
     {
         loadContentFromWebResponseIfNecessary(context);
@@ -89,7 +89,7 @@ public class XmlJsonXpathExtractor extends AbstractExtractor
      * @throws SAXException
      * @throws IOException
      */
-    private void loadContentFromWebResponseIfNecessary(final Context context) throws ParserConfigurationException, SAXException, IOException
+    private void loadContentFromWebResponseIfNecessary(final Context<?> context) throws ParserConfigurationException, SAXException, IOException
     {
         if (xmlInputSource == null)
         {
@@ -103,7 +103,7 @@ public class XmlJsonXpathExtractor extends AbstractExtractor
         }
     }
 
-    private void loadXMLSourceFromWebResponse(final Context context) throws ParserConfigurationException, SAXException, IOException
+    private void loadXMLSourceFromWebResponse(final Context<?> context) throws ParserConfigurationException, SAXException, IOException
     {
         XltLogger.runTimeLogger.debug("Loading content from WebResponse");
         final String contentType = HEADERCONTENTTYPES.get(context.getWebResponse().getContentType());

@@ -14,7 +14,7 @@ import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 public abstract class StoreDefaultTest
 {
 
-    public Context context;
+    public Context<?> context;
 
     /**
      * Creates a new {@link Context}

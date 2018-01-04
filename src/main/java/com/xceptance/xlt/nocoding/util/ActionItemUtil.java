@@ -70,7 +70,7 @@ public class ActionItemUtil
      *            The {@link Context} with the {@link DataStorage}.
      * @return
      */
-    public static void fillDefaultData(final List<AbstractActionItem> actionItems, final Context context)
+    public static void fillDefaultData(final List<AbstractActionItem> actionItems, final Context<?> context)
     {
         boolean hasRequest = false;
         boolean hasResponse = false;

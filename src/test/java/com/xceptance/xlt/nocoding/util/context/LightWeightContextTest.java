@@ -8,7 +8,7 @@ import com.xceptance.xlt.api.util.XltProperties;
 public class LightWeightContextTest
 {
 
-    public Context context;
+    public Context<?> context;
 
     @Before
     public void init()
@@ -19,25 +19,13 @@ public class LightWeightContextTest
     @Test
     public void testGetLightWeightPage()
     {
-        context.getLightWeightPage();
+        context.getPage();
     }
 
     @Test
     public void testSetLightWeightPage()
     {
-        context.setLightWeightPage(null);
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void testGetSgmlPage()
-    {
-        context.getSgmlPage();
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void testSetSgmlPage()
-    {
-        context.setSgmlPage(null);
+        context.setPage(null);
     }
 
 }

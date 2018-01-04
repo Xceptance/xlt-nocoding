@@ -17,7 +17,7 @@ public class XpathExtractor extends AbstractExtractor
     }
 
     @Override
-    public void execute(final Context context)
+    public void execute(final Context<?> context)
     {
         final AbstractExtractor extractor = getExtractor(context);
         extractor.execute(context);
@@ -31,7 +31,7 @@ public class XpathExtractor extends AbstractExtractor
      *            The {@link Context} with the WebResponse in it
      * @return {@link HtmlTextXpathExtractor} or {@link XmlJsonXpathExtractor}, depending on the content type
      */
-    AbstractExtractor getExtractor(final Context context)
+    AbstractExtractor getExtractor(final Context<?> context)
     {
         final String content = context.getWebResponse().getContentType();
         AbstractExtractor extractor = null;

@@ -30,7 +30,7 @@ import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
  */
 public class ValidatorTest
 {
-    public Context context;
+    public Context<?> context;
 
     public MockObjects mockObjects;
 

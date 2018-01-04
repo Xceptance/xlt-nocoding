@@ -54,7 +54,7 @@ public class VariableResolver
      * @param context
      * @return The resolved string with no variables
      */
-    public String resolveString(final String toResolve, final Context context)
+    public String resolveString(final String toResolve, final Context<?> context)
     {
         final List<String> resolvedValues = new ArrayList<String>();
         String resolvedValue = resolveExpression(toResolve, false, context).getLeft();
@@ -92,7 +92,7 @@ public class VariableResolver
      * @param context
      * @return A pair consisting of the resolved value and the length of the expression that was resolved
      */
-    public Pair<String, Integer> resolveExpression(final String expression, final boolean mustBeResolved, final Context context)
+    public Pair<String, Integer> resolveExpression(final String expression, final boolean mustBeResolved, final Context<?> context)
     {
         String resolvedValue = "";
         char current;
@@ -173,7 +173,7 @@ public class VariableResolver
      * @return The value provided in either {@link DataStorage}, beanshell, or the property files. If no value was found,
      *         returns "${variableName}"
      */
-    private String resolveVariable(final String variableName, final Context context)
+    private String resolveVariable(final String variableName, final Context<?> context)
     {
         // Try to resolve it in the dataStorage
         String resolvedValue = context.getVariables().get(variableName);

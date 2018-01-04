@@ -51,7 +51,7 @@ public class HtmlTextXpathExtractor extends AbstractExtractor
     }
 
     @Override
-    public void execute(final Context context)
+    public void execute(final Context<?> context)
     {
         if (context instanceof LightWeightContext)
         {
@@ -59,7 +59,7 @@ public class HtmlTextXpathExtractor extends AbstractExtractor
         }
         else if (context instanceof DomContext)
         {
-            htmlPage = context.getSgmlPage();
+            htmlPage = ((DomContext) context).getPage();
         }
         else
         {

@@ -13,7 +13,7 @@ import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
  */
 public abstract class ValidationMethodTest
 {
-    protected Context context;
+    protected Context<?> context;
 
     /**
      * Creates a new {@link Context}

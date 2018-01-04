@@ -23,7 +23,7 @@ import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
  */
 public class LightWeightActionTest
 {
-    Context context;
+    Context<?> context;
 
     /**
      * Creates a new {@link Context}

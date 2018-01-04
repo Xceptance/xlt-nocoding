@@ -19,7 +19,7 @@ public class HtmlTextXpathExtractorTest extends ExtractorTest
     {
         context = new DomContext(context);
         mockObjects.loadHtmlPage();
-        context.setSgmlPage(mockObjects.getHtmlPage());
+        ((DomContext) context).setPage(mockObjects.getHtmlPage());
         final HtmlTextXpathExtractor xpathExtractor = new HtmlTextXpathExtractor(mockObjects.xPathString);
         xpathExtractor.execute(context);
         final List<String> results = xpathExtractor.getResult();

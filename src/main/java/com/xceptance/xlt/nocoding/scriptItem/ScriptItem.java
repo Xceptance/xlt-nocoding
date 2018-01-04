@@ -15,5 +15,5 @@ public interface ScriptItem
      *            The current {@link Context}
      * @throws Throwable
      */
-    public void execute(Context context) throws Throwable;
+    public void execute(Context<?> context) throws Throwable;
 }

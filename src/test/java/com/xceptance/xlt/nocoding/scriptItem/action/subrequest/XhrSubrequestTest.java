@@ -28,7 +28,7 @@ public class XhrSubrequestTest
 {
     private MockObjects mockObjects;
 
-    private Context context;
+    private Context<?> context;
 
     /**
      * Sets {@link WebResponse} via {@link MockObjects#loadResponse()} in {@link Context}

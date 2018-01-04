@@ -14,7 +14,7 @@ import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 public class StaticSubrequestTest
 {
 
-    public Context context;
+    public Context<?> context;
 
     @Before
     public void init()

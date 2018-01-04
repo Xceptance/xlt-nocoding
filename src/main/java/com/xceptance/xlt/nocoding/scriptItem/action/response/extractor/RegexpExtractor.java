@@ -53,7 +53,7 @@ public class RegexpExtractor extends AbstractExtractor
      * specified, it only stores this matching group. Else, it stores every group.
      */
     @Override
-    public void execute(final Context context)
+    public void execute(final Context<?> context)
     {
         final WebResponse webResponse = context.getWebResponse();
         // Resolve variables
@@ -90,7 +90,7 @@ public class RegexpExtractor extends AbstractExtractor
      * Resolves the {@link #getExtractionExpression()} and {@link #group}.
      */
     @Override
-    protected void resolveValues(final Context context)
+    protected void resolveValues(final Context<?> context)
     {
         super.resolveValues(context);
         if (group != null && !group.isEmpty())

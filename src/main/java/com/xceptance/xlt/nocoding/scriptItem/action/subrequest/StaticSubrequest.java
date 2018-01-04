@@ -35,7 +35,7 @@ public class StaticSubrequest extends AbstractSubrequest
      * {@link #urls} are added to the {@link Downloader} via {@link Downloader#addRequest(String)} and then loaded.
      */
     @Override
-    public void execute(final Context context) throws Exception
+    public void execute(final Context<?> context) throws Exception
     {
         // Resolve urls
         resolveValues(context);
@@ -68,7 +68,7 @@ public class StaticSubrequest extends AbstractSubrequest
     }
 
     @Override
-    public void fillDefaultData(final Context context)
+    public void fillDefaultData(final Context<?> context)
     {
         // No need to do anything since there are default static subrequests but no default static urls
 
@@ -79,7 +79,7 @@ public class StaticSubrequest extends AbstractSubrequest
      * 
      * @param context
      */
-    public void resolveValues(final Context context)
+    public void resolveValues(final Context<?> context)
     {
         final List<String> newUrls = new ArrayList<String>();
         for (final String url : urls)

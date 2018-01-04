@@ -46,7 +46,7 @@ public class Response extends AbstractActionItem
      * Fills in default data, then executes every item in {@link #responseItems}
      */
     @Override
-    public void execute(final Context context) throws Throwable
+    public void execute(final Context<?> context) throws Throwable
     {
         // Fill default data
         fillDefaultData(context);
@@ -65,7 +65,7 @@ public class Response extends AbstractActionItem
     /**
      * Adds a {@link HttpcodeValidator} to the {@link #responseItems} if none is specified
      */
-    void fillDefaultData(final Context context)
+    void fillDefaultData(final Context<?> context)
     {
         boolean hasHttpcodeValidator = false;
         // Look for an instance of HttpcodeValidator

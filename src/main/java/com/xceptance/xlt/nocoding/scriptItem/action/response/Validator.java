@@ -55,7 +55,7 @@ public class Validator extends AbstractResponseItem
      * with {@link AbstractExtractor#getResult()} and executes the {@link #method}.
      */
     @Override
-    public void execute(final Context context) throws Exception
+    public void execute(final Context<?> context) throws Exception
     {
         // Execute the extractor
         extractor.execute(context);

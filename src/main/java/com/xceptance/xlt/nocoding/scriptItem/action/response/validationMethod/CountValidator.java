@@ -32,7 +32,7 @@ public class CountValidator extends AbstractValidationMethod
      * {@link #getExpressionToValidate()} has a size of the {@link Integer} value of {@link #count}.
      */
     @Override
-    public void execute(final Context context)
+    public void execute(final Context<?> context)
     {
         // Resolve values
         resolveValues(context);
@@ -52,7 +52,7 @@ public class CountValidator extends AbstractValidationMethod
      * Resolves {@link #count}.
      */
     @Override
-    protected void resolveValues(final Context context)
+    protected void resolveValues(final Context<?> context)
     {
         count = context.resolveString(count);
     }

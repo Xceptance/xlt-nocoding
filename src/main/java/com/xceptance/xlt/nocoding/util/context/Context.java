@@ -1,10 +1,8 @@
 package com.xceptance.xlt.nocoding.util.context;
 
-import com.gargoylesoftware.htmlunit.SgmlPage;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.data.GeneralDataProvider;
-import com.xceptance.xlt.api.htmlunit.LightWeightPage;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.util.NoCodingPropertyAdmin;
@@ -21,7 +19,7 @@ import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
  * 
  * @author ckeiner
  */
-public abstract class Context
+public abstract class Context<T>
 {
     protected final DataStorage dataStorage;
 
@@ -34,14 +32,9 @@ public abstract class Context
     protected NoCodingPropertyAdmin propertyAdmin;
 
     /**
-     * LightWeightPage
+     * The page of the site
      */
-    protected LightWeightPage lightWeightPage;
-
-    /**
-     * LightWeightPage
-     */
-    protected SgmlPage sgmlPage;
+    protected T page;
 
     /**
      * Creates a new {@link Context}, sets default Values in the {@link DataStorage} and configures the {@link XltWebClient}
@@ -78,7 +71,7 @@ public abstract class Context
      * 
      * @param context
      */
-    protected Context(final Context context)
+    protected Context(final Context<?> context)
     {
         this.dataStorage = context.getDataStorage();
         this.webClient = context.getWebClient();
@@ -139,13 +132,9 @@ public abstract class Context
         return propertyAdmin;
     }
 
-    public abstract LightWeightPage getLightWeightPage();
+    public abstract T getPage();
 
-    public abstract void setLightWeightPage(final LightWeightPage lightWeightPage);
-
-    public abstract SgmlPage getSgmlPage();
-
-    public abstract void setSgmlPage(final SgmlPage sgmlPage);
+    public abstract void setPage(final T page);
 
     /*
      * Data Storage
@@ -261,6 +250,6 @@ public abstract class Context
      * 
      * @return
      */
-    public abstract Context buildNewContext();
+    public abstract Context<?> buildNewContext();
 
 }

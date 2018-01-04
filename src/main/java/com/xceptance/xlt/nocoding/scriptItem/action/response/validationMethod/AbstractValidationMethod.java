@@ -23,7 +23,7 @@ public abstract class AbstractValidationMethod
      * @param context
      *            The {@link Context} to use
      */
-    public abstract void execute(Context context);
+    public abstract void execute(Context<?> context);
 
     public List<String> getExpressionToValidate()
     {
@@ -41,6 +41,6 @@ public abstract class AbstractValidationMethod
      * @param context
      *            The {@link Context} to use
      */
-    protected abstract void resolveValues(final Context context);
+    protected abstract void resolveValues(final Context<?> context);
 
 }

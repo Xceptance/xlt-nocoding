@@ -28,7 +28,7 @@ import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
  */
 public class StoreTest
 {
-    private Context context;
+    private Context<?> context;
 
     private XltMockWebConnection webConnection;
 

@@ -21,7 +21,7 @@ import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
  * 
  * @author ckeiner
  */
-public class DomContext extends Context
+public class DomContext extends Context<SgmlPage>
 {
 
     /**
@@ -29,7 +29,7 @@ public class DomContext extends Context
      * 
      * @param context
      */
-    public DomContext(final Context context)
+    public DomContext(final Context<?> context)
     {
         super(context);
     }
@@ -61,39 +61,21 @@ public class DomContext extends Context
     }
 
     /**
-     * A LightWeightPage cannot exist, therefore it throws an {@link IllegalStateException}
-     */
-    @Override
-    public LightWeightPage getLightWeightPage()
-    {
-        throw new IllegalStateException("Cannot get LightWeightPage in DomMode");
-    }
-
-    /**
-     * A LightWeightPage cannot exist, therefore it throws an {@link IllegalStateException}
-     */
-    @Override
-    public void setLightWeightPage(final LightWeightPage lightWeightPage)
-    {
-        throw new IllegalStateException("Cannot set LightWeightPage in DomMode");
-    }
-
-    /**
      * @return The current {@link SgmlPage}
      */
     @Override
-    public SgmlPage getSgmlPage()
+    public SgmlPage getPage()
     {
-        return sgmlPage;
+        return page;
     }
 
     /**
      * Sets the {@link SgmlPage}
      */
     @Override
-    public void setSgmlPage(final SgmlPage sgmlPage)
+    public void setPage(final SgmlPage sgmlPage)
     {
-        this.sgmlPage = sgmlPage;
+        this.page = sgmlPage;
     }
 
     /**
@@ -112,8 +94,8 @@ public class DomContext extends Context
     {
         if (!webRequest.isXHR())
         {
-            setSgmlPage(this.getWebClient().getPage(webRequest));
-            setWebResponse(getSgmlPage().getWebResponse());
+            setPage(this.getWebClient().getPage(webRequest));
+            setWebResponse(getPage().getWebResponse());
         }
         else
         {
@@ -129,9 +111,9 @@ public class DomContext extends Context
     public void appendToResultBrowser() throws Exception
     {
         final String name = getWebClient().getTimerName();
-        if (getSgmlPage() instanceof HtmlPage)
+        if (getPage() instanceof HtmlPage)
         {
-            ((SessionImpl) Session.getCurrent()).getRequestHistory().add(name, (HtmlPage) sgmlPage);
+            ((SessionImpl) Session.getCurrent()).getRequestHistory().add(name, (HtmlPage) getPage());
         }
         else
         {
@@ -144,7 +126,7 @@ public class DomContext extends Context
      * @return {@link #DomContext(Context)}
      */
     @Override
-    public Context buildNewContext()
+    public DomContext buildNewContext()
     {
         return new DomContext(this);
     }

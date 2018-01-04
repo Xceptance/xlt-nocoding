@@ -36,7 +36,7 @@ public class CookieExtractor extends AbstractExtractor
      *            The {@link Context} to use
      */
     @Override
-    public void execute(final Context context)
+    public void execute(final Context<?> context)
     {
         // Resolve variables
         resolveValues(context);
