@@ -3,6 +3,8 @@ package com.xceptance.xlt.nocoding.parser.csvParser;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.csv.CSVFormat;
+
 /**
  * Has all important constants for parsing a csv file
  * 
@@ -16,8 +18,6 @@ public class CsvConstants
     public static final String XPATH_GETTER_PREFIX = "xpath";
 
     public static final String REGEXP_GETTER_PREFIX = "regexp";
-
-    public static final int DYNAMIC_GETTER_COUNT = 10;
 
     /**
      * Permitted header fields, checked to avoid accidental incorrect spelling
@@ -56,6 +56,8 @@ public class CsvConstants
 
     public static final String ENCODED_DEFAULT = "false";
 
+    public static final CSVFormat CSV_FORMAT;
+
     static
     {
         PERMITTEDHEADERFIELDS.add(TYPE);
@@ -69,11 +71,7 @@ public class CsvConstants
         PERMITTEDHEADERFIELDS.add(TEXT);
         PERMITTEDHEADERFIELDS.add(ENCODED);
 
-        for (int i = 1; i <= DYNAMIC_GETTER_COUNT; i++)
-        {
-            PERMITTEDHEADERFIELDS.add(XPATH_GETTER_PREFIX + i);
-            PERMITTEDHEADERFIELDS.add(REGEXP_GETTER_PREFIX + i);
-        }
+        CSV_FORMAT = CSVFormat.RFC4180.withIgnoreEmptyLines(true).withCommentMarker('#').withHeader().withIgnoreSurroundingSpaces(true);
     }
 
     public static boolean isPermittedHeaderField(final String s)

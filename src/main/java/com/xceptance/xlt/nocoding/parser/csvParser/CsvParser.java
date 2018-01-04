@@ -6,7 +6,6 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 
 import com.xceptance.xlt.nocoding.parser.Parser;
@@ -30,11 +29,8 @@ public class CsvParser extends Parser
     {
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
         final Reader in = new FileReader(getFile());
-        final CSVFormat CSV_FORMAT = CSVFormat.RFC4180.withIgnoreEmptyLines(true)
-                                                      .withCommentMarker('#')
-                                                      .withHeader()
-                                                      .withIgnoreSurroundingSpaces(true);
-        final Iterable<CSVRecord> records = CSV_FORMAT.withFirstRecordAsHeader().parse(in);
+
+        final Iterable<CSVRecord> records = CsvConstants.CSV_FORMAT.withFirstRecordAsHeader().parse(in);
 
         Action lastAction = null;
         StaticSubrequest lastStatic = null;

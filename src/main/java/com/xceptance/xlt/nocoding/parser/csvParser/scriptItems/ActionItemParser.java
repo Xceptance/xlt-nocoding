@@ -52,7 +52,8 @@ public class ActionItemParser
             // Verify that the header is permitted
             if (!CsvConstants.isPermittedHeaderField(header))
             {
-                throw new IllegalArgumentException(header + "isn't an allowed header!");
+                if (!(header.contains(CsvConstants.REGEXP_GETTER_PREFIX) || header.contains(CsvConstants.XPATH_GETTER_PREFIX)))
+                    throw new IllegalArgumentException(header + "isn't an allowed header!");
             }
             // Get the value
             final String value = record.get(header);
@@ -66,7 +67,6 @@ public class ActionItemParser
             switch (header)
             {
                 case CsvConstants.TYPE:
-                    // Do nothing
                     break;
                 case CsvConstants.NAME:
                     name = value;
