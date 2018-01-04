@@ -70,7 +70,7 @@ public class HtmlXmlXpathExtractorTest extends ExtractorTest
      * 
      * @throws MalformedURLException
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IllegalStateException.class)
     public void testGetByXPathWithMaliciousXml() throws MalformedURLException
     {
         final String url = "http://www.xceptance.net";

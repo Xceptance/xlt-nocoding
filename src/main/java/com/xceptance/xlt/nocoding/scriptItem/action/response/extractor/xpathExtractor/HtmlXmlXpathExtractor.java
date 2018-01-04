@@ -22,12 +22,17 @@ public class HtmlXmlXpathExtractor extends XpathExtractorExecutor
     private SgmlPage htmlPage;
 
     /**
-     * Contains all the supported mime types. Supported mime types so far:
+     * Contains all the supported types. Supported types so far:
      * <ul>
      * <li>Html:
      * <ul>
      * <li>text/html
      * <li>text/application
+     * </ul>
+     * <li>Xml:
+     * <ul>
+     * <li>text/xml
+     * <li>application/xml
      * </ul>
      * </ul>
      */
@@ -73,6 +78,7 @@ public class HtmlXmlXpathExtractor extends XpathExtractorExecutor
             throw new IllegalStateException("Context must be " + LightWeightContext.class.getSimpleName() + " or "
                                             + DomContext.class.getSimpleName() + " but is " + context.getClass().getSimpleName());
         }
+
         final List<DomNode> htmlElements = getHtmlElementListByXPath(getExtractionExpression());
         for (final DomNode htmlElement : htmlElements)
         {

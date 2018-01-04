@@ -8,6 +8,7 @@ import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.SgmlPage;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.WebResponse;
+import com.gargoylesoftware.htmlunit.xml.XmlPage;
 import com.xceptance.xlt.api.engine.Session;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
 import com.xceptance.xlt.api.util.XltLogger;
@@ -83,6 +84,14 @@ public class LightWeightContext extends Context<LightWeightPage>
                 {
                     sgmlPage = (SgmlPage) page;
                     XltLogger.runTimeLogger.debug("SgmlPage built");
+                }
+                // TODO Wait for Jörg to find out what Htmlunit is supposed to do here
+                if (page instanceof XmlPage)
+                {
+                    if (((XmlPage) page).getTextContent() == null)
+                    {
+                        throw new IllegalStateException("Cannot convert WebResponse to SgmlPage.");
+                    }
                 }
             }
             catch (FailingHttpStatusCodeException | IOException e)
