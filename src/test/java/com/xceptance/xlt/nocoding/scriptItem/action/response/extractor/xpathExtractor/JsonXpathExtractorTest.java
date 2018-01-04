@@ -12,7 +12,7 @@ import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.ExtractorTest;
 import com.xceptance.xlt.nocoding.util.MockWebResponse;
 
-public class XmlJsonXpathExtractorTest extends ExtractorTest
+public class JsonXpathExtractorTest extends ExtractorTest
 {
 
     String urlString = "http://www.xceptance.com";
@@ -29,13 +29,6 @@ public class XmlJsonXpathExtractorTest extends ExtractorTest
                          + "      \"name\": \"Johnny Depp\"," + "      \"gender\" : \"male\"," + "      \"latitude\" : \"37.336453\","
                          + "      \"longitude\" : \"-121.884985\"" + "    }" + "  ]" + "}";
 
-    WebResponse xmlResponse;
-
-    String xmlType = "text/xml";
-
-    String xmlContent = "<data>" + " <employee>" + "   <name>John</name>" + "   <title>Manager</title>" + " </employee>" + " <employee>"
-                        + "   <name>Sara</name>" + "   <title>Clerk</title>" + " </employee>" + "</data>";
-
     WebResponse unknownTypeResponse;
 
     WebResponse maliciousJsonContentResponse;
@@ -49,14 +42,6 @@ public class XmlJsonXpathExtractorTest extends ExtractorTest
                                   + "      \"name\": \"Johnny Depp\"," + "      \"gender\" : \"male\","
                                   + "      \"latitude\" : \"37.336453\"," + "      \"longitude\" : \"-121.884985\"" + "    }" + "  ]";
 
-    WebResponse maliciousXmlContentResponse;
-
-    /**
-     * {@link #xmlContent} without ending data tag
-     */
-    String maliciousXmlContent = "<data>" + " <employee>" + "   <name>John</name>" + "   <title>Manager</title>" + " </employee>"
-                                 + " <employee>" + "   <name>Sara</name>" + "   <title>Clerk</title>" + " </employee>";
-
     @Before
     public void setup() throws MalformedURLException
     {
@@ -64,13 +49,9 @@ public class XmlJsonXpathExtractorTest extends ExtractorTest
 
         jsonResponse = new MockWebResponse(jsonContent, url, jsonType);
 
-        xmlResponse = new MockWebResponse(xmlContent, url, xmlType);
-
         unknownTypeResponse = new MockWebResponse("", url, "unknown");
 
         maliciousJsonContentResponse = new MockWebResponse(maliciousJsonContent, url, jsonType);
-
-        maliciousXmlContentResponse = new MockWebResponse(maliciousXmlContent, url, xmlType);
     }
 
     /**
@@ -80,7 +61,7 @@ public class XmlJsonXpathExtractorTest extends ExtractorTest
     public void testGetByXPathWithJson()
     {
         context.setWebResponse(jsonResponse);
-        final XmlJsonXpathExtractor xpathResponse = new XmlJsonXpathExtractor("//latitude");
+        final JsonXpathExtractor xpathResponse = new JsonXpathExtractor("//latitude");
         xpathResponse.execute(context);
         final List<String> list = xpathResponse.getResult();
         final String lat0 = list.get(0);
@@ -90,40 +71,13 @@ public class XmlJsonXpathExtractorTest extends ExtractorTest
     }
 
     /**
-     * Verifies you can get XML Content
-     */
-    @Test
-    public void testGetByXPathWithXML()
-    {
-        context.setWebResponse(xmlResponse);
-        final XmlJsonXpathExtractor xpathResponse = new XmlJsonXpathExtractor("//title");
-        xpathResponse.execute(context);
-        final List<String> list = xpathResponse.getResult();
-        final String tit0 = list.get(0);
-        final String tit1 = list.get(1);
-        Assert.assertEquals("Manager", tit0);
-        Assert.assertEquals("Clerk", tit1);
-    }
-
-    /**
      * Verifies an error is thrown when the Json Content is faulty
      */
     @Test(expected = IllegalArgumentException.class)
     public void testGetByXPathWithMaliciousJson()
     {
         context.setWebResponse(maliciousJsonContentResponse);
-        final XmlJsonXpathExtractor xpathResponse = new XmlJsonXpathExtractor("//latitude");
-        xpathResponse.execute(context);
-    }
-
-    /**
-     * Verifies an error is thrown when the Xml Content is faulty
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetByXPathWithMaliciousXml()
-    {
-        context.setWebResponse(maliciousXmlContentResponse);
-        final XmlJsonXpathExtractor xpathResponse = new XmlJsonXpathExtractor("//title");
+        final JsonXpathExtractor xpathResponse = new JsonXpathExtractor("//latitude");
         xpathResponse.execute(context);
     }
 

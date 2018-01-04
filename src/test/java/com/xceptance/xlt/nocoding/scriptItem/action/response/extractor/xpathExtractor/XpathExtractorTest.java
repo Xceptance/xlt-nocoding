@@ -20,7 +20,7 @@ public class XpathExtractorTest extends ExtractorTest
         mockObjects.load();
         final MockWebResponse mockWeResponseUnsupported = new MockWebResponse("some content", mockObjects.getUrl(), "unsupported/type");
         context.setWebResponse(mockWeResponseUnsupported);
-        new XpathExtractor("").getExtractor(context);
+        new XpathExtractor("").getExecutor(context);
     }
 
     /**
@@ -31,10 +31,10 @@ public class XpathExtractorTest extends ExtractorTest
     {
         final MockWebResponse mockWeResponseHtml = new MockWebResponse("some content", mockObjects.getUrl(), "text/html");
         context.setWebResponse(mockWeResponseHtml);
-        new XpathExtractor("").getExtractor(context);
+        new XpathExtractor("").getExecutor(context);
         final MockWebResponse mockWeResponseHtml2 = new MockWebResponse("some content", mockObjects.getUrl(), "text/application");
         context.setWebResponse(mockWeResponseHtml2);
-        new XpathExtractor("").getExtractor(context);
+        new XpathExtractor("").getExecutor(context);
     }
 
     /**

@@ -1,7 +1,6 @@
 package com.xceptance.xlt.nocoding.util.context;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
@@ -26,9 +25,9 @@ import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 public class LightWeightContext extends Context<LightWeightPage>
 {
     /**
-     * Cache of the SgmlPage
+     * The SgmlPage
      */
-    protected final Map<WebResponse, SgmlPage> sgmlPages = new HashMap<>();
+    protected SgmlPage sgmlPage;
 
     /**
      * Creates a new {@link LightWeightContext} out of the old {@link LightWeightContext}
@@ -67,40 +66,36 @@ public class LightWeightContext extends Context<LightWeightPage>
     }
 
     /**
-     * @return {@link #sgmlPages} - The {@link Map} that maps {@link WebResponse} to {@link SgmlPage}
-     */
-    public Map<WebResponse, SgmlPage> getSgmlPages()
-    {
-        return sgmlPages;
-    }
-
-    /**
-     * Returns <code>sgmlPages.get(webResponse)</code> if it is not <code>null</code>, else builds a {@link SgmlPage}
+     * Gets the sgmlPage if it is not null. Else, it builds the sgmlPage from the {@link WebResponse}.
      * 
-     * @return The {@link SgmlPage} corresponding to the {@link #webResponse}.
+     * @return {@link #sgmlPage} - The {@link Map} that maps {@link WebResponse} to {@link SgmlPage}
      */
-    public SgmlPage getSgmlPage(final WebResponse webResponse)
+    public SgmlPage getSgmlPage()
     {
-        SgmlPage sgmlPage = sgmlPages.get(webResponse);
         if (sgmlPage == null)
         {
             XltLogger.runTimeLogger.debug("Generating new SgmlPage...");
+            Page page;
             try
             {
-                final Page page = getWebClient().loadWebResponseInto(getWebResponse(), getWebClient().getCurrentWindow());
+                page = getWebClient().loadWebResponseInto(getWebResponse(), getWebClient().getCurrentWindow());
                 if (page instanceof SgmlPage)
                 {
                     sgmlPage = (SgmlPage) page;
                     XltLogger.runTimeLogger.debug("SgmlPage built");
-                    sgmlPages.put(webResponse, sgmlPage);
                 }
             }
             catch (FailingHttpStatusCodeException | IOException e)
             {
-                e.printStackTrace();
+                throw new IllegalStateException("Cannot convert WebResponse to SgmlPage.");
             }
         }
         return sgmlPage;
+    }
+
+    public void setSgmlPage(final SgmlPage sgmlPage)
+    {
+        this.sgmlPage = sgmlPage;
     }
 
     /**
@@ -135,6 +130,7 @@ public class LightWeightContext extends Context<LightWeightPage>
     @Override
     public void loadWebResponse(final WebRequest webRequest) throws FailingHttpStatusCodeException, IOException
     {
+        setSgmlPage(null);
         if (!webRequest.isXHR())
         {
             this.setPage(this.getWebClient().getLightWeightPage(webRequest));

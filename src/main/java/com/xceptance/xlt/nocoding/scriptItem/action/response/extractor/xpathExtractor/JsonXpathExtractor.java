@@ -22,15 +22,14 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.xceptance.xlt.api.util.XltLogger;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
 import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
- * Extractor for json and xml content types
+ * Xpath Extractor for json content types
  * 
  * @author ckeiner
  */
-public class XmlJsonXpathExtractor extends AbstractExtractor
+public class JsonXpathExtractor extends XpathExtractorExecutor
 {
     private XPath xPath;
 
@@ -40,21 +39,15 @@ public class XmlJsonXpathExtractor extends AbstractExtractor
 
     static final String JSON = "json";
 
-    static final String XML = "xml";
-
     static
     {
         // Json Types
         HEADERCONTENTTYPES.put("application/json", JSON);
         HEADERCONTENTTYPES.put("text/json", JSON);
         HEADERCONTENTTYPES.put("text/x-json", JSON);
-
-        // XML Types
-        HEADERCONTENTTYPES.put("text/xml", XML);
-        HEADERCONTENTTYPES.put("application/xml", XML);
     }
 
-    public XmlJsonXpathExtractor(final String extractionExpression)
+    public JsonXpathExtractor(final String extractionExpression)
     {
         super(extractionExpression);
     }
@@ -89,7 +82,8 @@ public class XmlJsonXpathExtractor extends AbstractExtractor
      * @throws SAXException
      * @throws IOException
      */
-    private void loadContentFromWebResponseIfNecessary(final Context<?> context) throws ParserConfigurationException, SAXException, IOException
+    private void loadContentFromWebResponseIfNecessary(final Context<?> context)
+        throws ParserConfigurationException, SAXException, IOException
     {
         if (xmlInputSource == null)
         {
@@ -114,13 +108,9 @@ public class XmlJsonXpathExtractor extends AbstractExtractor
         {
             xmlInputSource = createXMLSourceFromJson(bodyContent);
         }
-        else if (XML.equals(contentType))
-        {
-            xmlInputSource = createXMLSourceFromXML(bodyContent);
-        }
         else
         {
-            throw new IllegalArgumentException("Expected " + JSON + ", or " + XML + " but was " + contentType);
+            throw new IllegalArgumentException("Expected " + JSON + ", " + " but was " + contentType);
         }
     }
 
@@ -142,13 +132,6 @@ public class XmlJsonXpathExtractor extends AbstractExtractor
         final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         final DocumentBuilder db = dbf.newDocumentBuilder();
         final Document document = db.parse(source);
-        return document;
-    }
-
-    private Document createXMLSourceFromXML(final String xmlString) throws SAXException, IOException, ParserConfigurationException
-    {
-        XltLogger.runTimeLogger.debug("Loading XML Content");
-        final Document document = createDocumentFromXmlString(xmlString);
         return document;
     }
 

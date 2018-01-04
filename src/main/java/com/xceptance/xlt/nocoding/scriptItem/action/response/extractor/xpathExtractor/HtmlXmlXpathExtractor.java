@@ -7,7 +7,6 @@ import java.util.Map;
 import com.gargoylesoftware.htmlunit.SgmlPage;
 import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.xceptance.xlt.api.util.XltLogger;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.context.DomContext;
 import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
@@ -17,8 +16,9 @@ import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
  * 
  * @author ckeiner
  */
-public class HtmlTextXpathExtractor extends AbstractExtractor
+public class HtmlXmlXpathExtractor extends XpathExtractorExecutor
 {
+
     private SgmlPage htmlPage;
 
     /**
@@ -39,13 +39,20 @@ public class HtmlTextXpathExtractor extends AbstractExtractor
 
     static final String TEXTAPPLICATION = "text/application";
 
+    static final String XML = "xml";
+
     static
     {
         HEADERCONTENTTYPES.put(TEXTHTML, HTML);
         HEADERCONTENTTYPES.put(TEXTAPPLICATION, HTML);
+
+        // XML Types
+        HEADERCONTENTTYPES.put("text/xml", XML);
+        HEADERCONTENTTYPES.put("application/xml", XML);
+
     }
 
-    public HtmlTextXpathExtractor(final String extractionExpression)
+    public HtmlXmlXpathExtractor(final String extractionExpression)
     {
         super(extractionExpression);
     }
@@ -55,7 +62,7 @@ public class HtmlTextXpathExtractor extends AbstractExtractor
     {
         if (context instanceof LightWeightContext)
         {
-            htmlPage = ((LightWeightContext) context).getSgmlPage(context.getWebResponse());
+            htmlPage = ((LightWeightContext) context).getSgmlPage();
         }
         else if (context instanceof DomContext)
         {
