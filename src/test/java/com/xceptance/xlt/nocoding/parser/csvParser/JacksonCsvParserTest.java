@@ -20,7 +20,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.Action;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
 
-public class CsvParserNocodingTest extends ParserTest
+public class JacksonCsvParserTest extends ParserTest
 {
     protected final String path = super.path + "csv/";
 
@@ -37,7 +37,7 @@ public class CsvParserNocodingTest extends ParserTest
     public void testSimpleFileParsing() throws Exception
     {
         final String url = "http://hostname/";
-        final Parser parser = new CsvParserNocoding(fileSimpleFile);
+        final Parser parser = new JacksonCsvParser(fileSimpleFile);
         final List<ScriptItem> scriptItems = parser.parse();
 
         Assert.assertEquals(1, scriptItems.size());
@@ -57,7 +57,7 @@ public class CsvParserNocodingTest extends ParserTest
     public void testStaticFileParsing() throws Exception
     {
         final String url = "http://www.xceptance.net";
-        final Parser parser = new CsvParserNocoding(fileStaticFile);
+        final Parser parser = new JacksonCsvParser(fileStaticFile);
         final List<ScriptItem> scriptItems = parser.parse();
 
         Assert.assertEquals(1, scriptItems.size());

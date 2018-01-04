@@ -26,16 +26,16 @@ import com.xceptance.xlt.nocoding.util.ParserUtils;
  * 
  * @author ckeiner
  */
-public class CsvParserNocoding extends Parser
+public class JacksonCsvParser extends Parser
 {
 
     /**
-     * Creates a new instance of {@link CsvParserNocoding}
+     * Creates a new instance of {@link JacksonCsvParser}
      * 
      * @param pathToFile
      *            The path to the file
      */
-    public CsvParserNocoding(final String pathToFile)
+    public JacksonCsvParser(final String pathToFile)
     {
         super(pathToFile);
     }

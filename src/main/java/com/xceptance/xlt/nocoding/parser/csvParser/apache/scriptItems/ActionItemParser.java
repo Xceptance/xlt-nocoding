@@ -47,13 +47,22 @@ public class ActionItemParser
         final Iterator<String> headerIterator = record.toMap().keySet().iterator();
         while (headerIterator.hasNext())
         {
+            // Get the next header
             final String header = headerIterator.next();
+            // Verify that the header is permitted
+            if (!CsvConstants.isPermittedHeaderField(header))
+            {
+                throw new IllegalArgumentException(header + "isn't an allowed header!");
+            }
+            // Get the value
             final String value = record.get(header);
+            // If the value is null or empty, discard it
             if (value == null || value.isEmpty())
             {
                 continue;
             }
 
+            // Differentiate between the headers
             switch (header)
             {
                 case CsvConstants.TYPE:
@@ -110,21 +119,43 @@ public class ActionItemParser
                     break;
 
                 default:
-                    // If the fieldName contains either REGEXP_GETTER_PREFIX or XPATH_GETTER_PREFIX
-                    if (header.contains(CsvConstants.REGEXP_GETTER_PREFIX) || header.contains(CsvConstants.XPATH_GETTER_PREFIX))
+                    // If the fieldName contains either REGEXP_GETTER_PREFIX and XPath isn't used
+                    if (header.contains(CsvConstants.REGEXP_GETTER_PREFIX) && !hasXpath)
+                    {
+                        if (!hasXpath)
+                        {
+                            responseStores.add(handleStore(header, value));
+                            hasRegexp = true;
+                        }
+                        else
+                        {
+                            throw new IllegalArgumentException("Cannot use Xpath and Regexp together!");
+                        }
+                    }
+                    // If the fieldName contains either XPATH_GETTER_PREFIX and Regexp isn't used
+                    else if (header.contains(CsvConstants.XPATH_GETTER_PREFIX) && !hasRegexp)
                     {
                         // Create a response store
-                        responseStores.add(handleStore(header, value));
+                        if (!hasRegexp)
+                        {
+                            responseStores.add(handleStore(header, value));
+                            hasXpath = true;
+                        }
+                        else
+                        {
+                            throw new IllegalArgumentException("Cannot use Xpath and Regexp together!");
+                        }
                     }
                     // In every other case, throw an error
                     else
                     {
                         // Throw an exception
-                        throw new IllegalArgumentException("Unknown header: " + header);
+                        throw new IllegalArgumentException("Unknown or illegal header: " + header);
                     }
             }
         }
 
+        // Build an action with the data
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
         final Request request = new Request(url);
         request.setHttpMethod(method);

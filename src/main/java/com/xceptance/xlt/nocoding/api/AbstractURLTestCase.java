@@ -15,7 +15,7 @@ import com.xceptance.xlt.api.tests.AbstractTestCase;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.parser.Parser;
-import com.xceptance.xlt.nocoding.parser.csvParser.CsvParserNocoding;
+import com.xceptance.xlt.nocoding.parser.csvParser.JacksonCsvParser;
 import com.xceptance.xlt.nocoding.parser.csvParser.apache.ApacheCsvParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
@@ -154,7 +154,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
 
     /**
      * Creates the correct parser depending on the file extension. For example creates a {@link YamlParser} for yml/yaml
-     * files and a {@link CsvParserNocoding} for csv files.
+     * files and a {@link JacksonCsvParser} for csv files.
      * 
      * @param pathToFile
      *            The path to the file with or without the extension.
