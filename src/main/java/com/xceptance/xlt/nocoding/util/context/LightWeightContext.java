@@ -1,7 +1,6 @@
 package com.xceptance.xlt.nocoding.util.context;
 
 import java.io.IOException;
-import java.util.Map;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.Page;
@@ -19,7 +18,8 @@ import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 /**
- * The {@link Context} used in the LightWeight mode of the execution.
+ * The {@link Context} used in the LightWeight mode of the execution. Therefore, it extends
+ * <code>Context&lt;LightWeightPage&gt;</code>
  * 
  * @author ckeiner
  */
@@ -35,13 +35,13 @@ public class LightWeightContext extends Context<LightWeightPage>
      * 
      * @param context
      */
-    public LightWeightContext(final Context<?> context)
+    public LightWeightContext(final Context<LightWeightPage> context)
     {
         super(context);
     }
 
     /**
-     * Creates a new {@link LightWeightContext}, sets default Values in the {@link DataStorage} and configures the
+     * Creates a new {@link LightWeightContext}, with the provided {@link DataStorage} and configures the
      * {@link XltWebClient} according to the {@link XltProperties}
      * 
      * @param xltProperties
@@ -55,8 +55,8 @@ public class LightWeightContext extends Context<LightWeightPage>
     }
 
     /**
-     * Creates a new {@link LightWeightContext}, sets default Values in the {@link DataStorage} and configures the
-     * {@link XltWebClient} according to the {@link XltProperties}
+     * Creates a new {@link LightWeightContext}, with a new {@link DataStorage} and configures the {@link XltWebClient}
+     * according to the {@link XltProperties}
      * 
      * @param xltProperties
      *            The properties to use - normally {@link XltProperties#getInstance()}
@@ -67,25 +67,30 @@ public class LightWeightContext extends Context<LightWeightPage>
     }
 
     /**
-     * Gets the sgmlPage if it is not null. Else, it builds the sgmlPage from the {@link WebResponse}.
+     * Gets the {@link SgmlPage} if it isn't <code>null</code>. Else, it builds the SgmlPage from the {@link WebResponse}.
      * 
-     * @return {@link #sgmlPage} - The {@link Map} that maps {@link WebResponse} to {@link SgmlPage}
+     * @return
      */
     public SgmlPage getSgmlPage()
     {
+        // If the sgmlPage is null and therefore wasn't loaded already
         if (sgmlPage == null)
         {
+            // Generate a new sgmlPage
             XltLogger.runTimeLogger.debug("Generating new SgmlPage...");
             Page page;
             try
             {
+                // Load the WebResponse into the window of the web client
                 page = getWebClient().loadWebResponseInto(getWebResponse(), getWebClient().getCurrentWindow());
+                // If the built page is an instance of SgmlPage
                 if (page instanceof SgmlPage)
                 {
-                    sgmlPage = (SgmlPage) page;
+                    // Set the sgmlPage
+                    setSgmlPage((SgmlPage) page);
                     XltLogger.runTimeLogger.debug("SgmlPage built");
                 }
-                // TODO Wait for Jörg to find out what Htmlunit is supposed to do here
+                // TODO Wait for Jörg to find out what Htmlunit is supposed to do in case of a faulty xml
                 if (page instanceof XmlPage)
                 {
                     if (((XmlPage) page).getTextContent() == null)
@@ -99,6 +104,7 @@ public class LightWeightContext extends Context<LightWeightPage>
                 throw new IllegalStateException("Cannot convert WebResponse to SgmlPage.");
             }
         }
+        // Return the sgmlPage
         return sgmlPage;
     }
 
@@ -117,7 +123,8 @@ public class LightWeightContext extends Context<LightWeightPage>
     }
 
     /**
-     * Sets the {@link LightWeightPage}
+     * @param lightWeightPage
+     *            {@link LightWeightPage}
      */
     @Override
     public void setPage(final LightWeightPage lightWeightPage)
@@ -126,11 +133,11 @@ public class LightWeightContext extends Context<LightWeightPage>
     }
 
     /**
-     * Loads the {@link WebResponse} corresponding to the {@link WebRequest}. <br>
-     * If {@link WebRequest#isXHR()} is <code>false</code>, it loads the {@link WebResponse} via
-     * {@link XltWebClient#getLightWeightPage(WebRequest)}. <br>
-     * If {@link WebRequest#isXHR()} is <code>true</code>, it loads the {@link WebResponse} via
-     * {@link XltWebClient#loadWebResponse(WebRequest)}.
+     * Loads the {@link WebResponse} corresponding to the {@link WebRequest} and sets {@link #sgmlPage} to
+     * <code>null</code>. <br>
+     * If {@link WebRequest#isXHR()} is <code>false</code>, it loads the {@link LightWeightPage} and sets the
+     * {@link WebResponse}.<br>
+     * If <code>WebRequest.isXHR()</code> is <code>true</code>, it only loads the WebResponse.
      * 
      * @param webResponse
      * @throws IOException
@@ -139,22 +146,27 @@ public class LightWeightContext extends Context<LightWeightPage>
     @Override
     public void loadWebResponse(final WebRequest webRequest) throws FailingHttpStatusCodeException, IOException
     {
+        // Reset the sgmlPage
         setSgmlPage(null);
+        // If the webRequest is not a Xhr
         if (!webRequest.isXHR())
         {
+            // Load and set page
             this.setPage(this.getWebClient().getLightWeightPage(webRequest));
+            // Set webResponse
             setWebResponse(this.getPage().getWebResponse());
         }
+        // If the webRequest is a Xhr
         else
         {
+            // Load and set the WebResponse
             setWebResponse(this.getWebClient().loadWebResponse(webRequest));
         }
     }
 
     /**
-     * Appends the {@link #getLightWeightPage()} to the result browser, if {@link #getLightWeightPage()} is not
-     * <code>null</code>. <br>
-     * Else creates a new {@link LightWeightPage}.
+     * Appends the {@link #getPage()} to the result browser, if it is not <code>null</code>.<br>
+     * Otherwise, it creates a new {@link LightWeightPage}.
      */
     @Override
     public void appendToResultBrowser() throws Exception
@@ -175,7 +187,7 @@ public class LightWeightContext extends Context<LightWeightPage>
      * @return {@link #LightWeightContext(Context)}
      */
     @Override
-    public Context<?> buildNewContext()
+    public Context<LightWeightPage> buildNewContext()
     {
         return new LightWeightContext(this);
     }

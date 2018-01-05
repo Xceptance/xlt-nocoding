@@ -14,9 +14,11 @@ import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage.Un
 import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
 /**
- * The context for the execution. Thus, the context has methods for handling the {@link DataStorage},
- * {@link XltWebClient}, resolving variables, creating the current {@link WebResponse} and accessing properties.
+ * A template for the context during the execution. Thus, it has methods for handling the {@link DataStorage},
+ * {@link XltWebClient}, resolving variables, creating a {@link WebResponse} and accessing properties.
  * 
+ * @param T
+ *            The type of page to load
  * @author ckeiner
  */
 public abstract class Context<T>
@@ -32,13 +34,13 @@ public abstract class Context<T>
     protected NoCodingPropertyAdmin propertyAdmin;
 
     /**
-     * The page of the site
+     * The page corresponding to the {@link #webResponse}
      */
     protected T page;
 
     /**
-     * Creates a new {@link Context}, sets default Values in the {@link DataStorage} and configures the {@link XltWebClient}
-     * according to the {@link XltProperties}
+     * Creates a new {@link Context}, with a new {@link DataStorage} and configures the {@link XltWebClient} according to
+     * the {@link XltProperties}
      * 
      * @param xltProperties
      *            The properties to use - normally {@link XltProperties#getInstance()}
@@ -49,7 +51,7 @@ public abstract class Context<T>
     }
 
     /**
-     * Creates a new {@link Context}, sets default Values in the {@link DataStorage} and configures the {@link XltWebClient}
+     * Creates a new {@link Context}, with the provided {@link DataStorage} and configures the {@link XltWebClient}
      * according to the {@link XltProperties}
      * 
      * @param xltProperties
@@ -71,7 +73,7 @@ public abstract class Context<T>
      * 
      * @param context
      */
-    protected Context(final Context<?> context)
+    protected Context(final Context<T> context)
     {
         this.dataStorage = context.getDataStorage();
         this.webClient = context.getWebClient();
@@ -81,13 +83,18 @@ public abstract class Context<T>
     }
 
     /**
-     * Initializes the {@link Context} by loading some default items and configuring the {@link XltWebClient}
+     * Initializes the {@link Context} by configuring the {@link XltWebClient}
      */
     public void initialize()
     {
         configureWebClient();
     }
 
+    /**
+     * Gets the {@link DataStorage}
+     * 
+     * @return
+     */
     public DataStorage getDataStorage()
     {
         return dataStorage;
@@ -119,6 +126,11 @@ public abstract class Context<T>
         this.webResponse = webResponse;
     }
 
+    /**
+     * Gets the {@link VariableResolver}
+     * 
+     * @return
+     */
     public VariableResolver getResolver()
     {
         return resolver;
@@ -132,8 +144,18 @@ public abstract class Context<T>
         return propertyAdmin;
     }
 
+    /**
+     * Gets the page
+     * 
+     * @return
+     */
     public abstract T getPage();
 
+    /**
+     * Sets the page
+     * 
+     * @param page
+     */
     public abstract void setPage(final T page);
 
     /*
@@ -233,23 +255,23 @@ public abstract class Context<T>
      * Defines how the {@link WebResponse} is loaded
      * 
      * @param webRequest
-     *            The {@link WebRequest} for the {@link WebResponse}
+     *            The {@link WebRequest} for the <code>WebResponse</code>
      * @throws Exception
      */
     public abstract void loadWebResponse(final WebRequest webRequest) throws Exception;
 
     /**
-     * Defines how the {@link #webResponse} is appended to the Xlt Result Browser
+     * Appends the {@link #webResponse} to the Xlt Result Browser
      * 
      * @throws Exception
      */
     public abstract void appendToResultBrowser() throws Exception;
 
     /**
-     * Defines how a new {@link Context} gets created out of the old one
+     * Creates a new Context out of the current one
      * 
-     * @return
+     * @return Context<T>
      */
-    public abstract Context<?> buildNewContext();
+    public abstract Context<T> buildNewContext();
 
 }

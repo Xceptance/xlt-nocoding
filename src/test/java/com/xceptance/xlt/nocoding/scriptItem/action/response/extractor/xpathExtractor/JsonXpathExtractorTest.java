@@ -9,10 +9,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.ExtractorTest;
 import com.xceptance.xlt.nocoding.util.MockWebResponse;
 
-public class JsonXpathExtractorTest extends ExtractorTest
+public class JsonXpathExtractorTest extends AbstractXpathExtractorExecutorTest
 {
 
     String urlString = "http://www.xceptance.com";
