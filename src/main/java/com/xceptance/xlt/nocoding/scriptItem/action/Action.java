@@ -8,6 +8,7 @@ import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
 import com.xceptance.xlt.nocoding.util.ActionItemUtil;
 import com.xceptance.xlt.nocoding.util.Constants;
+import com.xceptance.xlt.nocoding.util.WebAction;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
@@ -17,7 +18,7 @@ import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
  * 
  * @author ckeiner
  */
-public abstract class Action implements ScriptItem
+public class Action implements ScriptItem
 {
     /**
      * The name of the action
@@ -88,6 +89,44 @@ public abstract class Action implements ScriptItem
         {
             actionItems.add(new StaticSubrequest(context.getDefaultStatics().getItems()));
             XltLogger.runTimeLogger.debug("Added default static subrequests to Action " + name);
+        }
+    }
+
+    /**
+     * Executes the {@link Action} by building a {@link WebAction}, running it and then validating the answer. In the end,
+     * the page gets appended to the result browser.
+     * 
+     * @throws Throwable
+     */
+    @Override
+    public void execute(final Context<?> context) throws Throwable
+    {
+        // Fill default data
+        fillDefaultData(context);
+
+        // Create the WebAction with the data of this action
+        final WebAction action = new WebAction(name, context, getActionItems());
+
+        // Try to execute it
+        try
+        {
+            // Execute the requests, responses and subrequests via xlt api
+            action.run();
+        }
+        catch (final Exception e)
+        {
+            XltLogger.runTimeLogger.error("Execution Step failed : " + getName());
+            e.printStackTrace();
+            throw new Exception(e);
+        }
+        // And always append the page to the result browser
+        finally
+        {
+            // Append the page to the result browser
+            if (context.getWebResponse() != null)
+            {
+                context.appendToResultBrowser();
+            }
         }
     }
 

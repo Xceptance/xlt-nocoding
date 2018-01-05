@@ -11,7 +11,7 @@ import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.parser.csvParser.CsvConstants;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.Action;
-import com.xceptance.xlt.nocoding.scriptItem.action.ActionImpl;
+import com.xceptance.xlt.nocoding.scriptItem.action.Action;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.HttpcodeValidator;
@@ -189,8 +189,8 @@ public class ActionItemParser
         {
             name = "Action-" + record.getRecordNumber();
         }
-        final ActionImpl impl = new ActionImpl(name, actionItems);
-        return impl;
+        final Action action = new Action(name, actionItems);
+        return action;
     }
 
     /**

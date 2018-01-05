@@ -13,7 +13,7 @@ import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.ParserTest;
 import com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
-import com.xceptance.xlt.nocoding.scriptItem.action.ActionImpl;
+import com.xceptance.xlt.nocoding.scriptItem.action.Action;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.HttpcodeValidator;
@@ -70,14 +70,14 @@ public class ActionItemParserTest extends ParserTest
         Assert.assertEquals(1, scriptItems.size());
 
         // Assert it's an action
-        Assert.assertTrue(scriptItems.get(0) instanceof ActionImpl);
-        final ActionImpl impl = (ActionImpl) scriptItems.get(0);
-        Assert.assertEquals("name", impl.getName());
-        Assert.assertEquals(2, impl.getActionItems().size());
+        Assert.assertTrue(scriptItems.get(0) instanceof Action);
+        final Action action = (Action) scriptItems.get(0);
+        Assert.assertEquals("name", action.getName());
+        Assert.assertEquals(2, action.getActionItems().size());
 
         // Assert request
-        Assert.assertTrue(impl.getActionItems().get(0) instanceof Request);
-        final Request request = (Request) impl.getActionItems().get(0);
+        Assert.assertTrue(action.getActionItems().get(0) instanceof Request);
+        final Request request = (Request) action.getActionItems().get(0);
         Assert.assertEquals("GET", request.getHttpMethod());
         Assert.assertEquals("true", request.getXhr());
         Assert.assertEquals("false", request.getEncodeParameters());
@@ -95,8 +95,8 @@ public class ActionItemParserTest extends ParserTest
         Assert.assertTrue(expectedHeader.equals(request.getHeaders()));
 
         // Assert response
-        Assert.assertTrue(impl.getActionItems().get(1) instanceof Response);
-        final Response response = (Response) impl.getActionItems().get(1);
+        Assert.assertTrue(action.getActionItems().get(1) instanceof Response);
+        final Response response = (Response) action.getActionItems().get(1);
         final List<AbstractResponseItem> responseItems = response.getResponseItems();
 
         // Assert HttpcodeValidator
@@ -157,7 +157,7 @@ public class ActionItemParserTest extends ParserTest
     {
         final Parser parser = new YamlParser(fileEmptyAction);
         final List<ScriptItem> scriptItems = parser.parse();
-        Assert.assertTrue(scriptItems.get(0) instanceof ActionImpl);
+        Assert.assertTrue(scriptItems.get(0) instanceof Action);
     }
 
     /**

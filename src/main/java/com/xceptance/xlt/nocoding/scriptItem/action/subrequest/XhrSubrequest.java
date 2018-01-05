@@ -47,7 +47,7 @@ public class XhrSubrequest extends AbstractSubrequest
      * the {@link #actionItems}.
      */
     @Override
-    public void execute(final Context<?> context) throws Throwable
+    public void execute(final Context<?> context) throws Exception
     {
         // Create a new local context, so we do not overwrite the old context
         final Context<?> localContext = context.buildNewContext();

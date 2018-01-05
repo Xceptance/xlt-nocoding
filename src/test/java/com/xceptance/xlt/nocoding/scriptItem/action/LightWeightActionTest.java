@@ -17,7 +17,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
- * Tests {@link ActionImpl}
+ * Tests {@link Action}
  * 
  * @author ckeiner
  */
@@ -35,7 +35,7 @@ public class LightWeightActionTest
     }
 
     /**
-     * Verifies {@link ActionImpl} adds a default {@link Request} if no {@link Request} is specified
+     * Verifies {@link Action} adds a default {@link Request} if no {@link Request} is specified
      */
     @Test
     public void testDefaultRequest()
@@ -47,18 +47,18 @@ public class LightWeightActionTest
         final String value = "TestName";
         context.getDefaultItems().store(configName, value);
 
-        final ActionImpl impl = new ActionImpl();
-        impl.fillDefaultData(context);
-        Assert.assertNotNull(impl.getActionItems());
-        Assert.assertFalse(impl.getActionItems().isEmpty());
-        Assert.assertTrue(impl.getActionItems().get(0) instanceof Request);
-        final Request request = (Request) impl.getActionItems().get(0);
+        final Action action = new Action();
+        action.fillDefaultData(context);
+        Assert.assertNotNull(action.getActionItems());
+        Assert.assertFalse(action.getActionItems().isEmpty());
+        Assert.assertTrue(action.getActionItems().get(0) instanceof Request);
+        final Request request = (Request) action.getActionItems().get(0);
         request.fillDefaultData(context);
         Assert.assertEquals(url, request.getUrl());
     }
 
     /**
-     * Verifies {@link ActionImpl} adds default {@link StaticSubrequest}
+     * Verifies {@link Action} adds default {@link StaticSubrequest}
      * 
      * @throws Throwable
      */
@@ -83,15 +83,15 @@ public class LightWeightActionTest
         final String configName = Constants.NAME;
         final String value = "TestName";
         context.getDefaultItems().store(configName, value);
-        final ActionImpl impl = new ActionImpl();
-        impl.fillDefaultData(context);
-        Assert.assertEquals(value, impl.getName());
+        final Action action = new Action();
+        action.fillDefaultData(context);
+        Assert.assertEquals(value, action.getName());
 
-        Assert.assertEquals(3, impl.getActionItems().size());
-        Assert.assertTrue(impl.getActionItems().get(0) instanceof Request);
-        Assert.assertTrue(impl.getActionItems().get(1) instanceof Response);
-        Assert.assertTrue(impl.getActionItems().get(2) instanceof StaticSubrequest);
-        final StaticSubrequest subrequest = (StaticSubrequest) impl.getActionItems().get(2);
+        Assert.assertEquals(3, action.getActionItems().size());
+        Assert.assertTrue(action.getActionItems().get(0) instanceof Request);
+        Assert.assertTrue(action.getActionItems().get(1) instanceof Response);
+        Assert.assertTrue(action.getActionItems().get(2) instanceof StaticSubrequest);
+        final StaticSubrequest subrequest = (StaticSubrequest) action.getActionItems().get(2);
         Assert.assertEquals(5, subrequest.getUrls().size());
         for (final String subrequestUrl : subrequest.getUrls())
         {
@@ -100,7 +100,7 @@ public class LightWeightActionTest
     }
 
     /**
-     * Verifies {@link ActionImpl} adds a default {@link Response} if no {@link Response} is specified
+     * Verifies {@link Action} adds a default {@link Response} if no {@link Response} is specified
      */
     @Test
     public void testDefaultResponse()
@@ -110,16 +110,16 @@ public class LightWeightActionTest
         final String configName = Constants.NAME;
         final String value = "TestName";
         context.getDefaultItems().store(configName, value);
-        final ActionImpl impl = new ActionImpl();
-        impl.fillDefaultData(context);
+        final Action action = new Action();
+        action.fillDefaultData(context);
 
-        Assert.assertEquals(2, impl.getActionItems().size());
-        Assert.assertTrue(impl.getActionItems().get(0) instanceof Request);
-        Assert.assertTrue(impl.getActionItems().get(1) instanceof Response);
+        Assert.assertEquals(2, action.getActionItems().size());
+        Assert.assertTrue(action.getActionItems().get(0) instanceof Request);
+        Assert.assertTrue(action.getActionItems().get(1) instanceof Response);
     }
 
     /**
-     * Verifies {@link ActionImpl} adds a default {@link ActionImpl#getName()} if no name is specified
+     * Verifies {@link Action} adds a default {@link Action#getName()} if no name is specified
      */
     @Test
     public void testDefaultName()
@@ -129,13 +129,13 @@ public class LightWeightActionTest
         final String configName = Constants.NAME;
         final String value = "TestName";
         context.getDefaultItems().store(configName, value);
-        final ActionImpl impl = new ActionImpl();
-        impl.fillDefaultData(context);
-        Assert.assertEquals(value, impl.getName());
+        final Action action = new Action();
+        action.fillDefaultData(context);
+        Assert.assertEquals(value, action.getName());
     }
 
     /**
-     * Verifies {@link ActionImpl} does not resolve {@link ActionImpl#getName()}
+     * Verifies {@link Action} does not resolve {@link Action#getName()}
      * 
      * @throws Throwable
      */
@@ -150,9 +150,9 @@ public class LightWeightActionTest
 
         context.getVariables().store("name", "TestName");
 
-        final ActionImpl impl = new ActionImpl();
-        impl.execute(context);
-        Assert.assertNotEquals("TestName", impl.getName());
+        final Action action = new Action();
+        action.execute(context);
+        Assert.assertNotEquals("TestName", action.getName());
     }
 
 }

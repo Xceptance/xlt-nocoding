@@ -18,7 +18,7 @@ public abstract class AbstractSubrequest extends AbstractActionItem
      *            The {@link Context} for this subrequest
      */
     @Override
-    public abstract void execute(Context<?> context) throws Throwable;
+    public abstract void execute(Context<?> context) throws Exception;
 
     /**
      * Fills default data of an item.

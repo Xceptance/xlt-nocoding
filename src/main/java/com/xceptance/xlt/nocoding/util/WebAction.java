@@ -8,6 +8,7 @@ import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.common.lang.ReflectionUtils;
 import com.xceptance.xlt.api.actions.AbstractWebAction;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
+import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
@@ -34,8 +35,6 @@ public class WebAction extends AbstractWebAction
      */
     private final List<AbstractActionItem> actionItems;
 
-    private ThrowingConsumer<WebAction> function;
-
     /**
      * @param timerName
      *            The name of the action
@@ -44,26 +43,50 @@ public class WebAction extends AbstractWebAction
      * @param request
      *            The main request
      * @param actionItems
-     * @param function
-     *            A {@link ThrowingConsumer<{@link WebAction}>}
      */
-    public WebAction(final String timerName, final Context<?> context, final List<AbstractActionItem> actionItems,
-        final ThrowingConsumer<WebAction> function)
+    public WebAction(final String timerName, final Context<?> context, final List<AbstractActionItem> actionItems)
     {
         super(timerName);
         this.context = context;
         this.webClient = context.getWebClient();
         this.actionItems = actionItems;
-        this.function = function;
     }
 
+    /**
+     * Execute the {@link WebAction}.
+     * 
+     * @param action
+     *            The {@link WebAction} that executes this method.
+     * @throws Exception
+     */
     @Override
     protected void execute() throws Exception
     {
         // clear cache with the private method in WebClient, so we can fire a request twice in a run
         final Map<String, WebResponse> pageLocalCache = ReflectionUtils.readInstanceField(getWebClient(), "pageLocalCache");
         pageLocalCache.clear();
-        function.accept(this);
+        // function.accept(this);
+
+        // Extract the context
+        final Context<?> context = this.getContext();
+        // Extract the action items
+        final List<AbstractActionItem> actionItems = this.getActionItems();
+
+        // Check if the first actionItem is a Request
+        if (!(actionItems.iterator().next() instanceof Request))
+        {
+            throw new Exception("First item of action \"" + this.getTimerName() + "\" is not a Request!");
+        }
+
+        // If there are actionItems
+        if (actionItems != null && !actionItems.isEmpty())
+        {
+            // Execute every actionItem, i.e. main request and validations.
+            for (final AbstractActionItem actionItem : actionItems)
+            {
+                actionItem.execute(context);
+            }
+        }
     }
 
     @Override
@@ -93,16 +116,6 @@ public class WebAction extends AbstractWebAction
     public void setWebClient(final WebClient webClient)
     {
         this.webClient = webClient;
-    }
-
-    public ThrowingConsumer<WebAction> getFunction()
-    {
-        return function;
-    }
-
-    public void setFunction(final ThrowingConsumer<WebAction> function)
-    {
-        this.function = function;
     }
 
     public Context<?> getContext()

@@ -18,5 +18,5 @@ public abstract class AbstractActionItem
      * @throws Throwable
      *             Any error that happens during the execution
      */
-    public abstract void execute(final Context<?> context) throws Throwable;
+    public abstract void execute(final Context<?> context) throws Exception;
 }

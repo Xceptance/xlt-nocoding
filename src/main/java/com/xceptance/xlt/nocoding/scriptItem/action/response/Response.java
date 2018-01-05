@@ -46,7 +46,7 @@ public class Response extends AbstractActionItem
      * Fills in default data, then executes every item in {@link #responseItems}
      */
     @Override
-    public void execute(final Context<?> context) throws Throwable
+    public void execute(final Context<?> context) throws Exception
     {
         // Fill default data
         fillDefaultData(context);

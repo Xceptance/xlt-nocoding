@@ -16,7 +16,7 @@ import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.resp
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.subrequest.SubrequestParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
-import com.xceptance.xlt.nocoding.scriptItem.action.ActionImpl;
+import com.xceptance.xlt.nocoding.scriptItem.action.Action;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
@@ -142,7 +142,7 @@ public class ActionItemParser extends AbstractScriptItemParser
             }
         }
         // Add the action to the script items
-        scriptItems.add(new ActionImpl(name, actionItems));
+        scriptItems.add(new Action(name, actionItems));
 
         // Return all scriptItems
         return scriptItems;
