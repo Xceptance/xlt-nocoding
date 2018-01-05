@@ -49,7 +49,7 @@ public class ActionItemParser
         {
             // Get the next header
             final String header = headerIterator.next();
-            // Verify that the header is permitted
+            // Verify that the header is permitted or one of the regexp/xpath getters
             if (!CsvConstants.isPermittedHeaderField(header))
             {
                 if (!(header.contains(CsvConstants.REGEXP_GETTER_PREFIX) || header.contains(CsvConstants.XPATH_GETTER_PREFIX)))
