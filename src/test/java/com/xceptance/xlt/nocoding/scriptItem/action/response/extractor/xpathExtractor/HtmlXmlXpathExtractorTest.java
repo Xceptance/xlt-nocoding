@@ -10,8 +10,11 @@ import org.junit.Test;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.SgmlPage;
 import com.gargoylesoftware.htmlunit.WebResponse;
+import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.util.MockWebResponse;
+import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.context.DomContext;
+import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 public class HtmlXmlXpathExtractorTest extends AbstractXpathExtractorExecutorTest
 {
@@ -42,13 +45,13 @@ public class HtmlXmlXpathExtractorTest extends AbstractXpathExtractorExecutorTes
     }
 
     /**
-     * Verifies you can get XML Content
+     * Verifies you can get XML Content with Dom Mode
      * 
      * @throws IOException
      * @throws FailingHttpStatusCodeException
      */
     @Test
-    public void testGetByXPathWithXML() throws FailingHttpStatusCodeException, IOException
+    public void testGetByXPathWithXMLInDomMode() throws FailingHttpStatusCodeException, IOException
     {
         final String url = "http://www.xceptance.net";
         final WebResponse xmlResponse = new MockWebResponse(xmlContent, new URL(url), xmlType);
@@ -65,13 +68,13 @@ public class HtmlXmlXpathExtractorTest extends AbstractXpathExtractorExecutorTes
     }
 
     /**
-     * Verifies an error is thrown when the Xml Content is faulty
+     * Verifies an error is thrown when the Xml Content is faulty and in Dom Mode
      * 
      * @throws IOException
      * @throws FailingHttpStatusCodeException
      */
     @Test(expected = IllegalStateException.class)
-    public void testGetByXPathWithMaliciousXml() throws FailingHttpStatusCodeException, IOException
+    public void testGetByXPathWithMaliciousXmlInDomMode() throws FailingHttpStatusCodeException, IOException
     {
         // final LightWeightContext context = new LightWeightContext(XltProperties.getInstance());
         final String url = "http://www.xceptance.net";
@@ -79,6 +82,46 @@ public class HtmlXmlXpathExtractorTest extends AbstractXpathExtractorExecutorTes
         context.setWebResponse(maliciousXmlContentResponse);
         ((DomContext) context).setPage((SgmlPage) context.getWebClient().loadWebResponseInto(maliciousXmlContentResponse,
                                                                                              context.getWebClient().getCurrentWindow()));
+        final HtmlXmlXpathExtractor xpathResponse = new HtmlXmlXpathExtractor("//title");
+        xpathResponse.execute(context);
+    }
+
+    /**
+     * Verifies you can get XML Content with Lightweight Mode
+     * 
+     * @throws IOException
+     * @throws FailingHttpStatusCodeException
+     */
+    @Test
+    public void testGetByXPathWithXMLInLightMode() throws FailingHttpStatusCodeException, IOException
+    {
+        final Context<?> context = new LightWeightContext(XltProperties.getInstance());
+        final String url = "http://www.xceptance.net";
+        final WebResponse xmlResponse = new MockWebResponse(xmlContent, new URL(url), xmlType);
+        context.setWebResponse(xmlResponse);
+        final HtmlXmlXpathExtractor xpathResponse = new HtmlXmlXpathExtractor("//title");
+        xpathResponse.execute(context);
+        final List<String> list = xpathResponse.getResult();
+        final String tit0 = list.get(0);
+        final String tit1 = list.get(1);
+        Assert.assertEquals("Manager", tit0);
+        Assert.assertEquals("Clerk", tit1);
+    }
+
+    /**
+     * Verifies an error is thrown when the Xml Content is faulty and in Lightweight Mode
+     * 
+     * @throws IOException
+     * @throws FailingHttpStatusCodeException
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testGetByXPathWithMaliciousXmlInLightMode() throws FailingHttpStatusCodeException, IOException
+    {
+        final Context<?> context = new LightWeightContext(XltProperties.getInstance());
+        // final LightWeightContext context = new LightWeightContext(XltProperties.getInstance());
+        final String url = "http://www.xceptance.net";
+        final WebResponse maliciousXmlContentResponse = new MockWebResponse(maliciousXmlContent, new URL(url), xmlType);
+        context.setWebResponse(maliciousXmlContentResponse);
         final HtmlXmlXpathExtractor xpathResponse = new HtmlXmlXpathExtractor("//title");
         xpathResponse.execute(context);
     }

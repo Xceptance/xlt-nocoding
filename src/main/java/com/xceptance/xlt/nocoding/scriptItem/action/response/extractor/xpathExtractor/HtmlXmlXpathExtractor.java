@@ -19,7 +19,7 @@ import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 public class HtmlXmlXpathExtractor extends XpathExtractorExecutor
 {
 
-    private SgmlPage htmlPage;
+    private SgmlPage sgmlPage;
 
     /**
      * Contains all the supported types. Supported types so far:
@@ -67,16 +67,21 @@ public class HtmlXmlXpathExtractor extends XpathExtractorExecutor
     {
         if (context instanceof LightWeightContext)
         {
-            htmlPage = ((LightWeightContext) context).getSgmlPage();
+            sgmlPage = ((LightWeightContext) context).getSgmlPage();
         }
         else if (context instanceof DomContext)
         {
-            htmlPage = ((DomContext) context).getPage();
+            sgmlPage = ((DomContext) context).getPage();
         }
         else
         {
             throw new IllegalStateException("Context must be " + LightWeightContext.class.getSimpleName() + " or "
                                             + DomContext.class.getSimpleName() + " but is " + context.getClass().getSimpleName());
+        }
+
+        if (!sgmlPage.hasChildNodes())
+        {
+            throw new IllegalStateException("Page doesn't have children");
         }
 
         final List<DomNode> htmlElements = getHtmlElementListByXPath(getExtractionExpression());
@@ -109,7 +114,7 @@ public class HtmlXmlXpathExtractor extends XpathExtractorExecutor
 
         try
         {
-            final List<DomNode> htmlElements = htmlPage.getByXPath(xPath);
+            final List<DomNode> htmlElements = sgmlPage.getByXPath(xPath);
 
             if (htmlElements.isEmpty())
             {
