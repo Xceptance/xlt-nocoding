@@ -122,7 +122,7 @@ public class RequestTest
         final Boolean encodeBody = false;
         final Boolean encodeParameters = false;
         final Map<String, String> headers = new HashMap<String, String>();
-        final Boolean xhr = false;
+        final Boolean xhr = true;
 
         context.getVariables().store(Constants.URL, url);
         context.getVariables().store(Constants.METHOD, method.toString());

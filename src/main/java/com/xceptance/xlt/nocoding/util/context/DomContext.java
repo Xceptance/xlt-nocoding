@@ -118,14 +118,16 @@ public class DomContext extends Context<SgmlPage>
     public void appendToResultBrowser() throws Exception
     {
         final String name = getWebClient().getTimerName();
-        if (getPage() instanceof HtmlPage)
+        if (getPage() != null)
         {
-            ((SessionImpl) Session.getCurrent()).getRequestHistory().add(name, (HtmlPage) getPage());
+            if (getPage() instanceof HtmlPage)
+            {
+                ((SessionImpl) Session.getCurrent()).getRequestHistory().add(name, (HtmlPage) getPage());
+            }
         }
         else
         {
             ((SessionImpl) Session.getCurrent()).getRequestHistory().add(new LightWeightPageImpl(getWebResponse(), name, getWebClient()));
-
         }
     }
 
