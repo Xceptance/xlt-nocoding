@@ -92,7 +92,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
      *             Most Throwable that happen during execution
      */
     @Test
-    public void executeTest() throws Throwable
+    public void execute() throws Throwable
     {
         XltLogger.runTimeLogger.info("Starting Testcase : " + this.toString());
         // If there are ScriptItems in the itemList
@@ -102,6 +102,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
             for (final ScriptItem item : itemList)
             {
                 XltLogger.runTimeLogger.info("Starting ScriptItem : " + item.toString());
+                context.setScriptItemCount(itemList.indexOf(item));
                 item.execute(context);
             }
         }

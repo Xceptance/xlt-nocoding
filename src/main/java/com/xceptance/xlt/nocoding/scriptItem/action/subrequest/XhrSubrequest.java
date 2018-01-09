@@ -6,7 +6,6 @@ import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.util.ActionItemUtil;
-import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
@@ -92,7 +91,7 @@ public class XhrSubrequest extends AbstractSubrequest
     {
         if (name == null || name.isEmpty())
         {
-            name = context.getDefaultItems().get(Constants.NAME);
+            name = ActionItemUtil.getDefaultName(context, "XhrSubrequest");
         }
         ActionItemUtil.fillDefaultData(actionItems, context);
     }

@@ -95,4 +95,21 @@ public class ActionItemUtil
         }
     }
 
+    /**
+     * @param start
+     * @param context
+     * @return String that starts with <code> start + "-" </code> and adds the current index of scriptItems to it
+     */
+    public static String getDefaultName(final Context<?> context, final String start)
+    {
+        String output = context.getDefaultItems().get(Constants.NAME);
+        // If there is no default name
+        if (output == null || output.isEmpty())
+        {
+            // Assign start + "-x" to name, whereas x is the index of the current scriptItem
+            output = start + "-" + context.getScriptItemCount();
+        }
+        return output;
+    }
+
 }
