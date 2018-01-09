@@ -2,6 +2,7 @@ package com.xceptance.xlt.nocoding.api;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,7 +79,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
                                                 + " but is " + mode);
         }
         // Resolve the filePath to use
-        final String pathToFile = getFilePath();
+        final String pathToFile = getFilePathFromPropertyDirectory();
         // Create the appropriate parser
         this.parser = decideParser(pathToFile);
         // Get or parse the file
@@ -113,7 +114,6 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
             XltLogger.runTimeLogger.error("No Script Items were found");
             throw new IllegalArgumentException("No Script Items were found");
         }
-
     }
 
     public Parser getParser()
@@ -137,7 +137,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
      * 
      * @return String that describes the path to the file
      */
-    protected String getFilePath()
+    protected String getFilePathFromPropertyDirectory()
     {
         // Find the data directory in the property files
         final String dataDirectory = context.getPropertyByKey(NoCodingPropertyAdmin.DIRECTORY);
@@ -151,6 +151,20 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
         }
         // Finally, return the path to the file
         return dataDirectory + File.separatorChar + fileName;
+    }
+
+    /**
+     * Gets the directory from the classpath
+     * 
+     * @return
+     */
+    protected String getFilePathFromClasspath()
+    {
+        // TODO get a file path
+        final String classString = getClass().getSimpleName() + ".class";
+        final URL dataDirectory = getClass().getResource(classString);
+        final String path = dataDirectory.getPath();
+        return path.substring(0, path.length() - classString.length());
     }
 
     /**
@@ -225,7 +239,8 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
      * On the first execution, it gets the list from the parser and saves it in {@link #DATA_CACHE}. Then, it gets the list
      * out of the {@link #DATA_CACHE}.
      * 
-     * @return A list of <code>ScriptItem</code>s generated from the file located at {@link #getFilePath()}
+     * @return A list of <code>ScriptItem</code>s generated from the file located at
+     *         {@link #getFilePathFromPropertyDirectory()}
      * @throws IOException
      *             is thrown, for example, when the file is not found, or the parser encounters an error
      */
