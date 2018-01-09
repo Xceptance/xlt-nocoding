@@ -102,6 +102,7 @@ public class ActionItemUtil
      */
     public static String getDefaultName(final Context<?> context, final String start)
     {
+        // Get the default name from the data storage
         String output = context.getDefaultItems().get(Constants.NAME);
         // If there is no default name
         if (output == null || output.isEmpty())

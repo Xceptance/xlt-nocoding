@@ -184,10 +184,6 @@ public class ActionItemParser
             actionItems.add(new Response(responseItems));
         }
 
-        if (name == null || name.isEmpty())
-        {
-            name = "Action-" + record.getRecordNumber();
-        }
         final Action action = new Action(name, actionItems);
         return action;
     }
