@@ -9,9 +9,21 @@ import org.apache.commons.csv.CSVRecord;
 import com.xceptance.xlt.nocoding.parser.csvParser.CsvConstants;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
 
+/**
+ * The class for parsing static subrequests.
+ * 
+ * @author ckeiner
+ */
 public class StaticItemParser
 {
 
+    /**
+     * Parses the static subrequest item in the static block to a {@link StaticSubrequest}.
+     * 
+     * @param record
+     *            The {@link CSVRecord} the item starts at
+     * @return A <code>StaticSubrequest</code> with the parsed URLs
+     */
     public StaticSubrequest parse(final CSVRecord record)
     {
         // Initialize variables
@@ -21,7 +33,9 @@ public class StaticItemParser
         final Iterator<String> headerIterator = record.toMap().keySet().iterator();
         while (headerIterator.hasNext())
         {
+            // Get the next header
             final String header = headerIterator.next();
+            // Get the value of the header
             final String value = record.get(header);
 
             switch (header)

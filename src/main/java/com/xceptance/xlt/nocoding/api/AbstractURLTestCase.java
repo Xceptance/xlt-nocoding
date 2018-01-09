@@ -102,6 +102,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
             for (final ScriptItem item : itemList)
             {
                 XltLogger.runTimeLogger.info("Starting ScriptItem : " + item.toString());
+                // TODO count zu index umbenennen -> storeItem interferiert
                 context.setScriptItemCount(itemList.indexOf(item));
                 item.execute(context);
             }

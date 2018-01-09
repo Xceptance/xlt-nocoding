@@ -23,8 +23,8 @@ import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
- * Reads a Yaml file, provided per constructor, and generates an {@link List} filled with {@link ScriptItem}s out of the
- * Yaml file.
+ * Reads a Yaml file, provided per constructor, and generates an List filled with {@link ScriptItem}s out of the Yaml
+ * file.
  * 
  * @author ckeiner
  */

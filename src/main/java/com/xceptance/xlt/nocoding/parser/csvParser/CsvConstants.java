@@ -6,7 +6,7 @@ import java.util.Set;
 import org.apache.commons.csv.CSVFormat;
 
 /**
- * Has all important constants for parsing a csv file
+ * This class has all important constants for parsing a CSV file
  * 
  * @author ckeiner
  */

@@ -7,6 +7,7 @@ import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.SgmlPage;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.WebResponse;
+import com.gargoylesoftware.htmlunit.xml.XmlPage;
 import com.xceptance.xlt.api.engine.Session;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
 import com.xceptance.xlt.api.util.XltLogger;
@@ -85,7 +86,7 @@ public class LightWeightContext extends Context<LightWeightPage>
                 // If the built page is an instance of SgmlPage
                 if (page instanceof SgmlPage)
                 {
-                    if (!((SgmlPage) page).hasChildNodes())
+                    if (page instanceof XmlPage && ((XmlPage) page).getXmlDocument() == null)
                     {
                         throw new IllegalStateException("Faulty WebResponse, the page doesn't have child nodes.");
                     }

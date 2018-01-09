@@ -9,6 +9,7 @@ import org.apache.commons.csv.CSVRecord;
 
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.parser.csvParser.CsvConstants;
+import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.Action;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
@@ -24,9 +25,21 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.store.ResponseStore
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.AbstractValidationMethod;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.MatchesValidator;
 
+/**
+ * The class for parsing an action item.
+ * 
+ * @author ckeiner
+ */
 public class ActionItemParser
 {
 
+    /**
+     * Parses the action item to a list of {@link ScriptItem}s.
+     * 
+     * @param record
+     *            The {@link CSVRecord} with the the action item
+     * @return The Action defined by the CSVRecord
+     */
     public Action parse(final CSVRecord record)
     {
         // Initialize all needed variables
@@ -44,6 +57,7 @@ public class ActionItemParser
 
         // Build an iterator over the headers
         final Iterator<String> headerIterator = record.toMap().keySet().iterator();
+        // While there are headers
         while (headerIterator.hasNext())
         {
             // Get the next header
@@ -149,42 +163,52 @@ public class ActionItemParser
                     else
                     {
                         // Throw an exception
-                        throw new IllegalArgumentException("Unknown or illegal header: " + header);
+                        throw new IllegalArgumentException("Allowed header but not implemented: " + header);
                     }
             }
         }
 
         // Build an action with the data
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
+
+        // Build the request
         final Request request = new Request(url);
         request.setHttpMethod(method);
         request.setParameters(parameters);
         request.setEncodeBody(encoded);
         request.setEncodeParameters(encoded);
+        // Add the request to the actionItems
         actionItems.add(request);
 
+        // Build the response
         final List<AbstractResponseItem> responseItems = new ArrayList<AbstractResponseItem>();
 
+        // HttpcodeValidator
         if (responsecode != null)
         {
             responseItems.add(new HttpcodeValidator(responsecode));
         }
+        // Validator
         if (extractor != null)
         {
             final String validationName = "Validate " + name;
             final Validator validator = new Validator(validationName, extractor, textValidator);
             responseItems.add(validator);
         }
+        // ResponseStore
         if (responseStores != null && !responseStores.isEmpty())
         {
             responseItems.addAll(responseStores);
         }
+        // Create response if there are responseItems
         if (responseItems != null && !responseItems.isEmpty())
         {
             actionItems.add(new Response(responseItems));
         }
 
+        // Build the action
         final Action action = new Action(name, actionItems);
+        // Return the action
         return action;
     }
 

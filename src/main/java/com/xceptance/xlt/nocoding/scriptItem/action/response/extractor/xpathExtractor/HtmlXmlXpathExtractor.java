@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.gargoylesoftware.htmlunit.SgmlPage;
 import com.gargoylesoftware.htmlunit.html.DomNode;
+import com.gargoylesoftware.htmlunit.xml.XmlPage;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.context.DomContext;
@@ -79,9 +80,9 @@ public class HtmlXmlXpathExtractor extends XpathExtractorExecutor
                                             + DomContext.class.getSimpleName() + " but is " + context.getClass().getSimpleName());
         }
 
-        if (!sgmlPage.hasChildNodes())
+        if (sgmlPage instanceof XmlPage && ((XmlPage) sgmlPage).getXmlDocument() == null)
         {
-            throw new IllegalStateException("Page doesn't have children");
+            throw new IllegalStateException("Xml page doesn't have a document");
         }
 
         final List<DomNode> htmlElements = getHtmlElementListByXPath(getExtractionExpression());
@@ -91,7 +92,6 @@ public class HtmlXmlXpathExtractor extends XpathExtractorExecutor
             XltLogger.runTimeLogger.debug("Found Element: " + elementAsString);
             addResult(elementAsString);
         }
-
     }
 
     private String getStringFromHtmlElement(final DomNode node)
