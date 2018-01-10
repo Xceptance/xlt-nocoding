@@ -2,7 +2,7 @@ package com.xceptance.xlt.nocoding.api;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,10 +78,12 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
                 throw new IllegalStateException("Mode must be " + NoCodingPropertyAdmin.LIGHTWEIGHT + " or " + NoCodingPropertyAdmin.DOM
                                                 + " but is " + mode);
         }
-        // Resolve the filePath to use
-        final String pathToFile = getFilePathFromPropertyDirectory();
+        final List<String> filePaths = new ArrayList<String>(2);
+        // Resolve the possible filePaths
+        filePaths.add(getFilePathFromClasspath());
+        filePaths.add(getFilePathFromPropertyDirectory());
         // Create the appropriate parser
-        this.parser = decideParser(pathToFile);
+        this.parser = decideParser(filePaths);
         // Get or parse the file
         itemList = getOrParse();
     }
@@ -160,76 +162,100 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
      */
     protected String getFilePathFromClasspath()
     {
-        // TODO get a file path
         final String classString = getClass().getSimpleName() + ".class";
-        final URL dataDirectory = getClass().getResource(classString);
-        final String path = dataDirectory.getPath();
-        return path.substring(0, path.length() - classString.length());
+        final String path = getClass().getResource(classString).getPath();
+        final String dataDirectory = path.substring(0, path.length() - 1 - classString.length());
+
+        String fileName = context.getPropertyByKey(NoCodingPropertyAdmin.FILENAME);
+        // If the fileName is empty
+        if (StringUtils.isBlank(fileName))
+        {
+            // Get the class and convert the class to a simple name
+            fileName = getClass().getSimpleName();
+        }
+        // Finally, return the path to the file
+        return dataDirectory + File.separatorChar + fileName;
     }
 
     /**
      * Creates the correct parser depending on the file extension. For example creates a {@link YamlParser} for yml/yaml
      * files and a {@link JacksonCsvParser} for csv files.
      * 
-     * @param pathToFile
+     * @param paths
      *            The path to the file with or without the extension.
      * @return The {@link Parser} that should be used for the specified file.
      */
-    protected Parser decideParser(String pathToFile)
+    protected Parser decideParser(final List<String> paths)
     {
         Parser parser = null;
-        // Get the extension
-        final String fileExtension = FilenameUtils.getExtension(pathToFile);
-        // If it is yml or yaml
-        if (fileExtension.equalsIgnoreCase("yml") || fileExtension.equalsIgnoreCase("yaml"))
+        // For each path
+        for (String path : paths)
         {
-            String parserInput = pathToFile;
-            // if the pathToFile does not contain the fileExtension, add it
-            if (!pathToFile.contains(fileExtension))
+            // Get the extensions
+            final String fileExtension = FilenameUtils.getExtension(path);
+            if (!fileExtension.isEmpty() && new File(path).isFile())
             {
-                parserInput += fileExtension;
+                // If it is yml or yaml
+                if (fileExtension.equalsIgnoreCase("yml") || fileExtension.equalsIgnoreCase("yaml"))
+                {
+                    parser = new YamlParser(path);
+                }
+                else if (fileExtension.equalsIgnoreCase("csv"))
+                {
+                    parser = new CsvParser(path);
+                }
+                else
+                {
+                    throw new IllegalArgumentException("Unknown file extension " + fileExtension);
+                }
+                break;
             }
-            // Create the YamlParser with the correct input
-            parser = new YamlParser(parserInput);
-        }
-        // If the file extension is empty, try to add yml, yaml and csv
-        else if (fileExtension.isEmpty())
-        {
-            // check for YAML files first
-            final String[] yamlPaths =
-                {
-                  pathToFile + ".yml", pathToFile + ".yaml"
-                };
-
-            for (final String yamlPath : yamlPaths)
+            // If the file extension is empty, try to add yml, yaml and csv
+            else if (fileExtension.isEmpty())
             {
-                // If the new path is a file, create the parser and quit the loop
-                if (new File(yamlPath).isFile())
+                // Check for YAML files first
+                final String[] yamlPaths =
+                    {
+                      path + ".yml", path + ".yaml"
+                    };
+
+                for (final String yamlPath : yamlPaths)
                 {
-                    pathToFile = yamlPath;
-                    parser = new YamlParser(pathToFile);
+                    // If the new path is a file, create the parser and quit the loop
+                    if (new File(yamlPath).isFile())
+                    {
+                        path = yamlPath;
+                        parser = new YamlParser(path);
+                        break;
+                    }
+                }
+                // If a yaml file has been found, the parser isn't null anymore, therefore break out of the loop
+                if (parser != null)
+                {
+                    break;
+                }
+
+                // Check for CSV file second
+                final String csvPath = path + ".csv";
+                if (new File(csvPath).isFile())
+                {
+                    path = csvPath;
+                    parser = new CsvParser(path);
                     break;
                 }
             }
-
-            // check for CSV file second
-            final String csvPath = pathToFile + ".csv";
-            if (new File(csvPath).isFile())
+            else
             {
-                pathToFile = csvPath;
-                parser = new CsvParser(pathToFile);
-                // throw new NotImplementedException("Csv not yet implemented.");
+                throw new IllegalArgumentException("Illegal file type: " + "\"" + fileExtension + "\"" + "\n"
+                                                   + "Supported types: '.yaml' | '.yml'\n");// or '.csv'" + "\n");
             }
         }
-        else
-        {
-            throw new IllegalArgumentException("Illegal file type: " + "\"" + fileExtension + "\"" + "\n"
-                                               + "Supported types: '.yaml' | '.yml'\n");// or '.csv'" + "\n");
-        }
+
+        // If the parser still is null, no file was found
         if (parser == null)
         {
             // No file with a supported extension was found
-            throw new IllegalArgumentException("Failed to find a script file for file path: " + pathToFile);
+            throw new IllegalArgumentException("Failed to find a script file for file path: " + paths);
         }
         return parser;
     }
