@@ -32,7 +32,7 @@ public class StoreDefaultItem extends StoreDefault
      * {@link Context#storeConfigItem(String, String)}.
      */
     @Override
-    public void execute(final Context<?> context) throws Throwable
+    public void execute(final Context<?> context)
     {
         // Resolve values
         super.resolveValues(context);

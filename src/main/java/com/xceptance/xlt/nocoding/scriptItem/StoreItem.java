@@ -38,7 +38,7 @@ public class StoreItem implements ScriptItem
      * {@link #value} via {@link Context#storeVariable(String, String)}.
      */
     @Override
-    public void execute(final Context<?> context) throws Throwable
+    public void execute(final Context<?> context)
     {
         // Resolve values
         resolveValues(context);

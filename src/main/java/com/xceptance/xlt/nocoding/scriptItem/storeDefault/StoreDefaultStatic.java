@@ -33,7 +33,7 @@ public class StoreDefaultStatic extends StoreDefault
      * {@link Context#storeDefaultStatic(String)}.
      */
     @Override
-    public void execute(final Context<?> context) throws Throwable
+    public void execute(final Context<?> context)
     {
         // Resolve values
         super.resolveValues(context);

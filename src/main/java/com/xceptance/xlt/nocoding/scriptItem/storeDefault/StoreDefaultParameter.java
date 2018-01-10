@@ -31,7 +31,7 @@ public class StoreDefaultParameter extends StoreDefault
      * {@link Context#storeDefaultParameter(String, String)}.
      */
     @Override
-    public void execute(final Context<?> context) throws Throwable
+    public void execute(final Context<?> context)
     {
         // Resolve values
         super.resolveValues(context);
