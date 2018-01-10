@@ -23,7 +23,7 @@ public class Validator extends AbstractResponseItem
     /**
      * The extractor to use
      */
-    private final AbstractExtractor extractor;
+    private AbstractExtractor extractor;
 
     /**
      * The validation method
@@ -101,6 +101,16 @@ public class Validator extends AbstractResponseItem
     public AbstractValidationMethod getMethod()
     {
         return method;
+    }
+
+    public void setExtractor(final AbstractExtractor extractor)
+    {
+        this.extractor = extractor;
+    }
+
+    public void setMethod(final AbstractValidationMethod method)
+    {
+        this.method = method;
     }
 
 }

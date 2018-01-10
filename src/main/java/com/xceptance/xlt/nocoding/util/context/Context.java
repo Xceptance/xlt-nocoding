@@ -34,9 +34,9 @@ public abstract class Context<T>
     protected NoCodingPropertyAdmin propertyAdmin;
 
     /**
-     * Counter for the scriptitems
+     * The index of the script item
      */
-    protected int scriptItemCount;
+    protected int scriptItemIndex;
 
     /**
      * The page corresponding to the {@link #webResponse}
@@ -85,7 +85,7 @@ public abstract class Context<T>
         this.resolver = context.getResolver();
         this.webResponse = context.getWebResponse();
         this.propertyAdmin = context.getPropertyAdmin();
-        scriptItemCount = 0;
+        scriptItemIndex = 0;
     }
 
     /**
@@ -150,14 +150,14 @@ public abstract class Context<T>
         return propertyAdmin;
     }
 
-    public int getScriptItemCount()
+    public int getScriptItemIndex()
     {
-        return scriptItemCount;
+        return scriptItemIndex;
     }
 
-    public void setScriptItemCount(final int scriptItemCount)
+    public void setScriptItemIndex(final int scriptItemIndex)
     {
-        this.scriptItemCount = scriptItemCount;
+        this.scriptItemIndex = scriptItemIndex;
     }
 
     /**

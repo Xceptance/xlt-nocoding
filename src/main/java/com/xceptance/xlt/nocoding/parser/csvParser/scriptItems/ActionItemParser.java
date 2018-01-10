@@ -43,14 +43,18 @@ public class ActionItemParser
     public Action parse(final CSVRecord record)
     {
         // Initialize all needed variables
+        // for the request
         String name = null;
         String url = null;
         String method = null;
         List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-        String responsecode = null;
+        String encoded = null;
+
+        // For the response
+        final List<AbstractResponseItem> responseItems = new ArrayList<AbstractResponseItem>();
         AbstractExtractor extractor = null;
         AbstractValidationMethod textValidator = null;
-        String encoded = null;
+
         final List<AbstractResponseStore> responseStores = new ArrayList<AbstractResponseStore>();
         boolean hasXpath = false;
         boolean hasRegexp = false;
@@ -62,12 +66,6 @@ public class ActionItemParser
         {
             // Get the next header
             final String header = headerIterator.next();
-            // Verify that the header is permitted or one of the regexp/xpath getters
-            if (!CsvConstants.isPermittedHeaderField(header))
-            {
-                if (!(header.contains(CsvConstants.REGEXP_GETTER_PREFIX) || header.contains(CsvConstants.XPATH_GETTER_PREFIX)))
-                    throw new IllegalArgumentException(header + "isn't an allowed header!");
-            }
             // Get the value
             final String value = record.get(header);
             // If the value is null or empty, discard it
@@ -100,7 +98,7 @@ public class ActionItemParser
                     parameters = readParameters(value);
                     break;
                 case CsvConstants.RESPONSECODE:
-                    responsecode = value;
+                    responseItems.add(new HttpcodeValidator(value));
                     break;
                 case CsvConstants.XPATH:
                     if (!hasRegexp)
@@ -135,29 +133,14 @@ public class ActionItemParser
                     // If the fieldName contains either REGEXP_GETTER_PREFIX and XPath isn't used
                     if (header.contains(CsvConstants.REGEXP_GETTER_PREFIX) && !hasXpath)
                     {
-                        if (!hasXpath)
-                        {
-                            responseStores.add(handleStore(header, value));
-                            hasRegexp = true;
-                        }
-                        else
-                        {
-                            throw new IllegalArgumentException("Cannot use Xpath and Regexp together!");
-                        }
+                        responseItems.add(handleStore(header, value));
+                        hasRegexp = true;
                     }
                     // If the fieldName contains either XPATH_GETTER_PREFIX and Regexp isn't used
                     else if (header.contains(CsvConstants.XPATH_GETTER_PREFIX) && !hasRegexp)
                     {
-                        // Create a response store
-                        if (!hasRegexp)
-                        {
-                            responseStores.add(handleStore(header, value));
-                            hasXpath = true;
-                        }
-                        else
-                        {
-                            throw new IllegalArgumentException("Cannot use Xpath and Regexp together!");
-                        }
+                        responseItems.add(handleStore(header, value));
+                        hasXpath = true;
                     }
                     // In every other case, throw an error
                     else
@@ -181,13 +164,7 @@ public class ActionItemParser
         actionItems.add(request);
 
         // Build the response
-        final List<AbstractResponseItem> responseItems = new ArrayList<AbstractResponseItem>();
 
-        // HttpcodeValidator
-        if (responsecode != null)
-        {
-            responseItems.add(new HttpcodeValidator(responsecode));
-        }
         // Validator
         if (extractor != null)
         {

@@ -78,7 +78,7 @@ public class Action implements ScriptItem
     {
         if (name == null || name.isEmpty())
         {
-            name = ActionItemUtil.getDefaultName(context, "Action");
+            setName(ActionItemUtil.getDefaultName(context, "Action"));
         }
         ActionItemUtil.assertOrder(actionItems);
         ActionItemUtil.fillDefaultData(actionItems, context);

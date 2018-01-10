@@ -19,6 +19,7 @@ import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.csvParser.CsvParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
+import com.xceptance.xlt.nocoding.scriptItem.action.Action;
 import com.xceptance.xlt.nocoding.util.NoCodingPropertyAdmin;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.context.DomContext;
@@ -224,8 +225,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
             }
             else
             {
-                throw new IllegalArgumentException("Illegal file type: " + "\"" + fileExtension + "\"" + "\n"
-                                                   + "Supported types: '.yaml' | '.yml'\n");// or '.csv'" + "\n");
+                throw new IllegalArgumentException("File extension defined but no File was found: " + "\"" + fileExtension);
             }
         }
         return correctPath;
@@ -257,7 +257,7 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
             }
             else
             {
-                throw new IllegalArgumentException("Unknown file extension " + fileExtension);
+                throw new IllegalArgumentException("Unknown file extension: " + fileExtension);
             }
         }
         // If the file extension is empty, try to add yml, yaml and csv
@@ -313,12 +313,15 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
         // If there are ScriptItems in the itemList
         if (getItemList() != null && !getItemList().isEmpty())
         {
+            int index = 0;
             // Execute every item
             for (final ScriptItem item : itemList)
             {
                 XltLogger.runTimeLogger.info("Starting ScriptItem : " + item.toString());
-                // TODO count zu index umbenennen -> storeItem interferiert
-                context.setScriptItemCount(itemList.indexOf(item));
+                if (item instanceof Action)
+                {
+                    context.setScriptItemIndex(index++);
+                }
                 item.execute(context);
             }
         }

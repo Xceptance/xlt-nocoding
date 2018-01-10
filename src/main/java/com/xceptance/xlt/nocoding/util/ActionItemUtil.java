@@ -108,7 +108,7 @@ public class ActionItemUtil
         if (output == null || output.isEmpty())
         {
             // Assign start + "-x" to name, whereas x is the index of the current scriptItem
-            output = start + "-" + context.getScriptItemCount();
+            output = start + "-" + context.getScriptItemIndex();
         }
         return output;
     }
