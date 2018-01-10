@@ -51,11 +51,26 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
      */
     private Context<?> context;
 
+    public Parser getParser()
+    {
+        return parser;
+    }
+
+    public List<ScriptItem> getItemList()
+    {
+        return itemList;
+    }
+
+    public Context<?> getContext()
+    {
+        return context;
+    }
+
     /**
-     * Prepares a test case by parsing the file
+     * Prepares a test case by parsing the contents of the file to {@link #itemList}
      * 
      * @throws IOException
-     *             is thrown, for example, when the file is not found, or the parser encounters an error
+     *             is thrown when the file is not found or the parser encounters an error
      */
     @Before
     public void initialize() throws IOException
@@ -78,14 +93,211 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
                 throw new IllegalStateException("Mode must be " + NoCodingPropertyAdmin.LIGHTWEIGHT + " or " + NoCodingPropertyAdmin.DOM
                                                 + " but is " + mode);
         }
-        final List<String> filePaths = new ArrayList<String>(2);
-        // Resolve the possible filePaths
-        filePaths.add(getFilePathFromClasspath());
-        filePaths.add(getFilePathFromPropertyDirectory());
+        // Get the possible filePaths
+        final List<String> filepaths = getAllPossibleFilepaths();
+        // Find the path that returns an existing File
+        final String filepath = getExistingFilepath(filepaths);
         // Create the appropriate parser
-        this.parser = decideParser(filePaths);
+        this.parser = decideParser(filepath);
         // Get or parse the file
         itemList = getOrParse();
+    }
+
+    /**
+     * Gets all possible filepaths, that is: Classpath and the provided directory in the properties
+     * 
+     * @return A list of Strings, that contain all file paths
+     */
+    protected List<String> getAllPossibleFilepaths()
+    {
+        final List<String> filepaths = new ArrayList<String>(2);
+        // Get the fileName from the property files
+        String fileName = context.getPropertyByKey(NoCodingPropertyAdmin.FILENAME);
+        // If the fileName is empty
+        if (StringUtils.isBlank(fileName))
+        {
+            // Get the class and convert the class to a simple name
+            fileName = getClass().getSimpleName();
+        }
+        String directory = getDirectoryToClasspath();
+        filepaths.add(directory + fileName);
+        directory = getDirectoryFromProperties();
+        filepaths.add(directory + fileName);
+        return filepaths;
+    }
+
+    /**
+     * Gets the directory from the file paths, ending with {@link File#separatorChar}
+     * 
+     * @return String that describes the path to the file
+     */
+    protected String getDirectoryFromProperties()
+    {
+        // Get the directory from the properties
+        String directory = context.getPropertyByKey(NoCodingPropertyAdmin.DIRECTORY);
+        // If it doesn't end with the File.separatorChar
+        if (!directory.endsWith(String.valueOf(File.separatorChar)))
+        {
+            // Add the separatorChar
+            directory = directory + File.separatorChar;
+        }
+        // Return the directory
+        return directory;
+    }
+
+    /**
+     * Gets the directory from the classpath, ending with {@link File#separatorChar}
+     * 
+     * @return
+     */
+    protected String getDirectoryToClasspath()
+    {
+        // Get the classname with .class after it
+        final String classString = getClass().getSimpleName() + ".class";
+        // Get the URL to the class and extract its path
+        final String path = getClass().getResource(classString).getPath();
+        // Remove the classname with .class
+        String directory = path.substring(0, path.length() - classString.length());
+
+        // If the directory does not end with the File.separatorChar
+        if (!directory.endsWith(String.valueOf(File.separatorChar)))
+        {
+            // Add the separatorChar
+            directory = directory + File.separatorChar;
+        }
+        // Return the directory
+        return directory;
+    }
+
+    /**
+     * Goes through all provided file paths and tries to find a path to an existing file. If the extension is missing, it
+     * adds yml, yaml and csv and searches for the file in that order.
+     * 
+     * @param possiblePaths
+     *            All possible filepaths to look into, with or without file extension
+     * @return The path to a found file
+     */
+    protected String getExistingFilepath(final List<String> possiblePaths)
+    {
+        String correctPath = null;
+        for (final String filepath : possiblePaths)
+        {
+            // Get the extensions
+            final String fileExtension = FilenameUtils.getExtension(filepath);
+            if (!fileExtension.isEmpty() && new File(filepath).isFile())
+            {
+                correctPath = filepath;
+                break;
+            }
+
+            // If the file extension is empty, try to add yml, yaml and csv
+            else if (fileExtension.isEmpty())
+            {
+                // Check for YAML files first
+                final String[] yamlPaths =
+                    {
+                      filepath + ".yml", filepath + ".yaml"
+                    };
+
+                for (final String yamlPath : yamlPaths)
+                {
+                    // If the new path is a file, create the parser and quit the loop
+                    if (new File(yamlPath).isFile())
+                    {
+                        correctPath = yamlPath;
+                        break;
+                    }
+                }
+                // If a yaml file has been found, the pathToFile isn't null anymore, therefore break out of the loop
+                if (correctPath != null)
+                {
+                    break;
+                }
+
+                // Check for CSV file second
+                final String csvPath = filepath + ".csv";
+                if (new File(csvPath).isFile())
+                {
+                    correctPath = csvPath;
+                    break;
+                }
+            }
+            else
+            {
+                throw new IllegalArgumentException("Illegal file type: " + "\"" + fileExtension + "\"" + "\n"
+                                                   + "Supported types: '.yaml' | '.yml'\n");// or '.csv'" + "\n");
+            }
+        }
+        return correctPath;
+    }
+
+    /**
+     * Creates the correct parser depending on the file extension. For example creates a {@link YamlParser} for yml/yaml
+     * files and a {@link CsvParser} for csv files.
+     * 
+     * @param path
+     *            The path to the file with the file extension
+     * @return The {@link Parser} that should be used for the specified file.
+     */
+    protected Parser decideParser(final String path)
+    {
+        Parser parser = null;
+        // Get the extensions
+        final String fileExtension = FilenameUtils.getExtension(path);
+        if (!fileExtension.isEmpty() && new File(path).isFile())
+        {
+            // If it is yml or yaml
+            if (fileExtension.equalsIgnoreCase("yml") || fileExtension.equalsIgnoreCase("yaml"))
+            {
+                parser = new YamlParser(path);
+            }
+            else if (fileExtension.equalsIgnoreCase("csv"))
+            {
+                parser = new CsvParser(path);
+            }
+            else
+            {
+                throw new IllegalArgumentException("Unknown file extension " + fileExtension);
+            }
+        }
+        // If the file extension is empty, try to add yml, yaml and csv
+        else if (fileExtension.isEmpty())
+        {
+            throw new IllegalArgumentException("Illegal file: " + "\"" + path + "\"" + "\n"
+                                               + "Supported types: '.yaml', '.yml' or '.csv'\n");
+        }
+
+        // If the parser still is null, no file was found
+        if (parser == null)
+        {
+            // No file with a supported extension was found
+            throw new IllegalArgumentException("Failed to find a script file for file path: " + path);
+        }
+        return parser;
+    }
+
+    /**
+     * Gets the list of <code>ScriptItem</code>s either by parsing them or from the cache. <br>
+     * On the first execution, it gets the list from the parser and saves it in {@link #DATA_CACHE}. Then, it gets the list
+     * out of the {@link #DATA_CACHE}.
+     * 
+     * @return A list of <code>ScriptItem</code>s generated from the file located at {@link #getDirectoryFromProperties()}
+     * @throws IOException
+     *             is thrown, for example, when the file is not found, or the parser encounters an error
+     */
+    protected List<ScriptItem> getOrParse() throws IOException
+    {
+        synchronized (DATA_CACHE)
+        {
+            final String filePath = parser.getFile().getAbsolutePath();
+            List<ScriptItem> result = DATA_CACHE.get(filePath);
+            if (result == null)
+            {
+                result = parser.parse();
+                DATA_CACHE.put(filePath, result);
+            }
+            return result;
+        }
     }
 
     /**
@@ -115,173 +327,6 @@ public abstract class AbstractURLTestCase extends AbstractTestCase
         {
             XltLogger.runTimeLogger.error("No Script Items were found");
             throw new IllegalArgumentException("No Script Items were found");
-        }
-    }
-
-    public Parser getParser()
-    {
-        return parser;
-    }
-
-    public List<ScriptItem> getItemList()
-    {
-        return itemList;
-    }
-
-    public Context<?> getContext()
-    {
-        return context;
-    }
-
-    /**
-     * Gets the file path, that is the path with the name of the file. <br>
-     * Uses {@value File#separatorChar} between the directory and the filename.
-     * 
-     * @return String that describes the path to the file
-     */
-    protected String getFilePathFromPropertyDirectory()
-    {
-        // Find the data directory in the property files
-        final String dataDirectory = context.getPropertyByKey(NoCodingPropertyAdmin.DIRECTORY);
-        // Get the fileName from the property files
-        String fileName = context.getPropertyByKey(NoCodingPropertyAdmin.FILENAME);
-        // If the fileName is empty
-        if (StringUtils.isBlank(fileName))
-        {
-            // Get the class and convert the class to a simple name
-            fileName = getClass().getSimpleName();
-        }
-        // Finally, return the path to the file
-        return dataDirectory + File.separatorChar + fileName;
-    }
-
-    /**
-     * Gets the directory from the classpath
-     * 
-     * @return
-     */
-    protected String getFilePathFromClasspath()
-    {
-        final String classString = getClass().getSimpleName() + ".class";
-        final String path = getClass().getResource(classString).getPath();
-        final String dataDirectory = path.substring(0, path.length() - 1 - classString.length());
-
-        String fileName = context.getPropertyByKey(NoCodingPropertyAdmin.FILENAME);
-        // If the fileName is empty
-        if (StringUtils.isBlank(fileName))
-        {
-            // Get the class and convert the class to a simple name
-            fileName = getClass().getSimpleName();
-        }
-        // Finally, return the path to the file
-        return dataDirectory + File.separatorChar + fileName;
-    }
-
-    /**
-     * Creates the correct parser depending on the file extension. For example creates a {@link YamlParser} for yml/yaml
-     * files and a {@link JacksonCsvParser} for csv files.
-     * 
-     * @param paths
-     *            The path to the file with or without the extension.
-     * @return The {@link Parser} that should be used for the specified file.
-     */
-    protected Parser decideParser(final List<String> paths)
-    {
-        Parser parser = null;
-        // For each path
-        for (String path : paths)
-        {
-            // Get the extensions
-            final String fileExtension = FilenameUtils.getExtension(path);
-            if (!fileExtension.isEmpty() && new File(path).isFile())
-            {
-                // If it is yml or yaml
-                if (fileExtension.equalsIgnoreCase("yml") || fileExtension.equalsIgnoreCase("yaml"))
-                {
-                    parser = new YamlParser(path);
-                }
-                else if (fileExtension.equalsIgnoreCase("csv"))
-                {
-                    parser = new CsvParser(path);
-                }
-                else
-                {
-                    throw new IllegalArgumentException("Unknown file extension " + fileExtension);
-                }
-                break;
-            }
-            // If the file extension is empty, try to add yml, yaml and csv
-            else if (fileExtension.isEmpty())
-            {
-                // Check for YAML files first
-                final String[] yamlPaths =
-                    {
-                      path + ".yml", path + ".yaml"
-                    };
-
-                for (final String yamlPath : yamlPaths)
-                {
-                    // If the new path is a file, create the parser and quit the loop
-                    if (new File(yamlPath).isFile())
-                    {
-                        path = yamlPath;
-                        parser = new YamlParser(path);
-                        break;
-                    }
-                }
-                // If a yaml file has been found, the parser isn't null anymore, therefore break out of the loop
-                if (parser != null)
-                {
-                    break;
-                }
-
-                // Check for CSV file second
-                final String csvPath = path + ".csv";
-                if (new File(csvPath).isFile())
-                {
-                    path = csvPath;
-                    parser = new CsvParser(path);
-                    break;
-                }
-            }
-            else
-            {
-                throw new IllegalArgumentException("Illegal file type: " + "\"" + fileExtension + "\"" + "\n"
-                                                   + "Supported types: '.yaml' | '.yml'\n");// or '.csv'" + "\n");
-            }
-        }
-
-        // If the parser still is null, no file was found
-        if (parser == null)
-        {
-            // No file with a supported extension was found
-            throw new IllegalArgumentException("Failed to find a script file for file path: " + paths);
-        }
-        return parser;
-    }
-
-    /**
-     * Gets the list of <code>ScriptItem</code>s either by parsing them or from the cache. <br>
-     * On the first execution, it gets the list from the parser and saves it in {@link #DATA_CACHE}. Then, it gets the list
-     * out of the {@link #DATA_CACHE}.
-     * 
-     * @return A list of <code>ScriptItem</code>s generated from the file located at
-     *         {@link #getFilePathFromPropertyDirectory()}
-     * @throws IOException
-     *             is thrown, for example, when the file is not found, or the parser encounters an error
-     */
-    public List<ScriptItem> getOrParse() throws IOException
-    {
-        synchronized (DATA_CACHE)
-        {
-            final String filePath = parser.getFile().getAbsolutePath();
-            List<ScriptItem> result = DATA_CACHE.get(filePath);
-            if (result == null)
-            {
-                result = parser.parse();
-                DATA_CACHE.put(filePath, result);
-            }
-            return result;
         }
     }
 
