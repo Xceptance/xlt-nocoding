@@ -7,9 +7,9 @@ import org.apache.commons.csv.CSVRecord;
 
 import com.xceptance.xlt.nocoding.parser.csvParser.CsvConstants;
 
-public abstract class CsvScriptItemParserTest
+public class CsvParserTestUtils
 {
-    protected Iterable<CSVRecord> buildRecord(final String input) throws IOException
+    public static Iterable<CSVRecord> buildRecord(final String input) throws IOException
     {
         final StringReader in = new StringReader(input);
         return CsvConstants.CSV_FORMAT.withFirstRecordAsHeader().parse(in);
