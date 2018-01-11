@@ -161,14 +161,14 @@ public class CsvParser extends Parser
             {
                 String number = "";
                 // Verify if it starts with the regexp getter prefix
-                if ((!header.startsWith(CsvConstants.REGEXP_GETTER_PREFIX)))
+                if (header.startsWith(CsvConstants.REGEXP_GETTER_PREFIX))
                 {
-                    number = header.substring(CsvConstants.REGEXP_GETTER_PREFIX.length() - 1);
+                    number = header.substring(CsvConstants.REGEXP_GETTER_PREFIX.length());
                 }
                 // If it starts with the xpath getter prefix
-                else if ((!header.startsWith(CsvConstants.XPATH_GETTER_PREFIX)))
+                else if (header.startsWith(CsvConstants.XPATH_GETTER_PREFIX))
                 {
-                    number = header.substring(CsvConstants.XPATH_GETTER_PREFIX.length() - 1);
+                    number = header.substring(CsvConstants.XPATH_GETTER_PREFIX.length());
                 }
                 // If it neither starts with the xpath or regexp getter prefix, throw an error
                 else

@@ -1,5 +1,6 @@
 package com.xceptance.xlt.nocoding.parser.csvParser;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.Assert;
@@ -21,13 +22,21 @@ public class CsvParserTest extends ParserTest
 
     protected final String fileStaticFile = path + "static.csv";
 
+    protected final String fileMalformedRegexpStoreFile = path + "malformedRegexpStoreHeader.csv";
+
+    protected final String fileRegexpStoreFile = path + "regexpStoreHeader.csv";
+
+    protected final String fileMalformedXpathStoreFile = path + "malformedXpathStoreHeader.csv";
+
+    protected final String fileXpathStoreFile = path + "xpathStoreHeader.csv";
+
     /**
      * Verifies a simple csv file can be parsed
      * 
-     * @throws Exception
+     * @throws IOException
      */
     @Test
-    public void testSimpleFileParsing() throws Exception
+    public void testSimpleFileParsing() throws IOException
     {
         final String url = "http://hostname/";
         final Parser parser = new CsvParser(fileSimpleFile);
@@ -44,10 +53,10 @@ public class CsvParserTest extends ParserTest
     /**
      * Verifies static requests are parsed correctly
      * 
-     * @throws Exception
+     * @throws IOException
      */
     @Test
-    public void testStaticFileParsing() throws Exception
+    public void testStaticFileParsing() throws IOException
     {
         final String url = "http://www.xceptance.net";
         final Parser parser = new CsvParser(fileStaticFile);
@@ -72,6 +81,54 @@ public class CsvParserTest extends ParserTest
         {
             Assert.assertEquals(url, urlOfList);
         }
+    }
+
+    /**
+     * Verifies correctly formed Regexp Store header can be parsed
+     * 
+     * @throws IOException
+     */
+    @Test
+    public void testRegexpStoreParsing() throws IOException
+    {
+        final Parser parser = new CsvParser(fileRegexpStoreFile);
+        parser.parse();
+    }
+
+    /**
+     * Verifies correctly formed Xpath Store header can be parsed
+     * 
+     * @throws IOException
+     */
+    @Test
+    public void testXpathStoreParsing() throws IOException
+    {
+        final Parser parser = new CsvParser(fileXpathStoreFile);
+        parser.parse();
+    }
+
+    /**
+     * Verifies malformed Regexp Store header cannot be parsed
+     * 
+     * @throws IOException
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testMalformedRegexpStoreParsing() throws IOException
+    {
+        final Parser parser = new CsvParser(fileMalformedRegexpStoreFile);
+        parser.parse();
+    }
+
+    /**
+     * Verifies malformed Xpath Store header cannot be parsed
+     * 
+     * @throws IOException
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testMalformedXpathStoreParsing() throws IOException
+    {
+        final Parser parser = new CsvParser(fileMalformedXpathStoreFile);
+        parser.parse();
     }
 
 }
