@@ -22,11 +22,11 @@ public class CsvParserTest extends ParserTest
 
     protected final String fileStaticFile = path + "static.csv";
 
-    protected final String fileMalformedRegexpStoreFile = path + "malformedRegexpStoreHeader.csv";
+    protected final String fileRegexpStoreWithLettersFile = path + "regexpStoreHeaderWithLetters.csv";
 
     protected final String fileRegexpStoreFile = path + "regexpStoreHeader.csv";
 
-    protected final String fileMalformedXpathStoreFile = path + "malformedXpathStoreHeader.csv";
+    protected final String fileXpathStoreWithLettersFile = path + "xpathStoreHeaderWithLetters.csv";
 
     protected final String fileXpathStoreFile = path + "xpathStoreHeader.csv";
 
@@ -108,26 +108,24 @@ public class CsvParserTest extends ParserTest
     }
 
     /**
-     * Verifies malformed Regexp Store header cannot be parsed
+     * Verifies a Regexp Store header with letters can be parsed
      * 
      * @throws IOException
      */
-    @Test(expected = IllegalArgumentException.class)
-    public void testMalformedRegexpStoreParsing() throws IOException
+    @Test
+    public void testRegexpStoreWithLettersParsing() throws IOException
     {
-        final Parser parser = new CsvParser(fileMalformedRegexpStoreFile);
+        final Parser parser = new CsvParser(fileRegexpStoreWithLettersFile);
         parser.parse();
     }
 
     /**
-     * Verifies malformed Xpath Store header cannot be parsed
-     * 
-     * @throws IOException
+     * Verifies a Xpath Store header with letters can be parsed
      */
-    @Test(expected = IllegalArgumentException.class)
-    public void testMalformedXpathStoreParsing() throws IOException
+    @Test
+    public void testXpathStoreWithLettersParsing() throws IOException
     {
-        final Parser parser = new CsvParser(fileMalformedXpathStoreFile);
+        final Parser parser = new CsvParser(fileXpathStoreWithLettersFile);
         parser.parse();
     }
 

@@ -152,26 +152,9 @@ public class CsvParser extends Parser
             // If the header is not in the permitted list
             if (!CsvConstants.isPermittedHeaderField(header))
             {
-                String number = "";
-                // Verify if it starts with the regexp getter prefix
-                if (header.startsWith(CsvConstants.REGEXP_GETTER_PREFIX))
+                // Verify the header either starts with the Regexp or Xpath getter prefix
+                if (!(header.startsWith(CsvConstants.REGEXP_GETTER_PREFIX) || header.startsWith(CsvConstants.XPATH_GETTER_PREFIX)))
                 {
-                    number = header.substring(CsvConstants.REGEXP_GETTER_PREFIX.length());
-                }
-                // If it starts with the xpath getter prefix
-                else if (header.startsWith(CsvConstants.XPATH_GETTER_PREFIX))
-                {
-                    number = header.substring(CsvConstants.XPATH_GETTER_PREFIX.length());
-                }
-                // If it neither starts with the xpath or regexp getter prefix, throw an error
-                else
-                {
-                    throw new IllegalArgumentException(header + "isn't an allowed header!");
-                }
-                // If the regexp or xpath getter prefix is not followed by a number
-                if (!number.matches("\\d+"))
-                {
-                    // throw an error
                     throw new IllegalArgumentException(header + "isn't an allowed header!");
                 }
             }
