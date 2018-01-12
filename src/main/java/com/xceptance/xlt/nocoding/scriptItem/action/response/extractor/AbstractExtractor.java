@@ -68,7 +68,7 @@ public abstract class AbstractExtractor
      */
     public void addResult(final List<String> resultList)
     {
-        getResult().addAll(result);
+        getResult().addAll(resultList);
     }
 
     /**

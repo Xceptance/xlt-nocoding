@@ -37,6 +37,8 @@ public class StaticItemParser
             url = url.substring(1, url.length() - 1);
         }
 
+        urls.add(url);
+
         // Return a new StaticSubrequest with all urls
         return new StaticSubrequest(urls);
     }
