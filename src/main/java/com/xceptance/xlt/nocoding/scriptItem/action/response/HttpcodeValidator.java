@@ -36,7 +36,7 @@ public class HttpcodeValidator extends AbstractResponseItem
      * {@link HttpResponseCodeValidator}.
      */
     @Override
-    public void execute(final Context<?> context) throws Exception
+    public void execute(final Context<?> context)
     {
         fillDefaultData(context);
         resolveValues(context);

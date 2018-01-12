@@ -35,7 +35,7 @@ public class ResponseStore extends AbstractResponseStore
      *            The {@link Context} to use
      */
     @Override
-    public void execute(final Context<?> context) throws Exception
+    public void execute(final Context<?> context)
     {
         // Execute the selector
         extractor.execute(context);
