@@ -51,7 +51,7 @@ public abstract class XpathExtractorExecutor
      * Adds a string to the result list.
      * 
      * @param result
-     *            The string to be added to the result.
+     *            The String to be added to the result.
      */
     public void addResult(final String result)
     {

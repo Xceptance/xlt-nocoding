@@ -21,6 +21,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.util.context.Context;
 
@@ -29,7 +30,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
  * 
  * @author ckeiner
  */
-public class JsonXpathExtractor extends XpathExtractorExecutor
+public class JsonXpathExtractorExecutor extends XpathExtractorExecutor
 {
     private XPath xPath;
 
@@ -47,7 +48,7 @@ public class JsonXpathExtractor extends XpathExtractorExecutor
         HEADERCONTENTTYPES.put("text/x-json", JSON);
     }
 
-    public JsonXpathExtractor(final String extractionExpression)
+    public JsonXpathExtractorExecutor(final String extractionExpression)
     {
         super(extractionExpression);
     }
@@ -65,6 +66,13 @@ public class JsonXpathExtractor extends XpathExtractorExecutor
         }
     }
 
+    /**
+     * Creates a {@link Document} from the {@link WebResponse}, then extracts a {@link NodeList} via the xpath expression,
+     * and finally creates a list of Strings out of it
+     * 
+     * @param context
+     * @return A list of strings that match the xpath expression
+     */
     private List<String> getByXPathFromInputSource(final Context<?> context)
         throws XPathExpressionException, ParserConfigurationException, SAXException, IOException
     {
@@ -78,9 +86,6 @@ public class JsonXpathExtractor extends XpathExtractorExecutor
      * Sets {@link #xmlInputSource} and {@link #xPath} if they are null
      * 
      * @param context
-     * @throws ParserConfigurationException
-     * @throws SAXException
-     * @throws IOException
      */
     private void loadContentFromWebResponseIfNecessary(final Context<?> context)
         throws ParserConfigurationException, SAXException, IOException
@@ -97,6 +102,11 @@ public class JsonXpathExtractor extends XpathExtractorExecutor
         }
     }
 
+    /**
+     * Sets {@link #xmlInputSource}. How the {@link Document} is created, depends on the content type.
+     * 
+     * @param context
+     */
     private void loadXMLSourceFromWebResponse(final Context<?> context) throws ParserConfigurationException, SAXException, IOException
     {
         XltLogger.runTimeLogger.debug("Loading content from WebResponse");
@@ -114,18 +124,34 @@ public class JsonXpathExtractor extends XpathExtractorExecutor
         }
     }
 
+    /**
+     * Parses Json to Xml and creates a {@link Document} out of it.
+     * 
+     * @param json
+     *            The String with the Json content
+     * @return The Json Content as Document
+     */
     private Document createXMLSourceFromJson(final String json) throws ParserConfigurationException, SAXException, IOException
     {
         XltLogger.runTimeLogger.debug("Converting Json Content to XML");
-        String xmlString;
-        xmlString = org.json.XML.toString(new JSONObject(json));
+        // Convert Json to Xml
+        String xmlString = org.json.XML.toString(new JSONObject(json));
+        // Add json tags to the xmlString
         xmlString = "<json>" + xmlString + "</json>";
 
+        // Create the document from the xml string
         final Document document = createDocumentFromXmlString(xmlString);
-
+        // Return the document
         return document;
     }
 
+    /**
+     * Creates a {@link Document} from the xml string
+     * 
+     * @param xmlString
+     *            The String with the xml content
+     * @return The xml string as Document
+     */
     private Document createDocumentFromXmlString(final String xmlString) throws SAXException, IOException, ParserConfigurationException
     {
         final InputSource source = new InputSource(new StringReader(xmlString));
@@ -135,6 +161,13 @@ public class JsonXpathExtractor extends XpathExtractorExecutor
         return document;
     }
 
+    /**
+     * Extracts a {@link NodeList} from {@link #xmlInputSource} via the supplied xPath expression
+     * 
+     * @param xPath
+     *            The xPath expression with which to extract the nodes
+     * @return A list of nodes that match the xPath expression
+     */
     private NodeList createNodeListByXPathFromInputSource(final String xPath)
     {
         XltLogger.runTimeLogger.debug("Getting Elements by XPath: " + xPath);
@@ -163,6 +196,13 @@ public class JsonXpathExtractor extends XpathExtractorExecutor
         return list;
     }
 
+    /**
+     * Gets the text content from the {@link NodeList}.
+     * 
+     * @param nodeList
+     *            The <code>NodeList</code> from which to extract the text content
+     * @return A list of String with the extracted text content
+     */
     private List<String> createStringListFromNodeList(final NodeList nodeList)
     {
         final List<String> resultList = new ArrayList<>();

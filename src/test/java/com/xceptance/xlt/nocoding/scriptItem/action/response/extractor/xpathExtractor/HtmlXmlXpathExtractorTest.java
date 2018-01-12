@@ -38,9 +38,9 @@ public class HtmlXmlXpathExtractorTest extends AbstractXpathExtractorExecutorTes
     {
         mockObjects.loadHtmlPage();
         ((DomContext) context).setPage(mockObjects.getHtmlPage());
-        final HtmlXmlXpathExtractor xpathExtractor = new HtmlXmlXpathExtractor(mockObjects.xPathString);
-        xpathExtractor.execute(context);
-        final List<String> results = xpathExtractor.getResult();
+        final HtmlXmlXpathExtractorExecutor extractorExecutor = new HtmlXmlXpathExtractorExecutor(mockObjects.xPathString);
+        extractorExecutor.execute(context);
+        final List<String> results = extractorExecutor.getResult();
         Assert.assertEquals(mockObjects.xpathStringExpected, results.get(0));
     }
 
@@ -58,7 +58,7 @@ public class HtmlXmlXpathExtractorTest extends AbstractXpathExtractorExecutorTes
         context.setWebResponse(xmlResponse);
         ((DomContext) context).setPage((SgmlPage) context.getWebClient().loadWebResponseInto(xmlResponse,
                                                                                              context.getWebClient().getCurrentWindow()));
-        final HtmlXmlXpathExtractor xpathResponse = new HtmlXmlXpathExtractor("//title");
+        final HtmlXmlXpathExtractorExecutor xpathResponse = new HtmlXmlXpathExtractorExecutor("//title");
         xpathResponse.execute(context);
         final List<String> list = xpathResponse.getResult();
         final String tit0 = list.get(0);
@@ -82,7 +82,7 @@ public class HtmlXmlXpathExtractorTest extends AbstractXpathExtractorExecutorTes
         context.setWebResponse(maliciousXmlContentResponse);
         ((DomContext) context).setPage((SgmlPage) context.getWebClient().loadWebResponseInto(maliciousXmlContentResponse,
                                                                                              context.getWebClient().getCurrentWindow()));
-        final HtmlXmlXpathExtractor xpathResponse = new HtmlXmlXpathExtractor("//title");
+        final HtmlXmlXpathExtractorExecutor xpathResponse = new HtmlXmlXpathExtractorExecutor("//title");
         xpathResponse.execute(context);
     }
 
@@ -99,7 +99,7 @@ public class HtmlXmlXpathExtractorTest extends AbstractXpathExtractorExecutorTes
         final String url = "http://www.xceptance.net";
         final WebResponse xmlResponse = new MockWebResponse(xmlContent, new URL(url), xmlType);
         context.setWebResponse(xmlResponse);
-        final HtmlXmlXpathExtractor xpathResponse = new HtmlXmlXpathExtractor("//title");
+        final HtmlXmlXpathExtractorExecutor xpathResponse = new HtmlXmlXpathExtractorExecutor("//title");
         xpathResponse.execute(context);
         final List<String> list = xpathResponse.getResult();
         final String tit0 = list.get(0);
@@ -122,7 +122,7 @@ public class HtmlXmlXpathExtractorTest extends AbstractXpathExtractorExecutorTes
         final String url = "http://www.xceptance.net";
         final WebResponse maliciousXmlContentResponse = new MockWebResponse(maliciousXmlContent, new URL(url), xmlType);
         context.setWebResponse(maliciousXmlContentResponse);
-        final HtmlXmlXpathExtractor xpathResponse = new HtmlXmlXpathExtractor("//title");
+        final HtmlXmlXpathExtractorExecutor xpathResponse = new HtmlXmlXpathExtractorExecutor("//title");
         xpathResponse.execute(context);
     }
 

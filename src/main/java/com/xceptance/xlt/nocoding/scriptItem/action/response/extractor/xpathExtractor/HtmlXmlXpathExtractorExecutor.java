@@ -17,7 +17,7 @@ import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
  * 
  * @author ckeiner
  */
-public class HtmlXmlXpathExtractor extends XpathExtractorExecutor
+public class HtmlXmlXpathExtractorExecutor extends XpathExtractorExecutor
 {
 
     private SgmlPage sgmlPage;
@@ -49,6 +49,7 @@ public class HtmlXmlXpathExtractor extends XpathExtractorExecutor
 
     static
     {
+        // Html Types
         HEADERCONTENTTYPES.put(TEXTHTML, HTML);
         HEADERCONTENTTYPES.put(TEXTAPPLICATION, HTML);
 
@@ -58,7 +59,7 @@ public class HtmlXmlXpathExtractor extends XpathExtractorExecutor
 
     }
 
-    public HtmlXmlXpathExtractor(final String extractionExpression)
+    public HtmlXmlXpathExtractorExecutor(final String extractionExpression)
     {
         super(extractionExpression);
     }
@@ -66,10 +67,12 @@ public class HtmlXmlXpathExtractor extends XpathExtractorExecutor
     @Override
     public void execute(final Context<?> context)
     {
+        // Get the Sgml page if the context is LightWeightContext
         if (context instanceof LightWeightContext)
         {
             sgmlPage = ((LightWeightContext) context).getSgmlPage();
         }
+        // Else, simply get the page
         else if (context instanceof DomContext)
         {
             sgmlPage = ((DomContext) context).getPage();
@@ -80,12 +83,15 @@ public class HtmlXmlXpathExtractor extends XpathExtractorExecutor
                                             + DomContext.class.getSimpleName() + " but is " + context.getClass().getSimpleName());
         }
 
+        // Verify, that if the sgmlPage is a XmlPage, that it has content
         if (sgmlPage instanceof XmlPage && ((XmlPage) sgmlPage).getXmlDocument() == null)
         {
             throw new IllegalStateException("Xml page doesn't have a document");
         }
 
+        // Get the Html elements via xPath
         final List<DomNode> htmlElements = getHtmlElementListByXPath(getExtractionExpression());
+        // Store each element as string in result
         for (final DomNode htmlElement : htmlElements)
         {
             final String elementAsString = getStringFromHtmlElement(htmlElement);
@@ -94,6 +100,13 @@ public class HtmlXmlXpathExtractor extends XpathExtractorExecutor
         }
     }
 
+    /**
+     * Gets the TextContent of a {@link DomNode}
+     * 
+     * @param node
+     *            The node from which to extract t
+     * @return
+     */
     private String getStringFromHtmlElement(final DomNode node)
     {
         try
@@ -108,6 +121,13 @@ public class HtmlXmlXpathExtractor extends XpathExtractorExecutor
         }
     }
 
+    /**
+     * Gets all matching elements from the xPath expression from {@link #sgmlPage}
+     * 
+     * @param xPath
+     *            The xPath expression with which to extract information
+     * @return A list of {@link DomNode}s that can be extracted via xPath
+     */
     private List<DomNode> getHtmlElementListByXPath(final String xPath)
     {
         XltLogger.runTimeLogger.debug("Getting Elements by XPath: " + xPath);

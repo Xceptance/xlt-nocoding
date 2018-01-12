@@ -60,7 +60,7 @@ public class JsonXpathExtractorTest extends AbstractXpathExtractorExecutorTest
     public void testGetByXPathWithJson()
     {
         context.setWebResponse(jsonResponse);
-        final JsonXpathExtractor xpathResponse = new JsonXpathExtractor("//latitude");
+        final JsonXpathExtractorExecutor xpathResponse = new JsonXpathExtractorExecutor("//latitude");
         xpathResponse.execute(context);
         final List<String> list = xpathResponse.getResult();
         final String lat0 = list.get(0);
@@ -76,7 +76,7 @@ public class JsonXpathExtractorTest extends AbstractXpathExtractorExecutorTest
     public void testGetByXPathWithMaliciousJson()
     {
         context.setWebResponse(maliciousJsonContentResponse);
-        final JsonXpathExtractor xpathResponse = new JsonXpathExtractor("//latitude");
+        final JsonXpathExtractorExecutor xpathResponse = new JsonXpathExtractorExecutor("//latitude");
         xpathResponse.execute(context);
     }
 

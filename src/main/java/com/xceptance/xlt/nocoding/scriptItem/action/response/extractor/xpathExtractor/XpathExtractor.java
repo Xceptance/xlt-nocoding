@@ -29,19 +29,19 @@ public class XpathExtractor extends AbstractExtractor
      * 
      * @param context
      *            The {@link Context} with the WebResponse in it
-     * @return {@link HtmlXmlXpathExtractor} or {@link JsonXpathExtractor}, depending on the content type
+     * @return {@link HtmlXmlXpathExtractorExecutor} or {@link JsonXpathExtractorExecutor}, depending on the content type
      */
     XpathExtractorExecutor getExecutor(final Context<?> context)
     {
         final String content = context.getWebResponse().getContentType();
         XpathExtractorExecutor executor = null;
-        if (HtmlXmlXpathExtractor.HEADERCONTENTTYPES.containsKey(content))
+        if (HtmlXmlXpathExtractorExecutor.HEADERCONTENTTYPES.containsKey(content))
         {
-            executor = new HtmlXmlXpathExtractor(getExtractionExpression());
+            executor = new HtmlXmlXpathExtractorExecutor(getExtractionExpression());
         }
-        else if (JsonXpathExtractor.HEADERCONTENTTYPES.containsKey(content))
+        else if (JsonXpathExtractorExecutor.HEADERCONTENTTYPES.containsKey(content))
         {
-            executor = new JsonXpathExtractor(getExtractionExpression());
+            executor = new JsonXpathExtractorExecutor(getExtractionExpression());
         }
         else
         {
