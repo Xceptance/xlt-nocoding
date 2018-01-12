@@ -21,7 +21,7 @@ public class XpathExtractor extends AbstractExtractor
     {
         final XpathExtractorExecutor executor = getExecutor(context);
         executor.execute(context);
-        result.addAll(executor.getResult());
+        addResult(executor.getResult());
     }
 
     /**

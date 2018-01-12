@@ -42,7 +42,7 @@ public class StaticSubrequest extends AbstractSubrequest
         // Get the number of threads in the properties
         final String numberThreads = context.getPropertyByKey(NoCodingPropertyAdmin.DOWNLOADTHREADS);
         // Get the UID in the properties
-        final String userAgentUID = context.getPropertyByKey("userAgent.UID");
+        final String userAgentUID = context.getPropertyByKey(NoCodingPropertyAdmin.USERAGENTUID);
         // Create a Downloader
         Downloader downloader = null;
         if (numberThreads != null && userAgentUID != null)

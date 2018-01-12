@@ -11,7 +11,7 @@ import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 /**
  * Extracts an element from the {@link WebResponse} in the {@link Context}. The extraction happens in
  * {@link AbstractExtractor#execute(Context)}. To get the result, you need to use {@link AbstractExtractor#getResult()}.
- * However, you cannot reuse an instance twice.
+ * However, you should not reuse an instance twice.
  * 
  * @author ckeiner
  */
@@ -26,7 +26,7 @@ public abstract class AbstractExtractor
     /**
      * The result of the extraction
      */
-    protected final List<String> result;
+    private final List<String> result;
 
     /**
      * Sets {@link #extractionExpression} and creates an {@link ArrayList} for {@link #result}.
@@ -58,6 +58,17 @@ public abstract class AbstractExtractor
     public void addResult(final String result)
     {
         getResult().add(result);
+    }
+
+    /**
+     * Adds all strings in the list to the result list.
+     * 
+     * @param result
+     *            The list of strings to be added to the result.
+     */
+    public void addResult(final List<String> resultList)
+    {
+        getResult().addAll(result);
     }
 
     /**
