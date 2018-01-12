@@ -32,7 +32,7 @@ public class RequestParser implements AbstractActionItemParser
         List<NameValuePair> parameters = null;
         String encoded = null;
 
-        // Get url
+        // Get url if it is mapped
         if (record.isMapped(CsvConstants.URL))
         {
             url = record.get(CsvConstants.URL);
@@ -42,17 +42,17 @@ public class RequestParser implements AbstractActionItemParser
                 url = url.substring(1, url.length() - 1);
             }
         }
-        // Get the method
+        // Get the method if it is mapped
         if (record.isMapped(CsvConstants.METHOD))
         {
             method = record.get(CsvConstants.METHOD);
         }
-        // Get the parameters
+        // Get the parameters if it is mapped
         if (record.isMapped(CsvConstants.PARAMETERS))
         {
             parameters = readParameters(record.get(CsvConstants.PARAMETERS));
         }
-        // Get encoded
+        // Get encoded if it is mapped
         if (record.isMapped(CsvConstants.ENCODED))
         {
             encoded = record.get(CsvConstants.ENCODED);
@@ -70,11 +70,12 @@ public class RequestParser implements AbstractActionItemParser
     }
 
     /**
-     * Converts the given string to a {@link List}<{@link NameValuePair}> according to http parameters
+     * Converts the given string to a {@link List}<{@link NameValuePair}>.
      * 
      * @param parameterString
-     *            The string to turn into {@link List}<{@link NameValuePair}>
-     * @return
+     *            String, in which name and value of a single parameter is divided by an equal sign, '=', and multiple
+     *            parameters divided by an ampersand, '&'.
+     * @return The String converted to a list of NameValuePairs
      */
     private List<NameValuePair> readParameters(final String parameterString)
     {

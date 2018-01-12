@@ -26,7 +26,8 @@ import com.xceptance.xlt.nocoding.util.context.DomContext;
 import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
- * Executes a xlt-nocoding test case by parsing the file specified in the properties and executing the parsed commands.
+ * Executes a xlt-nocoding test case by parsing the file specified in the classpath or the properties and executing the
+ * parsed commands.
  * 
  * @author ckeiner
  */
@@ -71,12 +72,12 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
      * Prepares a test case by parsing the contents of the file to {@link #itemList}
      * 
      * @throws IOException
-     *             is thrown when the file is not found or the parser encounters an error
+     *             Thrown when the file is not found or the parser encounters an error
      */
     @Before
     public void initialize() throws IOException
     {
-        // Instantiate the PropertyManager with a new DataStorage
+        // Instantiate the properties
         final XltProperties properties = XltProperties.getInstance();
         // Get the mode and create the corresponding Context
         final String mode = properties.getProperty(NoCodingPropertyAdmin.MODE);
@@ -120,17 +121,20 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
             // Get the class and convert the class to a simple name
             fileName = getClass().getSimpleName();
         }
+        // Get the directory to the classpath
         String directory = getDirectoryToClasspath();
         filepaths.add(directory + fileName);
+        // Get the directory from the properties
         directory = getDirectoryFromProperties();
         filepaths.add(directory + fileName);
+        // Return all filepaths
         return filepaths;
     }
 
     /**
      * Gets the directory from the file paths, ending with {@link File#separatorChar}
      * 
-     * @return String that describes the path to the file
+     * @return String that describes the path to the directory defined in the properties
      */
     protected String getDirectoryFromProperties()
     {
@@ -149,7 +153,7 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
     /**
      * Gets the directory from the classpath, ending with {@link File#separatorChar}
      * 
-     * @return
+     * @return String that describes the path to the classpath directory
      */
     protected String getDirectoryToClasspath()
     {
@@ -232,8 +236,8 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
     }
 
     /**
-     * Creates the correct parser depending on the file extension. For example creates a {@link YamlParser} for yml/yaml
-     * files and a {@link CsvParser} for csv files.
+     * Creates the correct parser depending on the file extension. For example, it creates a {@link YamlParser} for yml/yaml
+     * files and a {@link CsvParser} for CSV files.
      * 
      * @param path
      *            The path to the file with the file extension
@@ -281,9 +285,9 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
      * On the first execution, it gets the list from the parser and saves it in {@link #DATA_CACHE}. Then, it gets the list
      * out of the {@link #DATA_CACHE}.
      * 
-     * @return A list of <code>ScriptItem</code>s generated from the file located at {@link #getDirectoryFromProperties()}
+     * @return A list of <code>ScriptItem</code>s generated from the provided file
      * @throws IOException
-     *             is thrown, for example, when the file is not found, or the parser encounters an error
+     *             Thrown when the parser encounters an error
      */
     protected List<ScriptItem> getOrParse() throws IOException
     {

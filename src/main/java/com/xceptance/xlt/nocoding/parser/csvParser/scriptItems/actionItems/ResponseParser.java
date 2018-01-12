@@ -78,20 +78,24 @@ public class ResponseParser implements AbstractActionItemParser
             }
         }
 
+        // Get responsecode if it is mapped
         if (record.isMapped(CsvConstants.RESPONSECODE))
         {
             responsecode = record.get(CsvConstants.RESPONSECODE);
         }
+        // Get Xpath if it is mapped, and create the extractor
         if (record.isMapped(CsvConstants.XPATH))
         {
             extractor = new XpathExtractor(record.get(CsvConstants.XPATH));
             hasXpath = true;
         }
+        // Get Regexp if it is mapped, and create the extractor
         if (record.isMapped(CsvConstants.REGEXP))
         {
             extractor = new RegexpExtractor(record.get(CsvConstants.REGEXP));
             hasRegexp = true;
         }
+        // Get Text if it is mapped, and create the validator
         if (record.isMapped(CsvConstants.TEXT))
         {
             validationMethod = new MatchesValidator(record.get(CsvConstants.TEXT));
@@ -106,7 +110,7 @@ public class ResponseParser implements AbstractActionItemParser
         {
             throw new IllegalArgumentException("Cannot map Xpath Validations/Stores and Regexp Validations/Stores together");
         }
-        // Verify that either both CsvConstants.TEXT and the extractor have values, or only the extractor
+        // Verify that either CsvConstants.TEXT and the extractor have values, or only the extractor has a value
         if (validationMethod != null && (extractor == null))
         {
             throw new IllegalArgumentException("Cannot map " + CsvConstants.TEXT + " without extractor");
@@ -156,32 +160,14 @@ public class ResponseParser implements AbstractActionItemParser
         // If the fieldName contains CsvConstants.REGEXP_GETTER_PREFIX
         if (fieldName.contains(CsvConstants.REGEXP_GETTER_PREFIX))
         {
-            // And the rest of the string is numbers
-            if (fieldName.substring(CsvConstants.REGEXP_GETTER_PREFIX.length()).matches("[0-9]+"))
-            {
-                // Create an AbstractExtractor
-                storeExtractor = new RegexpExtractor(value);
-            }
-            else
-            {
-                // Throw an error
-                throw new IllegalArgumentException(fieldName + " must be " + CsvConstants.REGEXP_GETTER_PREFIX + " a number");
-            }
+            // Create an AbstractExtractor
+            storeExtractor = new RegexpExtractor(value);
         }
         // If the fieldName contains CsvConstants.XPATH_GETTER_PREFIX
         else if (fieldName.contains(CsvConstants.XPATH_GETTER_PREFIX))
         {
-            // And the rest of the string is numbers
-            if (fieldName.substring(CsvConstants.XPATH_GETTER_PREFIX.length()).matches("[0-9]+"))
-            {
-                // Create an AbstractExtractor
-                storeExtractor = new XpathExtractor(value);
-            }
-            else
-            {
-                // Throw an error
-                throw new IllegalArgumentException(fieldName + " must be " + CsvConstants.XPATH_GETTER_PREFIX + " a number");
-            }
+            // Create an AbstractExtractor
+            storeExtractor = new XpathExtractor(value);
         }
 
         // Return the new ResponseStore

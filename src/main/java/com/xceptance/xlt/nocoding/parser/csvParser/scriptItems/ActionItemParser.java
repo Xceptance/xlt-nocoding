@@ -31,7 +31,7 @@ public class ActionItemParser
     {
         String name = null;
         final List<AbstractActionItem> actionItems = new ArrayList<>(2);
-        // Get the name
+        // Get the name if it is mapped
         if (record.isMapped(CsvConstants.NAME))
         {
             name = record.get(CsvConstants.NAME);

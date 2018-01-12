@@ -21,8 +21,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.Action;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
 
 /**
- * Reads a CSV file, provided per constructor, and generates an List filled with {@link ScriptItem}s out of the CSV
- * file.
+ * Reads a CSV file, provided per constructor, and generates a list filled with {@link ScriptItem}s out of the CSV file.
  * 
  * @author ckeiner
  */
@@ -41,7 +40,7 @@ public class CsvParser extends Parser
     }
 
     /**
-     * Parses the file in {@link #getFile()} and returns a list of {@link ScriptItem}s
+     * Parses the file in {@link #getFile()} to a list of {@link ScriptItem}s
      * 
      * @return A list of {@link ScriptItem}s.
      * @throws IOException
@@ -72,10 +71,6 @@ public class CsvParser extends Parser
             parser.close();
         }
 
-        // Get the records
-
-        // final Iterable<CSVRecord> records = CsvConstants.CSV_FORMAT.withFirstRecordAsHeader().parse(in);
-        // For each CSVRecord
         for (final CSVRecord record : records)
         {
             // If the record is consistent, which means that all headers have a value
@@ -101,10 +96,9 @@ public class CsvParser extends Parser
                         break;
 
                     case CsvConstants.TYPE_STATIC:
-                        // If there was no lastAction
+                        // If there was no lastAction, throw an exception
                         if (lastAction == null)
                         {
-                            // Throw an exception
                             throw new IllegalArgumentException("Static Type must be defined after an Action Type");
                         }
                         // If there wasn't a last static request
@@ -126,10 +120,9 @@ public class CsvParser extends Parser
                     case CsvConstants.TYPE_XHR_ACTION:
                         // Reset the last static subrequest
                         lastStatic = null;
-                        // If there was no lastAction
+                        // If there was no lastAction, throw an exception
                         if (lastAction == null)
                         {
-                            // Throw an exception
                             throw new IllegalArgumentException("Xhr Action Type must be defined after an Action Type");
                         }
                         // Add the Xhr Subrequest to the action items of the lastAction
