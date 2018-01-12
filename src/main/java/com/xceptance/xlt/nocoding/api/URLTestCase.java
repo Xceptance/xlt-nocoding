@@ -1,12 +1,12 @@
 package com.xceptance.xlt.nocoding.api;
 
 /**
- * Deprecated, use {@link AbstractNocodingTestCase} instead.
+ * Deprecated, use {@link GenericNocodingTestCase} instead.
  * 
  * @author ckeiner
  */
 @Deprecated
-public class URLTestCase extends AbstractNocodingTestCase
+public class URLTestCase extends GenericNocodingTestCase
 {
 
 }

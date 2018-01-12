@@ -1,7 +1,7 @@
 package com.xceptance.xlt.common.tests;
 
 import com.gargoylesoftware.htmlunit.WebRequest;
-import com.xceptance.xlt.nocoding.api.AbstractNocodingTestCase;
+import com.xceptance.xlt.nocoding.api.GenericNocodingTestCase;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.Downloader;
 
 /**
@@ -21,9 +21,9 @@ import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.Downloader;
  * </ul>
  *
  * @author matthias mitterreiter
- * @deprecated Use {@link AbstractNocodingTestCase} instead.
+ * @deprecated Use {@link GenericNocodingTestCase} instead.
  */
 @Deprecated
-public class URLTestCase extends AbstractNocodingTestCase
+public class URLTestCase extends GenericNocodingTestCase
 {
 }

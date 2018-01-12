@@ -92,8 +92,13 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
                 break;
 
             default:
-                throw new IllegalStateException("Mode must be " + NoCodingPropertyAdmin.LIGHTWEIGHT + " or " + NoCodingPropertyAdmin.DOM
-                                                + " but is " + mode);
+                if (!StringUtils.isBlank(mode))
+                {
+                    throw new IllegalStateException("Mode must be " + NoCodingPropertyAdmin.LIGHTWEIGHT + " or " + NoCodingPropertyAdmin.DOM
+                                                    + " but is " + mode);
+                }
+                XltLogger.runTimeLogger.info("No mode supplied, assuming Lightweight mode.");
+                context = new LightWeightContext(properties);
         }
         // Get the possible filePaths
         final List<String> filepaths = getAllPossibleFilepaths();
