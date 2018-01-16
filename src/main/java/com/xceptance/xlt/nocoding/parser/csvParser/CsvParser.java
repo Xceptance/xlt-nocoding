@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -27,6 +28,8 @@ import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
  */
 public class CsvParser extends Parser
 {
+
+    public static final List<String> FILE_EXTENSION = Arrays.asList("csv");
 
     /**
      * Creates a {@link File} with the provided path to the file.

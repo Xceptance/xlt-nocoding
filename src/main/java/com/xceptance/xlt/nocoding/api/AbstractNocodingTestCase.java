@@ -16,6 +16,7 @@ import com.xceptance.xlt.api.tests.AbstractTestCase;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.parser.Parser;
+import com.xceptance.xlt.nocoding.parser.ParserFactory;
 import com.xceptance.xlt.nocoding.parser.csvParser.CsvParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
@@ -52,6 +53,11 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
      * The {@link Context} of all <code>ScriptItems</code>
      */
     private Context<?> context;
+
+    /**
+     * The factory for the parser
+     */
+    private ParserFactory parserFactory;
 
     public Parser getParser()
     {
@@ -100,12 +106,13 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
                 XltLogger.runTimeLogger.info("No mode supplied, assuming Lightweight mode.");
                 context = new LightWeightContext(properties);
         }
+        parserFactory = ParserFactory.getInstance();
         // Get the possible filePaths
         final List<String> filepaths = getAllPossibleFilepaths();
         // Find the path that returns an existing File
         final String filepath = getExistingFilepath(filepaths);
         // Create the appropriate parser
-        this.parser = decideParser(filepath);
+        this.parser = getParserFor(filepath);
         // Get or parse the file
         itemList = getOrParse();
     }
@@ -203,32 +210,22 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
             // If the file extension is empty, try to add yml, yaml and csv
             else if (fileExtension.isEmpty())
             {
-                // Check for YAML files first
-                final String[] yamlPaths =
-                    {
-                      filepath + ".yml", filepath + ".yaml"
-                    };
-
-                for (final String yamlPath : yamlPaths)
+                // Get all possible extensions
+                final List<String> extensions = parserFactory.getExtensions();
+                // Try to add each extension and stop when a file is found
+                for (final String extension : extensions)
                 {
-                    // If the new path is a file, create the parser and quit the loop
-                    if (new File(yamlPath).isFile())
+                    final String fullPath = filepath + "." + extension;
+
+                    if (new File(fullPath).isFile())
                     {
-                        correctPath = yamlPath;
+                        correctPath = fullPath;
                         break;
                     }
                 }
-                // If a yaml file has been found, the pathToFile isn't null anymore, therefore break out of the loop
+                // If a file has been found, the pathToFile isn't null anymore, therefore break out of the loop
                 if (correctPath != null)
                 {
-                    break;
-                }
-
-                // Check for CSV file second
-                final String csvPath = filepath + ".csv";
-                if (new File(csvPath).isFile())
-                {
-                    correctPath = csvPath;
                     break;
                 }
             }
@@ -248,39 +245,20 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
      *            The path to the file with the file extension
      * @return The {@link Parser} that should be used for the specified file.
      */
-    protected Parser decideParser(final String path)
+    protected Parser getParserFor(final String path)
     {
         Parser parser = null;
         // Get the extensions
         final String fileExtension = FilenameUtils.getExtension(path);
         if (!fileExtension.isEmpty() && new File(path).isFile())
         {
-            // If it is yml or yaml
-            if (fileExtension.equalsIgnoreCase("yml") || fileExtension.equalsIgnoreCase("yaml"))
-            {
-                parser = new YamlParser(path);
-            }
-            else if (fileExtension.equalsIgnoreCase("csv"))
-            {
-                parser = new CsvParser(path);
-            }
-            else
-            {
-                throw new IllegalArgumentException("Unknown file extension: " + fileExtension);
-            }
+            parser = ParserFactory.getInstance().getParser(path);
         }
         // If the file extension is empty, try to add yml, yaml and csv
         else if (fileExtension.isEmpty())
         {
             throw new IllegalArgumentException("Illegal file: " + "\"" + path + "\"" + "\n"
                                                + "Supported types: '.yaml', '.yml' or '.csv'\n");
-        }
-
-        // If the parser still is null, no file was found
-        if (parser == null)
-        {
-            // No file with a supported extension was found
-            throw new IllegalArgumentException("Failed to find a script file for file path: " + path);
         }
         return parser;
     }

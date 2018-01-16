@@ -3,6 +3,7 @@ package com.xceptance.xlt.nocoding.parser.yamlParser;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,6 +31,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
  */
 public class YamlParser extends Parser
 {
+    public static final List<String> FILE_EXTENSION = Arrays.asList("yml", "yaml");
 
     /**
      * Creates a {@link File} with the provided path to the file.
