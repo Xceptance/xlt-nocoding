@@ -114,7 +114,7 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
         // Create the appropriate parser
         this.parser = getParserFor(filepath);
         // Get or parse the file
-        itemList = getOrParse();
+        itemList = getOrParse(filepath);
     }
 
     /**
@@ -217,7 +217,7 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
                 {
                     final String fullPath = filepath + "." + extension;
 
-                    if (new File(fullPath).isFile())
+                    if (new File(fullPath).isFile() || getClass().getResource(fullPath) != null)
                     {
                         correctPath = fullPath;
                         break;
@@ -254,7 +254,7 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
         {
             parser = ParserFactory.getInstance().getParser(path);
         }
-        // If the file extension is empty, try to add yml, yaml and csv
+        // If the file extension is empty, throw an error
         else if (fileExtension.isEmpty())
         {
             throw new IllegalArgumentException("Illegal file: " + "\"" + path + "\"" + "\n"
@@ -268,19 +268,20 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
      * On the first execution, it gets the list from the parser and saves it in {@link #DATA_CACHE}. Then, it gets the list
      * out of the {@link #DATA_CACHE}.
      * 
+     * @param filePath
+     *            The path to the file that is to be parsed
      * @return A list of <code>ScriptItem</code>s generated from the provided file
      * @throws IOException
      *             Thrown when the parser encounters an error
      */
-    protected List<ScriptItem> getOrParse() throws IOException
+    protected List<ScriptItem> getOrParse(final String filePath) throws IOException
     {
         synchronized (DATA_CACHE)
         {
-            final String filePath = parser.getFile().getAbsolutePath();
             List<ScriptItem> result = DATA_CACHE.get(filePath);
             if (result == null)
             {
-                result = parser.parse();
+                result = parser.parse(filePath);
                 DATA_CACHE.put(filePath, result);
             }
             return result;

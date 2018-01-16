@@ -64,8 +64,8 @@ public class ActionItemParserTest extends ParserTest
     @Test
     public void testSingleActionNoDefaultsParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileSingleActionNoDefaultsData);
-        final List<ScriptItem> scriptItems = parser.parse();
+        final Parser parser = new YamlParser();
+        final List<ScriptItem> scriptItems = parser.parse(fileSingleActionNoDefaultsData);
 
         Assert.assertEquals(1, scriptItems.size());
 
@@ -143,8 +143,8 @@ public class ActionItemParserTest extends ParserTest
     @Test
     public void testComplexTestCaseParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileComplexTestCase);
-        parser.parse();
+        final Parser parser = new YamlParser();
+        parser.parse(fileComplexTestCase);
     }
 
     /**
@@ -155,8 +155,8 @@ public class ActionItemParserTest extends ParserTest
     @Test
     public void testEmptyActionParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileEmptyAction);
-        final List<ScriptItem> scriptItems = parser.parse();
+        final Parser parser = new YamlParser();
+        final List<ScriptItem> scriptItems = parser.parse(fileEmptyAction);
         Assert.assertTrue(scriptItems.get(0) instanceof Action);
     }
 
@@ -168,9 +168,8 @@ public class ActionItemParserTest extends ParserTest
     @Test
     public void testActionNameNullParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileActionNameNull);
-        @SuppressWarnings("unused")
-        final List<ScriptItem> scriptItems = parser.parse();
+        final Parser parser = new YamlParser();
+        parser.parse(fileActionNameNull);
     }
 
     /*
@@ -185,9 +184,8 @@ public class ActionItemParserTest extends ParserTest
     @Test(expected = JsonParseException.class)
     public void testSyntaxErrorActionParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileSyntaxErrorAction);
-        @SuppressWarnings("unused")
-        final List<ScriptItem> scriptItems = parser.parse();
+        final Parser parser = new YamlParser();
+        parser.parse(fileSyntaxErrorAction);
     }
 
     /**
@@ -198,9 +196,8 @@ public class ActionItemParserTest extends ParserTest
     @Test(expected = JsonParseException.class)
     public void testSyntaxErrorActionArrayNotObjectParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileSyntaxErrorActionArrayNotObject);
-        @SuppressWarnings("unused")
-        final List<ScriptItem> scriptItems = parser.parse();
+        final Parser parser = new YamlParser();
+        parser.parse(fileSyntaxErrorActionArrayNotObject);
     }
 
     /**
@@ -211,9 +208,8 @@ public class ActionItemParserTest extends ParserTest
     @Test(expected = JsonParseException.class)
     public void testWrongOrderActionParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileWrongOrderAction);
-        @SuppressWarnings("unused")
-        final List<ScriptItem> scriptItems = parser.parse();
+        final Parser parser = new YamlParser();
+        parser.parse(fileWrongOrderAction);
     }
 
     /**
@@ -224,9 +220,8 @@ public class ActionItemParserTest extends ParserTest
     @Test(expected = JsonParseException.class)
     public void testWrongOrderParsing() throws Throwable
     {
-        final Parser parser = new YamlParser(fileWrongOrder);
-        @SuppressWarnings("unused")
-        final List<ScriptItem> scriptItems = parser.parse();
+        final Parser parser = new YamlParser();
+        parser.parse(fileWrongOrder);
     }
 
 }

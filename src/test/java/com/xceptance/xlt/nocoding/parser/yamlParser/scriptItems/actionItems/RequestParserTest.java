@@ -31,8 +31,8 @@ public class RequestParserTest extends ParserTest
     @Test(expected = JsonParseException.class)
     public void testSyntaxErrorRequestParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileSyntaxErrorRequest);
-        parser.parse();
+        final Parser parser = new YamlParser();
+        parser.parse(fileSyntaxErrorRequest);
     }
 
     /**
@@ -43,8 +43,8 @@ public class RequestParserTest extends ParserTest
     @Test(expected = JsonParseException.class)
     public void testSyntaxErrorRequestArrayNotObjectParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileSyntaxErrorRequestArrayNotObject);
-        parser.parse();
+        final Parser parser = new YamlParser();
+        parser.parse(fileSyntaxErrorRequestArrayNotObject);
     }
 
     /**
@@ -55,8 +55,8 @@ public class RequestParserTest extends ParserTest
     @Test
     public void testUrlNullParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileUrlNull);
-        parser.parse();
+        final Parser parser = new YamlParser();
+        parser.parse(fileUrlNull);
     }
 
 }

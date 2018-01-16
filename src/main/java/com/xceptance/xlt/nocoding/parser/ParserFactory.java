@@ -1,54 +1,70 @@
 package com.xceptance.xlt.nocoding.parser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 
 import com.xceptance.xlt.nocoding.parser.csvParser.CsvParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser;
 
+/**
+ * The class for getting the accepted extensions and the associated {@link Parser} for the extension
+ * 
+ * @author ckeiner
+ */
 public class ParserFactory
 {
     private static ParserFactory factoryInstance;
 
-    public static ParserFactory getInstance()
+    private final Map<String, Parser> extensionsMap;
+
+    private ParserFactory()
     {
-        synchronized (factoryInstance)
+        extensionsMap = new HashMap<>();
+        final CsvParser csvParser = new CsvParser();
+        final YamlParser yamlParser = new YamlParser();
+        for (final String extension : csvParser.getExtensions())
         {
-            if (factoryInstance == null)
-            {
-                factoryInstance = new ParserFactory();
-            }
+            extensionsMap.put(extension, csvParser);
+        }
+        for (final String extension : yamlParser.getExtensions())
+        {
+            extensionsMap.put(extension, yamlParser);
+        }
+    }
+
+    public static synchronized ParserFactory getInstance()
+    {
+        if (factoryInstance == null)
+        {
+            factoryInstance = new ParserFactory();
         }
         return factoryInstance;
     }
 
     /**
-     * Returns list of extensions without a dot
+     * Returns list of extensions
      * 
      * @return
      */
     public List<String> getExtensions()
     {
-        final List<String> extensions = new ArrayList<String>();
-        extensions.addAll(CsvParser.FILE_EXTENSION);
-        extensions.addAll(YamlParser.FILE_EXTENSION);
-        return extensions;
+        return new ArrayList<String>(extensionsMap.keySet());
     }
 
+    /**
+     * Checks the parser for its file extensions and then creates the parser is the extension fits
+     * 
+     * @param file
+     * @return The Parser associated with the extension of <code>file</code>
+     */
     public Parser getParser(final String file)
     {
-        Parser parser = null;
         final String extension = FilenameUtils.getExtension(file);
-        if (CsvParser.FILE_EXTENSION.contains(extension))
-        {
-            parser = new CsvParser(file);
-        }
-        else if (YamlParser.FILE_EXTENSION.contains(extension))
-        {
-            parser = new YamlParser(file);
-        }
+        final Parser parser = extensionsMap.get(extension);
 
         if (parser == null)
         {

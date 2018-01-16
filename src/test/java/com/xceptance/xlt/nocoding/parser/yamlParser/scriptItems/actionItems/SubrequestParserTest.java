@@ -40,8 +40,8 @@ public class SubrequestParserTest extends ParserTest
     @Test
     public void testXhrSubrequestsParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileXhrSubrequests);
-        parser.parse();
+        final Parser parser = new YamlParser();
+        parser.parse(fileXhrSubrequests);
     }
 
     /**
@@ -52,8 +52,8 @@ public class SubrequestParserTest extends ParserTest
     @Test
     public void testStaticSubrequestsParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileStaticSubrequests);
-        parser.parse();
+        final Parser parser = new YamlParser();
+        parser.parse(fileStaticSubrequests);
     }
 
     /**
@@ -64,8 +64,8 @@ public class SubrequestParserTest extends ParserTest
     @Test(expected = JsonParseException.class)
     public void testSyntaxErrorSubrequestsParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileSyntaxErrorSubrequests);
-        parser.parse();
+        final Parser parser = new YamlParser();
+        parser.parse(fileSyntaxErrorSubrequests);
     }
 
     /**
@@ -76,8 +76,8 @@ public class SubrequestParserTest extends ParserTest
     @Test(expected = JsonParseException.class)
     public void testSyntaxErrorSubrequestsObjectNotArrayParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileSyntaxErrorSubrequestsObjectNotArray);
-        parser.parse();
+        final Parser parser = new YamlParser();
+        parser.parse(fileSyntaxErrorSubrequestsObjectNotArray);
     }
 
     /**
@@ -88,8 +88,8 @@ public class SubrequestParserTest extends ParserTest
     @Test(expected = JsonParseException.class)
     public void testSyntaxErrorSubrequestsStaticItemObjectNotArrayParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileSyntaxErrorSubrequestsStaticItemObjectNotArray);
-        parser.parse();
+        final Parser parser = new YamlParser();
+        parser.parse(fileSyntaxErrorSubrequestsStaticItemObjectNotArray);
     }
 
     /**
@@ -100,8 +100,8 @@ public class SubrequestParserTest extends ParserTest
     @Test(expected = JsonParseException.class)
     public void testSyntaxErrorSubrequestsXhrItemArrayNotObjectParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileSyntaxErrorSubrequestsXhrItemArrayNotObject);
-        parser.parse();
+        final Parser parser = new YamlParser();
+        parser.parse(fileSyntaxErrorSubrequestsXhrItemArrayNotObject);
     }
 
     /**
@@ -112,8 +112,8 @@ public class SubrequestParserTest extends ParserTest
     @Test(expected = JsonParseException.class)
     public void testSyntaxErrorXhrParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileSyntaxErrorXhr);
-        parser.parse();
+        final Parser parser = new YamlParser();
+        parser.parse(fileSyntaxErrorXhr);
     }
 
     /**
@@ -124,8 +124,8 @@ public class SubrequestParserTest extends ParserTest
     @Test(expected = JsonParseException.class)
     public void testSyntaxErrorStaticParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileSyntaxErrorStatic);
-        parser.parse();
+        final Parser parser = new YamlParser();
+        parser.parse(fileSyntaxErrorStatic);
     }
 
 }

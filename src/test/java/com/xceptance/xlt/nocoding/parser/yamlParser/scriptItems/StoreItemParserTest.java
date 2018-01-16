@@ -31,8 +31,8 @@ public class StoreItemParserTest extends ParserTest
     @Test
     public void testStoreParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileStore);
-        final List<ScriptItem> scriptItems = parser.parse();
+        final Parser parser = new YamlParser();
+        final List<ScriptItem> scriptItems = parser.parse(fileStore);
 
         Assert.assertEquals(7, scriptItems.size());
 
@@ -82,8 +82,7 @@ public class StoreItemParserTest extends ParserTest
     @Test(expected = JsonParseException.class)
     public void testStoreObjectParse() throws Exception
     {
-        final Parser parser = new YamlParser(fileStoreObjectNotArray);
-        @SuppressWarnings("unused")
-        final List<ScriptItem> scriptItems = parser.parse();
+        final Parser parser = new YamlParser();
+        parser.parse(fileStoreObjectNotArray);
     }
 }

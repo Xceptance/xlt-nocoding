@@ -29,35 +29,25 @@ import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
 public class CsvParser extends Parser
 {
 
-    public static final List<String> FILE_EXTENSION = Arrays.asList("csv");
-
     /**
-     * Creates a {@link File} with the provided path to the file.
+     * Parses the content of the file at the location of the parameter to a list of {@link ScriptItem}s
      * 
      * @param pathToFile
-     *            The path to the file.
-     */
-    public CsvParser(final String pathToFile)
-    {
-        super(pathToFile);
-    }
-
-    /**
-     * Parses the file in {@link #getFile()} to a list of {@link ScriptItem}s
-     * 
+     *            The String that describes the path to the file
      * @return A list of {@link ScriptItem}s.
      * @throws IOException
      *             If {@link CSVFormat#parse(Reader)} fails.
      */
     @Override
-    public List<ScriptItem> parse() throws IOException
+    public List<ScriptItem> parse(final String pathToFile) throws IOException
     {
+        final File file = new File(pathToFile);
         // Initialize variables
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
         Action lastAction = null;
         StaticSubrequest lastStatic = null;
         // Generate a reader based on the file
-        final Reader in = new FileReader(getFile());
+        final Reader in = new FileReader(file);
 
         // Create a CSVParser based on the file
         final CSVParser parser = new CSVParser(in, CsvConstants.CSV_FORMAT.withFirstRecordAsHeader());
@@ -162,6 +152,12 @@ public class CsvParser extends Parser
                 }
             }
         }
+    }
+
+    @Override
+    public List<String> getExtensions()
+    {
+        return Arrays.asList("csv");
     }
 
 }

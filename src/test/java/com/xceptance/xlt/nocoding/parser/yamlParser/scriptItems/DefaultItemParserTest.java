@@ -50,8 +50,8 @@ public class DefaultItemParserTest extends ParserTest
     @Test
     public void testFileTmpParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileTmp);
-        final List<ScriptItem> scriptItems = parser.parse();
+        final Parser parser = new YamlParser();
+        final List<ScriptItem> scriptItems = parser.parse(fileTmp);
 
         Assert.assertEquals(2, scriptItems.size());
 
@@ -75,8 +75,8 @@ public class DefaultItemParserTest extends ParserTest
     @Test
     public void testTestDataParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileTestData);
-        final List<ScriptItem> scriptItems = parser.parse();
+        final Parser parser = new YamlParser();
+        final List<ScriptItem> scriptItems = parser.parse(fileTestData);
         // We only check for "bigger than 22", since we might have more than 22 elements, due to some default items.
         // Default Lists are stored with key "listname_name_x" and value "listname_value_x" whereas x is the count of the
         // element

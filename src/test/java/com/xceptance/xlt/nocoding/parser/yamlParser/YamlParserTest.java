@@ -34,9 +34,8 @@ public class YamlParserTest extends ParserTest
     @Test
     public void testEmptyFileParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileEmptyFile);
-        final List<ScriptItem> scriptItems = parser.parse();
-
+        final Parser parser = new YamlParser();
+        final List<ScriptItem> scriptItems = parser.parse(fileEmptyFile);
         Assert.assertTrue(scriptItems.isEmpty());
     }
 
@@ -48,8 +47,8 @@ public class YamlParserTest extends ParserTest
     @Test(expected = FileNotFoundException.class)
     public void testNotExistingFileParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileNotExistingFile);
-        final List<ScriptItem> scriptItems = parser.parse();
+        final Parser parser = new YamlParser();
+        final List<ScriptItem> scriptItems = parser.parse(fileNotExistingFile);
         Assert.assertTrue(scriptItems.isEmpty());
     }
 
@@ -61,9 +60,8 @@ public class YamlParserTest extends ParserTest
     @Test(expected = JsonParseException.class)
     public void testSyntaxErrorRootParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileSyntaxErrorRoot);
-        @SuppressWarnings("unused")
-        final List<ScriptItem> scriptItems = parser.parse();
+        final Parser parser = new YamlParser();
+        parser.parse(fileSyntaxErrorRoot);
     }
 
     /**
@@ -74,9 +72,8 @@ public class YamlParserTest extends ParserTest
     @Test(expected = IllegalArgumentException.class)
     public void testSyntaxErrorRootObjectNotArrayParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileSyntaxErrorRootObjectNotArray);
-        @SuppressWarnings("unused")
-        final List<ScriptItem> scriptItems = parser.parse();
+        final Parser parser = new YamlParser();
+        parser.parse(fileSyntaxErrorRootObjectNotArray);
     }
 
 }

@@ -39,8 +39,8 @@ public class CsvParserTest extends ParserTest
     public void testSimpleFileParsing() throws IOException
     {
         final String url = "http://hostname/";
-        final Parser parser = new CsvParser(fileSimpleFile);
-        final List<ScriptItem> scriptItems = parser.parse();
+        final Parser parser = new CsvParser();
+        final List<ScriptItem> scriptItems = parser.parse(fileSimpleFile);
 
         Assert.assertEquals(1, scriptItems.size());
         Assert.assertTrue(scriptItems.get(0) instanceof Action);
@@ -59,8 +59,8 @@ public class CsvParserTest extends ParserTest
     public void testStaticFileParsing() throws IOException
     {
         final String url = "http://www.xceptance.net";
-        final Parser parser = new CsvParser(fileStaticFile);
-        final List<ScriptItem> scriptItems = parser.parse();
+        final Parser parser = new CsvParser();
+        final List<ScriptItem> scriptItems = parser.parse(fileStaticFile);
 
         Assert.assertEquals(1, scriptItems.size());
         Assert.assertTrue(scriptItems.get(0) instanceof Action);
@@ -91,8 +91,8 @@ public class CsvParserTest extends ParserTest
     @Test
     public void testRegexpStoreParsing() throws IOException
     {
-        final Parser parser = new CsvParser(fileRegexpStoreFile);
-        parser.parse();
+        final Parser parser = new CsvParser();
+        parser.parse(fileRegexpStoreFile);
     }
 
     /**
@@ -103,8 +103,8 @@ public class CsvParserTest extends ParserTest
     @Test
     public void testXpathStoreParsing() throws IOException
     {
-        final Parser parser = new CsvParser(fileXpathStoreFile);
-        parser.parse();
+        final Parser parser = new CsvParser();
+        parser.parse(fileXpathStoreFile);
     }
 
     /**
@@ -115,8 +115,8 @@ public class CsvParserTest extends ParserTest
     @Test
     public void testRegexpStoreWithLettersParsing() throws IOException
     {
-        final Parser parser = new CsvParser(fileRegexpStoreWithLettersFile);
-        parser.parse();
+        final Parser parser = new CsvParser();
+        parser.parse(fileRegexpStoreWithLettersFile);
     }
 
     /**
@@ -125,8 +125,8 @@ public class CsvParserTest extends ParserTest
     @Test
     public void testXpathStoreWithLettersParsing() throws IOException
     {
-        final Parser parser = new CsvParser(fileXpathStoreWithLettersFile);
-        parser.parse();
+        final Parser parser = new CsvParser();
+        parser.parse(fileXpathStoreWithLettersFile);
     }
 
 }

@@ -51,8 +51,8 @@ public class ResponseParserTest extends ParserTest
     @Test(expected = JsonParseException.class)
     public void testSyntaxErrorResponseParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileSyntaxErrorResponse);
-        parser.parse();
+        final Parser parser = new YamlParser();
+        parser.parse(fileSyntaxErrorResponse);
     }
 
     /**
@@ -63,8 +63,8 @@ public class ResponseParserTest extends ParserTest
     @Test(expected = JsonParseException.class)
     public void testSyntaxErrorResponseArrayNotObjectParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileSyntaxErrorResponseArrayNotObject);
-        parser.parse();
+        final Parser parser = new YamlParser();
+        parser.parse(fileSyntaxErrorResponseArrayNotObject);
     }
 
     /**
@@ -76,8 +76,8 @@ public class ResponseParserTest extends ParserTest
     @Test(expected = JsonParseException.class)
     public void testSyntaxErrorResponseStoreItemArrayNotObjectParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileSyntaxErrorResponseStoreItemArrayNotObject);
-        parser.parse();
+        final Parser parser = new YamlParser();
+        parser.parse(fileSyntaxErrorResponseStoreItemArrayNotObject);
     }
 
     /**
@@ -88,8 +88,8 @@ public class ResponseParserTest extends ParserTest
     @Test(expected = JsonParseException.class)
     public void testSyntaxErrorResponseStoreObjectNotArrayParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileSyntaxErrorResponseStoreObjectNotArray);
-        parser.parse();
+        final Parser parser = new YamlParser();
+        parser.parse(fileSyntaxErrorResponseStoreObjectNotArray);
     }
 
     /**
@@ -101,8 +101,8 @@ public class ResponseParserTest extends ParserTest
     @Test(expected = JsonParseException.class)
     public void testSyntaxErrorResponseValidationItemArrayNotObjectParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileSyntaxErrorResponseValidationItemArrayNotObject);
-        parser.parse();
+        final Parser parser = new YamlParser();
+        parser.parse(fileSyntaxErrorResponseValidationItemArrayNotObject);
     }
 
     /**
@@ -113,8 +113,8 @@ public class ResponseParserTest extends ParserTest
     @Test(expected = JsonParseException.class)
     public void testSyntaxErrorResponseValidationObjectNotArrayParsing() throws Exception
     {
-        final Parser parser = new YamlParser(fileSyntaxErrorResponseValidationObjectNotArray);
-        parser.parse();
+        final Parser parser = new YamlParser();
+        parser.parse(fileSyntaxErrorResponseValidationObjectNotArray);
     }
 
     /**

@@ -31,34 +31,26 @@ import com.xceptance.xlt.nocoding.util.Constants;
  */
 public class YamlParser extends Parser
 {
-    public static final List<String> FILE_EXTENSION = Arrays.asList("yml", "yaml");
 
     /**
-     * Creates a {@link File} with the provided path to the file.
+     * Parses the content of the file at the location of the parameter to a list of {@link ScriptItem}s
      * 
      * @param pathToFile
-     *            The path to the file.
-     */
-    public YamlParser(final String pathToFile)
-    {
-        super(pathToFile);
-    }
-
-    /**
-     * Parses the file in {@link #getFile()} and returns a list of {@link ScriptItem}s
-     * 
+     *            The String that describes the path to the file
      * @return A list of {@link ScriptItem}s.
      * @throws IOException
      *             If a {@link JsonParser} cannot be created or the file cannot be mapped to a {@link JsonNode}.
      */
     @Override
-    public List<ScriptItem> parse() throws IOException
+    public List<ScriptItem> parse(final String pathToFile) throws IOException
     {
+        final File file = new File(pathToFile);
+
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
         // Build the factory
         final YAMLFactory factory = new YAMLFactory();
         // Create the parser
-        final JsonParser parser = factory.createParser(getFile());
+        final JsonParser parser = factory.createParser(file);
         // Allow comments in the parser, so we have the correct line numbers
         parser.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS, true);
         parser.configure(Feature.ALLOW_YAML_COMMENTS, true);
@@ -139,6 +131,12 @@ public class YamlParser extends Parser
         }
         // Return all scriptItems
         return scriptItems;
+    }
+
+    @Override
+    public List<String> getExtensions()
+    {
+        return Arrays.asList("yml", "yaml");
     }
 
 }
