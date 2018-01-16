@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang3.StringUtils;
 
 import com.xceptance.xlt.nocoding.parser.csvParser.CsvConstants;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseItem;
@@ -65,13 +66,13 @@ public class ResponseParser implements AbstractActionItemParser
             }
 
             // If the fieldName contains either REGEXP_GETTER_PREFIX and XPath isn't used
-            if (header.contains(CsvConstants.REGEXP_GETTER_PREFIX))
+            if (header.contains(CsvConstants.REGEXP_GETTER_PREFIX) && StringUtils.isNotBlank(value))
             {
                 responseStores.add(handleStore(header, value));
                 hasRegexp = true;
             }
             // If the fieldName contains either XPATH_GETTER_PREFIX and Regexp isn't used
-            else if (header.contains(CsvConstants.XPATH_GETTER_PREFIX))
+            else if (header.contains(CsvConstants.XPATH_GETTER_PREFIX) && StringUtils.isNotBlank(value))
             {
                 responseStores.add(handleStore(header, value));
                 hasXpath = true;
@@ -81,24 +82,40 @@ public class ResponseParser implements AbstractActionItemParser
         // Get responsecode if it is mapped
         if (record.isMapped(CsvConstants.RESPONSECODE))
         {
-            responsecode = record.get(CsvConstants.RESPONSECODE);
+            final String value = record.get(CsvConstants.RESPONSECODE);
+            if (StringUtils.isNotBlank(value))
+            {
+                responsecode = value;
+            }
         }
         // Get Xpath if it is mapped, and create the extractor
         if (record.isMapped(CsvConstants.XPATH))
         {
-            extractor = new XpathExtractor(record.get(CsvConstants.XPATH));
+            final String value = record.get(CsvConstants.XPATH);
+            if (StringUtils.isNotBlank(value))
+            {
+                extractor = new XpathExtractor(value);
+            }
             hasXpath = true;
         }
         // Get Regexp if it is mapped, and create the extractor
         if (record.isMapped(CsvConstants.REGEXP))
         {
-            extractor = new RegexpExtractor(record.get(CsvConstants.REGEXP));
+            final String value = record.get(CsvConstants.REGEXP);
+            if (StringUtils.isNotBlank(value))
+            {
+                extractor = new RegexpExtractor(record.get(CsvConstants.REGEXP));
+            }
             hasRegexp = true;
         }
         // Get Text if it is mapped, and create the validator
         if (record.isMapped(CsvConstants.TEXT))
         {
-            validationMethod = new MatchesValidator(record.get(CsvConstants.TEXT));
+            final String value = record.get(CsvConstants.TEXT);
+            if (StringUtils.isNotBlank(value))
+            {
+                validationMethod = new MatchesValidator(value);
+            }
         }
 
         /*
