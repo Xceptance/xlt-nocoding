@@ -54,11 +54,6 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
      */
     private Context<?> context;
 
-    /**
-     * The factory for the parser
-     */
-    private ParserFactory parserFactory;
-
     public Parser getParser()
     {
         return parser;
@@ -106,7 +101,6 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
                 XltLogger.runTimeLogger.info("No mode supplied, assuming Lightweight mode.");
                 context = new LightWeightContext(properties);
         }
-        parserFactory = ParserFactory.getInstance();
         // Get the possible filePaths
         final List<String> filepaths = getAllPossibleFilepaths();
         // Find the path that returns an existing File
@@ -211,13 +205,13 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
             else if (fileExtension.isEmpty())
             {
                 // Get all possible extensions
-                final List<String> extensions = parserFactory.getExtensions();
+                final List<String> extensions = ParserFactory.getInstance().getExtensions();
                 // Try to add each extension and stop when a file is found
                 for (final String extension : extensions)
                 {
                     final String fullPath = filepath + "." + extension;
 
-                    if (new File(fullPath).isFile() || getClass().getResource(fullPath) != null)
+                    if (new File(fullPath).isFile())
                     {
                         correctPath = fullPath;
                         break;

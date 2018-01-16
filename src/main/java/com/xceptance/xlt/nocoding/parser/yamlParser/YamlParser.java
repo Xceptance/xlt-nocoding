@@ -44,11 +44,14 @@ public class YamlParser extends Parser
     @Override
     public List<ScriptItem> parse(final String pathToFile) throws IOException
     {
-        final File file = new File(pathToFile);
 
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
         // Build the factory
         final YAMLFactory factory = new YAMLFactory();
+
+        // Create the file for the parser
+        final File file = new File(pathToFile);
+
         // Create the parser
         final JsonParser parser = factory.createParser(file);
         // Allow comments in the parser, so we have the correct line numbers
