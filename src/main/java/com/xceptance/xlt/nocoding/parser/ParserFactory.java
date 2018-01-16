@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FilenameUtils;
-
 import com.xceptance.xlt.nocoding.parser.csvParser.CsvParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser;
 
@@ -63,7 +61,7 @@ public class ParserFactory
      */
     public Parser getParser(final String file)
     {
-        final String extension = FilenameUtils.getExtension(file);
+        final String extension = file.substring(file.lastIndexOf('.') + 1);
         final Parser parser = extensionsMap.get(extension);
 
         if (parser == null)

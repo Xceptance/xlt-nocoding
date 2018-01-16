@@ -2,6 +2,7 @@ package com.xceptance.xlt.nocoding.api;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.vfs2.FileNotFolderException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -166,7 +168,7 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
         // Get the classname with .class after it
         final String classString = getClass().getSimpleName() + ".class";
         // Get the URL to the class and extract its path
-        final String path = getClass().getResource(classString).getPath();
+        final String path = getClass().getResource(classString).toString();
         // Remove the classname with .class
         String directory = path.substring(0, path.length() - classString.length());
 
@@ -216,6 +218,28 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
                         correctPath = fullPath;
                         break;
                     }
+                    try
+                    {
+                        final URL file = new URL(fullPath);
+                        if (file != null)
+                        {
+                            try
+                            {
+                                file.openStream();
+                                correctPath = fullPath;
+                                break;
+                            }
+                            // Thrown when the file doesn't exist
+                            catch (final FileNotFolderException e)
+                            {
+                                // TODO: handle exception
+                            }
+                        }
+                    }
+                    catch (final IOException e)
+                    {
+                        // Do nothing
+                    }
                 }
                 // If a file has been found, the pathToFile isn't null anymore, therefore break out of the loop
                 if (correctPath != null)
@@ -241,20 +265,7 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
      */
     protected Parser getParserFor(final String path)
     {
-        Parser parser = null;
-        // Get the extensions
-        final String fileExtension = FilenameUtils.getExtension(path);
-        if (!fileExtension.isEmpty() && new File(path).isFile())
-        {
-            parser = ParserFactory.getInstance().getParser(path);
-        }
-        // If the file extension is empty, throw an error
-        else if (fileExtension.isEmpty())
-        {
-            throw new IllegalArgumentException("Illegal file: " + "\"" + path + "\"" + "\n"
-                                               + "Supported types: '.yaml', '.yml' or '.csv'\n");
-        }
-        return parser;
+        return ParserFactory.getInstance().getParser(path);
     }
 
     /**
