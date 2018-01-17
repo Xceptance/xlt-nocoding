@@ -1,5 +1,7 @@
 package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems;
 
+import java.io.IOException;
+
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -35,10 +37,10 @@ public class SubrequestParserTest extends ParserTest
     /**
      * Verifies a XhrSubrequest can be parsed
      * 
-     * @throws Exception
+     * @throws IOException
      */
     @Test
-    public void testXhrSubrequestsParsing() throws Exception
+    public void testXhrSubrequestsParsing() throws IOException
     {
         final Parser parser = new YamlParser();
         parser.parse(fileXhrSubrequests);
@@ -47,10 +49,10 @@ public class SubrequestParserTest extends ParserTest
     /**
      * Verifies a static subrequest can be parsed
      * 
-     * @throws Exception
+     * @throws IOException
      */
     @Test
-    public void testStaticSubrequestsParsing() throws Exception
+    public void testStaticSubrequestsParsing() throws IOException
     {
         final Parser parser = new YamlParser();
         parser.parse(fileStaticSubrequests);
@@ -59,10 +61,10 @@ public class SubrequestParserTest extends ParserTest
     /**
      * Verifies an error happens when "Subrequests" has an invalid tag
      * 
-     * @throws Exception
+     * @throws IOException
      */
     @Test(expected = JsonParseException.class)
-    public void testSyntaxErrorSubrequestsParsing() throws Exception
+    public void testSyntaxErrorSubrequestsParsing() throws IOException
     {
         final Parser parser = new YamlParser();
         parser.parse(fileSyntaxErrorSubrequests);
@@ -71,10 +73,10 @@ public class SubrequestParserTest extends ParserTest
     /**
      * Verifies an error happens when "Subrequests" has objects beneath it and not arrays
      * 
-     * @throws Exception
+     * @throws IOException
      */
     @Test(expected = JsonParseException.class)
-    public void testSyntaxErrorSubrequestsObjectNotArrayParsing() throws Exception
+    public void testSyntaxErrorSubrequestsObjectNotArrayParsing() throws IOException
     {
         final Parser parser = new YamlParser();
         parser.parse(fileSyntaxErrorSubrequestsObjectNotArray);
@@ -83,10 +85,10 @@ public class SubrequestParserTest extends ParserTest
     /**
      * Verifies an error happens when "Static" beneath "Subrequests" has objects beneath it and not arrays
      * 
-     * @throws Exception
+     * @throws IOException
      */
     @Test(expected = JsonParseException.class)
-    public void testSyntaxErrorSubrequestsStaticItemObjectNotArrayParsing() throws Exception
+    public void testSyntaxErrorSubrequestsStaticItemObjectNotArrayParsing() throws IOException
     {
         final Parser parser = new YamlParser();
         parser.parse(fileSyntaxErrorSubrequestsStaticItemObjectNotArray);
@@ -95,10 +97,10 @@ public class SubrequestParserTest extends ParserTest
     /**
      * Verifies an error happens when "Xhr" beneath "Subrequests" has an array beneath it and not objects
      * 
-     * @throws Exception
+     * @throws IOException
      */
     @Test(expected = JsonParseException.class)
-    public void testSyntaxErrorSubrequestsXhrItemArrayNotObjectParsing() throws Exception
+    public void testSyntaxErrorSubrequestsXhrItemArrayNotObjectParsing() throws IOException
     {
         final Parser parser = new YamlParser();
         parser.parse(fileSyntaxErrorSubrequestsXhrItemArrayNotObject);
@@ -107,10 +109,10 @@ public class SubrequestParserTest extends ParserTest
     /**
      * Verifies an error happens when "Xhr" beneath "Subrequests" has an invalid tag
      * 
-     * @throws Exception
+     * @throws IOException
      */
     @Test(expected = JsonParseException.class)
-    public void testSyntaxErrorXhrParsing() throws Exception
+    public void testSyntaxErrorXhrParsing() throws IOException
     {
         final Parser parser = new YamlParser();
         parser.parse(fileSyntaxErrorXhr);
@@ -119,10 +121,10 @@ public class SubrequestParserTest extends ParserTest
     /**
      * Verifies an error happens when "Static" beneath "Subrequests" has a single value
      * 
-     * @throws Exception
+     * @throws IOException
      */
     @Test(expected = JsonParseException.class)
-    public void testSyntaxErrorStaticParsing() throws Exception
+    public void testSyntaxErrorStaticParsing() throws IOException
     {
         final Parser parser = new YamlParser();
         parser.parse(fileSyntaxErrorStatic);

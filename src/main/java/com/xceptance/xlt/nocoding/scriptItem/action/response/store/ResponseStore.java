@@ -2,11 +2,10 @@ package com.xceptance.xlt.nocoding.scriptItem.action.response.store;
 
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.RegexpExtractor;
 import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
- * Takes an {@link AbstractExtractor} and stores the result via {@link Context#storeVariable(String, String)}.
+ * Takes an {@link AbstractExtractor} and stores the result in {@link Context#getVariables()}.
  * 
  * @author ckeiner
  */
@@ -28,8 +27,7 @@ public class ResponseStore extends AbstractResponseStore
     }
 
     /**
-     * Resolves values, sets group of the {@link RegexpExtractor} if {@link #group} is specified, then stores the result via
-     * {@link Context#storeVariable(String, String)}.
+     * Resolves values, then stores the result in {@link Context#getVariables()}.
      * 
      * @param context
      *            The {@link Context} to use

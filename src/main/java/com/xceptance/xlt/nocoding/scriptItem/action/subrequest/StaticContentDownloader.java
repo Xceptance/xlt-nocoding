@@ -112,8 +112,6 @@ public class StaticContentDownloader
      *
      * @param url
      *            the URL to load
-     * @param referrerUrl
-     *            the referrer URL
      */
     public void addRequest(final URL url)
     {

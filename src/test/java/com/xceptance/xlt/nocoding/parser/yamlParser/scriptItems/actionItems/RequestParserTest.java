@@ -1,5 +1,7 @@
 package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems;
 
+import java.io.IOException;
+
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -26,10 +28,10 @@ public class RequestParserTest extends ParserTest
     /**
      * Verifies an error happens when "Request" has an invalid tag
      * 
-     * @throws Exception
+     * @throws IOException
      */
     @Test(expected = JsonParseException.class)
-    public void testSyntaxErrorRequestParsing() throws Exception
+    public void testSyntaxErrorRequestParsing() throws IOException
     {
         final Parser parser = new YamlParser();
         parser.parse(fileSyntaxErrorRequest);
@@ -38,10 +40,10 @@ public class RequestParserTest extends ParserTest
     /**
      * Verifies an error happens when "Request" has an array beneath it and not objects
      * 
-     * @throws Exception
+     * @throws IOException
      */
     @Test(expected = JsonParseException.class)
-    public void testSyntaxErrorRequestArrayNotObjectParsing() throws Exception
+    public void testSyntaxErrorRequestArrayNotObjectParsing() throws IOException
     {
         final Parser parser = new YamlParser();
         parser.parse(fileSyntaxErrorRequestArrayNotObject);
@@ -50,10 +52,10 @@ public class RequestParserTest extends ParserTest
     /**
      * Verifies a empty url can be parsed
      * 
-     * @throws Exception
+     * @throws IOException
      */
     @Test
-    public void testUrlNullParsing() throws Exception
+    public void testUrlNullParsing() throws IOException
     {
         final Parser parser = new YamlParser();
         parser.parse(fileUrlNull);

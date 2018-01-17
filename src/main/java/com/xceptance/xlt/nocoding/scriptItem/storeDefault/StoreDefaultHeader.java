@@ -28,8 +28,7 @@ public class StoreDefaultHeader extends StoreDefault
 
     /**
      * If {@link #getValue()} is {@link Constants#DELETE}, the list of default headers is deleted with
-     * {@link Context#deleteDefaultHeader()}. Else it stores a default header with
-     * {@link Context#storeDefaultHeader(String, String)}.
+     * {@link UniqueStorage#clear()}. Else it stores a default header with {@link UniqueStorage#store(String, String)}.
      */
     @Override
     public void execute(final Context<?> context)

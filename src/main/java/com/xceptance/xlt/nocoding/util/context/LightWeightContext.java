@@ -135,7 +135,8 @@ public class LightWeightContext extends Context<LightWeightPage>
      * {@link WebResponse}.<br>
      * If <code>WebRequest.isXHR()</code> is <code>true</code>, it only loads the WebResponse.
      * 
-     * @param webResponse
+     * @param webRequest
+     *            The webRequest that should be send
      * @throws IOException
      * @throws FailingHttpStatusCodeException
      */

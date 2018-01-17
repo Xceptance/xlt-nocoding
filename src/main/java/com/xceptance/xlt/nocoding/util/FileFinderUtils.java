@@ -101,6 +101,7 @@ public class FileFinderUtils
      * URL and tries to open the Stream. If the Stream can be opened, then we can read from there and return true.<br>
      * 
      * @param fullPath
+     *            The path to the file, with the file extension
      * @return True if either a File or URL can read from the provided <code>fullPath</code><br>
      */
     public static boolean existsFileFor(final String fullPath)

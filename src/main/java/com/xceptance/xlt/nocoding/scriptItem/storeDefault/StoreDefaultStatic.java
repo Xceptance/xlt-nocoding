@@ -29,8 +29,7 @@ public class StoreDefaultStatic extends StoreDefault
 
     /**
      * If {@link #getValue()} is {@link Constants#DELETE}, the list of default static requests is deleted with
-     * {@link Context#deleteDefaultStatic()}. Else it stores a default static requests with
-     * {@link Context#storeDefaultStatic(String)}.
+     * {@link SingleStorage#clear()}. Else it stores a default static requests with {@link SingleStorage#store(String)}.
      */
     @Override
     public void execute(final Context<?> context)

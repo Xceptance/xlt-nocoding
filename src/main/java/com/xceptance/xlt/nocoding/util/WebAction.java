@@ -36,13 +36,14 @@ public class WebAction extends AbstractWebAction
     private final List<AbstractActionItem> actionItems;
 
     /**
+     * Creates a new instance of WebAction.
+     * 
      * @param timerName
      *            The name of the action
      * @param context
      *            The current {@link Context}
-     * @param request
-     *            The main request
      * @param actionItems
+     *            The list of {@link AbstractActionItem}s that are to be executed
      */
     public WebAction(final String timerName, final Context<?> context, final List<AbstractActionItem> actionItems)
     {

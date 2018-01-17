@@ -18,7 +18,7 @@ public abstract class AbstractActionItemParser
      * 
      * @param node
      *            The {@link JsonNode} the item starts at
-     * @return A list of {@link AbstractActionItem}> since the subrequest block can have multiple action items
+     * @return A list of {@link AbstractActionItem}
      */
     public abstract List<AbstractActionItem> parse(JsonNode node);
 

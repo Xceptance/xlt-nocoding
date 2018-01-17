@@ -63,7 +63,7 @@ public abstract class AbstractExtractor
     /**
      * Adds all strings in the list to the result list.
      * 
-     * @param result
+     * @param resultList
      *            The list of strings to be added to the result.
      */
     public void addResult(final List<String> resultList)

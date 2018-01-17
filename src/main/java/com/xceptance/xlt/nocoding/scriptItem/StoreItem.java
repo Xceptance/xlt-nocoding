@@ -34,8 +34,8 @@ public class StoreItem implements ScriptItem
     }
 
     /**
-     * Executes the {@link StoreItem} by resolving values and then storing the {@link #variableName} and resolved
-     * {@link #value} via {@link Context#storeVariable(String, String)}.
+     * Executes the {@link StoreItem} by resolving the values and then storing the {@link #variableName} in
+     * {@link Context#getVariables()}.
      */
     @Override
     public void execute(final Context<?> context)

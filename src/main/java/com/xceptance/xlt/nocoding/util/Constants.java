@@ -129,7 +129,7 @@ public class Constants
      * <li>{@link #PARAMETERS}
      * <li>{@link #HEADERS}
      * <li>{@link #BODY}
-     * <li>{@link #ENCODEBODYDY}
+     * <li>{@link #ENCODEBODY}
      * </ul>
      */
     public final static Set<String> PERMITTEDREQUESTITEMS = new HashSet<>();

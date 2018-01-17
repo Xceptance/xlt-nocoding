@@ -74,8 +74,8 @@ public class DefaultKeyValueStorage extends UniqueStorage
     /**
      * Stores an item with a default value of {@link #fallback}.
      * 
-     * @param key
-     *            The key you want to store your item with
+     * @param itemName
+     *            The key/name you want to store your item with
      * @param value
      *            The value you want to store
      * @param fallback

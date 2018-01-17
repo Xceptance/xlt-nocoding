@@ -121,8 +121,7 @@ public class ParserUtilsTest
     }
 
     /**
-     * Verifies {@link ParserUtils#getArrayNodeAsNameValuePair(JsonNode)} returns a correct
-     * {@link List}<{@link NameValuePair}>
+     * Verifies {@link ParserUtils#getArrayNodeAsNameValuePair(JsonNode)} returns a correct list of {@link NameValuePair}s
      * 
      * @throws IOException
      */

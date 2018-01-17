@@ -29,7 +29,9 @@ public abstract class StoreDefault implements ScriptItem
      * Creates a {@link StoreDefault} that sets {@link #variableName} and {@link #value}
      * 
      * @param variableName
+     *            The name of the variable
      * @param value
+     *            The value of the variable
      */
     public StoreDefault(final String variableName, final String value)
     {

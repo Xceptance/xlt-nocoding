@@ -61,14 +61,13 @@ public class ActionItemUtil
     }
 
     /**
-     * Adds a default {@link Request} and default {@link Response} if none is found in the
-     * {@link List}<{@link AbstractActionItem}>.
+     * Adds a default {@link Request} and default {@link Response} if none is found in the list of
+     * {@link AbstractActionItem}.
      * 
      * @param actionItems
      *            The list to add the default items to
      * @param context
      *            The {@link Context} with the {@link DataStorage}.
-     * @return
      */
     public static void fillDefaultData(final List<AbstractActionItem> actionItems, final Context<?> context)
     {
@@ -97,7 +96,9 @@ public class ActionItemUtil
 
     /**
      * @param start
+     *            The String the defaultName should start with if no default name was defined
      * @param context
+     *            The Context with the {@link DataStorage}
      * @return String that starts with <code> start + "-" </code> and adds the current index of scriptItems to it
      */
     public static String getDefaultName(final Context<?> context, final String start)

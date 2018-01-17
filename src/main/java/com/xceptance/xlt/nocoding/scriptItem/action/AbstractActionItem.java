@@ -15,7 +15,7 @@ public abstract class AbstractActionItem
      * 
      * @param context
      *            The {@link Context} for the {@link AbstractActionItem}
-     * @throws Throwable
+     * @throws Exception
      *             Any error that happens during the execution
      */
     public abstract void execute(final Context<?> context) throws Exception;

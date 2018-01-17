@@ -65,11 +65,11 @@ public class ParserUtils
     }
 
     /**
-     * Converts an ArrayNode consisting of ObjectNodes with simple Key/Value-Pairs to a List<NameValuePair>
+     * Converts an ArrayNode consisting of ObjectNodes with simple Key/Value-Pairs to a List of {@link NameValuePair}s
      * 
      * @param jsonNode
      *            The ArrayNode consisting of ObjectNodes
-     * @return
+     * @return A list of <code>NameValuePair</code>s that describe the parameters
      */
     public static List<NameValuePair> getArrayNodeAsNameValuePair(final JsonNode jsonNode)
     {
@@ -105,10 +105,8 @@ public class ParserUtils
     }
 
     /**
-     * Gets the ObjectNode in the JsonParser parser
+     * Gets the root <code>ObjectNode</code> in the {@link JsonParser} parser via {@link ObjectMapper#readTree(JsonParser)}.
      * 
-     * @param nodeName
-     *            The name of the node
      * @param parser
      *            The parser in which to look for the node
      * @return The JsonNode with the specified name
@@ -122,10 +120,10 @@ public class ParserUtils
     }
 
     /**
-     * Gets the JsonNode with the specified nodeName in the JsonParser parser
+     * Gets the JsonNode with the specified <code>fieldName</code> in the JsonParser parser
      * 
-     * @param nodeName
-     *            The name of the node
+     * @param fieldName
+     *            The name of the field
      * @param parser
      *            The parser in which to look for the node
      * @return The JsonNode with the specified name
@@ -140,11 +138,12 @@ public class ParserUtils
     }
 
     /**
-     * Parses an expected string value at node with the field name fieldName. However, if we get null, we try to parse it as
-     * boolean and then as integer
+     * Parses the value at <code>node</code> with the field name <code>fieldName</code> to a String.
      * 
      * @param node
+     *            The node from which to read the <code>fieldName</code>
      * @param fieldName
+     *            The name of the field from which to read the value
      * @return The value as {@link String}
      */
     public static String readValue(final JsonNode node, final String fieldName)
@@ -153,11 +152,10 @@ public class ParserUtils
     }
 
     /**
-     * Parses an expected string value at node with the field name fieldName. However, if we get null, we try to parse it as
-     * boolean and then as integer
+     * Parses the value at <code>node</code> to a String.
      * 
      * @param node
-     * @param fieldName
+     *            The node from which to read the value
      * @return The value as {@link String}
      */
     public static String readSingleValue(final JsonNode node)

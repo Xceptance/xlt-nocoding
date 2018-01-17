@@ -286,7 +286,7 @@ public abstract class Context<T>
     /**
      * Creates a new Context out of the current one
      * 
-     * @return Context<T>
+     * @return Context with the type T
      */
     public abstract Context<T> buildNewContext();
 

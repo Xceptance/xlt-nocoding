@@ -12,8 +12,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 /**
- * The abstract class for each Action. An Action consist of a {@link #name} and
- * {@link List}<{@link AbstractActionItem}>.
+ * The abstract class for each Action. An Action consist of a {@link #name} and list of {@link AbstractActionItem}s.
  * 
  * @author ckeiner
  */
@@ -43,7 +42,7 @@ public class Action implements ScriptItem
      * @param name
      *            The name of the action
      * @param actionItems
-     *            A {@link List}<{@link AbstractActionItem}>
+     *            A list of {@link AbstractActionItem}s
      */
     public Action(final String name, final List<AbstractActionItem> actionItems)
     {
