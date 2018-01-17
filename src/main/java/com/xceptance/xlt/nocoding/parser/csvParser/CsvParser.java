@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
@@ -28,13 +27,13 @@ public class CsvParser extends Parser
 {
 
     /**
-     * Parses the content of the file at the location of the parameter to a list of {@link ScriptItem}s
+     * Parses the content of the file at the location of <code>pathToFile</code> to a list of {@link ScriptItem}s
      * 
      * @param pathToFile
      *            The String that describes the path to the file
      * @return A list of {@link ScriptItem}s.
      * @throws IOException
-     *             If {@link CSVFormat#parse(Reader)} fails.
+     *             if an I/O error occurs during creating the reader, parsing the file or closing the parser
      */
     @Override
     public List<ScriptItem> parse(final String pathToFile) throws IOException
@@ -44,10 +43,10 @@ public class CsvParser extends Parser
         Action lastAction = null;
         StaticSubrequest lastStatic = null;
 
-        // Generate a reader based on the file
-        final Reader fileReader = createReader(pathToFile);
-        // Create a CSVParser based on the file
-        final CSVParser parser = new CSVParser(fileReader, CsvConstants.CSV_FORMAT.withFirstRecordAsHeader());
+        // Create a Reader based on the file
+        final Reader reader = createReader(pathToFile);
+        // Create a CSVParser based on the Reader
+        final CSVParser parser = new CSVParser(reader, CsvConstants.CSV_FORMAT.withFirstRecordAsHeader());
         // Read all records
         final List<CSVRecord> records = parser.getRecords();
         // Try to validate all headers are allowed

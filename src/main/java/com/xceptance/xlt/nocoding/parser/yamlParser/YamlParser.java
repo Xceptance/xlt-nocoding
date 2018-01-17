@@ -48,10 +48,10 @@ public class YamlParser extends Parser
         // Build the factory
         final YAMLFactory factory = new YAMLFactory();
 
-        // Generate a reader based on the file
-        final Reader fileReader = createReader(pathToFile);
+        // Generate a Reader based on the file
+        final Reader reader = createReader(pathToFile);
         // Create the parser
-        final JsonParser parser = factory.createParser(fileReader);
+        final JsonParser parser = factory.createParser(reader);
         // Allow comments in the parser, so we have the correct line numbers
         parser.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS, true);
         parser.configure(Feature.ALLOW_YAML_COMMENTS, true);
