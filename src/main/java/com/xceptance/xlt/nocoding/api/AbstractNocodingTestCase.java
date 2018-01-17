@@ -82,7 +82,13 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
         // Instantiate the properties
         final XltProperties properties = XltProperties.getInstance();
         // Get the mode and create the corresponding Context
-        final String mode = properties.getProperty(NoCodingPropertyAdmin.MODE);
+        String mode = properties.getProperty(NoCodingPropertyAdmin.MODE);
+        // If mode isn't defined, set it to Lightweight
+        if (mode == null)
+        {
+            XltLogger.runTimeLogger.info("No mode supplied, assuming default mode: " + NoCodingPropertyAdmin.MODE_DEFAULT);
+            mode = NoCodingPropertyAdmin.MODE_DEFAULT;
+        }
         switch (mode)
         {
             case NoCodingPropertyAdmin.LIGHTWEIGHT:
@@ -94,13 +100,8 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
                 break;
 
             default:
-                if (!StringUtils.isBlank(mode))
-                {
-                    throw new IllegalStateException("Mode must be " + NoCodingPropertyAdmin.LIGHTWEIGHT + " or " + NoCodingPropertyAdmin.DOM
-                                                    + " but is " + mode);
-                }
-                XltLogger.runTimeLogger.info("No mode supplied, assuming Lightweight mode.");
-                context = new LightWeightContext(properties);
+                throw new IllegalStateException("Mode must be " + NoCodingPropertyAdmin.LIGHTWEIGHT + " or " + NoCodingPropertyAdmin.DOM
+                                                + " but is " + mode);
         }
         // Get the possible filePaths
         final List<String> filepaths = getAllPossibleFilepaths();
@@ -147,6 +148,11 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
     {
         // Get the directory from the properties
         String directory = context.getPropertyByKey(NoCodingPropertyAdmin.DIRECTORY);
+        // If the directory is not defined in the properties, assume
+        if (directory == null)
+        {
+            directory = NoCodingPropertyAdmin.DIRECTORY_DEFAULT;
+        }
         // If it doesn't end with the File.separatorChar
         if (!directory.endsWith(String.valueOf(File.separatorChar)))
         {
@@ -183,7 +189,7 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
 
     /**
      * Goes through all provided file paths and tries to find a path to an existing file. If the extension is missing, it
-     * adds yml, yaml and csv and searches for the file in that order.
+     * adds all known extensions via {@link ParserFactory#getExtensions()} and searches for the file.
      * 
      * @param possiblePaths
      *            All possible filepaths to look into, with or without file extension
@@ -198,14 +204,17 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
             final String fileExtension = FilenameUtils.getExtension(filepath);
             if (!fileExtension.isEmpty())
             {
+                // Check if the file exists
                 if (existsFileFor(filepath))
                 {
+                    // If it does, this is the correct path
                     correctPath = filepath;
+                    // Exit the loop
                     break;
                 }
             }
 
-            // If the file extension is empty, try to add yml, yaml and csv
+            // If the file extension is empty, try to add all known extensions
             else if (fileExtension.isEmpty())
             {
                 // Get all possible extensions
@@ -213,24 +222,43 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
                 // Try to add each extension and stop when a file is found
                 for (final String extension : extensions)
                 {
+                    // Add .extension to the path
                     final String fullPath = filepath + "." + extension;
+                    // Check if it exists
                     if (existsFileFor(fullPath))
                     {
                         correctPath = fullPath;
                         break;
                     }
                 }
-                // If a file has been found, the pathToFile isn't null anymore, therefore break out of the loop
+                // If a file has been found, the correctPath isn't null anymore, therefore break out of the outer loop
                 if (correctPath != null)
                 {
                     break;
                 }
             }
         }
+        // Since we cannot say for sure if we found an existing file, throw an error if correctPath is still null
         if (correctPath == null)
         {
-            // TODO better error
-            throw new IllegalArgumentException("No script file found!");
+            String allFiles = "";
+            for (final String path : possiblePaths)
+            {
+                allFiles += path + "\n";
+            }
+            // Remove last \n
+            allFiles = allFiles.substring(0, allFiles.length() - 1);
+            String extensions = "";
+            for (final String extension : ParserFactory.getInstance().getExtensions())
+            {
+                extensions += extension + ", ";
+            }
+            // Remove comma
+            extensions = extensions.substring(0, extensions.length() - 2);
+
+            final String errorMessage = "No script file found in any of these locations:\n" + allFiles
+                                        + " with the following extensions added if none was supplied: " + extensions;
+            throw new IllegalArgumentException(errorMessage);
         }
         return correctPath;
     }
