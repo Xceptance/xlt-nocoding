@@ -9,7 +9,7 @@ import com.xceptance.xlt.nocoding.parser.csvParser.CsvConstants;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
 
 /**
- * The class for parsing static subrequests.
+ * The class for parsing Static Subrequests from a {@link CSVRecord}.
  * 
  * @author ckeiner
  */
@@ -17,11 +17,11 @@ public class StaticItemParser
 {
 
     /**
-     * Extracts the information needed for a static subrequest from the {@link CSVRecord} and creates a
+     * Extracts the information needed for a Static Subrequest from the {@link CSVRecord} and creates a
      * {@link StaticSubrequest} out of it.
      * 
      * @param record
-     *            The CSVRecord that describes the static subrequest
+     *            The CSVRecord that describes the Static Subrequest
      * @return A <code>StaticSubrequest</code> with the parsed URL
      */
     public StaticSubrequest parse(final CSVRecord record)

@@ -24,8 +24,7 @@ import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
- * Reads a Yaml file, provided per constructor, and generates an List filled with {@link ScriptItem}s out of the Yaml
- * file.
+ * Reads a Yaml file and generates a list filled with {@link ScriptItem}s out of the Yaml file.
  * 
  * @author ckeiner
  */
@@ -33,13 +32,14 @@ public class YamlParser extends Parser
 {
 
     /**
-     * Parses the content of the file at the location of the parameter to a list of {@link ScriptItem}s
+     * Parses the content of the file at the <code>pathToFile</code> to a list of {@link ScriptItem}s
      * 
      * @param pathToFile
      *            The String that describes the path to the file
-     * @return A list of {@link ScriptItem}s.
+     * @return A list of {@link ScriptItem}s
      * @throws IOException
-     *             If a {@link JsonParser} cannot be created or the file cannot be mapped to a {@link JsonNode}.
+     *             If a {@link Reader} or {@link JsonParser} cannot be created or the file cannot be mapped to a
+     *             {@link JsonNode}.
      */
     @Override
     public List<ScriptItem> parse(final String pathToFile) throws IOException

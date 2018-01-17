@@ -19,7 +19,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.Action;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
 
 /**
- * Reads a CSV file, provided per constructor, and generates a list filled with {@link ScriptItem}s out of the CSV file.
+ * Reads a CSV file, and generates a list filled with {@link ScriptItem}s out of the CSV file.
  * 
  * @author ckeiner
  */
@@ -27,11 +27,11 @@ public class CsvParser extends Parser
 {
 
     /**
-     * Parses the content of the file at the location of <code>pathToFile</code> to a list of {@link ScriptItem}s
+     * Parses the content of the file at <code>pathToFile</code> to a list of {@link ScriptItem}s
      * 
      * @param pathToFile
      *            The String that describes the path to the file
-     * @return A list of {@link ScriptItem}s.
+     * @return A list of {@link ScriptItem}s
      * @throws IOException
      *             if an I/O error occurs during creating the reader, parsing the file or closing the parser
      */

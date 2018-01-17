@@ -4,6 +4,11 @@ import org.apache.commons.csv.CSVRecord;
 
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 
+/**
+ * Defines the interface for parsing an action item from a {@link CSVRecord}.
+ * 
+ * @author ckeiner
+ */
 public interface AbstractActionItemParser
 {
     /**

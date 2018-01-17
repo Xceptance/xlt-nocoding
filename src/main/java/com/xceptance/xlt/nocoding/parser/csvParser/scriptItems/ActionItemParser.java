@@ -25,7 +25,7 @@ public class ActionItemParser
      * 
      * @param record
      *            The {@link CSVRecord} with the the action item
-     * @return The Action defined by the CSVRecord
+     * @return The {@link Action} defined by the CSVRecord
      */
     public Action parse(final CSVRecord record)
     {

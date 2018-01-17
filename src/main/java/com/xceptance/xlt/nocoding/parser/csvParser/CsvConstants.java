@@ -20,7 +20,7 @@ public class CsvConstants
     public static final String REGEXP_GETTER_PREFIX = "regexp";
 
     /**
-     * Permitted header fields, checked to avoid accidental incorrect spelling
+     * Permitted header fields, without XPATH_GETTER_PREFIX and REGEXP_GETTER_PREFIX
      */
     private final static Set<String> PERMITTEDHEADERFIELDS = new HashSet<>();
 

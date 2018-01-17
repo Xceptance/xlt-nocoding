@@ -16,10 +16,20 @@ import com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser;
  */
 public class ParserFactory
 {
+    /**
+     * The singleton instance of <code>ParserFactory</code>
+     */
     private static ParserFactory factoryInstance;
 
+    /**
+     * The map, that maps the extension to a concrete parser
+     */
     private final Map<String, Parser> extensionsMap;
 
+    /**
+     * Creates a new instance of <code>ParserFactory</code> and fills {@link #extensionsMap} with the known Parsers and its
+     * extensions
+     */
     private ParserFactory()
     {
         extensionsMap = new HashMap<>();
@@ -35,6 +45,12 @@ public class ParserFactory
         }
     }
 
+    /**
+     * Either creates an instance of <code>ParserFactory</code> if {@link #factoryInstance} is <code>null</code> or returns
+     * <code>factoryInstance</code>.
+     * 
+     * @return the singleton instance of <code>ParserFactory</code>
+     */
     public static synchronized ParserFactory getInstance()
     {
         if (factoryInstance == null)
@@ -45,9 +61,10 @@ public class ParserFactory
     }
 
     /**
-     * Returns list of extensions
+     * Returns a list of all known file extensions for the parser, therefore it returns the {@link Map#keySet()} of
+     * {@link #extensionsMap}.
      * 
-     * @return
+     * @return A list with the content of {@link Map#keySet()} of {@link #extensionsMap}.
      */
     public List<String> getExtensions()
     {
