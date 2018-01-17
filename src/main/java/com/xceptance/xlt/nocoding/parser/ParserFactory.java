@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.parser.csvParser.CsvParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser;
 
@@ -61,13 +62,17 @@ public class ParserFactory
      */
     public Parser getParser(final String file)
     {
+        // Extract the extension of the file, that is the last position of the . +1, so we cut out the dot
         final String extension = file.substring(file.lastIndexOf('.') + 1);
+        // Get the Parser instance from the extensionsMap
         final Parser parser = extensionsMap.get(extension);
-
+        // If the parser is null, the extensions could not be found
         if (parser == null)
         {
-            throw new IllegalArgumentException("Could not find appropriate parser for " + file);
+            throw new IllegalArgumentException("Could not find appropriate parser for the extension " + extension + " with the path "
+                                               + file);
         }
+        XltLogger.runTimeLogger.debug("Using " + parser.getClass().getSimpleName() + " for " + file);
         return parser;
     }
 

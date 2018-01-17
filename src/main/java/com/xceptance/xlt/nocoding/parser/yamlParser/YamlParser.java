@@ -1,7 +1,7 @@
 package com.xceptance.xlt.nocoding.parser.yamlParser;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -44,16 +44,14 @@ public class YamlParser extends Parser
     @Override
     public List<ScriptItem> parse(final String pathToFile) throws IOException
     {
-
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
         // Build the factory
         final YAMLFactory factory = new YAMLFactory();
 
-        // Create the file for the parser
-        final File file = new File(pathToFile);
-
+        // Generate a reader based on the file
+        final Reader fileReader = createReader(pathToFile);
         // Create the parser
-        final JsonParser parser = factory.createParser(file);
+        final JsonParser parser = factory.createParser(fileReader);
         // Allow comments in the parser, so we have the correct line numbers
         parser.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS, true);
         parser.configure(Feature.ALLOW_YAML_COMMENTS, true);

@@ -10,7 +10,6 @@ import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.vfs2.FileNotFolderException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -197,10 +196,13 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
         {
             // Get the extensions
             final String fileExtension = FilenameUtils.getExtension(filepath);
-            if (!fileExtension.isEmpty() && new File(filepath).isFile())
+            if (!fileExtension.isEmpty())
             {
-                correctPath = filepath;
-                break;
+                if (existsFileFor(filepath))
+                {
+                    correctPath = filepath;
+                    break;
+                }
             }
 
             // If the file extension is empty, try to add yml, yaml and csv
@@ -212,33 +214,10 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
                 for (final String extension : extensions)
                 {
                     final String fullPath = filepath + "." + extension;
-
-                    if (new File(fullPath).isFile())
+                    if (existsFileFor(fullPath))
                     {
                         correctPath = fullPath;
                         break;
-                    }
-                    try
-                    {
-                        final URL file = new URL(fullPath);
-                        if (file != null)
-                        {
-                            try
-                            {
-                                file.openStream();
-                                correctPath = fullPath;
-                                break;
-                            }
-                            // Thrown when the file doesn't exist
-                            catch (final FileNotFolderException e)
-                            {
-                                // TODO: handle exception
-                            }
-                        }
-                    }
-                    catch (final IOException e)
-                    {
-                        // Do nothing
                     }
                 }
                 // If a file has been found, the pathToFile isn't null anymore, therefore break out of the loop
@@ -247,12 +226,56 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
                     break;
                 }
             }
-            else
-            {
-                throw new IllegalArgumentException("File extension defined but no File was found: " + "\"" + fileExtension);
-            }
+        }
+        if (correctPath == null)
+        {
+            // TODO better error
+            throw new IllegalArgumentException("No script file found!");
         }
         return correctPath;
+    }
+
+    /**
+     * Checks if at the location of <code>fullPath</code> anything can be found.<br>
+     * At first, it creates a file at the path and if it exists, the function returns true. If no File exists, it creates a
+     * URL and tries to open the Stream. If the Stream can be opened, then we can read from there and return true.<br>
+     * 
+     * @param fullPath
+     * @return True if either a File or URL can read from the provided <code>fullPath</code><br>
+     */
+    protected boolean existsFileFor(final String fullPath)
+    {
+        boolean exists = false;
+
+        // Check if a file exists at the location
+        if (new File(fullPath).exists())
+        {
+            exists = true;
+        }
+        // If no file could be found
+        else
+        {
+            try
+            {
+                // Try to build a URL out of fullPath
+                final URL file = new URL(fullPath);
+                if (file != null)
+                {
+                    // Try to open the stream
+                    file.openStream();
+                    // We only execute this line, if the stream could be opened
+                    exists = true;
+                }
+            }
+            // Catch MalformedURLException and every other IO exception that occurs when opening the Stream, thus telling us, that
+            // we cannot find something at the location
+            catch (final IOException e)
+            {
+                exists = false;
+            }
+        }
+        // Return the value of exists
+        return exists;
     }
 
     /**

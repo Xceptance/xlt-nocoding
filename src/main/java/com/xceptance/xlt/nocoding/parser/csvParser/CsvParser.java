@@ -1,7 +1,5 @@
 package com.xceptance.xlt.nocoding.parser.csvParser;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
@@ -41,16 +39,15 @@ public class CsvParser extends Parser
     @Override
     public List<ScriptItem> parse(final String pathToFile) throws IOException
     {
-        final File file = new File(pathToFile);
         // Initialize variables
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
         Action lastAction = null;
         StaticSubrequest lastStatic = null;
-        // Generate a reader based on the file
-        final Reader in = new FileReader(file);
 
+        // Generate a reader based on the file
+        final Reader fileReader = createReader(pathToFile);
         // Create a CSVParser based on the file
-        final CSVParser parser = new CSVParser(in, CsvConstants.CSV_FORMAT.withFirstRecordAsHeader());
+        final CSVParser parser = new CSVParser(fileReader, CsvConstants.CSV_FORMAT.withFirstRecordAsHeader());
         // Read all records
         final List<CSVRecord> records = parser.getRecords();
         // Try to validate all headers are allowed
