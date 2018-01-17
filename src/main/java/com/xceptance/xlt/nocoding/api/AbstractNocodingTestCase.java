@@ -2,13 +2,11 @@ package com.xceptance.xlt.nocoding.api;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +20,7 @@ import com.xceptance.xlt.nocoding.parser.csvParser.CsvParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.Action;
+import com.xceptance.xlt.nocoding.util.FileFinderUtils;
 import com.xceptance.xlt.nocoding.util.NoCodingPropertyAdmin;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.context.DomContext;
@@ -83,7 +82,7 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
         final XltProperties properties = XltProperties.getInstance();
         // Get the mode and create the corresponding Context
         String mode = properties.getProperty(NoCodingPropertyAdmin.MODE);
-        // If mode isn't defined, set it to Lightweight
+        // If mode isn't defined, set it to the default mode
         if (mode == null)
         {
             XltLogger.runTimeLogger.info("No mode supplied, assuming default mode: " + NoCodingPropertyAdmin.MODE_DEFAULT);
@@ -100,13 +99,14 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
                 break;
 
             default:
+                // Mode is neither of the two options, therefore throw an error
                 throw new IllegalStateException("Mode must be " + NoCodingPropertyAdmin.LIGHTWEIGHT + " or " + NoCodingPropertyAdmin.DOM
                                                 + " but is " + mode);
         }
         // Get the possible filePaths
         final List<String> filepaths = getAllPossibleFilepaths();
         // Find the path that returns an existing File
-        final String filepath = getExistingFilepath(filepaths);
+        final String filepath = FileFinderUtils.getExistingFilepath(filepaths);
         // Create the appropriate parser
         this.parser = getParserFor(filepath);
         // Get or parse the file
@@ -148,7 +148,7 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
     {
         // Get the directory from the properties
         String directory = context.getPropertyByKey(NoCodingPropertyAdmin.DIRECTORY);
-        // If the directory is not defined in the properties, assume
+        // If the directory is not defined in the properties, assume default directory
         if (directory == null)
         {
             directory = NoCodingPropertyAdmin.DIRECTORY_DEFAULT;
@@ -188,125 +188,6 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
     }
 
     /**
-     * Goes through all provided file paths and tries to find a path to an existing file. If the extension is missing, it
-     * adds all known extensions via {@link ParserFactory#getExtensions()} and searches for the file.
-     * 
-     * @param possiblePaths
-     *            All possible filepaths to look into, with or without file extension
-     * @return The path to a found file
-     */
-    protected String getExistingFilepath(final List<String> possiblePaths)
-    {
-        String correctPath = null;
-        for (final String filepath : possiblePaths)
-        {
-            // Get the extensions
-            final String fileExtension = FilenameUtils.getExtension(filepath);
-            if (!fileExtension.isEmpty())
-            {
-                // Check if the file exists
-                if (existsFileFor(filepath))
-                {
-                    // If it does, this is the correct path
-                    correctPath = filepath;
-                    // Exit the loop
-                    break;
-                }
-            }
-
-            // If the file extension is empty, try to add all known extensions
-            else if (fileExtension.isEmpty())
-            {
-                // Get all possible extensions
-                final List<String> extensions = ParserFactory.getInstance().getExtensions();
-                // Try to add each extension and stop when a file is found
-                for (final String extension : extensions)
-                {
-                    // Add .extension to the path
-                    final String fullPath = filepath + "." + extension;
-                    // Check if it exists
-                    if (existsFileFor(fullPath))
-                    {
-                        correctPath = fullPath;
-                        break;
-                    }
-                }
-                // If a file has been found, the correctPath isn't null anymore, therefore break out of the outer loop
-                if (correctPath != null)
-                {
-                    break;
-                }
-            }
-        }
-        // Since we cannot say for sure if we found an existing file, throw an error if correctPath is still null
-        if (correctPath == null)
-        {
-            String allFiles = "";
-            for (final String path : possiblePaths)
-            {
-                allFiles += path + "\n";
-            }
-            // Remove last \n
-            allFiles = allFiles.substring(0, allFiles.length() - 1);
-            String extensions = "";
-            for (final String extension : ParserFactory.getInstance().getExtensions())
-            {
-                extensions += extension + ", ";
-            }
-            // Remove comma
-            extensions = extensions.substring(0, extensions.length() - 2);
-
-            final String errorMessage = "No script file found in any of these locations:\n" + allFiles
-                                        + " with the following extensions added if none was supplied: " + extensions;
-            throw new IllegalArgumentException(errorMessage);
-        }
-        return correctPath;
-    }
-
-    /**
-     * Checks if at the location of <code>fullPath</code> anything can be found.<br>
-     * At first, it creates a file at the path and if it exists, the function returns true. If no File exists, it creates a
-     * URL and tries to open the Stream. If the Stream can be opened, then we can read from there and return true.<br>
-     * 
-     * @param fullPath
-     * @return True if either a File or URL can read from the provided <code>fullPath</code><br>
-     */
-    protected boolean existsFileFor(final String fullPath)
-    {
-        boolean exists = false;
-
-        // Check if a file exists at the location
-        if (new File(fullPath).exists())
-        {
-            exists = true;
-        }
-        // If no file could be found
-        else
-        {
-            try
-            {
-                // Try to build a URL out of fullPath
-                final URL file = new URL(fullPath);
-                if (file != null)
-                {
-                    // Try to open the stream
-                    file.openStream();
-                    // We only execute this line, if the stream could be opened
-                    exists = true;
-                }
-            }
-            // Catch MalformedURLException and every other IO exception that occurs when opening the Stream, thus telling us, that
-            // we cannot find something at the location
-            catch (final IOException e)
-            {
-                exists = false;
-            }
-        }
-        // Return the value of exists
-        return exists;
-    }
-
-    /**
      * Creates the correct parser depending on the file extension. For example, it creates a {@link YamlParser} for yml/yaml
      * files and a {@link CsvParser} for CSV files.
      * 
@@ -337,6 +218,7 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
             List<ScriptItem> result = DATA_CACHE.get(filePath);
             if (result == null)
             {
+                XltLogger.runTimeLogger.debug("Parsing file...");
                 result = parser.parse(filePath);
                 DATA_CACHE.put(filePath, result);
             }
