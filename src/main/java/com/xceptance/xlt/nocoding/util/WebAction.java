@@ -23,7 +23,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
 public class WebAction extends AbstractWebAction
 {
     /**
-     * The context in the current WebAction
+     * The context of the current WebAction
      */
     private final Context<?> context;
 
@@ -41,7 +41,7 @@ public class WebAction extends AbstractWebAction
      * Creates a new instance of WebAction.
      * 
      * @param timerName
-     *            The name of the action
+     *            The name of the WebAction
      * @param context
      *            The current {@link Context}
      * @param actionItems
@@ -56,22 +56,18 @@ public class WebAction extends AbstractWebAction
     }
 
     /**
-     * Execute the {@link WebAction}.
+     * Execute the {@link WebAction} by executing {@link #actionItems}.
      * 
-     * @param action
-     *            The {@link WebAction} that executes this method.
      * @throws Exception
+     *             Any Exception that happens during the execution
      */
     @Override
     protected void execute() throws Exception
     {
-        // clear cache with the private method in WebClient, so we can fire a request twice in a run
+        // clear cache with the private method in WebClient, so we can fire a request to the same url twice in a run
         final Map<String, WebResponse> pageLocalCache = ReflectionUtils.readInstanceField(getWebClient(), "pageLocalCache");
         pageLocalCache.clear();
-        // function.accept(this);
 
-        // Extract the context
-        final Context<?> context = this.getContext();
         // Extract the action items
         final List<AbstractActionItem> actionItems = this.getActionItems();
 
@@ -87,7 +83,7 @@ public class WebAction extends AbstractWebAction
             // Execute every actionItem, i.e. main request and validations.
             for (final AbstractActionItem actionItem : actionItems)
             {
-                actionItem.execute(context);
+                actionItem.execute(getContext());
             }
         }
     }
