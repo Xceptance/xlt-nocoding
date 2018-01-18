@@ -5,7 +5,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractE
 import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
- * Decides which XpathExtractor is to be used and stores the result in {@link #getResult()}
+ * Decides which {@link XpathExtractorExecutor} is to be used and stores the result in {@link #getResult()}
  * 
  * @author ckeiner
  */

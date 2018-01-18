@@ -29,7 +29,7 @@ public abstract class AbstractExtractor
     private final List<String> result;
 
     /**
-     * Sets {@link #extractionExpression} and creates an {@link ArrayList} for {@link #result}.
+     * Sets {@link #extractionExpression} and creates an ArrayList for {@link #result}.
      * 
      * @param extractionExpression
      *            The {@link #extractionExpression} to use for extracting

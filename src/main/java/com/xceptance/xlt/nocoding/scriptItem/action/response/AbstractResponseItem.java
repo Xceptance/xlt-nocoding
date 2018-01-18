@@ -16,7 +16,7 @@ public abstract class AbstractResponseItem
      * Executes the item by either storing or validating something in the {@link WebResponse}
      * 
      * @param context
-     *            The context with the last {@link WebResponse} and {@link DataStorage}
+     *            The {@link Context} with the last {@link WebResponse} and {@link DataStorage}
      */
     public abstract void execute(final Context<?> context);
 

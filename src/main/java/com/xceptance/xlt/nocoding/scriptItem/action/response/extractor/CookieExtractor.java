@@ -1,6 +1,5 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response.extractor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
@@ -17,8 +16,8 @@ public class CookieExtractor extends AbstractExtractor
 {
 
     /**
-     * Creates an instance of {@link CookieExtractor}, sets {@link #extractionExpression} and creates an {@link ArrayList}
-     * for {@link #result}.
+     * Creates an instance of {@link CookieExtractor}, sets {@link #extractionExpression} and creates an ArrayList for
+     * {@link #result}.
      * 
      * @param extractionExpression
      *            The name of the cookie

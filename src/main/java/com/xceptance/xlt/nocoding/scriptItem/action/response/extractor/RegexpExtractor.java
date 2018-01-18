@@ -21,8 +21,8 @@ public class RegexpExtractor extends AbstractExtractor
     private String group;
 
     /**
-     * Creates an instance of {@link RegexpExtractor}, sets {@link #extractionExpression} and creates an {@link ArrayList}
-     * for {@link #result}.
+     * Creates an instance of {@link RegexpExtractor}, sets {@link #extractionExpression} and creates an ArrayList for
+     * {@link #result}.
      * 
      * @param extractionExpression
      *            The regular expression to use on the content of the {@link WebResponse}.
@@ -58,10 +58,7 @@ public class RegexpExtractor extends AbstractExtractor
         final WebResponse webResponse = context.getWebResponse();
         // Resolve variables
         resolveValues(context);
-        // // Build a page with the content
-        // final LightWeightPage page = new LightWeightPage(webResponse, context.getWebClient().getTimerName());
-        // // Read the content
-        // final String pageContent = page.getContent();
+        // Get the content of the webResponse as string
         final String pageContent = webResponse.getContentAsString();
         // Create a matcher object, so we can save our found matches
         final Matcher matcher = Pattern.compile(extractionExpression).matcher(pageContent);

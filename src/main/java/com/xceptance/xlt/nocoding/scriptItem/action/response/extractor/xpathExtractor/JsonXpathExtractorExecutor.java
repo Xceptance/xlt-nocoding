@@ -48,6 +48,13 @@ public class JsonXpathExtractorExecutor extends XpathExtractorExecutor
         HEADERCONTENTTYPES.put("text/x-json", JSON);
     }
 
+    /**
+     * Creates a new {@link JsonXpathExtractorExecutor} for Html and Xml content types
+     * 
+     * @param extractionExpression
+     *            The {@link #extractionExpression} to use for extracting
+     * @see XpathExtractorExecutor#XpathExtractorExecutor(String)
+     */
     public JsonXpathExtractorExecutor(final String extractionExpression)
     {
         super(extractionExpression);

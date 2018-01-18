@@ -36,7 +36,7 @@ public abstract class AbstractValidationMethod
     }
 
     /**
-     * Resolves values
+     * Resolves values.
      * 
      * @param context
      *            The {@link Context} to use

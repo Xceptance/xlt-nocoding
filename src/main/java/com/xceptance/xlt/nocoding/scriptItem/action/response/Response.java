@@ -22,7 +22,7 @@ public class Response extends AbstractActionItem
     private final List<AbstractResponseItem> responseItems;
 
     /**
-     * Creates an instance of {@link Response} that creates an {@link ArrayList} for {@link #responseItems} and adds a
+     * Creates an instance of {@link Response} that creates an ArrayList for {@link #responseItems} and adds a
      * {@link HttpcodeValidator}.
      */
     public Response()

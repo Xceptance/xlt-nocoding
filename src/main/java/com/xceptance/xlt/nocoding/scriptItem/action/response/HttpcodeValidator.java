@@ -3,13 +3,12 @@ package com.xceptance.xlt.nocoding.scriptItem.action.response;
 import org.junit.Assert;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
-import com.xceptance.xlt.api.htmlunit.LightWeightPage;
 import com.xceptance.xlt.api.validators.HttpResponseCodeValidator;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
- * Validates the Httpcode of a {@link WebResponse}. Httpcode can be specified or is defaulted.
+ * Validates the Httpcode of a {@link WebResponse}. Httpcode can be specified or defaulted.
  * 
  * @author ckeiner
  */
@@ -21,10 +20,10 @@ public class HttpcodeValidator extends AbstractResponseItem
     private String httpcode;
 
     /**
-     * Creates an instance of {@link HttpcodeValidator} that sets {@link #httpcode}.
+     * Creates an instance of {@link HttpcodeValidator} and sets {@link #httpcode}.
      * 
      * @param httpcode
-     *            The expected httpcode
+     *            The expected Http Responsecode
      */
     public HttpcodeValidator(final String httpcode)
     {
@@ -32,7 +31,7 @@ public class HttpcodeValidator extends AbstractResponseItem
     }
 
     /**
-     * Resolves values, fills in default data and then builds a {@link LightWeightPage} which is validated with the
+     * Resolves values, fills in default data and validates {@link WebResponse#getStatusCode()} equals {@link #httpcode}
      * {@link HttpResponseCodeValidator}.
      */
     @Override
@@ -44,7 +43,7 @@ public class HttpcodeValidator extends AbstractResponseItem
     }
 
     /**
-     * Uses the default data for httpcode if {@link #httpcode} is null or empty
+     * Uses the default value for httpcode if {@link #httpcode} is null or empty
      */
     @Override
     protected void fillDefaultData(final Context<?> context)
@@ -56,7 +55,7 @@ public class HttpcodeValidator extends AbstractResponseItem
     }
 
     /**
-     * Resolves httpcode
+     * Resolves {@link #httpcode}
      * 
      * @param context
      */

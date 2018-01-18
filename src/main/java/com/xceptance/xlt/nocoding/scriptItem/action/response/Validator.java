@@ -38,7 +38,7 @@ public class Validator extends AbstractResponseItem
      * @param extractor
      *            The extractor to use
      * @param method
-     *            The validation method
+     *            The method for validating
      */
     public Validator(final String validationName, final AbstractExtractor extractor, final AbstractValidationMethod method)
     {
@@ -65,7 +65,7 @@ public class Validator extends AbstractResponseItem
         }
         // Set the result of the execution as expressionToValidate in the ValidationMethod
         getMethod().setExpressionToValidate(getExtractor().getResult());
-        // Try to validate and catch any Exception and AssertionErrors so the validationName can be added to the
+        // Try to validate and catch any AssertionErrors so the validationName can be added to the
         // Exception/AssertionError
         try
         {

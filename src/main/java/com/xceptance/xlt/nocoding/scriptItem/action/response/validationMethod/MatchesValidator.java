@@ -17,7 +17,7 @@ public class MatchesValidator extends AbstractValidationMethod
 {
 
     /**
-     * The {@link Pattern} to match {@link #getExpressionToValidate()} against as {@link String}
+     * The {@link Pattern} to match {@link #getExpressionToValidate()} against as String
      */
     private String validationExpression;
 
@@ -25,7 +25,7 @@ public class MatchesValidator extends AbstractValidationMethod
      * Creates an instance of {@link MatchesValidator} that sets {@link #validationExpression}
      * 
      * @param validationExpression
-     *            The {@link Pattern} to match {@link #getExpressionToValidate()} against as {@link String}
+     *            The {@link Pattern} to match {@link #getExpressionToValidate()} against as String
      */
     public MatchesValidator(final String validationExpression)
     {

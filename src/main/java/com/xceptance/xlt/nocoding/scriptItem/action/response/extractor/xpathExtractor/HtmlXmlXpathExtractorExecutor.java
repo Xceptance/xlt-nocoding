@@ -59,6 +59,13 @@ public class HtmlXmlXpathExtractorExecutor extends XpathExtractorExecutor
 
     }
 
+    /**
+     * Creates a new {@link HtmlXmlXpathExtractorExecutor} for Html and Xml content types
+     * 
+     * @param extractionExpression
+     *            The {@link #extractionExpression} to use for extracting
+     * @see XpathExtractorExecutor#XpathExtractorExecutor(String)
+     */
     public HtmlXmlXpathExtractorExecutor(final String extractionExpression)
     {
         super(extractionExpression);
@@ -104,7 +111,7 @@ public class HtmlXmlXpathExtractorExecutor extends XpathExtractorExecutor
      * Gets the TextContent of a {@link DomNode}
      * 
      * @param node
-     *            The node from which to extract t
+     *            The node from which to extract the text content
      * @return
      */
     private String getStringFromHtmlElement(final DomNode node)
