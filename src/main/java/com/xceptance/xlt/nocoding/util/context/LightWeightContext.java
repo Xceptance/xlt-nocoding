@@ -164,9 +164,12 @@ public class LightWeightContext extends Context<LightWeightPage>
     /**
      * Appends the {@link #getPage()} to the result browser, if it is not <code>null</code>.<br>
      * Otherwise, it creates a new {@link LightWeightPage}.
+     * 
+     * @throws IOException
+     * @throws FailingHttpStatusCodeException
      */
     @Override
-    public void appendToResultBrowser() throws Exception
+    public void appendToResultBrowser() throws FailingHttpStatusCodeException, IOException
     {
         final String name = getWebClient().getTimerName();
         if (getPage() != null)

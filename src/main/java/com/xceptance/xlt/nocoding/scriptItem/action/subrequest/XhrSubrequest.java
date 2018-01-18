@@ -9,8 +9,8 @@ import com.xceptance.xlt.nocoding.util.ActionItemUtil;
 import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
- * Creates a {@link XhrSubrequest} that has a name and consists of a {@link Request}, {@link Response} and maybe
- * multiple {@link AbstractSubrequest}.
+ * Creates a {@link XhrSubrequest} that has a name and consists of a {@link Request}, and optionally a {@link Response}
+ * and maybe multiple {@link AbstractSubrequest}.
  * 
  * @author ckeiner
  */
@@ -32,7 +32,7 @@ public class XhrSubrequest extends AbstractSubrequest
      * @param name
      *            The name of the subrequest
      * @param actionItems
-     *            The request, response and subrequests of this subrequest
+     *            A list of {@link AbstractActionItem}s
      */
     public XhrSubrequest(final String name, final List<AbstractActionItem> actionItems)
     {
@@ -41,7 +41,7 @@ public class XhrSubrequest extends AbstractSubrequest
     }
 
     /**
-     * Executes the subrequest by first creating a local {@link Context} out of the method parameter. Then it asserts the
+     * Executes the subrequest by first creating a local {@link Context} out of the method parameter. Then, it asserts the
      * order of the {@link #actionItems}. Then, sets the {@link Request} in the {@link #actionItems} up. Finally, executes
      * the {@link #actionItems}.
      */

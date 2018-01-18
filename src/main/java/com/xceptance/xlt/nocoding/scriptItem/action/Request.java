@@ -1,5 +1,6 @@
 package com.xceptance.xlt.nocoding.scriptItem.action;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -11,6 +12,7 @@ import java.util.Map;
 
 import org.openqa.selenium.InvalidArgumentException;
 
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.WebResponse;
@@ -23,7 +25,7 @@ import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
 /**
- * Describes a HTTP Request, that gets transformed to a {@link WebRequest} and then sent with the {@link XltWebClient}.
+ * Describes a HTTP Request, that gets transformed to a {@link WebRequest} and then sent via the {@link XltWebClient}.
  * 
  * @author ckeiner
  */
@@ -162,7 +164,7 @@ public class Request extends AbstractActionItem
     }
 
     /**
-     * Create a {@link RecentKeyTreeMap} out of the specified map, so headers are treated case insensitive.
+     * Create a {@link RecentKeyTreeMap} out of the specified map, so headers are always treated case insensitive.
      * 
      * @param headers
      *            The map with the headers
@@ -197,7 +199,7 @@ public class Request extends AbstractActionItem
     }
 
     /**
-     * Fills in the default values for all attributes if the attribute isn't specified
+     * Fills in the default values for all unspecified attributes
      * 
      * @param context
      *            The {@link Context} with the {@link DataStorage}
@@ -384,18 +386,19 @@ public class Request extends AbstractActionItem
     }
 
     /**
-     * Builds the {@link WebRequest} with the given {@link Context} and sends the {@link WebRequest} with
-     * {@link Context#getWebClient()}. Finally, it stores the {@link WebResponse} with
-     * {@link Context#setWebResponse(WebResponse)}.
+     * Builds the {@link WebRequest} with the given {@link Context} and sends the <code>WebRequest</code>. Finally, it
+     * stores the corresponding {@link WebResponse} with {@link Context#setWebResponse(WebResponse)}.
      * 
      * @param context
      *            The {@link Context} with the {@link DataStorage}, {@link VariableResolver} and {@link XltWebClient}
-     * @throws Exception
+     * @throws IOException
+     *             if building of sending the <code>WebRequest</code> fails
+     * @throws FailingHttpStatusCodeException
      */
     @Override
-    public void execute(final Context<?> context) throws Exception
+    public void execute(final Context<?> context) throws FailingHttpStatusCodeException, IOException
     {
-        // fill in the default data if the attribute is not specified
+        // Fill in the default data if the attribute is not specified
         fillDefaultData(context);
         // Then resolve all variables
         resolveValues(context);
@@ -418,16 +421,15 @@ public class Request extends AbstractActionItem
     }
 
     /**
-     * Builds the web request that is specified by this object
+     * Builds the {@link WebRequest} that is specified by this object
      * 
      * @param context
      *            The current {@link Context}
-     * @return The {@link WebRequest} that is specified by this object
+     * @return The <code>WebRequest</code> that is specified by this object
      * @throws MalformedURLException
-     * @throws InvalidArgumentException
      * @throws UnsupportedEncodingException
      */
-    WebRequest buildWebRequest(final Context<?> context) throws MalformedURLException, InvalidArgumentException, UnsupportedEncodingException
+    WebRequest buildWebRequest(final Context<?> context) throws MalformedURLException, UnsupportedEncodingException
     {
         // Create a URL object
         final URL url = new URL(this.url);

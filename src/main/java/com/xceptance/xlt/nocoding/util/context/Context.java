@@ -1,5 +1,8 @@
 package com.xceptance.xlt.nocoding.util.context;
 
+import java.io.IOException;
+
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.data.GeneralDataProvider;
@@ -272,16 +275,18 @@ public abstract class Context<T>
      * 
      * @param webRequest
      *            The {@link WebRequest} for the <code>WebResponse</code>
-     * @throws Exception
+     * @throws IOException
+     * @throws FailingHttpStatusCodeException
      */
-    public abstract void loadWebResponse(final WebRequest webRequest) throws Exception;
+    public abstract void loadWebResponse(final WebRequest webRequest) throws FailingHttpStatusCodeException, IOException;
 
     /**
      * Appends the {@link #webResponse} to the Xlt Result Browser
      * 
-     * @throws Exception
+     * @throws IOException
+     * @throws FailingHttpStatusCodeException
      */
-    public abstract void appendToResultBrowser() throws Exception;
+    public abstract void appendToResultBrowser() throws FailingHttpStatusCodeException, IOException;
 
     /**
      * Creates a new Context out of the current one

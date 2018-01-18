@@ -92,7 +92,7 @@ public class DomContext extends Context<SgmlPage>
      * @throws FailingHttpStatusCodeException
      */
     @Override
-    public void loadWebResponse(final WebRequest webRequest) throws Exception
+    public void loadWebResponse(final WebRequest webRequest) throws FailingHttpStatusCodeException, IOException
     {
         // If the webRequest is not a Xhr
         if (!webRequest.isXHR())
@@ -113,9 +113,12 @@ public class DomContext extends Context<SgmlPage>
     /**
      * Appends {@link #getPage()} to the result browser, if it is an instance of {@link HtmlPage}. <br>
      * Otherwise, it creates a new {@link LightWeightPage} and appends it.
+     * 
+     * @throws IOException
+     * @throws FailingHttpStatusCodeException
      */
     @Override
-    public void appendToResultBrowser() throws Exception
+    public void appendToResultBrowser() throws FailingHttpStatusCodeException, IOException
     {
         final String name = getWebClient().getTimerName();
         if (getPage() != null)

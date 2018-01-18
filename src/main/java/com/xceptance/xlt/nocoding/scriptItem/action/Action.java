@@ -12,7 +12,8 @@ import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 /**
- * The abstract class for each Action. An Action consist of a {@link #name} and list of {@link AbstractActionItem}s.
+ * <code>Action</code> is the data model for the "Action" type of the execution.<br>
+ * Therefore, it consists of a {@link #name} and list of {@link AbstractActionItem}s.
  * 
  * @author ckeiner
  */
@@ -29,7 +30,7 @@ public class Action implements ScriptItem
     protected final List<AbstractActionItem> actionItems;
 
     /**
-     * Creates an instance of {@link Action} that sets {@link #actionItems} to an {@link ArrayList} of size 1.
+     * Creates an instance of {@link Action} that sets {@link #actionItems} to an ArrayList of size 1.
      */
     public Action()
     {
@@ -67,8 +68,7 @@ public class Action implements ScriptItem
 
     /**
      * Fills in the default data for name, request, response if it isn't specified and verifies there is only one request,
-     * response and in the correct order. Finally, it adds the default static subrequests even if static subrequests are
-     * already defined.
+     * response and in the correct order. Finally, it adds the default static subrequests.
      * 
      * @param context
      *            The {@link Context} with the {@link DataStorage}.
@@ -91,10 +91,11 @@ public class Action implements ScriptItem
     }
 
     /**
-     * Executes the {@link Action} by building a {@link WebAction}, running it and then validating the answer. In the end,
-     * the page gets appended to the result browser.
+     * Executes the {@link Action} by building a {@link WebAction} with the {@link #actionItems}. The <code>WebAction</code>
+     * then executes the <code>actionItems</code>. In the end, the loaded page gets appended to the result browser.
      * 
      * @throws Throwable
+     *             if a Throwable occurs during the execution or when the page is appended to the result browser
      */
     @Override
     public void execute(final Context<?> context) throws Throwable
@@ -115,7 +116,7 @@ public class Action implements ScriptItem
         {
             XltLogger.runTimeLogger.error("Execution Step failed : " + getName());
             e.printStackTrace();
-            throw new Exception(e);
+            throw new Exception("Execution Step failed : " + getName(), e);
         }
         // And always append the page to the result browser
         finally
