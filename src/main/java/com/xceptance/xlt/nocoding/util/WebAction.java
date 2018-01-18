@@ -98,6 +98,9 @@ public class WebAction extends AbstractWebAction
     {
     }
 
+    /**
+     * Gets the WebClient if it is set, else it gets the WebClient via {@link AbstractWebAction#getWebClient()}.
+     */
     public WebClient getWebClient()
     {
         WebClient webClient;
