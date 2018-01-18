@@ -9,12 +9,14 @@ import com.xceptance.common.lang.ReflectionUtils;
 import com.xceptance.xlt.api.actions.AbstractWebAction;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.Request;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
+import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
 import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * The WebAction extends the AbstractWebAction of the XLT framework. Therefore, this is the interface to XLT. A
- * WebAction fires a main (web) request, and afterwards an arbitrary amount of Request, Response and AbstractSubrequest.
- * The execution of the main request, etc. can be configured by passing a function to the WebAction.
+ * WebAction fires a main (web) request, and afterwards an arbitrary amount of (XHR Sub)Request, {@link Response} and
+ * {@link AbstractSubrequest}.
  * 
  * @author ckeiner
  */
@@ -26,7 +28,7 @@ public class WebAction extends AbstractWebAction
     private final Context<?> context;
 
     /**
-     * The main request in this action
+     * The WebClient for this action
      */
     private WebClient webClient;
 

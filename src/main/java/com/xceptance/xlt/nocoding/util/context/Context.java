@@ -3,6 +3,7 @@ package com.xceptance.xlt.nocoding.util.context;
 import java.io.IOException;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.data.GeneralDataProvider;
@@ -21,25 +22,40 @@ import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
  * {@link XltWebClient}, resolving variables, creating a {@link WebResponse} and accessing properties.
  * 
  * @param T
- *            The type of page to load
+ *            The type of the loaded page to load
  * @author ckeiner
  */
 public abstract class Context<T>
 {
+    /**
+     * The storage for default items, and variables
+     */
     protected final DataStorage dataStorage;
 
+    /**
+     * The {@link WebClient} for sending {@link WebRequest}s
+     */
     protected final XltWebClient webClient;
 
+    /**
+     * The resolver that resolves variables
+     */
     protected final VariableResolver resolver;
 
+    /**
+     * The last {@link WebResponse}, that was received
+     */
     protected WebResponse webResponse;
 
+    /**
+     * Provides access to the properties
+     */
     protected NoCodingPropertyAdmin propertyAdmin;
 
     /**
      * The index of the script item
      */
-    protected int scriptItemIndex;
+    protected int actionIndex;
 
     /**
      * The page corresponding to the {@link #webResponse}
@@ -47,8 +63,7 @@ public abstract class Context<T>
     protected T page;
 
     /**
-     * Creates a new {@link Context}, with a new {@link DataStorage} and configures the {@link XltWebClient} according to
-     * the {@link XltProperties}
+     * Creates a new {@link Context#Context(XltProperties, DataStorage)}, with a new {@link DataStorage}.
      * 
      * @param xltProperties
      *            The properties to use - normally {@link XltProperties#getInstance()}
@@ -59,8 +74,8 @@ public abstract class Context<T>
     }
 
     /**
-     * Creates a new {@link Context}, with the provided {@link DataStorage} and configures the {@link XltWebClient}
-     * according to the {@link XltProperties}
+     * Creates a new {@link Context}, with the provided {@link DataStorage}, creates a new {@link XltWebClient} and
+     * {@link VariableResolver} and finally calls {@link #initialize()}.
      * 
      * @param xltProperties
      *            The properties to use - normally {@link XltProperties#getInstance()}
@@ -80,6 +95,7 @@ public abstract class Context<T>
      * Creates a new {@link Context} out of the old {@link Context}
      * 
      * @param context
+     *            The context that should be copied
      */
     protected Context(final Context<T> context)
     {
@@ -88,13 +104,15 @@ public abstract class Context<T>
         this.resolver = context.getResolver();
         this.webResponse = context.getWebResponse();
         this.propertyAdmin = context.getPropertyAdmin();
-        scriptItemIndex = 0;
+        this.actionIndex = 0;
+        this.page = context.page;
+
     }
 
     /**
      * Initializes the {@link Context} by configuring the {@link XltWebClient}
      */
-    public void initialize()
+    protected void initialize()
     {
         configureWebClient();
     }
@@ -153,29 +171,47 @@ public abstract class Context<T>
         return propertyAdmin;
     }
 
-    public int getScriptItemIndex()
-    {
-        return scriptItemIndex;
-    }
-
-    public void setScriptItemIndex(final int scriptItemIndex)
-    {
-        this.scriptItemIndex = scriptItemIndex;
-    }
-
     /**
-     * Gets the page
+     * Gets the index of the last action
      * 
      * @return
      */
-    public abstract T getPage();
+    public int getActionIndex()
+    {
+        return actionIndex;
+    }
 
     /**
-     * Sets the page
+     * Sets the index as new {@link #actionIndex}
+     * 
+     * @param actionIndex
+     *            The index {@link this#actionIndex}
+     */
+    public void setActionIndex(final int actionIndex)
+    {
+        this.actionIndex = actionIndex;
+    }
+
+    /**
+     * Gets the page.
+     * 
+     * @return The page corresponding to the {@link #webResponse}
+     */
+    public T getPage()
+    {
+        return page;
+    };
+
+    /**
+     * Sets the page.
      * 
      * @param page
+     *            The page corresponding to the {@link #webResponse}
      */
-    public abstract void setPage(final T page);
+    public void setPage(final T page)
+    {
+        this.page = page;
+    };
 
     /*
      * Data Storage
@@ -263,7 +299,7 @@ public abstract class Context<T>
     }
 
     /**
-     * Configures the webClient as specified in the config, thus dis-/enabling javascript, css, etc.
+     * Configures the webClient as specified in the properties, thus dis-/enabling javascript, css, etc.
      */
     private void configureWebClient()
     {

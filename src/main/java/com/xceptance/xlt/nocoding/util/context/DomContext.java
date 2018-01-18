@@ -14,6 +14,7 @@ import com.xceptance.xlt.engine.LightWeightPageImpl;
 import com.xceptance.xlt.engine.SessionImpl;
 import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
+import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
 /**
  * The {@link Context} used in the Dom mode of the execution. Therefore, it extends <code>Context&lt;SgmlPage&gt;</code>
@@ -22,37 +23,12 @@ import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
  */
 public class DomContext extends Context<SgmlPage>
 {
-
     /**
-     * Creates a new {@link DomContext} out of the old {@link DomContext}
-     * 
-     * @param context
-     */
-    public DomContext(final Context<SgmlPage> context)
-    {
-        super(context);
-    }
-
-    /**
-     * Creates a new {@link DomContext}, with the provided {@link DataStorage} and configures the {@link XltWebClient}
-     * according to the {@link XltProperties}
+     * Calls {@link DomContext#DomContext(XltProperties, DataStorage)}, with a new {@link DataStorage}.
      * 
      * @param xltProperties
      *            The properties to use - normally {@link XltProperties#getInstance()}
-     * @param dataStorage
-     *            The {@link DataStorage} you want to use
-     */
-    public DomContext(final XltProperties xltProperties, final DataStorage dataStorage)
-    {
-        super(xltProperties, dataStorage);
-    }
-
-    /**
-     * Creates a new {@link DomContext}, with a new {@link DataStorage} and configures the {@link XltWebClient} according to
-     * the {@link XltProperties}
-     * 
-     * @param xltProperties
-     *            The properties to use - normally {@link XltProperties#getInstance()}
+     * @see Context#Context(XltProperties)
      */
     public DomContext(final XltProperties xltProperties)
     {
@@ -60,25 +36,30 @@ public class DomContext extends Context<SgmlPage>
     }
 
     /**
-     * Gets the {@link SgmlPage}
+     * Creates a new {@link DomContext}, with the provided {@link DataStorage}, creates a new {@link XltWebClient} and
+     * {@link VariableResolver} and finally calls {@link Context#initialize()}.
      * 
-     * @return
+     * @param xltProperties
+     *            The properties to use - normally {@link XltProperties#getInstance()}
+     * @param dataStorage
+     *            The {@link DataStorage} you want to use
+     * @see Context#Context(XltProperties, DataStorage)
      */
-    @Override
-    public SgmlPage getPage()
+    public DomContext(final XltProperties xltProperties, final DataStorage dataStorage)
     {
-        return page;
+        super(xltProperties, dataStorage);
     }
 
     /**
-     * Sets the {@link SgmlPage}
+     * Creates a new {@link DomContext} out of the old {@link DomContext}
      * 
-     * @param sgmlPage
+     * @param context
+     *            The Context to copy the values from
+     * @see Context#Context(Context)
      */
-    @Override
-    public void setPage(final SgmlPage sgmlPage)
+    public DomContext(final Context<SgmlPage> context)
     {
-        this.page = sgmlPage;
+        super(context);
     }
 
     /**
@@ -135,7 +116,9 @@ public class DomContext extends Context<SgmlPage>
     }
 
     /**
-     * @return {@link #DomContext(Context)}
+     * Creates a new {@link DomContext} out of the current one.
+     * 
+     * @return A new <code>DomContext</code> via {@link #DomContext(Context)}
      */
     @Override
     public DomContext buildNewContext()

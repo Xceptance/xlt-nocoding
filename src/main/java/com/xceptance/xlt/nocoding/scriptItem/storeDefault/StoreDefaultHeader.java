@@ -19,7 +19,7 @@ public class StoreDefaultHeader extends StoreDefault
      * @param variableName
      *            The name of the header
      * @param value
-     *            The default value of the header
+     *            The corresponding default value of the header
      */
     public StoreDefaultHeader(final String variableName, final String value)
     {
@@ -27,8 +27,8 @@ public class StoreDefaultHeader extends StoreDefault
     }
 
     /**
-     * If {@link #getValue()} is {@link Constants#DELETE}, the list of default headers is deleted with
-     * {@link UniqueStorage#clear()}. Else it stores a default header with {@link UniqueStorage#store(String, String)}.
+     * If {@link #getValue()} is {@link Constants#DELETE}, the list of default headers is deleted. Else, it stores a default
+     * header.
      */
     @Override
     public void execute(final Context<?> context)
@@ -40,6 +40,7 @@ public class StoreDefaultHeader extends StoreDefault
         // If the value is not "delete"
         if (!value.equals(Constants.DELETE))
         {
+            // TODO Lowercase default headers
             // Store the header as lowercase
             storage.store(variableName.toLowerCase(), value);
             XltLogger.runTimeLogger.debug("Added \"" + variableName.toLowerCase() + "\" with the value \"" + value

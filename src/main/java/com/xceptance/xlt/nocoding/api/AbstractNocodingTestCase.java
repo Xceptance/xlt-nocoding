@@ -246,7 +246,7 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
                 XltLogger.runTimeLogger.info("Starting ScriptItem : " + item.toString());
                 if (item instanceof Action)
                 {
-                    context.setScriptItemIndex(index++);
+                    context.setActionIndex(index++);
                 }
                 item.execute(context);
             }

@@ -5,13 +5,30 @@ import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.DuplicateStorage;
 
+/**
+ * Stores a default cookie.
+ * 
+ * @author ckeiner
+ */
 public class StoreDefaultCookie extends StoreDefault
 {
+    /**
+     * Creates an instance of {@link StoreDefaultHeader} that sets {@link #getVariableName()} and {@link #getValue()}
+     * 
+     * @param variableName
+     *            The name of the cookie
+     * @param value
+     *            The corresponding default value of the cookie
+     */
     public StoreDefaultCookie(final String variableName, final String value)
     {
         super(variableName, value);
     }
 
+    /**
+     * If {@link #getValue()} is {@link Constants#DELETE}, the list of default cookies is deleted. Else, it stores a default
+     * cookie.
+     */
     @Override
     public void execute(final Context<?> context)
     {

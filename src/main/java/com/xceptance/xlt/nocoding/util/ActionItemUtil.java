@@ -22,7 +22,7 @@ public class ActionItemUtil
      * Asserts that the order of {@link Request}, {@link Response}, and {@link AbstractSubrequest} is correct.
      * 
      * @param actionItems
-     *            The {@link List} you want to assert the order of
+     *            The list of {@link AbstractActionItem}s you want to assert the order of
      */
     public static void assertOrder(final List<AbstractActionItem> actionItems)
     {
@@ -65,7 +65,7 @@ public class ActionItemUtil
      * {@link AbstractActionItem}.
      * 
      * @param actionItems
-     *            The list to add the default items to
+     *            The list of {@link AbstractActionItem}s to add the default items to
      * @param context
      *            The {@link Context} with the {@link DataStorage}.
      */
@@ -95,11 +95,14 @@ public class ActionItemUtil
     }
 
     /**
+     * Either gets a default name from {@link Context#getDefaultItems()} or calculates a name out of the <code>start</code>
+     * and {@link Context#getActionIndex()}.
+     * 
      * @param start
      *            The String the defaultName should start with if no default name was defined
      * @param context
      *            The Context with the {@link DataStorage}
-     * @return String that starts with <code> start + "-" </code> and adds the current index of scriptItems to it
+     * @return String that starts with <code> start + "-" </code> and adds the current index of the action items to it
      */
     public static String getDefaultName(final Context<?> context, final String start)
     {
@@ -109,7 +112,7 @@ public class ActionItemUtil
         if (output == null || output.isEmpty())
         {
             // Assign start + "-x" to name, whereas x is the index of the current scriptItem
-            output = start + "-" + context.getScriptItemIndex();
+            output = start + "-" + context.getActionIndex();
         }
         return output;
     }

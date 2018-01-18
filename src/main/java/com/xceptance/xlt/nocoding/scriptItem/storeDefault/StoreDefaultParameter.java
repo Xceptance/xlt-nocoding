@@ -26,9 +26,8 @@ public class StoreDefaultParameter extends StoreDefault
     }
 
     /**
-     * If {@link #getValue()} is {@link Constants#DELETE}, the list of default parameters is deleted with
-     * {@link DuplicateStorage#clear()}. Else it stores a default parameter with
-     * {@link DuplicateStorage#store(String, String)}.
+     * If {@link #getValue()} is {@link Constants#DELETE}, the list of default parameters is deleted. Else, it stores a
+     * default parameter.
      */
     @Override
     public void execute(final Context<?> context)

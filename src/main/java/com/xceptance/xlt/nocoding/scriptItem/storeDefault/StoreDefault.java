@@ -8,8 +8,7 @@ import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
 /**
  * The abstract class for every default store item. A default store item is an item that sets the default value for
- * certain fields. These fields are specified by {@link Constants#PERMITTEDLISTITEMS}. However, extending this list
- * means, one must also extend the parser, and where the new default value is to be set.
+ * certain fields. These fields are specified by {@link Constants#PERMITTEDLISTITEMS}.
  * 
  * @author ckeiner
  */
@@ -50,7 +49,7 @@ public abstract class StoreDefault implements ScriptItem
     }
 
     /**
-     * Resolves the {@link #value}.
+     * Resolves {@link #value}.
      * 
      * @param context
      *            The {@link Context} with the {@link VariableResolver} and {@link DataStorage}

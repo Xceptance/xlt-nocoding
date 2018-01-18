@@ -28,8 +28,7 @@ public class StoreDefaultItem extends StoreDefault
 
     /**
      * If {@link #getValue()} is {@link Constants#DELETE}, the default item with the name {@link #getVariableName()} is
-     * deleted with {@link DefaultKeyValueStorage#remove(String)}. Else it stores a default item with
-     * {@link DefaultKeyValueStorage#store(String, String)}.
+     * deleted. Else, it stores a default item.
      */
     @Override
     public void execute(final Context<?> context)

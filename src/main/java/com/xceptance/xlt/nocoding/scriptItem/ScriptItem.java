@@ -3,13 +3,13 @@ package com.xceptance.xlt.nocoding.scriptItem;
 import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
- * This interface defines all script item. A script item is either an "Action", "Store", or default definitions.
+ * Defines the behavior of a scriptItem. A script item is either an "Action", "Store", or default definitions.
  */
 public interface ScriptItem
 {
 
     /**
-     * The method, which executes the ScriptItem
+     * The method, which executes the ScriptItem.
      * 
      * @param context
      *            The current {@link Context}

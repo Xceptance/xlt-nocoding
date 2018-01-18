@@ -16,6 +16,7 @@ import com.xceptance.xlt.engine.LightWeightPageImpl;
 import com.xceptance.xlt.engine.SessionImpl;
 import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
+import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
 /**
  * The {@link Context} used in the LightWeight mode of the execution. Therefore, it extends
@@ -31,23 +32,26 @@ public class LightWeightContext extends Context<LightWeightPage>
     protected SgmlPage sgmlPage;
 
     /**
-     * Creates a new {@link LightWeightContext} out of the old {@link LightWeightContext}
+     * Calls {@link LightWeightContext#LightWeightContext(XltProperties, DataStorage)}, with a new {@link DataStorage}.
      * 
-     * @param context
+     * @param xltProperties
+     *            The properties to use - normally {@link XltProperties#getInstance()}
+     * @see Context#Context(XltProperties)
      */
-    public LightWeightContext(final Context<LightWeightPage> context)
+    public LightWeightContext(final XltProperties xltProperties)
     {
-        super(context);
+        super(xltProperties);
     }
 
     /**
-     * Creates a new {@link LightWeightContext}, with the provided {@link DataStorage} and configures the
-     * {@link XltWebClient} according to the {@link XltProperties}
+     * Creates a new {@link LightWeightContext}, with the provided {@link DataStorage}, creates a new {@link XltWebClient}
+     * and {@link VariableResolver} and finally calls {@link Context#initialize()}.
      * 
      * @param xltProperties
      *            The properties to use - normally {@link XltProperties#getInstance()}
      * @param dataStorage
      *            The {@link DataStorage} you want to use
+     * @see Context#Context(XltProperties, DataStorage)
      */
     public LightWeightContext(final XltProperties xltProperties, final DataStorage dataStorage)
     {
@@ -55,15 +59,15 @@ public class LightWeightContext extends Context<LightWeightPage>
     }
 
     /**
-     * Creates a new {@link LightWeightContext}, with a new {@link DataStorage} and configures the {@link XltWebClient}
-     * according to the {@link XltProperties}
+     * Creates a new {@link LightWeightContext} out of the old {@link LightWeightContext}
      * 
-     * @param xltProperties
-     *            The properties to use - normally {@link XltProperties#getInstance()}
+     * @param context
+     *            The Context to copy the values from
+     * @see Context#Context(Context)
      */
-    public LightWeightContext(final XltProperties xltProperties)
+    public LightWeightContext(final Context<LightWeightPage> context)
     {
-        super(xltProperties);
+        super(context);
     }
 
     /**
@@ -74,58 +78,42 @@ public class LightWeightContext extends Context<LightWeightPage>
     public SgmlPage getSgmlPage()
     {
         // If the sgmlPage is null and therefore wasn't loaded already
-        if (sgmlPage == null)
+        synchronized (sgmlPage)
         {
-            // Generate a new sgmlPage
-            XltLogger.runTimeLogger.debug("Generating new SgmlPage...");
-            Page page;
-            try
+            if (sgmlPage == null)
             {
-                // Load the WebResponse into the window of the web client
-                page = getWebClient().loadWebResponseInto(getWebResponse(), getWebClient().getCurrentWindow());
-                // If the built page is an instance of SgmlPage
-                if (page instanceof SgmlPage)
+                // Generate a new sgmlPage
+                XltLogger.runTimeLogger.debug("Generating new SgmlPage...");
+                Page page;
+                try
                 {
-                    if (page instanceof XmlPage && ((XmlPage) page).getXmlDocument() == null)
+                    // Load the WebResponse into the window of the web client
+                    page = getWebClient().loadWebResponseInto(getWebResponse(), getWebClient().getCurrentWindow());
+                    // If the built page is an instance of SgmlPage
+                    if (page instanceof SgmlPage)
                     {
-                        throw new IllegalStateException("Faulty WebResponse, the page doesn't have child nodes.");
+                        if (page instanceof XmlPage && ((XmlPage) page).getXmlDocument() == null)
+                        {
+                            throw new IllegalStateException("Faulty WebResponse, the page doesn't have child nodes.");
+                        }
+                        // Set the sgmlPage
+                        setSgmlPage((SgmlPage) page);
+                        XltLogger.runTimeLogger.debug("SgmlPage built");
                     }
-                    // Set the sgmlPage
-                    setSgmlPage((SgmlPage) page);
-                    XltLogger.runTimeLogger.debug("SgmlPage built");
+                }
+                catch (FailingHttpStatusCodeException | IOException e)
+                {
+                    throw new IllegalStateException("Cannot convert WebResponse to SgmlPage.");
                 }
             }
-            catch (FailingHttpStatusCodeException | IOException e)
-            {
-                throw new IllegalStateException("Cannot convert WebResponse to SgmlPage.");
-            }
+            // Return the sgmlPage
+            return sgmlPage;
         }
-        // Return the sgmlPage
-        return sgmlPage;
     }
 
-    public void setSgmlPage(final SgmlPage sgmlPage)
+    protected void setSgmlPage(final SgmlPage sgmlPage)
     {
         this.sgmlPage = sgmlPage;
-    }
-
-    /**
-     * @return The current {@link LightWeightPage}
-     */
-    @Override
-    public LightWeightPage getPage()
-    {
-        return page;
-    }
-
-    /**
-     * @param lightWeightPage
-     *            {@link LightWeightPage}
-     */
-    @Override
-    public void setPage(final LightWeightPage lightWeightPage)
-    {
-        this.page = lightWeightPage;
     }
 
     /**
@@ -184,7 +172,9 @@ public class LightWeightContext extends Context<LightWeightPage>
     }
 
     /**
-     * @return {@link #LightWeightContext(Context)}
+     * Creates a new {@link LightWeightContext} out of the current one.
+     * 
+     * @return A new <code>LightWeightContext</code> via {@link #LightWeightContext(Context)}
      */
     @Override
     public Context<LightWeightPage> buildNewContext()

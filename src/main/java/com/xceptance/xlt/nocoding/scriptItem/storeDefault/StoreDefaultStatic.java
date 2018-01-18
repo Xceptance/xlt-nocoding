@@ -7,7 +7,7 @@ import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.SingleStorage;
 
 /**
  * Stores a default static request. This class does not use the variableName with the single exception of "Static:
- * Delete".
+ * Delete", which deletes all default static requests.
  * 
  * @author ckeiner
  */
@@ -28,8 +28,8 @@ public class StoreDefaultStatic extends StoreDefault
     }
 
     /**
-     * If {@link #getValue()} is {@link Constants#DELETE}, the list of default static requests is deleted with
-     * {@link SingleStorage#clear()}. Else it stores a default static requests with {@link SingleStorage#store(String)}.
+     * If {@link #getValue()} is {@link Constants#DELETE}, the list of default static requests is deleted. Else, it stores a
+     * default static requests.
      */
     @Override
     public void execute(final Context<?> context)

@@ -7,7 +7,7 @@ import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
 /**
  * A StoreItem consist of a {@link #variableName} and a {@link #value}, which gets stored in the {@link DataStorage} in
- * {@link Context#getDataStorage()}. However, the value first gets resolved with {@link Context#resolveString(String)}.
+ * {@link Context#getDataStorage()}. However, the value gets resolved before it is stored.
  */
 public class StoreItem implements ScriptItem
 {
@@ -34,8 +34,8 @@ public class StoreItem implements ScriptItem
     }
 
     /**
-     * Executes the {@link StoreItem} by resolving the values and then storing the {@link #variableName} in
-     * {@link Context#getVariables()}.
+     * Executes the {@link StoreItem} by resolving the values and then storing the {@link #variableName} with its
+     * {@link #value} in {@link Context#getVariables()}.
      */
     @Override
     public void execute(final Context<?> context)
@@ -63,7 +63,7 @@ public class StoreItem implements ScriptItem
     }
 
     /**
-     * Resolves the {@link #value}.
+     * Resolves {@link #value}.
      * 
      * @param context
      *            The {@link Context} with the {@link VariableResolver} and {@link DataStorage}.
