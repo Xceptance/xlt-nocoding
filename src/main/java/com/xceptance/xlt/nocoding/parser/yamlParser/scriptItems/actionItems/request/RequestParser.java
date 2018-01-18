@@ -29,17 +29,17 @@ public class RequestParser extends AbstractActionItemParser
     /**
      * Parses a request item to a <code>Request</code>.
      * 
-     * @param node
+     * @param requestNode
      *            The {@link JsonNode} with the request in it
      * @return The <code>Request</code> wrapped in a list of <code>AbstractActionItem</code>s.
      */
     @Override
-    public List<AbstractActionItem> parse(final JsonNode node)
+    public List<AbstractActionItem> parse(final JsonNode requestNode)
     {
         // Verify that an object was used and not an array
-        if (!(node instanceof ObjectNode))
+        if (!(requestNode instanceof ObjectNode))
         {
-            throw new IllegalArgumentException("Expected ObjectNode in request but was " + node.getClass().getSimpleName());
+            throw new IllegalArgumentException("Expected ObjectNode in request but was " + requestNode.getClass().getSimpleName());
         }
 
         // Initialize variables
@@ -54,7 +54,7 @@ public class RequestParser extends AbstractActionItemParser
         String encodeBody = null;
 
         // Get an iterator over the fieldNames
-        final Iterator<String> fieldNames = node.fieldNames();
+        final Iterator<String> fieldNames = requestNode.fieldNames();
 
         // As long as we have a fieldName
         while (fieldNames.hasNext())
@@ -68,47 +68,47 @@ public class RequestParser extends AbstractActionItemParser
                 throw new IllegalArgumentException("Not a permitted request item: " + fieldName);
             }
 
-            // Depending on the fieldName, we generally want to read the value but assign it to different variables
+            // We generally want to read the value of the fieldName but assign it to different variables
             switch (fieldName)
             {
                 case Constants.URL:
-                    url = ParserUtils.readValue(node, fieldName);
+                    url = ParserUtils.readValue(requestNode, fieldName);
                     // XltLogger.runTimeLogger.debug("URL: " + url);
                     break;
 
                 case Constants.METHOD:
-                    method = ParserUtils.readValue(node, fieldName);
+                    method = ParserUtils.readValue(requestNode, fieldName);
                     // XltLogger.runTimeLogger.debug("Method: " + method);
                     break;
 
                 case Constants.XHR:
-                    xhr = ParserUtils.readValue(node, fieldName);
+                    xhr = ParserUtils.readValue(requestNode, fieldName);
                     // final String xhr2 = node.get(fieldName).textValue();
                     // XltLogger.runTimeLogger.debug("Xhr: " + xhr);
                     break;
 
                 case Constants.ENCODEPARAMETERS:
-                    encodeParameters = ParserUtils.readValue(node, fieldName);
+                    encodeParameters = ParserUtils.readValue(requestNode, fieldName);
                     // XltLogger.runTimeLogger.debug("EncodeParameters: " + encodeParameters);
                     break;
 
                 case Constants.PARAMETERS:
                     // Create a new ParameterParser that parses parameters
-                    parameters.addAll(new ParameterParser().parse(node.get(fieldName)));
+                    parameters.addAll(new ParameterParser().parse(requestNode.get(fieldName)));
                     break;
 
                 case Constants.HEADERS:
                     // Create a new HeaderParser that parses headers
-                    headers.putAll(new HeaderParser().parse(node.get(fieldName)));
+                    headers.putAll(new HeaderParser().parse(requestNode.get(fieldName)));
                     break;
 
                 case Constants.BODY:
-                    body = ParserUtils.readValue(node, fieldName);
+                    body = ParserUtils.readValue(requestNode, fieldName);
                     // XltLogger.runTimeLogger.debug("Body: " + body);
                     break;
 
                 case Constants.ENCODEBODY:
-                    encodeBody = ParserUtils.readValue(node, fieldName);
+                    encodeBody = ParserUtils.readValue(requestNode, fieldName);
                     // XltLogger.runTimeLogger.debug("EncodeBody: " + encodeBody);
                     break;
 

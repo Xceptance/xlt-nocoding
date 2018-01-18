@@ -22,17 +22,17 @@ public class StoreItemParser extends AbstractScriptItemParser
     /**
      * Parses the store item to a list of {@link ScriptItem}s.
      * 
-     * @param root
+     * @param storeNode
      *            The {@link JsonNode} with the store item
      * @return A list of <code>ScriptItem</code>s with all specified {@link StoreItem}s.
      */
     @Override
-    public List<ScriptItem> parse(final JsonNode root)
+    public List<ScriptItem> parse(final JsonNode storeNode)
     {
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
 
         // Get the current JsonNode from the parser where the Store item is located
-        final JsonNode jsonNode = root.get(Constants.STORE);
+        final JsonNode jsonNode = storeNode.get(Constants.STORE);
 
         // Convert the node to a list of NameValuePair so it retains its order
         final List<NameValuePair> storeItems = ParserUtils.getArrayNodeAsNameValuePair(jsonNode);

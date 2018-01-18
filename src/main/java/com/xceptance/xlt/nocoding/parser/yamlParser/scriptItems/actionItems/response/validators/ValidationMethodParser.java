@@ -41,23 +41,25 @@ public class ValidationMethodParser
         // Get the associated value
         final String validationExpression = ParserUtils.readValue(node, identifier);
         // Build a validation method depending on the name of the selector
-        if (identifier.equals(Constants.MATCHES))
+        switch (identifier)
         {
-            method = new MatchesValidator(validationExpression);
+            case Constants.MATCHES:
+                method = new MatchesValidator(validationExpression);
+                break;
+
+            case Constants.TEXT:
+                method = new TextValidator(validationExpression);
+                break;
+
+            case Constants.COUNT:
+                method = new CountValidator(validationExpression);
+                break;
+
+            default:
+                throw new NotImplementedException("Permitted Validation Method but no parsing specified: " + identifier);
         }
-        else if (identifier.equals(Constants.TEXT))
-        {
-            method = new TextValidator(validationExpression);
-        }
-        else if (identifier.equals(Constants.COUNT))
-        {
-            method = new CountValidator(validationExpression);
-        }
-        else
-        {
-            throw new NotImplementedException("Permitted Validation Method but no parsing specified: " + identifier);
-        }
-        // Return it
+
+        // Return the method
         return method;
     }
 

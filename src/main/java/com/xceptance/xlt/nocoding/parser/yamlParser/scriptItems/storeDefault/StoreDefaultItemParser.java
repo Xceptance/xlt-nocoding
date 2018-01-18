@@ -12,7 +12,7 @@ import com.xceptance.xlt.nocoding.util.ParserUtils;
 /**
  * The class for parsing single, default key-value items. <br>
  * Therefore, it does not parse {@link Constants#HEADERS}, nor {@link Constants#PARAMETERS}, nor
- * {@link Constants#STATIC}.
+ * {@link Constants#STATIC}, etc.
  * 
  * @author ckeiner
  */
@@ -20,21 +20,21 @@ public class StoreDefaultItemParser extends AbstractStoreDefaultParser
 {
 
     /**
-     * Parses the headers list item to a list of {@link StoreDefault}s which consists of a single {@link StoreDefaultItem}.
+     * Parses the default item to a list of {@link StoreDefault}s which consists of a single {@link StoreDefaultItem}.
      * 
-     * @param node
+     * @param defaultItemNode
      *            The {@link JsonNode} the default key-value item start at
      * @return A list of <code>StoreDefault</code>s with the parsed default key-value item.
      */
     @Override
-    public List<StoreDefault> parse(final JsonNode node)
+    public List<StoreDefault> parse(final JsonNode defaultItemNode)
     {
         // Create new default items list
         final List<StoreDefault> defaultItems = new ArrayList<>();
         // Get the name of the default item
-        final String variableName = node.fieldNames().next();
+        final String variableName = defaultItemNode.fieldNames().next();
         // Get the value of the default item
-        final String value = ParserUtils.readSingleValue(node.get(variableName));
+        final String value = ParserUtils.readSingleValue(defaultItemNode.get(variableName));
         // Create the new StoreDefaultItem and add it to the default items list
         defaultItems.add(new StoreDefaultItem(variableName, value));
 

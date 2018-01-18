@@ -20,19 +20,21 @@ public class StaticSubrequestParser
     /**
      * Parses the static subrequest item in the static block to a {@link StaticSubrequest}.
      * 
-     * @param node
-     *            The {@link JsonNode} the item starts at
+     * @param staticNode
+     *            The {@link JsonNode} the static subrequest item starts at
      * @return A <code>StaticSubrequest</code> with the parsed URLs
      */
-    public StaticSubrequest parse(final JsonNode node)
+    public StaticSubrequest parse(final JsonNode staticNode)
     {
         final List<String> urls = new ArrayList<>();
-        if (!(node instanceof ArrayNode))
+        // Verify staticNode is an ArrayNode
+        if (!(staticNode instanceof ArrayNode))
         {
-            throw new IllegalArgumentException("Expected ArrayNode in Static block but was " + node.getClass().getSimpleName());
+            throw new IllegalArgumentException("Expected ArrayNode in Static block but was " + staticNode.getClass().getSimpleName());
         }
-        // Create an iterator over the elements
-        final Iterator<JsonNode> staticUrlsIterator = node.elements();
+        // Create an iterator over the elements, that is every url
+        final Iterator<JsonNode> staticUrlsIterator = staticNode.elements();
+        // As long as there are elements, read the url and save it
         while (staticUrlsIterator.hasNext())
         {
             // Read the url
@@ -41,10 +43,10 @@ public class StaticSubrequestParser
             urls.add(url);
         }
 
-        // If there are no urls, throw an Exception
+        // If there were no urls, throw an Exception
         if (urls.isEmpty())
         {
-            throw new IllegalArgumentException("No urls found");
+            throw new IllegalArgumentException("No urls found!");
         }
         // Return the specified StaticSubrequest
         return new StaticSubrequest(urls);

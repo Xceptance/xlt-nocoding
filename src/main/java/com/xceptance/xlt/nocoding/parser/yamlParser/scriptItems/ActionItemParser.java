@@ -32,26 +32,29 @@ public class ActionItemParser extends AbstractScriptItemParser
     /**
      * Parses the action item to a list of {@link ScriptItem}s.
      * 
-     * @param root
+     * @param actionNode
      *            The {@link JsonNode} with the the action item
      * @return A list of <code>ScriptItem</code>s containing a single {@link Action}.
      */
     @Override
-    public List<ScriptItem> parse(final JsonNode root)
+    public List<ScriptItem> parse(final JsonNode actionNode)
     {
         // Initialize variables
         String name = null;
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>(3);
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>(1);
 
-        // TODO root.elements? wieso? -> durch fieldNames ersetzen?
+        /*
+         * TODO root.elements? wieso? -> durch fieldNames ersetzen? ---> Damit es in das System mit StoreDefaultParser
+         * reinpasst, fieldNames wäre Umweg
+         */
         // Create a jsonNode iterator so we can iterate over the ArrayNode
-        final Iterator<JsonNode> iterator = root.elements();
+        final Iterator<JsonNode> iterator = actionNode.elements();
 
         // While we have elements in our Node
         while (iterator.hasNext())
         {
-            // Get the next element
+            // Get the next element, which is the content of the action
             final JsonNode node = iterator.next();
             // Verify that this is either a NullNode or an ObjectNode
             if (!(node instanceof NullNode) && !(node instanceof ObjectNode))
@@ -59,7 +62,7 @@ public class ActionItemParser extends AbstractScriptItemParser
                 throw new IllegalArgumentException("Action must either be emtpy or an ObjectNode, and not a "
                                                    + node.getClass().getSimpleName());
             }
-            // Get the fieldName of the objects in the array node
+            // Get the fieldName of the objects in the ArrayNode, which is for example Request, Name.
             final Iterator<String> fieldNames = node.fieldNames();
 
             while (fieldNames.hasNext())

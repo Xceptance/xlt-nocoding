@@ -15,27 +15,27 @@ import com.xceptance.xlt.nocoding.util.Constants;
  * 
  * @author ckeiner
  */
-public class StoreDefaultParameterParser extends AbstractStoreDefaultParser
+public class StoreDefaultParametersParser extends AbstractStoreDefaultParser
 {
 
     /**
-     * Parses the parameter list item to a list of {@link StoreDefault}s which consists of multiple
+     * Parses the parameters list item to a list of {@link StoreDefault}s, which consists of multiple
      * {@link StoreDefaultParameter}.
      * 
-     * @param node
+     * @param defaultParametersNode
      *            The {@link JsonNode} the default parameters start at
      * @return A list of <code>StoreDefault</code>s with the parsed default parameters.
      */
     @Override
-    public List<StoreDefault> parse(final JsonNode node)
+    public List<StoreDefault> parse(final JsonNode defaultParametersNode)
     {
         // Create list of defaultItems
         final List<StoreDefault> defaultItems = new ArrayList<>();
         // Check if the node is textual and has the value of Constants.DELETE
-        if (node.isTextual())
+        if (defaultParametersNode.isTextual())
         {
             // Check if the textValue is Constants.DELETE
-            if (node.textValue().equals(Constants.DELETE))
+            if (defaultParametersNode.textValue().equals(Constants.DELETE))
             {
                 // Create a StoreDefaultParameter item that deletes all default parameters
                 defaultItems.add(new StoreDefaultParameter(Constants.PARAMETERS, Constants.DELETE));
@@ -43,13 +43,13 @@ public class StoreDefaultParameterParser extends AbstractStoreDefaultParser
             else
             {
                 throw new IllegalArgumentException("Default Parameters must be an ArrayNode or textual and contain " + Constants.DELETE
-                                                   + " and not " + node.textValue());
+                                                   + " and not " + defaultParametersNode.textValue());
             }
         }
         else
         {
             // Parse parameters with the parameter parser
-            final List<NameValuePair> parameters = new ParameterParser().parse(node);
+            final List<NameValuePair> parameters = new ParameterParser().parse(defaultParametersNode);
             for (final NameValuePair parameter : parameters)
             {
                 // Create a StoreDefaultParameter for every parameter key value pair

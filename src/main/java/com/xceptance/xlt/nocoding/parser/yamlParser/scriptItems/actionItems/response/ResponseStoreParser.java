@@ -26,58 +26,59 @@ public class ResponseStoreParser
     /**
      * Parses the store item in the response block to a list of {@link AbstractResponseStore}
      * 
-     * @param node
+     * @param responseStoreNode
      *            The {@link JsonNode} the store item starts at
      * @return A list of all <code>AbstractResponseStore</code>s with the parsed content
      */
-    public List<AbstractResponseStore> parse(final JsonNode node)
+    public List<AbstractResponseStore> parse(final JsonNode responseStoreNode)
     {
         // Verify that an array was used and not an object
-        if (!(node instanceof ArrayNode))
+        if (!(responseStoreNode instanceof ArrayNode))
         {
-            throw new IllegalArgumentException("Expected ArrayNode in the store block but was " + node.getClass().getSimpleName());
+            throw new IllegalArgumentException("Expected ArrayNode in the store block but was "
+                                               + responseStoreNode.getClass().getSimpleName());
         }
         // Initialize variables
         String variableName = null;
         final List<AbstractResponseStore> responseStores = new ArrayList<AbstractResponseStore>();
-        // Get an iterator over the elements
-        final Iterator<JsonNode> iterator = node.elements();
+        // Get an Iterator over every ResponseStore
+        final Iterator<JsonNode> iterator = responseStoreNode.elements();
 
         // As long as we have another element
         while (iterator.hasNext())
         {
-            // Get the next element
+            // Get the next element, therefore the ObjectNode with a single ResponseStore in it
             final JsonNode current = iterator.next();
-            // Get an iterator over the fieldNames
+            // Get an iterator over the fieldNames, which should only be the name of the variable
             final Iterator<String> fieldName = current.fieldNames();
 
             // As long as we have another fieldName
             while (fieldName.hasNext())
             {
-                // Get the next fieldName which is also the variableName
+                // Get the next fieldName, which is also the name of the variable
                 variableName = fieldName.next();
 
                 /*
                  * Substructure of Store
                  */
 
-                // Get the substructure
+                // Get the substructure, that is the ObjectNode with the information of the ResponseStore
                 final JsonNode storeContent = current.get(variableName);
-                // Verify that an object was used and not an array
+                // Verify that it is an ObjectNode
                 if (!(storeContent instanceof ObjectNode))
                 {
                     throw new IllegalArgumentException("Expected ObjectNode after the variable name, " + variableName + ", but was "
-                                                       + node.getClass().getSimpleName());
+                                                       + responseStoreNode.getClass().getSimpleName());
                 }
-                // And get an iterator over the fieldNames
+                // And get an iterator over the fieldNames, that is the content of a single ResponseStore
                 final Iterator<String> name = storeContent.fieldNames();
-                // Iterate over the content
+                // If we have a next name
                 if (name.hasNext())
                 {
                     AbstractExtractor extractor = null;
                     // Build an extractor depending on the next element in the iterator
                     String nextName = name.next();
-                    if (Constants.isPermittedExtractionMode(nextName))
+                    if (Constants.isPermittedExtraction(nextName))
                     {
                         extractor = new ExtractorParser(nextName).parse(storeContent);
                         // If we have another name, it must be Constants.GROUP
@@ -87,6 +88,7 @@ public class ResponseStoreParser
                             // Verify the value of the nextName is the allowed field Constants.GROUP
                             if (nextName.equals(Constants.GROUP))
                             {
+                                // TODO should ResponseStore really check this again? Extractor already does
                                 // Verify the extractor is a RegexpExtractor, as no other AbstractExtractor has a second argument
                                 if (!(extractor instanceof RegexpExtractor))
                                 {

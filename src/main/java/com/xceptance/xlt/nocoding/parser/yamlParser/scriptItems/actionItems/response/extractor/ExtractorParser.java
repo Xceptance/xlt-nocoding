@@ -35,7 +35,7 @@ public class ExtractorParser
      * specified, verifies the <code>AbstractExtractor</code> is a {@link RegexpExtractor}.
      * 
      * @param node
-     *            The <code>JsonNode</code> of the extraction item
+     *            The <code>JsonNode</code> with the extraction item in it
      * @return The <code>AbstractExtractor</code> corresponding to the identifier. <br>
      *         For example, {@link Constants#REGEXP} is parsed to a <code>RegexpExtractor</code>.
      */
@@ -46,34 +46,36 @@ public class ExtractorParser
         final String extractorExpression = ParserUtils.readValue(node, identifier);
         final boolean hasGroup = node.has(Constants.GROUP);
         // Build a extractor depending on the name of the selector
-        if (identifier.equals(Constants.XPATH))
+        switch (identifier)
         {
-            extractor = new XpathExtractor(extractorExpression);
-        }
-        else if (identifier.equals(Constants.REGEXP))
-        {
-            if (hasGroup)
-            {
-                extractor = new RegexpExtractor(extractorExpression, ParserUtils.readValue(node, Constants.GROUP));
-            }
-            else
-            {
-                extractor = new RegexpExtractor(extractorExpression);
-            }
-        }
-        else if (identifier.equals(Constants.HEADER))
-        {
-            extractor = new HeaderExtractor(extractorExpression);
-        }
-        else if (identifier.equals(Constants.COOKIE))
-        {
-            extractor = new CookieExtractor(extractorExpression);
-        }
-        else
-        {
-            throw new NotImplementedException("Permitted Extraction but no parsing specified: " + identifier);
+            case Constants.XPATH:
+                extractor = new XpathExtractor(extractorExpression);
+                break;
+
+            case Constants.REGEXP:
+                if (hasGroup)
+                {
+                    extractor = new RegexpExtractor(extractorExpression, ParserUtils.readValue(node, Constants.GROUP));
+                }
+                else
+                {
+                    extractor = new RegexpExtractor(extractorExpression);
+                }
+                break;
+
+            case Constants.HEADER:
+                extractor = new HeaderExtractor(extractorExpression);
+                break;
+
+            case Constants.COOKIE:
+                extractor = new CookieExtractor(extractorExpression);
+                break;
+
+            default:
+                throw new NotImplementedException("Permitted Extraction but no parsing specified: " + identifier);
         }
 
+        // Throw an Exception when Constants.GROUP is specified, but the extractor is not a RegexpExtractor
         if (hasGroup && !(extractor instanceof RegexpExtractor))
         {
             throw new IllegalArgumentException(Constants.GROUP + " only allowed with RegexpExtractor, but is "

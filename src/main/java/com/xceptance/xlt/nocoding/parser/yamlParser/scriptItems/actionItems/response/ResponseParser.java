@@ -28,17 +28,17 @@ public class ResponseParser extends AbstractActionItemParser
     /**
      * Parses the response item to a {@link Response} wrapped in a list of {@link AbstractActionItem}s.
      * 
-     * @param node
+     * @param responseNode
      *            The {@link JsonNode} with the response item
      * @return The <code>Response</code> wrapped in a list of <code>AbstractActionItem</code>s
      */
     @Override
-    public List<AbstractActionItem> parse(final JsonNode node)
+    public List<AbstractActionItem> parse(final JsonNode responseNode)
     {
         // Verify that an object was used and not an array
-        if (!(node instanceof ObjectNode))
+        if (!(responseNode instanceof ObjectNode))
         {
-            throw new IllegalArgumentException("Expected ObjectNode in response but was " + node.getClass().getSimpleName());
+            throw new IllegalArgumentException("Expected ObjectNode in response but was " + responseNode.getClass().getSimpleName());
         }
 
         // Initialize variables
@@ -47,7 +47,7 @@ public class ResponseParser extends AbstractActionItemParser
         final List<AbstractResponseItem> responseItems = new ArrayList<AbstractResponseItem>();
 
         // Get an iterator over the fieldNames
-        final Iterator<String> fieldNames = node.fieldNames();
+        final Iterator<String> fieldNames = responseNode.fieldNames();
 
         // As long as we have a fieldName
         while (fieldNames.hasNext())
@@ -65,21 +65,21 @@ public class ResponseParser extends AbstractActionItemParser
             {
                 case Constants.HTTPCODE:
                     // Extract the httpcode
-                    httpcode = ParserUtils.readValue(node, fieldName);
+                    httpcode = ParserUtils.readValue(responseNode, fieldName);
                     // Add the validator for the httpcode to the responseItems
                     responseItems.add(new HttpcodeValidator(httpcode));
-                    XltLogger.runTimeLogger.debug("Added Httpcode " + httpcode);
+                    XltLogger.runTimeLogger.debug("Added HttpcodeValidator with the Httpcode " + httpcode);
                     break;
 
                 case Constants.VALIDATION:
                     // Create a new validation parser and add the result to the responseItems
-                    responseItems.addAll(new ValidationParser().parse(node.get(fieldName)));
+                    responseItems.addAll(new ValidationParser().parse(responseNode.get(fieldName)));
                     XltLogger.runTimeLogger.debug("Added Validation");
                     break;
 
                 case Constants.STORE:
                     // Create a new response store parser and add the result to the responseItems
-                    responseItems.addAll(new ResponseStoreParser().parse(node.get(fieldName)));
+                    responseItems.addAll(new ResponseStoreParser().parse(responseNode.get(fieldName)));
                     XltLogger.runTimeLogger.debug("Added Store");
                     break;
 
@@ -87,9 +87,9 @@ public class ResponseParser extends AbstractActionItemParser
                     throw new NotImplementedException("Permitted response item but no parser specified: " + fieldName);
             }
         }
-        // Add the response to the actionItems
+        // Add a new response with the responseItems to the actionItems
         actionItems.add(new Response(responseItems));
-        // Return it
+        // Return the actionItems
         return actionItems;
     }
 

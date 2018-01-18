@@ -14,12 +14,12 @@ public abstract class AbstractScriptItemParser
 {
 
     /**
-     * Parses the list item at the specified {@link JsonNode}.
+     * Parses the script item at the specified {@link JsonNode}.
      * 
-     * @param root
-     *            The <code>JsonNode</code> the list item starts at
+     * @param scriptItemNode
+     *            The <code>JsonNode</code> the script item starts at
      * @return A list of all {@link ScriptItem}s defined by the specified <code>JsonNode</code>
      */
-    public abstract List<ScriptItem> parse(JsonNode root);
+    public abstract List<ScriptItem> parse(JsonNode scriptItemNode);
 
 }

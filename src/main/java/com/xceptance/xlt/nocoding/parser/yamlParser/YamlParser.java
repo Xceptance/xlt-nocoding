@@ -16,7 +16,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.parser.Parser;
-import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.AbstractScriptItemParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.ActionItemParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.StoreDefaultParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.StoreItemParser;
@@ -53,12 +52,12 @@ public class YamlParser extends Parser
         // Create the parser
         final JsonParser parser = factory.createParser(reader);
         // Allow comments in the parser, so we have the correct line numbers
-        parser.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS, true);
-        parser.configure(Feature.ALLOW_YAML_COMMENTS, true);
+        parser.enable(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS);
+        parser.enable(Feature.ALLOW_YAML_COMMENTS);
 
         // Create an ObjectMapper
         final ObjectMapper mapper = new ObjectMapper();
-        // Map the parsed content to JsonNodes, which is easier to use
+        // Map the parsed content to JsonNodes, which are easier to use
         final JsonNode root = mapper.readTree(parser);
 
         // Check that the root, which consists of the list items, is an ArrayNode
@@ -96,25 +95,22 @@ public class YamlParser extends Parser
                         try
                         {
                             // Differentiate between Store, Action and default definitions
-                            AbstractScriptItemParser scriptItemParser = null;
                             switch (currentName)
                             {
                                 case Constants.STORE:
                                     // Set parser to StoreItemParser
-                                    scriptItemParser = new StoreItemParser();
+                                    scriptItems.addAll(new StoreItemParser().parse(node));
                                     break;
                                 case Constants.ACTION:
                                     // Set parser to ActionItemParser
-                                    scriptItemParser = new ActionItemParser();
+                                    scriptItems.addAll(new ActionItemParser().parse(node));
                                     break;
 
                                 default:
                                     // Set parser to DefaultItemParser
-                                    scriptItemParser = new StoreDefaultParser();
+                                    scriptItems.addAll(new StoreDefaultParser().parse(node));
                                     break;
                             }
-                            // Parse the scriptItem
-                            scriptItems.addAll(scriptItemParser.parse(node));
                         }
                         // Catch any exception while parsing, so we can print the current line/column number with the error
                         catch (final Exception e)

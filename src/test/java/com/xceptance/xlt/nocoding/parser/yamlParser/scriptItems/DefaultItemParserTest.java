@@ -15,11 +15,11 @@ import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.ParserTest;
 import com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser;
-import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.storeDefault.StoreDefaultCookieParser;
-import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.storeDefault.StoreDefaultHeaderParser;
+import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.storeDefault.StoreDefaultCookiesParser;
+import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.storeDefault.StoreDefaultHeadersParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.storeDefault.StoreDefaultItemParser;
-import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.storeDefault.StoreDefaultParameterParser;
-import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.storeDefault.StoreDefaultStaticParser;
+import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.storeDefault.StoreDefaultParametersParser;
+import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.storeDefault.StoreDefaultStaticsParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.StoreItem;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefault;
@@ -182,7 +182,7 @@ public class DefaultItemParserTest extends ParserTest
         final ArrayNode array = jf.arrayNode();
         array.add(content);
 
-        final StoreDefault storeDefault = new StoreDefaultCookieParser().parse(array).get(0);
+        final StoreDefault storeDefault = new StoreDefaultCookiesParser().parse(array).get(0);
         Assert.assertTrue(storeDefault instanceof StoreDefaultCookie);
         Assert.assertEquals(name, storeDefault.getVariableName());
         Assert.assertEquals(value, storeDefault.getValue());
@@ -204,7 +204,7 @@ public class DefaultItemParserTest extends ParserTest
         final ArrayNode array = jf.arrayNode();
         array.add(content);
 
-        final StoreDefault storeDefault = new StoreDefaultParameterParser().parse(array).get(0);
+        final StoreDefault storeDefault = new StoreDefaultParametersParser().parse(array).get(0);
         Assert.assertTrue(storeDefault instanceof StoreDefaultParameter);
         Assert.assertEquals(name, storeDefault.getVariableName());
         Assert.assertEquals(value, storeDefault.getValue());
@@ -226,7 +226,7 @@ public class DefaultItemParserTest extends ParserTest
         final ArrayNode array = jf.arrayNode();
         array.add(content);
 
-        final StoreDefault storeDefault = new StoreDefaultHeaderParser().parse(array).get(0);
+        final StoreDefault storeDefault = new StoreDefaultHeadersParser().parse(array).get(0);
         Assert.assertTrue(storeDefault instanceof StoreDefaultHeader);
         Assert.assertEquals(name, storeDefault.getVariableName());
         Assert.assertEquals(value, storeDefault.getValue());
@@ -247,7 +247,7 @@ public class DefaultItemParserTest extends ParserTest
         array.add(url);
         array.add(url);
 
-        final List<StoreDefault> storeDefaultList = new StoreDefaultStaticParser().parse(array);
+        final List<StoreDefault> storeDefaultList = new StoreDefaultStaticsParser().parse(array);
         Assert.assertEquals(3, storeDefaultList.size());
         final StoreDefault storeDefault = storeDefaultList.get(0);
         Assert.assertTrue(storeDefault instanceof StoreDefaultStatic);

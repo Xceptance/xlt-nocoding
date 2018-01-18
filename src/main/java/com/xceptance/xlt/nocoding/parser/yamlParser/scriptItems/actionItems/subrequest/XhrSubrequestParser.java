@@ -29,23 +29,24 @@ public class XhrSubrequestParser
     /**
      * Parses the Xhr item to a {@link XhrSubrequest}.
      * 
-     * @param node
+     * @param xhrNode
      *            The {@link JsonNode} with the xhr subrequest item
      * @return The <code>XhrSubrequest</code> with the parsed data
      */
-    public XhrSubrequest parse(final JsonNode node)
+    public XhrSubrequest parse(final JsonNode xhrNode)
     {
-        // Verify the node is an ObjectNode
-        if (!(node instanceof NullNode) && !(node instanceof ObjectNode))
+        // Verify the node is an ObjectNode or a NullNode
+        if (!(xhrNode instanceof NullNode) && !(xhrNode instanceof ObjectNode))
         {
-            throw new IllegalArgumentException("Expected NullNode or ObjectNode in Xhr block but was " + node.getClass().getSimpleName());
+            throw new IllegalArgumentException("Expected NullNode or ObjectNode in Xhr block but was "
+                                               + xhrNode.getClass().getSimpleName());
         }
         // Initialize variables
         String name = null;
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
 
-        // Extract all fieldNames of the node
-        final Iterator<String> fieldNames = node.fieldNames();
+        // Extract all fieldNames of the node, which is the information of the node (i.e. Name, Request)
+        final Iterator<String> fieldNames = xhrNode.fieldNames();
 
         // Iterate over the fieldNames
         while (fieldNames.hasNext())
@@ -66,7 +67,7 @@ public class XhrSubrequestParser
                     // Check that this is the first item we parse
                     if (actionItems.isEmpty())
                     {
-                        name = ParserUtils.readValue(node, fieldName);
+                        name = ParserUtils.readValue(xhrNode, fieldName);
                         if (name != null)
                         {
                             XltLogger.runTimeLogger.debug("Xhr Subrequest Name: " + name);
@@ -83,9 +84,9 @@ public class XhrSubrequestParser
                     if (actionItems.isEmpty())
                     {
                         // Log the Request block with the unparsed content
-                        XltLogger.runTimeLogger.debug("Request: " + node.get(fieldName).toString());
+                        XltLogger.runTimeLogger.debug("Request: " + xhrNode.get(fieldName).toString());
                         // Create a new request parser and get the first element, so we can set Xhr to true
-                        actionItem = new RequestParser().parse(node.get(fieldName)).get(0);
+                        actionItem = new RequestParser().parse(xhrNode.get(fieldName)).get(0);
                         if (actionItem instanceof Request)
                         {
                             ((Request) actionItem).setXhr("true");
@@ -106,9 +107,9 @@ public class XhrSubrequestParser
                     if (actionItems.isEmpty() || actionItems.get(0) instanceof Request)
                     {
                         // Log the Response block with the unparsed content
-                        XltLogger.runTimeLogger.debug("Response: " + node.get(fieldName).toString());
+                        XltLogger.runTimeLogger.debug("Response: " + xhrNode.get(fieldName).toString());
                         // Create a new ResponseParser and parse the response
-                        actionItem = new ResponseParser().parse(node.get(fieldName)).get(0);
+                        actionItem = new ResponseParser().parse(xhrNode.get(fieldName)).get(0);
                         break;
                     }
                     else
@@ -117,9 +118,9 @@ public class XhrSubrequestParser
                     }
 
                 case Constants.SUBREQUESTS:
-                    XltLogger.runTimeLogger.debug("Subrequests: " + node.get(fieldName).toString());
+                    XltLogger.runTimeLogger.debug("Subrequests: " + xhrNode.get(fieldName).toString());
                     // Create a new SubrequestParser and parse the subrequest
-                    actionItem = new SubrequestParser().parse(node.get(fieldName)).get(0);
+                    actionItem = new SubrequestParser().parse(xhrNode.get(fieldName)).get(0);
                     break;
 
                 default:

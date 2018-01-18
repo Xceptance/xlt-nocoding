@@ -25,36 +25,36 @@ public class SubrequestParser extends AbstractActionItemParser
      * Parses the subrequest item in the action block to a list of {@link AbstractSubrequest}s. A subrequest item can
      * consist of multiple subrequests.
      * 
-     * @param node
+     * @param subrequestNode
      *            The {@link JsonNode} the subrequest item starts at
      * @return A list with all specified subrequest in the node
      */
     @Override
-    public List<AbstractActionItem> parse(final JsonNode node)
+    public List<AbstractActionItem> parse(final JsonNode subrequestNode)
     {
         // Verify that we have an ArrayNode
-        if (!(node instanceof ArrayNode))
+        if (!(subrequestNode instanceof ArrayNode))
         {
-            throw new IllegalArgumentException("Expected ArrayNode in Subrequest but was " + node.getClass().getSimpleName());
+            throw new IllegalArgumentException("Expected ArrayNode in Subrequest but was " + subrequestNode.getClass().getSimpleName());
         }
         // Initialize Variables
-        final List<AbstractSubrequest> subrequest = new ArrayList<AbstractSubrequest>();
+        final List<AbstractSubrequest> subrequests = new ArrayList<AbstractSubrequest>();
 
-        // Get an iterator over the elements
-        final Iterator<JsonNode> iterator = node.elements();
+        // Get an iterator over the elements, that is every single subrequest
+        final Iterator<JsonNode> iterator = subrequestNode.elements();
 
-        // Iterate over the elements
+        // Iterate over every subrequest
         while (iterator.hasNext())
         {
-            // Get the current node
+            // Get the current node, which describes a single subrequest
             final JsonNode current = iterator.next();
-            // Get the fieldNames of the current node
+            // Get the fieldNames of the current node, which should only contain the type of the subrequest (i.e. XHR, Static)
             final Iterator<String> fieldNames = current.fieldNames();
 
             // Iterate over the fieldNames
             while (fieldNames.hasNext())
             {
-                // Extract the first fieldName, which specifies which kind of subrequest this is
+                // Extract the first fieldName, which specifies, what kind of subrequest this is
                 final String fieldName = fieldNames.next();
 
                 // Check if the name is a permitted request item
@@ -68,12 +68,12 @@ public class SubrequestParser extends AbstractActionItemParser
                 {
                     case Constants.XHR:
                         // Create an XhrSubrequestParser and parse it
-                        subrequest.add(new XhrSubrequestParser().parse(current.get(fieldName)));
+                        subrequests.add(new XhrSubrequestParser().parse(current.get(fieldName)));
                         break;
 
                     case Constants.STATIC:
                         // Create StaticSubrequestParser and parse the current node
-                        subrequest.add(new StaticSubrequestParser().parse(current.get(fieldName)));
+                        subrequests.add(new StaticSubrequestParser().parse(current.get(fieldName)));
                         break;
 
                     default:
@@ -83,10 +83,10 @@ public class SubrequestParser extends AbstractActionItemParser
             }
 
         }
-        // Create new AbstractActionItem list
+        // Create a new AbstractActionItem list
         final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
         // Add all subrequests to it
-        actionItems.addAll(subrequest);
+        actionItems.addAll(subrequests);
         // Return the list with all subrequests
         return actionItems;
     }

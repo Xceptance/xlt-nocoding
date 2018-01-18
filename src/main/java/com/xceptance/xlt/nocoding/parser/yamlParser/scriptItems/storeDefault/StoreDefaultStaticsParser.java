@@ -15,27 +15,27 @@ import com.xceptance.xlt.nocoding.util.ParserUtils;
  * 
  * @author ckeiner
  */
-public class StoreDefaultStaticParser extends AbstractStoreDefaultParser
+public class StoreDefaultStaticsParser extends AbstractStoreDefaultParser
 {
 
     /**
      * Parses the static subrequest list item to a list of {@link StoreDefault}s which consists of multiple
      * {@link StoreDefaultStatic}.
      * 
-     * @param node
+     * @param staticNode
      *            The {@link JsonNode} the default static subrequests start at
      * @return A list of <code>StoreDefault</code>s with the parsed default static subrequests.
      */
     @Override
-    public List<StoreDefault> parse(final JsonNode node)
+    public List<StoreDefault> parse(final JsonNode staticNode)
     {
         // Create list of defaultItems
         final List<StoreDefault> defaultItems = new ArrayList<>();
         // Check if the node is textual
-        if (node.isTextual())
+        if (staticNode.isTextual())
         {
             // Check if the textValue is Constants.DELETE
-            if (node.textValue().equals(Constants.DELETE))
+            if (staticNode.textValue().equals(Constants.DELETE))
             {
                 // Create a StoreDefaultHeader item that deletes all default headers
                 defaultItems.add(new StoreDefaultStatic(Constants.DELETE));
@@ -43,13 +43,13 @@ public class StoreDefaultStaticParser extends AbstractStoreDefaultParser
             else
             {
                 throw new IllegalArgumentException("Default Static must be an ArrayNode or textual and contain " + Constants.DELETE
-                                                   + " and not " + node.textValue());
+                                                   + " and not " + staticNode.textValue());
             }
         }
         else
         {
             // Get an iterator over the elements
-            final Iterator<JsonNode> elementIterator = node.elements();
+            final Iterator<JsonNode> elementIterator = staticNode.elements();
             while (elementIterator.hasNext())
             {
                 // Get the next node

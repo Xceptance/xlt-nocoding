@@ -17,14 +17,14 @@ public class ParameterParser
     /**
      * Parses a parameter item to a list of <code>NameValuePair</code>s
      * 
-     * @param node
+     * @param parameterNode
      *            The {@link JsonNode} with the parameters in it
-     * @return A list containing the parsed parameters
+     * @return A list of <code>NameValuePair</code>s containing the parsed parameters
      */
-    public List<NameValuePair> parse(final JsonNode node)
+    public List<NameValuePair> parse(final JsonNode parameterNode)
     {
-        // Transform the JsonNode to a List of NameValuePairs
-        final List<NameValuePair> parameters = ParserUtils.getArrayNodeAsNameValuePair(node);
+        // Transform the JsonNode to a list of NameValuePairs
+        final List<NameValuePair> parameters = ParserUtils.getArrayNodeAsNameValuePair(parameterNode);
         // Return the list
         return parameters;
     }

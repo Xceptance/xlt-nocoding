@@ -16,10 +16,10 @@ public abstract class AbstractActionItemParser
     /**
      * Parses the defined action item at the node.
      * 
-     * @param node
+     * @param actionItemNode
      *            The {@link JsonNode} the item starts at
      * @return A list of {@link AbstractActionItem}
      */
-    public abstract List<AbstractActionItem> parse(JsonNode node);
+    public abstract List<AbstractActionItem> parse(JsonNode actionItemNode);
 
 }

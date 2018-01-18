@@ -252,7 +252,7 @@ public class Constants
         return PERMITTEDSUBREQUESTITEMS.contains(s);
     }
 
-    public static boolean isPermittedExtractionMode(final String s)
+    public static boolean isPermittedExtraction(final String s)
     {
         return PERMITTEDEXTRACTIONMODE.contains(s);
     }

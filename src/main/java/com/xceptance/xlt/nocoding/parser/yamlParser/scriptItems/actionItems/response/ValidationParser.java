@@ -27,36 +27,37 @@ public class ValidationParser
     /**
      * Parses the validation items in the response block to a list of {@link Validator}.
      * 
-     * @param node
+     * @param validateNode
      *            The {@link JsonNode} with the validation item
      * @return A list of <code>Validator</code>
      */
-    public List<Validator> parse(final JsonNode node)
+    public List<Validator> parse(final JsonNode validateNode)
     {
         // Verify that an array was used and not an object
-        if (!(node instanceof ArrayNode))
+        if (!(validateNode instanceof ArrayNode))
         {
-            throw new IllegalArgumentException("Expected ArrayNode in the validate block but was " + node.getClass().getSimpleName());
+            throw new IllegalArgumentException("Expected ArrayNode in the validate block but was "
+                                               + validateNode.getClass().getSimpleName());
         }
         // Initialize variables
         final List<Validator> validator = new ArrayList<Validator>();
         String validationName = null;
 
-        // Get an iterator over the elements
-        final Iterator<JsonNode> iterator = node.elements();
+        // Get an Iterator over every validation
+        final Iterator<JsonNode> iterator = validateNode.elements();
 
         // Iterate over the elements
         while (iterator.hasNext())
         {
-            // Get the next element
+            // Get the next element, therefore the ObjectNode with a single validation in it
             final JsonNode current = iterator.next();
-            // Get the fieldNames
+            // Get an iterator over the fieldNames, which should only be the name of the validation
             final Iterator<String> fieldName = current.fieldNames();
 
             // Iterate over the fieldNames
             while (fieldName.hasNext())
             {
-                // The current fieldName is the name of the validation
+                // Get the next fieldName, which is also the name of the validation
                 validationName = fieldName.next();
                 AbstractExtractor extractor = null;
                 AbstractValidationMethod validation = null;
@@ -65,16 +66,16 @@ public class ValidationParser
                  * Substructure of a validation
                  */
 
-                // Get the substructure
+                // Get the substructure, that is the ObjectNode with the information of the validation
                 final JsonNode validationContent = current.get(validationName);
-                // Verify that an object was used and not an array
+                // Verify that it is an ObjectNode
                 if (!(validationContent instanceof ObjectNode))
                 {
                     throw new IllegalArgumentException("Expected ObjectNode after the validation name, " + validationName + ", but was "
-                                                       + node.getClass().getSimpleName());
+                                                       + validateNode.getClass().getSimpleName());
                 }
 
-                // And get an iterator over the fieldNames
+                // And get an iterator over the fieldNames, that is the content of a single Validator
                 final Iterator<String> name = validationContent.fieldNames();
                 // Iterate over the fieldNames of the substructure
                 while (name.hasNext())
@@ -83,7 +84,7 @@ public class ValidationParser
                     final String nextName = name.next();
 
                     // If it is a permitted extraction mode
-                    if (Constants.isPermittedExtractionMode(nextName))
+                    if (Constants.isPermittedExtraction(nextName))
                     {
                         // Check that the extractor is the first item and no other extractor was defined already
                         if (validation == null && extractor == null)
@@ -137,7 +138,7 @@ public class ValidationParser
                     {
                         if (!(extractor instanceof RegexpExtractor))
                         {
-                            throw new IllegalArgumentException("Group cannot be specified unless selector is RegexpExtractor, but is "
+                            throw new IllegalArgumentException("Group cannot be specified unless the extractor is a RegexpExtractor, but is "
                                                                + extractor.getClass().getSimpleName());
                         }
                     }

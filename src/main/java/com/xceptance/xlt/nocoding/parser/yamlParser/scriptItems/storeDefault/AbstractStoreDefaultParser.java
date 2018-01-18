@@ -15,9 +15,9 @@ public abstract class AbstractStoreDefaultParser
     /**
      * Parses the default item at the specified {@link JsonNode}.
      * 
-     * @param node
-     *            The <code>JsonNode</code> the item starts at
+     * @param defaultItemNode
+     *            The <code>JsonNode</code> the default item starts at
      * @return {@link StoreDefault}
      */
-    public abstract List<StoreDefault> parse(JsonNode node);
+    public abstract List<StoreDefault> parse(JsonNode defaultItemNode);
 }
