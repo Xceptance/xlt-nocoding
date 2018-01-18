@@ -56,6 +56,7 @@ public class ActionItemParser extends AbstractScriptItemParser
         {
             // Get the next element, which is the content of the action
             final JsonNode node = iterator.next();
+            actionNode.get(Constants.ACTION);
             // Verify that this is either a NullNode or an ObjectNode
             if (!(node instanceof NullNode) && !(node instanceof ObjectNode))
             {

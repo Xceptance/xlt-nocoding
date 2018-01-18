@@ -78,37 +78,34 @@ public class LightWeightContext extends Context<LightWeightPage>
     public SgmlPage getSgmlPage()
     {
         // If the sgmlPage is null and therefore wasn't loaded already
-        synchronized (sgmlPage)
+        if (sgmlPage == null)
         {
-            if (sgmlPage == null)
+            // Generate a new sgmlPage
+            XltLogger.runTimeLogger.debug("Generating new SgmlPage...");
+            Page page;
+            try
             {
-                // Generate a new sgmlPage
-                XltLogger.runTimeLogger.debug("Generating new SgmlPage...");
-                Page page;
-                try
+                // Load the WebResponse into the window of the web client
+                page = getWebClient().loadWebResponseInto(getWebResponse(), getWebClient().getCurrentWindow());
+                // If the built page is an instance of SgmlPage
+                if (page instanceof SgmlPage)
                 {
-                    // Load the WebResponse into the window of the web client
-                    page = getWebClient().loadWebResponseInto(getWebResponse(), getWebClient().getCurrentWindow());
-                    // If the built page is an instance of SgmlPage
-                    if (page instanceof SgmlPage)
+                    if (page instanceof XmlPage && ((XmlPage) page).getXmlDocument() == null)
                     {
-                        if (page instanceof XmlPage && ((XmlPage) page).getXmlDocument() == null)
-                        {
-                            throw new IllegalStateException("Faulty WebResponse, the page doesn't have child nodes.");
-                        }
-                        // Set the sgmlPage
-                        setSgmlPage((SgmlPage) page);
-                        XltLogger.runTimeLogger.debug("SgmlPage built");
+                        throw new IllegalStateException("Faulty WebResponse, the page doesn't have child nodes.");
                     }
-                }
-                catch (FailingHttpStatusCodeException | IOException e)
-                {
-                    throw new IllegalStateException("Cannot convert WebResponse to SgmlPage.");
+                    // Set the sgmlPage
+                    setSgmlPage((SgmlPage) page);
+                    XltLogger.runTimeLogger.debug("SgmlPage built");
                 }
             }
-            // Return the sgmlPage
-            return sgmlPage;
+            catch (FailingHttpStatusCodeException | IOException e)
+            {
+                throw new IllegalStateException("Cannot convert WebResponse to SgmlPage.");
+            }
         }
+        // Return the sgmlPage
+        return sgmlPage;
     }
 
     protected void setSgmlPage(final SgmlPage sgmlPage)

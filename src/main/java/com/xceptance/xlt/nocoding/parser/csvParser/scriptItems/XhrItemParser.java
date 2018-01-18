@@ -1,8 +1,14 @@
 package com.xceptance.xlt.nocoding.parser.csvParser.scriptItems;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.csv.CSVRecord;
 
-import com.xceptance.xlt.nocoding.scriptItem.action.Action;
+import com.xceptance.xlt.nocoding.parser.csvParser.CsvConstants;
+import com.xceptance.xlt.nocoding.parser.csvParser.scriptItems.actionItems.RequestParser;
+import com.xceptance.xlt.nocoding.parser.csvParser.scriptItems.actionItems.ResponseParser;
+import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.XhrSubrequest;
 
 /**
@@ -23,8 +29,21 @@ public class XhrItemParser
      */
     public XhrSubrequest parse(final CSVRecord record)
     {
-        final Action action = new ActionItemParser().parse(record);
-        return new XhrSubrequest(action.getName(), action.getActionItems());
+        String name = null;
+        final List<AbstractActionItem> actionItems = new ArrayList<>(2);
+        // Get the name if it is mapped
+        if (record.isMapped(CsvConstants.NAME))
+        {
+            name = record.get(CsvConstants.NAME);
+        }
+        // Parse the request
+        actionItems.add(new RequestParser().parse(record));
+        // Parse the response
+        actionItems.add(new ResponseParser().parse(record));
+        // Create the action
+        final XhrSubrequest xhrSubrequest = new XhrSubrequest(name, actionItems);
+        // Return the action
+        return xhrSubrequest;
     }
 
 }
