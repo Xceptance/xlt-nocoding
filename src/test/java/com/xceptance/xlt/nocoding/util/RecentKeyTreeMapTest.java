@@ -17,7 +17,7 @@ public class RecentKeyTreeMapTest
     @Before
     public void init()
     {
-        this.treeMap = new RecentKeyTreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
+        this.treeMap = new RecentKeyTreeMap();
     }
 
     @Test

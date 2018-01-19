@@ -3,6 +3,7 @@ package com.xceptance.xlt.nocoding.util.dataStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.DuplicateStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.SingleStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage.DefaultKeyValueStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage.RecentKeyUniqueStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage.UniqueStorage;
 
 /**
@@ -30,7 +31,7 @@ public class DataStorage
         this.defaultCookies = new DuplicateStorage();
         this.defaultParameters = new DuplicateStorage();
         this.defaultStatics = new SingleStorage();
-        this.defaultHeaders = new UniqueStorage();
+        this.defaultHeaders = new RecentKeyUniqueStorage();
         this.variables = new UniqueStorage();
         this.defaultItems = new DefaultKeyValueStorage();
     }

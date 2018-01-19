@@ -40,11 +40,9 @@ public class StoreDefaultHeader extends StoreDefault
         // If the value is not "delete"
         if (!value.equals(Constants.DELETE))
         {
-            // TODO Lowercase default headers
-            // Store the header as lowercase
-            storage.store(variableName.toLowerCase(), value);
-            XltLogger.runTimeLogger.debug("Added \"" + variableName.toLowerCase() + "\" with the value \"" + value
-                                          + "\" to default header storage");
+            // Store the header
+            storage.store(variableName, value);
+            XltLogger.runTimeLogger.debug("Added \"" + variableName + "\" with the value \"" + value + "\" to default header storage");
         }
         else
         {
