@@ -96,6 +96,7 @@ public class Constants
      * <li>{@link #METHOD}
      * <li>{@link #ENCODEPARAMETERS}
      * <li>{@link #ENCODEBODY}
+     * <li>{@link #XHR}
      * <li>{@link #HEADERS}
      * <li>{@link #PARAMETERS}
      * <li>{@link #COOKIES}

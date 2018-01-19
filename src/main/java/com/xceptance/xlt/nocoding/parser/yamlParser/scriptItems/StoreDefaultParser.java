@@ -41,14 +41,38 @@ public class StoreDefaultParser extends AbstractScriptItemParser
     {
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
 
-        // Check if the name is a permitted action item
-        if (!Constants.isPermittedListItem(variableName))
-        {
-            throw new IllegalArgumentException("Not a permitted list item: " + variableName);
-        }
         // Since it was a permitted action item, differentiate between the name of the item
         switch (variableName)
         {
+
+            case Constants.NAME:
+                scriptItems.add(parseSingleItem(defaultNode));
+                break;
+
+            case Constants.HTTPCODE:
+                scriptItems.add(parseSingleItem(defaultNode));
+                break;
+
+            case Constants.URL:
+                scriptItems.add(parseSingleItem(defaultNode));
+                break;
+
+            case Constants.METHOD:
+                scriptItems.add(parseSingleItem(defaultNode));
+                break;
+
+            case Constants.ENCODEPARAMETERS:
+                scriptItems.add(parseSingleItem(defaultNode));
+                break;
+
+            case Constants.ENCODEBODY:
+                scriptItems.add(parseSingleItem(defaultNode));
+                break;
+
+            case Constants.XHR:
+                scriptItems.add(parseSingleItem(defaultNode));
+                break;
+
             case Constants.HEADERS:
                 scriptItems.addAll(new StoreDefaultHeadersParser().parse(defaultNode));
                 break;
@@ -57,19 +81,21 @@ public class StoreDefaultParser extends AbstractScriptItemParser
                 scriptItems.addAll(new StoreDefaultParametersParser().parse(defaultNode));
                 break;
 
-            case Constants.STATIC:
-                scriptItems.addAll(new StoreDefaultStaticsParser().parse(defaultNode));
-                break;
-
             case Constants.COOKIES:
                 scriptItems.addAll(new StoreDefaultCookiesParser().parse(defaultNode));
                 break;
 
-            default:
-                // We got a simple name value pairs, as such we simply want to read a single value
+            case Constants.BODY:
                 scriptItems.add(parseSingleItem(defaultNode));
-                // scriptItems.addAll(new StoreDefaultItemParser().parse(defaultNode));
                 break;
+
+            case Constants.STATIC:
+                scriptItems.addAll(new StoreDefaultStaticsParser().parse(defaultNode));
+                break;
+
+            default:
+                // We didn't find something fitting, so throw an Exception
+                throw new IllegalArgumentException("Unknown default list item: " + variableName);
         }
 
         return scriptItems;
