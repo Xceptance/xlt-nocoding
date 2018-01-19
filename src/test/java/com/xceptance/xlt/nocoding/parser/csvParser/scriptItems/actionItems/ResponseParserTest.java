@@ -9,6 +9,7 @@ import org.junit.Test;
 import com.xceptance.xlt.nocoding.parser.csvParser.CsvConstants;
 import com.xceptance.xlt.nocoding.parser.csvParser.scriptItems.CsvParserTestUtils;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.Validator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.RegexpExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.xpathExtractor.XpathExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.store.ResponseStore;
@@ -57,6 +58,55 @@ public class ResponseParserTest
             Assert.assertTrue(((ResponseStore) response.getResponseItems().get(0)).getExtractor() instanceof RegexpExtractor);
             Assert.assertEquals(value, ((ResponseStore) response.getResponseItems().get(0)).getExtractor().getExtractionExpression());
         }
+    }
+
+    /**
+     * Verifies that if {@link CsvConstants#NAME} is mapped and neither null nor empty, the name of the validation is
+     * "Validate " with the value of <code>CsvConstants.NAME</code> added
+     * 
+     * @throws IOException
+     */
+    @Test
+    public void testValidationNameWithNameDefined() throws IOException
+    {
+        final String name = "testAction";
+        final String headers = CsvConstants.NAME + "," + CsvConstants.XPATH;
+        final String value = name + ", xpath";
+        final String input = headers + "\n" + value;
+        final String validationName = "Validate" + " " + name;
+        Response response = null;
+
+        final Iterable<CSVRecord> records = CsvParserTestUtils.buildRecord(input);
+        for (final CSVRecord csvRecord : records)
+        {
+            response = new ResponseParser().parse(csvRecord);
+        }
+        Assert.assertTrue(response.getResponseItems().get(0) instanceof Validator);
+        final Validator validator = (Validator) response.getResponseItems().get(0);
+        Assert.assertEquals(validationName, validator.getValidationName());
+    }
+
+    /**
+     * Verifies that if {@link CsvConstants#NAME} is mapped and null, the name of the validation is also empty
+     * 
+     * @throws IOException
+     */
+    @Test
+    public void testValidationNameWithNameNotDefined() throws IOException
+    {
+        final String headers = CsvConstants.NAME + "," + CsvConstants.XPATH;
+        final String value = ", xpath";
+        final String input = headers + "\n" + value;
+        Response response = null;
+
+        final Iterable<CSVRecord> records = CsvParserTestUtils.buildRecord(input);
+        for (final CSVRecord csvRecord : records)
+        {
+            response = new ResponseParser().parse(csvRecord);
+        }
+        Assert.assertTrue(response.getResponseItems().get(0) instanceof Validator);
+        final Validator validator = (Validator) response.getResponseItems().get(0);
+        Assert.assertTrue(validator.getValidationName().isEmpty());
     }
 
     /**
@@ -153,4 +203,5 @@ public class ResponseParserTest
             new ResponseParser().parse(csvRecord);
         }
     }
+
 }

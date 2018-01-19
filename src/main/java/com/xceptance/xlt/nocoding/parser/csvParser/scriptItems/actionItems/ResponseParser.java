@@ -145,8 +145,7 @@ public class ResponseParser implements AbstractActionItemParser
         // Validator
         if (extractor != null)
         {
-            // TODO better name for the validation
-            final String validationName = "Validate " + extractor.getExtractionExpression();
+            final String validationName = createValidationName(record, "Validate");
             final Validator validator = new Validator(validationName, extractor, validationMethod);
             responseItems.add(validator);
         }
@@ -158,6 +157,30 @@ public class ResponseParser implements AbstractActionItemParser
 
         // Return the response
         return new Response(responseItems);
+    }
+
+    /**
+     * Creates a name for the validation out of the {@link CSVRecord} and <code>validationNameStart</code>.
+     * 
+     * @param record
+     *            The <code>CSVRecord</code> with the action item
+     * @param validationNameStart
+     *            The String the name of the validation should start with
+     * @return If {@link CsvConstants#NAME} is mapped and not null or empty, returns <code>validationNameStart + " "</code>
+     *         with the value of <code>CsvConstants.NAME</code>. Otherwise, returns an empty string.
+     */
+    private String createValidationName(final CSVRecord record, final String validationNameStart)
+    {
+        String name = "";
+        if (record.isMapped(CsvConstants.NAME))
+        {
+            final String value = record.get(CsvConstants.NAME);
+            if (StringUtils.isNotBlank(value))
+            {
+                name = validationNameStart + " " + value;
+            }
+        }
+        return name;
     }
 
     /**

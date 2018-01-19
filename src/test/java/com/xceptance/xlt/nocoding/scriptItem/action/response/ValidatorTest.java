@@ -60,25 +60,25 @@ public class ValidatorTest
         AbstractValidationMethod method = new ExistsValidator();
         Validator validator = new Validator(validationName, extractor, method);
 
-        executeRequest(validator);
+        executeInARequest(validator);
 
         // Build Validator with TextModule
         extractor = new CookieExtractor(mockObjects.cookieName1);
         method = new TextValidator(mockObjects.cookieValue1);
         validator = new Validator(validationName, extractor, method);
-        executeRequest(validator);
+        executeInARequest(validator);
 
         // Build Validator with MatchesModule
         extractor = new CookieExtractor(mockObjects.cookieName1);
         method = new MatchesValidator(mockObjects.cookieValue1);
         validator = new Validator(validationName, extractor, method);
-        executeRequest(validator);
+        executeInARequest(validator);
 
         // Build Validator with MatchesModule
         extractor = new CookieExtractor(mockObjects.cookieName1);
         method = new CountValidator("1");
         validator = new Validator(validationName, extractor, method);
-        executeRequest(validator);
+        executeInARequest(validator);
 
     }
 
@@ -96,25 +96,25 @@ public class ValidatorTest
         AbstractValidationMethod method = new ExistsValidator();
         Validator validator = new Validator(validationName, extractor, method);
 
-        executeRequest(validator);
+        executeInARequest(validator);
 
         // Build Validator with TextModule
         extractor = new HeaderExtractor("Set-Cookie");
         method = new TextValidator(mockObjects.cookieName1 + "=" + mockObjects.cookieValue1);
         validator = new Validator(validationName, extractor, method);
-        executeRequest(validator);
+        executeInARequest(validator);
 
         // Build Validator with MatchesModule
         extractor = new HeaderExtractor("Set-Cookie");
         method = new MatchesValidator(mockObjects.cookieName1 + "=" + mockObjects.cookieValue1);
         validator = new Validator(validationName, extractor, method);
-        executeRequest(validator);
+        executeInARequest(validator);
 
         // Build Validator with MatchesModule
         extractor = new HeaderExtractor("Set-Cookie");
         method = new CountValidator("3");
         validator = new Validator(validationName, extractor, method);
-        executeRequest(validator);
+        executeInARequest(validator);
 
     }
 
@@ -132,25 +132,25 @@ public class ValidatorTest
         AbstractValidationMethod method = new ExistsValidator();
         Validator validator = new Validator(validationName, extractor, method);
 
-        executeRequest(validator);
+        executeInARequest(validator);
 
         // Build Validator with TextModule
         extractor = new RegexpExtractor(mockObjects.regexString);
         method = new TextValidator(mockObjects.regexStringExpected);
         validator = new Validator(validationName, extractor, method);
-        executeRequest(validator);
+        executeInARequest(validator);
 
         // Build Validator with MatchesModule
         extractor = new RegexpExtractor(mockObjects.regexString);
         method = new MatchesValidator(mockObjects.regexStringExpected);
         validator = new Validator(validationName, extractor, method);
-        executeRequest(validator);
+        executeInARequest(validator);
 
         // Build Validator with MatchesModule
         extractor = new RegexpExtractor(mockObjects.regexString);
         method = new CountValidator("1");
         validator = new Validator(validationName, extractor, method);
-        executeRequest(validator);
+        executeInARequest(validator);
     }
 
     /**
@@ -170,7 +170,7 @@ public class ValidatorTest
         final AbstractExtractor extractor = new RegexpExtractor(mockObjects.regexString);
         final AbstractValidationMethod method = new ExistsValidator();
         final Validator validator = new Validator("${" + variableName + "}", extractor, method);
-        executeRequest(validator);
+        executeInARequest(validator);
         Assert.assertNotEquals(validationName, validator.getValidationName());
     }
 
@@ -187,9 +187,27 @@ public class ValidatorTest
         final AbstractExtractor extractor = new RegexpExtractor(mockObjects.regexString, "0");
         final AbstractValidationMethod method = new ExistsValidator();
         final Validator validator = new Validator(validationName, extractor, method);
-        executeRequest(validator);
+        executeInARequest(validator);
         Assert.assertTrue(extractor instanceof RegexpExtractor);
         Assert.assertEquals("0", ((RegexpExtractor) extractor).getGroup());
+    }
+
+    /**
+     * Verifies, that when {@link Validator#getValidationName()} is null or empty, the default name is
+     * <code>"Validate Action-" +</code> {@link Context#getActionIndex()}
+     * 
+     * @throws Throwable
+     */
+    @Test
+    public void testValidationNameEmptyGetsDefault() throws Throwable
+    {
+        final String validationName = "Validate Action-0";
+        // Build Validator with ExistsModule
+        final AbstractExtractor extractor = new RegexpExtractor(mockObjects.regexString, "0");
+        final AbstractValidationMethod method = new ExistsValidator();
+        final Validator validator = new Validator("", extractor, method);
+        executeInARequest(validator);
+        Assert.assertEquals(validationName, validator.getValidationName());
     }
 
     /*
@@ -202,7 +220,7 @@ public class ValidatorTest
      * @param validator
      * @throws Throwable
      */
-    public void executeRequest(final Validator validator) throws Throwable
+    public void executeInARequest(final Validator validator) throws Throwable
     {
         // Build Response
         final List<AbstractResponseItem> responseItems = new ArrayList<AbstractResponseItem>();

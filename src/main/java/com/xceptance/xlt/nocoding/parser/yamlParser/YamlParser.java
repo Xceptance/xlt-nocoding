@@ -99,16 +99,16 @@ public class YamlParser extends Parser
                             {
                                 case Constants.STORE:
                                     // Set parser to StoreItemParser
-                                    scriptItems.addAll(new StoreItemParser().parse(node));
+                                    scriptItems.addAll(new StoreItemParser().parse(node.get(currentName)));
                                     break;
                                 case Constants.ACTION:
                                     // Set parser to ActionItemParser
-                                    scriptItems.addAll(new ActionItemParser().parse(node));
+                                    scriptItems.addAll(new ActionItemParser().parse(node.get(currentName)));
                                     break;
 
                                 default:
                                     // Set parser to DefaultItemParser
-                                    scriptItems.addAll(new StoreDefaultParser().parse(node));
+                                    scriptItems.addAll(new StoreDefaultParser(currentName).parse(node.get(currentName)));
                                     break;
                             }
                         }

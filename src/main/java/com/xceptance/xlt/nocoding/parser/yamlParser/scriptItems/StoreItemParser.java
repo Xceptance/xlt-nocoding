@@ -8,7 +8,6 @@ import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.StoreItem;
-import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
@@ -31,11 +30,8 @@ public class StoreItemParser extends AbstractScriptItemParser
     {
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
 
-        // Get the current JsonNode from the parser where the Store item is located
-        final JsonNode jsonNode = storeNode.get(Constants.STORE);
-
         // Convert the node to a list of NameValuePair so it retains its order
-        final List<NameValuePair> storeItems = ParserUtils.getArrayNodeAsNameValuePair(jsonNode);
+        final List<NameValuePair> storeItems = ParserUtils.getArrayNodeAsNameValuePair(storeNode);
 
         for (final NameValuePair storeItem : storeItems)
         {

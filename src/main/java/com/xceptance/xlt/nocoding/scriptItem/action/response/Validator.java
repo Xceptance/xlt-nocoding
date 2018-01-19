@@ -1,5 +1,7 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.AbstractValidationMethod;
@@ -17,7 +19,7 @@ public class Validator extends AbstractResponseItem
     /**
      * The name of the validation
      */
-    private final String validationName;
+    private String validationName;
 
     /**
      * The extractor to use
@@ -55,6 +57,7 @@ public class Validator extends AbstractResponseItem
     @Override
     public void execute(final Context<?> context)
     {
+        fillDefaultData(context);
         // Execute the extractor
         getExtractor().execute(context);
 
@@ -80,9 +83,23 @@ public class Validator extends AbstractResponseItem
         }
     }
 
+    protected void fillDefaultData(final Context<?> context)
+    {
+        if (StringUtils.isBlank(getValidationName()))
+        {
+            final String validationName = "Validate Action-" + context.getActionIndex();
+            setValidationName(validationName);
+        }
+    }
+
     public String getValidationName()
     {
         return validationName;
+    }
+
+    public void setValidationName(final String validationName)
+    {
+        this.validationName = validationName;
     }
 
     public AbstractExtractor getExtractor()

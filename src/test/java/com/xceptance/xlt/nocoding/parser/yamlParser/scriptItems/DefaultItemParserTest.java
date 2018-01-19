@@ -17,7 +17,6 @@ import com.xceptance.xlt.nocoding.parser.ParserTest;
 import com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.storeDefault.StoreDefaultCookiesParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.storeDefault.StoreDefaultHeadersParser;
-import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.storeDefault.StoreDefaultItemParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.storeDefault.StoreDefaultParametersParser;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.storeDefault.StoreDefaultStaticsParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
@@ -25,7 +24,6 @@ import com.xceptance.xlt.nocoding.scriptItem.StoreItem;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefault;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultCookie;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultHeader;
-import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultItem;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultParameter;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultStatic;
 import com.xceptance.xlt.nocoding.util.Constants;
@@ -253,26 +251,6 @@ public class DefaultItemParserTest extends ParserTest
         Assert.assertTrue(storeDefault instanceof StoreDefaultStatic);
         Assert.assertEquals(Constants.STATIC, storeDefault.getVariableName());
         Assert.assertEquals(url, storeDefault.getValue());
-    }
-
-    /**
-     * Verifies default items can be parsed
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void testDefaultItemParsing() throws Exception
-    {
-        final String name = "name_1";
-        final String value = "val_1";
-        final JsonNodeFactory jf = new JsonNodeFactory(false);
-        final ObjectNode content = jf.objectNode();
-        content.put(name, value);
-
-        final StoreDefault storeDefault = new StoreDefaultItemParser().parse(content).get(0);
-        Assert.assertTrue(storeDefault instanceof StoreDefaultItem);
-        Assert.assertEquals(name, storeDefault.getVariableName());
-        Assert.assertEquals(value, storeDefault.getValue());
     }
 
 }

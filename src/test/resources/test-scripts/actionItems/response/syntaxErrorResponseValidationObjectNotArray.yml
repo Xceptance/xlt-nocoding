@@ -1,5 +1,5 @@
 - Action :
-  Response :
-    Validate :
-      validation_name :
-        Regex : .*
+    Response :
+      Validate :
+        validation_name :
+          Regex : .*

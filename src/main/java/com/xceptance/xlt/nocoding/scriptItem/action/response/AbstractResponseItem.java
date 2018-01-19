@@ -19,9 +19,4 @@ public abstract class AbstractResponseItem
      *            The {@link Context} with the last {@link WebResponse} and {@link DataStorage}
      */
     public abstract void execute(final Context<?> context);
-
-    protected void fillDefaultData(final Context<?> context)
-    {
-
-    }
 }

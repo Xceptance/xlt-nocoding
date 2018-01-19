@@ -45,7 +45,6 @@ public class HttpcodeValidator extends AbstractResponseItem
     /**
      * Uses the default value for httpcode if {@link #httpcode} is null or empty
      */
-    @Override
     protected void fillDefaultData(final Context<?> context)
     {
         if (httpcode == null || httpcode.isEmpty())
