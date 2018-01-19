@@ -11,7 +11,7 @@ import java.util.TreeMap;
  * 
  * @author ckeiner
  */
-public class RecentKeyTreeMap<K, V> extends TreeMap<K, V>
+public class RecentKeyTreeMap extends TreeMap<String, String>
 {
 
     /**
@@ -19,7 +19,12 @@ public class RecentKeyTreeMap<K, V> extends TreeMap<K, V>
      */
     private static final long serialVersionUID = -7785650967625657832L;
 
-    public RecentKeyTreeMap(final Comparator<? super K> caseInsensitiveOrder)
+    public RecentKeyTreeMap()
+    {
+        super(String.CASE_INSENSITIVE_ORDER);
+    }
+
+    public RecentKeyTreeMap(final Comparator<? super String> caseInsensitiveOrder)
     {
         super(caseInsensitiveOrder);
     }
@@ -28,9 +33,9 @@ public class RecentKeyTreeMap<K, V> extends TreeMap<K, V>
      * Uses the most recent Key-Name as Key-Value
      */
     @Override
-    public V put(final K arg0, final V arg1)
+    public String put(final String arg0, final String arg1)
     {
-        V output = null;
+        String output = null;
         if (this.containsKey(arg0))
         {
             output = this.remove(arg0);

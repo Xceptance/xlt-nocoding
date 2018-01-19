@@ -95,7 +95,7 @@ public class Request extends AbstractActionItem
         this.url = url;
         parameters = new ArrayList<NameValuePair>();
         cookies = new ArrayList<NameValuePair>();
-        headers = new RecentKeyTreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
+        headers = new RecentKeyTreeMap();
     }
 
     public String getUrl()
@@ -173,7 +173,7 @@ public class Request extends AbstractActionItem
     {
         if (headers != null && !headers.isEmpty())
         {
-            this.headers = new RecentKeyTreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
+            this.headers = new RecentKeyTreeMap();
             this.headers.putAll(headers);
         }
     }
@@ -279,7 +279,7 @@ public class Request extends AbstractActionItem
         if (context.getDefaultHeaders() != null)
         {
             // Create a tree map that is case insensitive (since headers are case insensitive
-            final RecentKeyTreeMap<String, String> defaultHeaders = new RecentKeyTreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
+            final RecentKeyTreeMap defaultHeaders = new RecentKeyTreeMap();
             // Get the default headers
             defaultHeaders.putAll(context.getDefaultHeaders().getItems());
             // Overwrite the default values with the current ones and/or add the current ones
