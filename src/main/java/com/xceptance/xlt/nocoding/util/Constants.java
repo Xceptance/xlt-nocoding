@@ -49,8 +49,6 @@ public class Constants
 
     public static final String DELETE = "Delete";
 
-    public static final String VARIABLES = "Variables";
-
     public static final String ENCODED = "Encoded";
 
     public static final String METHOD_POST = "POST";
@@ -100,9 +98,7 @@ public class Constants
      * <li>{@link #HEADERS}
      * <li>{@link #PARAMETERS}
      * <li>{@link #COOKIES}
-     * <li>{@link #VARIABLES}
      * <li>{@link #HEADER}
-     * <li>{@link #COOKIE}
      * <li>{@link #BODY}
      * <li>{@link #STATIC}
      * </ul>
@@ -190,7 +186,6 @@ public class Constants
         PERMITTEDLISTITEMS.add(HEADERS);
         PERMITTEDLISTITEMS.add(PARAMETERS);
         PERMITTEDLISTITEMS.add(COOKIES);
-        PERMITTEDLISTITEMS.add(VARIABLES);
         PERMITTEDLISTITEMS.add(HEADER);
         PERMITTEDLISTITEMS.add(BODY);
         PERMITTEDLISTITEMS.add(STATIC);
