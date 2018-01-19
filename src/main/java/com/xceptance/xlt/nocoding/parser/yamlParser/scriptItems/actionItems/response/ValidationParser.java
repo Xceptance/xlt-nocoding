@@ -12,7 +12,6 @@ import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.resp
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.response.validators.ValidationMethodParser;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Validator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.RegexpExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.AbstractValidationMethod;
 import com.xceptance.xlt.nocoding.util.Constants;
 
@@ -40,122 +39,83 @@ public class ValidationParser
                                                + validateNode.getClass().getSimpleName());
         }
         // Initialize variables
-        final List<Validator> validator = new ArrayList<Validator>();
-        String validationName = null;
+        final List<Validator> validatorList = new ArrayList<Validator>();
 
         // Get an Iterator over every validation
         final Iterator<JsonNode> iterator = validateNode.elements();
 
-        // Iterate over the elements
+        // Iterate over all validations
         while (iterator.hasNext())
         {
             // Get the next element, therefore the ObjectNode with a single validation in it
-            final JsonNode current = iterator.next();
-            // Get an iterator over the fieldNames, which should only be the name of the validation
-            final Iterator<String> fieldName = current.fieldNames();
-
-            // Iterate over the fieldNames
-            while (fieldName.hasNext())
-            {
-                // Get the next fieldName, which is also the name of the validation
-                validationName = fieldName.next();
-                AbstractExtractor extractor = null;
-                AbstractValidationMethod validation = null;
-
-                /*
-                 * Substructure of a validation
-                 */
-
-                // Get the substructure, that is the ObjectNode with the information of the validation
-                final JsonNode validationContent = current.get(validationName);
-                // Verify that it is an ObjectNode
-                if (!(validationContent instanceof ObjectNode))
-                {
-                    throw new IllegalArgumentException("Expected ObjectNode after the validation name, " + validationName + ", but was "
-                                                       + validateNode.getClass().getSimpleName());
-                }
-
-                // And get an iterator over the fieldNames, that is the content of a single Validator
-                final Iterator<String> name = validationContent.fieldNames();
-                // Iterate over the fieldNames of the substructure
-                while (name.hasNext())
-                {
-                    // Get the next fieldName
-                    final String nextName = name.next();
-
-                    // If it is a permitted extraction mode
-                    if (Constants.isPermittedExtraction(nextName))
-                    {
-                        // Check that the extractor is the first item and no other extractor was defined already
-                        if (validation == null && extractor == null)
-                        {
-                            // Parse the extractor
-                            XltLogger.runTimeLogger.debug("Extraction Mode is " + extractor);
-                            extractor = new ExtractorParser(nextName).parse(validationContent);
-                        }
-                        else
-                        {
-                            // Throw an error depending on why the parsing failed
-                            String errorMessage = null;
-                            if (validation != null)
-                            {
-                                errorMessage = "Extraction must be parsed before the Validation Method!";
-                            }
-                            else if (extractor != null)
-                            {
-                                errorMessage = "Cannot parse two extractors!";
-                            }
-                            throw new IllegalArgumentException(errorMessage);
-                        }
-                    }
-                    // If it is a permitted validation method
-                    else if (Constants.isPermittedValidationMethod(nextName))
-                    {
-                        // Check that the validation is the second item and no other validation was defined already
-                        if (extractor != null && validation == null)
-                        {
-                            // Parse the validation method
-                            XltLogger.runTimeLogger.debug("Validation Method is " + extractor);
-                            validation = new ValidationMethodParser(nextName).parse(validationContent);
-                        }
-                        else
-                        {
-                            // Throw an error depending on why the parsing failed
-                            String errorMessage = null;
-                            if (extractor == null)
-                            {
-                                errorMessage = "Validation Method must be parsed after the extractor!";
-                            }
-                            else if (validation != null)
-                            {
-                                errorMessage = "Cannot parse two validation method!";
-                            }
-                            throw new IllegalArgumentException(errorMessage);
-                        }
-                    }
-                    // If it is group
-                    else if (nextName.equals(Constants.GROUP))
-                    {
-                        if (!(extractor instanceof RegexpExtractor))
-                        {
-                            throw new IllegalArgumentException("Group cannot be specified unless the extractor is a RegexpExtractor, but is "
-                                                               + extractor.getClass().getSimpleName());
-                        }
-                    }
-                    // If it is none of the above, nextName was not a permitted validation item
-                    else
-                    {
-                        throw new IllegalArgumentException("Unknown Validation Item " + nextName);
-                    }
-                }
-                // Add the new validator to the list of validators
-                validator.add(new Validator(validationName, extractor, validation));
-                // Print a debug statement
-                XltLogger.runTimeLogger.debug("Added " + validationName + " to Validations");
-            }
+            final JsonNode validationNode = iterator.next();
+            final Validator validator = parseSingleValidator(validationNode);
+            // Print a debug statement
+            XltLogger.runTimeLogger.debug("Added " + validator.getValidationName() + " to Validations.");
+            validatorList.add(validator);
         }
         // Return all validations
-        return validator;
+        return validatorList;
+    }
+
+    protected Validator parseSingleValidator(final JsonNode validation)
+    {
+        final String validationName = validation.fieldNames().next();
+        final JsonNode validationContent = validation.get(validationName);
+
+        // Verify the validation is an ObjectNode
+        if (!(validationContent instanceof ObjectNode))
+        {
+            throw new IllegalArgumentException("Expected ObjectNode after the validation name, " + validationName + ", but was "
+                                               + validationContent.getClass().getSimpleName());
+        }
+
+        // Get the fieldNames, that is the extraction method and validation method name
+        final Iterator<String> contentKeys = validationContent.fieldNames();
+        AbstractExtractor extractor = null;
+        AbstractValidationMethod validationMethod = null;
+        // Iterate over all content keys
+        while (contentKeys.hasNext())
+        {
+            // Get the next contentKey
+            final String contentKey = contentKeys.next();
+            // If it is an extraction, parse the extraction
+            if (Constants.isPermittedExtraction(contentKey))
+            {
+                // Verify, that no extractor was parsed already
+                if (extractor != null)
+                {
+                    throw new IllegalArgumentException("Cannot parse two extraction methods!");
+                }
+                // Parse the extractor
+                XltLogger.runTimeLogger.debug("Extraction Mode is " + extractor);
+                extractor = new ExtractorParser(contentKey).parse(validationContent);
+            }
+            // If it is a validation method, parse the validation method
+            else if (Constants.isPermittedValidationMethod(contentKey))
+            {
+                // Verify, that an extractor was parsed already
+                if (extractor == null)
+                {
+                    throw new IllegalArgumentException("Cannot parse validation before the extraction!");
+                }
+                // Verify, that no validation was parsed already
+                if (validationMethod != null)
+                {
+                    throw new IllegalArgumentException("Cannot parse two validation methods!");
+                }
+                // Parse the validation method
+                XltLogger.runTimeLogger.debug("Validation Method is " + extractor);
+                validationMethod = new ValidationMethodParser(contentKey).parse(validationContent);
+            }
+            // If it is not Group OR Group and extractor is null, throw an error
+            else if (!Constants.GROUP.equals(contentKey) || extractor == null)
+            {
+                throw new IllegalArgumentException("Unknown Validation Item: " + contentKey);
+            }
+        }
+
+        return new Validator(validationName, extractor, validationMethod);
     }
 
 }
