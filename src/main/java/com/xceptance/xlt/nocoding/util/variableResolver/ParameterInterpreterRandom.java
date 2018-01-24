@@ -49,7 +49,7 @@ public class ParameterInterpreterRandom
 
     public String String(final String characters, final int length)
     {
-        return RandomStringUtils.random(length, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
+        return RandomStringUtils.random(length, characters);
     }
 
     public String DigitString(final int length)
