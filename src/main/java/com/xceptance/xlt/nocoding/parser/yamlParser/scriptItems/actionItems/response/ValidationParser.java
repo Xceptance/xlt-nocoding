@@ -35,20 +35,19 @@ public class ValidationParser
         // Verify that an array was used and not an object
         if (!(validateNode instanceof ArrayNode))
         {
-            throw new IllegalArgumentException("Expected ArrayNode in the validate block but was "
-                                               + validateNode.getClass().getSimpleName());
+            throw new IllegalArgumentException("Expected ArrayNode after Validate, but was " + validateNode.getClass().getSimpleName());
         }
         // Initialize variables
         final List<Validator> validatorList = new ArrayList<Validator>();
 
         // Get an Iterator over every validation
-        final Iterator<JsonNode> iterator = validateNode.elements();
+        final Iterator<JsonNode> iteratorOverValidations = validateNode.elements();
 
         // Iterate over all validations
-        while (iterator.hasNext())
+        while (iteratorOverValidations.hasNext())
         {
             // Get the next element, therefore the ObjectNode with a single validation in it
-            final JsonNode validationNode = iterator.next();
+            final JsonNode validationNode = iteratorOverValidations.next();
             final Validator validator = parseSingleValidator(validationNode);
             // Print a debug statement
             XltLogger.runTimeLogger.debug("Added " + validator.getValidationName() + " to Validations.");

@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.response.extractor.ExtractorParser;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.RegexpExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.store.AbstractResponseStore;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.store.ResponseStore;
 import com.xceptance.xlt.nocoding.util.Constants;
@@ -35,82 +34,76 @@ public class ResponseStoreParser
         // Verify that an array was used and not an object
         if (!(responseStoreNode instanceof ArrayNode))
         {
-            throw new IllegalArgumentException("Expected ArrayNode in the store block but was "
-                                               + responseStoreNode.getClass().getSimpleName());
+            throw new IllegalArgumentException("Expected ArrayNode after Store, but was " + responseStoreNode.getClass().getSimpleName());
         }
         // Initialize variables
-        String variableName = null;
+        final String variableName = null;
         final List<AbstractResponseStore> responseStores = new ArrayList<AbstractResponseStore>();
         // Get an Iterator over every ResponseStore
-        final Iterator<JsonNode> iterator = responseStoreNode.elements();
+        final Iterator<JsonNode> iteratorOverStores = responseStoreNode.elements();
 
         // As long as we have another element
-        while (iterator.hasNext())
+        while (iteratorOverStores.hasNext())
         {
             // Get the next element, therefore the ObjectNode with a single ResponseStore in it
-            final JsonNode current = iterator.next();
-            // Get an iterator over the fieldNames, which should only be the name of the variable
-            final Iterator<String> fieldName = current.fieldNames();
+            final JsonNode storeNode = iteratorOverStores.next();
+            final AbstractResponseStore responseStore = parseSingleStore(storeNode);
+            // Print a debug statement
+            XltLogger.runTimeLogger.debug("Added " + responseStore.getVariableName() + " to the response stores.");
+            responseStores.add(responseStore);
+        }
+        return responseStores;
+    }
 
-            // As long as we have another fieldName
-            while (fieldName.hasNext())
+    public AbstractResponseStore parseSingleStore(final JsonNode singleStore)
+    {
+        AbstractResponseStore responseStore = null;
+        // Get an iterator over the fieldNames, which should only be the name of the variable
+        final String variableName = singleStore.fieldNames().next();
+
+        // Get the substructure, that is the ObjectNode with the information of the ResponseStore
+        final JsonNode storeContent = singleStore.get(variableName);
+        // Verify that it is an ObjectNode
+        if (!(storeContent instanceof ObjectNode))
+        {
+            throw new IllegalArgumentException("Expected ObjectNode after " + variableName + ", but was "
+                                               + storeContent.getClass().getSimpleName());
+        }
+        // And get an iterator over the fieldNames, that is the content of a single ResponseStore
+        final Iterator<String> contentFields = storeContent.fieldNames();
+        // If we have a next name
+        if (contentFields.hasNext())
+        {
+            AbstractExtractor extractor = null;
+            // Build an extractor depending on the next element in the iterator
+            String nextName = contentFields.next();
+            if (Constants.isPermittedExtraction(nextName))
             {
-                // Get the next fieldName, which is also the name of the variable
-                variableName = fieldName.next();
-
-                /*
-                 * Substructure of Store
-                 */
-
-                // Get the substructure, that is the ObjectNode with the information of the ResponseStore
-                final JsonNode storeContent = current.get(variableName);
-                // Verify that it is an ObjectNode
-                if (!(storeContent instanceof ObjectNode))
+                extractor = new ExtractorParser(nextName).parse(storeContent);
+                // If we have another name, it must be Constants.GROUP
+                if (contentFields.hasNext())
                 {
-                    throw new IllegalArgumentException("Expected ObjectNode after the variable name, " + variableName + ", but was "
-                                                       + responseStoreNode.getClass().getSimpleName());
-                }
-                // And get an iterator over the fieldNames, that is the content of a single ResponseStore
-                final Iterator<String> name = storeContent.fieldNames();
-                // If we have a next name
-                if (name.hasNext())
-                {
-                    AbstractExtractor extractor = null;
-                    // Build an extractor depending on the next element in the iterator
-                    String nextName = name.next();
-                    if (Constants.isPermittedExtraction(nextName))
+                    nextName = contentFields.next();
+                    // Verify the value of the nextName is the allowed field Constants.GROUP
+                    if (nextName.equals(Constants.GROUP))
                     {
-                        extractor = new ExtractorParser(nextName).parse(storeContent);
-                        // If we have another name, it must be Constants.GROUP
-                        if (name.hasNext())
-                        {
-                            nextName = name.next();
-                            // Verify the value of the nextName is the allowed field Constants.GROUP
-                            if (nextName.equals(Constants.GROUP))
-                            {
-                                // TODO should ResponseStore really check this again? Extractor already does
-                                // Verify the extractor is a RegexpExtractor, as no other AbstractExtractor has a second argument
-                                if (!(extractor instanceof RegexpExtractor))
-                                {
-                                    throw new IllegalArgumentException("Not a permitted ResponseStore item : " + nextName);
-                                }
-                            }
-                            else
-                            {
-                                throw new IllegalArgumentException("Unexpected argument " + nextName);
-                            }
-                        }
-                        responseStores.add(new ResponseStore(variableName, extractor));
+                        // Do nothing
+                    }
+                    else
+                    {
+                        throw new IllegalArgumentException("Unexpected argument " + nextName);
                     }
                 }
-
-                // Log the variableName
-                XltLogger.runTimeLogger.debug("Added " + variableName + " to ResponseStore");
+                responseStore = new ResponseStore(variableName, extractor);
             }
         }
 
+        if (responseStore == null)
+        {
+            throw new IllegalArgumentException("Could not create an AbstractResponseStore. Is an extraction missing?");
+        }
         // Return all responseStores
-        return responseStores;
+        return responseStore;
     }
 
 }
