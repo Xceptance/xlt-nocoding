@@ -1,12 +1,15 @@
 package com.xceptance.xlt.nocoding.util.context;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.SgmlPage;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.WebResponse;
+import com.gargoylesoftware.htmlunit.WebResponseData;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.api.engine.Session;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
 import com.xceptance.xlt.api.util.XltProperties;
@@ -111,7 +114,23 @@ public class DomContext extends Context<SgmlPage>
         }
         else
         {
-            ((SessionImpl) Session.getCurrent()).getRequestHistory().add(new LightWeightPageImpl(getWebResponse(), name, getWebClient()));
+            // Check if the webRequest was xhr
+            if (getWebResponse().getWebRequest().isXHR())
+            {
+                // If it was xhr, build an empty WebResponse
+                final byte[] bytes = null;
+                final WebResponseData webResponseData = new WebResponseData(bytes, 200, "OK", new ArrayList<NameValuePair>());
+                final WebResponse webResponse = new WebResponse(webResponseData, getWebResponse().getWebRequest(),
+                                                                getWebResponse().getLoadTime());
+                // Append an empty page to the webResponse (you can still see the original WebResponse in the ResultBrowser)
+                ((SessionImpl) Session.getCurrent()).getRequestHistory().add(new LightWeightPageImpl(webResponse, name, getWebClient()));
+            }
+            // If it wasn't an XHR, build a LightWeightPage from the WebResponse
+            else
+            {
+                ((SessionImpl) Session.getCurrent()).getRequestHistory()
+                                                    .add(new LightWeightPageImpl(getWebResponse(), name, getWebClient()));
+            }
         }
     }
 

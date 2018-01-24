@@ -440,12 +440,21 @@ public class Request extends AbstractActionItem
         if (getXhr() != null && Boolean.valueOf(getXhr()))
         {
             webRequest.setXHR();
+
+            // Set XHR headers
+            webRequest.getAdditionalHeaders().put("X-Requested-With", "XMLHttpRequest");
+            // If there was a previous WebResponse, set the Url als Referer
+            if (context.getWebResponse() != null)
+            {
+                // Get the url of the old webResponse
+                webRequest.getAdditionalHeaders().put("Referer", context.getWebResponse().getWebRequest().getUrl().toString());
+            }
         }
 
         // Set headers if they aren't null or empty
         if (getHeaders() != null || !getHeaders().isEmpty())
         {
-            webRequest.setAdditionalHeaders(headers);
+            webRequest.getAdditionalHeaders().putAll(headers);
         }
 
         // Set parameters if they aren't null or empty
