@@ -1,15 +1,12 @@
 package com.xceptance.xlt.nocoding.util.context;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.SgmlPage;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.WebResponse;
-import com.gargoylesoftware.htmlunit.WebResponseData;
-import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.gargoylesoftware.htmlunit.xml.XmlPage;
 import com.xceptance.xlt.api.engine.Session;
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
@@ -165,19 +162,14 @@ public class LightWeightContext extends Context<LightWeightPage>
         {
             ((SessionImpl) Session.getCurrent()).getRequestHistory().add(getPage());
         }
-        // If getPage is null, which should only happen if the first request is a XHR
+        // If getPage is null, which happens for all requests, that only have XHR or no requests as predecessor
         else
         {
             // Check if the webRequest was xhr
             if (getWebResponse().getWebRequest().isXHR())
             {
-                // If it was xhr, build an empty WebResponse
-                final byte[] bytes = null;
-                final WebResponseData webResponseData = new WebResponseData(bytes, 200, "OK", new ArrayList<NameValuePair>());
-                final WebResponse webResponse = new WebResponse(webResponseData, getWebResponse().getWebRequest(),
-                                                                getWebResponse().getLoadTime());
-                // Append an empty page to the webResponse (you can still see the original WebResponse in the ResultBrowser)
-                ((SessionImpl) Session.getCurrent()).getRequestHistory().add(new LightWeightPageImpl(webResponse, name, getWebClient()));
+                // Append an empty page to the result browser
+                ((SessionImpl) Session.getCurrent()).getRequestHistory().add(name);
             }
             // If it wasn't an XHR, build a LightWeightPage from the WebResponse
             else
