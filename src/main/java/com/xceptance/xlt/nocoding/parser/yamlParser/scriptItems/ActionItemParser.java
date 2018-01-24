@@ -32,7 +32,7 @@ public class ActionItemParser extends AbstractScriptItemParser
     /**
      * Parses the action item to a list of {@link ScriptItem}s.
      * 
-     * @param actionNodeee
+     * @param actionNode
      *            The {@link JsonNode} with the the action item
      * @return A list of <code>ScriptItem</code>s containing a single {@link Action}.
      */

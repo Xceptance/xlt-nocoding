@@ -185,7 +185,7 @@ public abstract class Context<T>
      * Sets the index as new {@link #actionIndex}
      * 
      * @param actionIndex
-     *            The index {@link this#actionIndex}
+     *            The index to set {@link #actionIndex} to
      */
     public void setActionIndex(final int actionIndex)
     {
