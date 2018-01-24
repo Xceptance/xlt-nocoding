@@ -85,8 +85,7 @@ public class XhrItemParserTest extends CsvParserTestUtils
         Assert.assertTrue(responseItems.get(1) instanceof Validator);
         final Validator validator = (Validator) responseItems.get(1);
 
-        // TODO find a better validation name
-        // Assert.assertEquals("Validate " + name, validator.getValidationName());
+        Assert.assertEquals("Validate " + name, validator.getValidationName());
         Assert.assertTrue(validator.getExtractor() instanceof RegexpExtractor);
         Assert.assertEquals(regexp, validator.getExtractor().getExtractionExpression());
         Assert.assertTrue("Validator is not a " + MatchesValidator.class.getSimpleName(),

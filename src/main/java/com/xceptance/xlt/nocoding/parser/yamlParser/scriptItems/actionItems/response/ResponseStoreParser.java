@@ -36,8 +36,6 @@ public class ResponseStoreParser
         {
             throw new IllegalArgumentException("Expected ArrayNode after Store, but was " + responseStoreNode.getClass().getSimpleName());
         }
-        // Initialize variables
-        final String variableName = null;
         final List<AbstractResponseStore> responseStores = new ArrayList<AbstractResponseStore>();
         // Get an Iterator over every ResponseStore
         final Iterator<JsonNode> iteratorOverStores = responseStoreNode.elements();
