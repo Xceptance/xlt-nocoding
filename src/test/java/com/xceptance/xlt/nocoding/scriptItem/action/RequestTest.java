@@ -263,7 +263,6 @@ public class RequestTest
 
         request = new Request(url);
         final Map<String, String> newHeader = new RecentKeyTreeMap();
-        newHeader.put("Accept-Encoding", "gzip, deflate");
         newHeader.put("AccEpt", "application/xhtml+xml");
         newHeader.put("COOkIE", "cookieName=cookieValue");
         request.setHeaders(newHeader);
@@ -271,9 +270,9 @@ public class RequestTest
         webRequest = request.buildWebRequest(context);
 
         final Map<String, String> actualHeader = webRequest.getAdditionalHeaders();
-
-        actualHeader.forEach((key, value) -> {
-            if (!(newHeader.containsKey(key)))
+        // Check new Header keys are in actual header
+        newHeader.forEach((key, value) -> {
+            if (!(actualHeader.containsKey(key)))
             {
                 throw new AssertionError();
             }
@@ -283,6 +282,7 @@ public class RequestTest
                 Assert.assertEquals(newHeader.get(key), value);
             }
         });
+
     }
 
     /**
