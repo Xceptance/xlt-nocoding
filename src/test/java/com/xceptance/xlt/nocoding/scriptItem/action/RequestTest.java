@@ -82,11 +82,8 @@ public class RequestTest
         // Parameters
         expected.setRequestParameters(parameters);
         // Headers
-        final HashMap<String, String> defaultHeaders = new HashMap<String, String>();
-        defaultHeaders.putAll(headers);
-        defaultHeaders.put("Accept", "*/*");
-        defaultHeaders.put("Accept-Encoding", "gzip, deflate");
-        expected.setAdditionalHeaders(headers);
+        expected.getAdditionalHeaders().putAll(context.getDefaultHeaders().getItems());
+        expected.getAdditionalHeaders().putAll(headers);
         if (xhr)
         {
             expected.setXHR();
@@ -203,7 +200,8 @@ public class RequestTest
         expected.setRequestParameters(parameters);
         // Headers
 
-        expected.setAdditionalHeaders(headers);
+        expected.getAdditionalHeaders().putAll(context.getDefaultHeaders().getItems());
+        expected.getAdditionalHeaders().putAll(headers);
         if (xhr)
         {
             expected.setXHR();
@@ -264,7 +262,8 @@ public class RequestTest
         }
 
         request = new Request(url);
-        final Map<String, String> newHeader = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
+        final Map<String, String> newHeader = new RecentKeyTreeMap();
+        newHeader.put("Accept-Encoding", "gzip, deflate");
         newHeader.put("AccEpt", "application/xhtml+xml");
         newHeader.put("COOkIE", "cookieName=cookieValue");
         request.setHeaders(newHeader);

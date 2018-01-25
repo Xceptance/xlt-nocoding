@@ -439,7 +439,10 @@ public class Request extends AbstractActionItem
         // Set headers if they aren't null or empty
         if (getHeaders() != null || !getHeaders().isEmpty())
         {
-            webRequest.setAdditionalHeaders(headers);
+            final RecentKeyTreeMap headerExchange = new RecentKeyTreeMap();
+            headerExchange.putAll(webRequest.getAdditionalHeaders());
+            headerExchange.putAll(headers);
+            webRequest.setAdditionalHeaders(headerExchange);
         }
         // Set Xhr if it is specified and can be converted to a boolean
         if (getXhr() != null && Boolean.valueOf(getXhr()))
