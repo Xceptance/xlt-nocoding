@@ -255,7 +255,7 @@ public class Request extends AbstractActionItem
          * Set default cookies
          */
 
-        if (context.getDefaultParameters() != null)
+        if (context.getDefaultCookies() != null)
         {
             // Get default cookies
             final List<NameValuePair> defaultCookies = context.getDefaultCookies().getItems();
@@ -436,6 +436,11 @@ public class Request extends AbstractActionItem
         // Create a WebRequest
         final WebRequest webRequest = new WebRequest(url, HttpMethod.valueOf(getHttpMethod()));
 
+        // Set headers if they aren't null or empty
+        if (getHeaders() != null || !getHeaders().isEmpty())
+        {
+            webRequest.setAdditionalHeaders(headers);
+        }
         // Set Xhr if it is specified and can be converted to a boolean
         if (getXhr() != null && Boolean.valueOf(getXhr()))
         {
@@ -449,12 +454,6 @@ public class Request extends AbstractActionItem
                 // Get the url of the old webResponse
                 webRequest.getAdditionalHeaders().put("Referer", context.getWebResponse().getWebRequest().getUrl().toString());
             }
-        }
-
-        // Set headers if they aren't null or empty
-        if (getHeaders() != null || !getHeaders().isEmpty())
-        {
-            webRequest.getAdditionalHeaders().putAll(headers);
         }
 
         // Set parameters if they aren't null or empty

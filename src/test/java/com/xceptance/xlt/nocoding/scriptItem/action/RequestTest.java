@@ -82,6 +82,10 @@ public class RequestTest
         // Parameters
         expected.setRequestParameters(parameters);
         // Headers
+        final HashMap<String, String> defaultHeaders = new HashMap<String, String>();
+        defaultHeaders.putAll(headers);
+        defaultHeaders.put("Accept", "*/*");
+        defaultHeaders.put("Accept-Encoding", "gzip, deflate");
         expected.setAdditionalHeaders(headers);
         if (xhr)
         {
@@ -122,7 +126,7 @@ public class RequestTest
         final Boolean encodeBody = false;
         final Boolean encodeParameters = false;
         final Map<String, String> headers = new HashMap<String, String>();
-        final Boolean xhr = true;
+        final Boolean xhr = false;
 
         context.getVariables().store(Constants.URL, url);
         context.getVariables().store(Constants.METHOD, method.toString());
@@ -198,6 +202,7 @@ public class RequestTest
         // Parameters
         expected.setRequestParameters(parameters);
         // Headers
+
         expected.setAdditionalHeaders(headers);
         if (xhr)
         {

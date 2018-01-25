@@ -37,8 +37,6 @@ public class NoCodingPropertyAdmin
 
     public static final String DOWNLOADTHREADS = "com.xceptance.xlt.staticContent.downloadThreads";
 
-    public static final String TLSVERSION = "com.xceptance.xlt.nocoding.TLSVersion";
-
     public static final String MODE = "com.xceptance.xlt.nocoding.mode";
 
     public static final String LIGHTWEIGHT = "light";
@@ -61,20 +59,6 @@ public class NoCodingPropertyAdmin
         setLoadStaticContent(webClient);
         setCredentials(webClient);
         setRedirectEnabled(webClient);
-        setTlsVersion(webClient);
-    }
-
-    private void setTlsVersion(final XltWebClient webClient)
-    {
-        final String tlsVersion = getPropertyByKey(TLSVERSION);
-        if (tlsVersion != null)
-        {
-            webClient.getOptions().setSSLClientProtocols(new String[]
-                {
-                  tlsVersion
-                });
-            XltLogger.runTimeLogger.debug(getConfigWebClient("TLSVersion", tlsVersion));
-        }
     }
 
     private void setJavaScriptEnabled(final XltWebClient webClient)
