@@ -309,7 +309,7 @@ public class Request extends AbstractActionItem
      * Tries to resolve all variables of non-null attributes
      * 
      * @param context
-     *            The {@link Context} with the {@link DataStorage}
+     *            The {@link Context} with the {@link VariableResolver}
      * @throws InvalidArgumentException
      */
     void resolveValues(final Context<?> context) throws InvalidArgumentException

@@ -3,6 +3,8 @@ package com.xceptance.xlt.nocoding.scriptItem.action;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openqa.selenium.InvalidArgumentException;
+
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
@@ -10,6 +12,7 @@ import com.xceptance.xlt.nocoding.util.ActionItemUtil;
 import com.xceptance.xlt.nocoding.util.WebAction;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
+import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
 /**
  * <code>Action</code> is the data model for the "Action" type of the execution.<br>
@@ -91,6 +94,21 @@ public class Action implements ScriptItem
     }
 
     /**
+     * Tries to resolve all variables of non-null attributes
+     * 
+     * @param context
+     *            The {@link Context} with the {@link VariableResolver}
+     * @throws InvalidArgumentException
+     */
+    protected void resolveValues(final Context<?> context)
+    {
+        if (getName() != null)
+        {
+            setName(context.resolveString(getName()));
+        }
+    }
+
+    /**
      * Executes the {@link Action} by building a {@link WebAction} with the {@link #actionItems}. The <code>WebAction</code>
      * then executes the <code>actionItems</code>. In the end, the loaded page gets appended to the result browser.
      * 
@@ -102,6 +120,8 @@ public class Action implements ScriptItem
     {
         // Fill default data
         fillDefaultData(context);
+        // Resolve values
+        resolveValues(context);
 
         // Create the WebAction with the data of this action
         final WebAction action = new WebAction(name, context, getActionItems());

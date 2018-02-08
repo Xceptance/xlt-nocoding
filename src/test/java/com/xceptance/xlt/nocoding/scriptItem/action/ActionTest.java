@@ -21,7 +21,7 @@ import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
  * 
  * @author ckeiner
  */
-public class LightWeightActionTest
+public class ActionTest
 {
     Context<?> context;
 
@@ -135,7 +135,7 @@ public class LightWeightActionTest
     }
 
     /**
-     * Verifies {@link Action} does not resolve {@link Action#getName()}
+     * Verifies {@link Action} does resolve {@link Action#getName()}
      * 
      * @throws Throwable
      */
@@ -152,7 +152,7 @@ public class LightWeightActionTest
 
         final Action action = new Action();
         action.execute(context);
-        Assert.assertNotEquals("TestName", action.getName());
+        Assert.assertEquals("TestName", action.getName());
     }
 
 }
