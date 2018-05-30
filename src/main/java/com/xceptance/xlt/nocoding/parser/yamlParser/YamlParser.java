@@ -27,7 +27,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
  * 
  * @author ckeiner
  */
-public class YamlParser extends Parser
+public class YamlParser implements Parser
 {
 
     /**

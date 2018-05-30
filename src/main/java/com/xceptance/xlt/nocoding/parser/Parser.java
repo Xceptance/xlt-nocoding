@@ -17,7 +17,7 @@ import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
  * 
  * @author ckeiner
  */
-public abstract class Parser
+public interface Parser
 {
     /**
      * Parses the content of the file at <code>pathToFile</code> to a list of {@link ScriptItem}s
@@ -48,7 +48,7 @@ public abstract class Parser
      *             If the <code>FileReader</code> cannot be created or <code>Url.openStream()</code> fails to open the
      *             stream.
      */
-    public Reader createReader(final String pathToFile) throws IOException
+    public default Reader createReader(final String pathToFile) throws IOException
     {
         Reader fileReader = null;
         // Create a file from the path

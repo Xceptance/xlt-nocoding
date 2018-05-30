@@ -23,7 +23,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
  * 
  * @author ckeiner
  */
-public class CsvParser extends Parser
+public class CsvParser implements Parser
 {
 
     /**
