@@ -1,5 +1,7 @@
 package com.xceptance.xlt.nocoding.scriptItem.action;
 
+import java.io.Serializable;
+
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.util.context.Context;
 
@@ -8,7 +10,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
  * 
  * @author ckeiner
  */
-public abstract class AbstractActionItem
+public abstract class AbstractActionItem implements Serializable
 {
     /**
      * Executes the action item

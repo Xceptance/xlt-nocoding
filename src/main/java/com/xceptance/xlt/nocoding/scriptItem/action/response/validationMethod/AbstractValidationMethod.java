@@ -1,5 +1,6 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.xceptance.xlt.nocoding.util.context.Context;
@@ -9,7 +10,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
  * 
  * @author ckeiner
  */
-public abstract class AbstractValidationMethod
+public abstract class AbstractValidationMethod implements Serializable
 {
 
     /**

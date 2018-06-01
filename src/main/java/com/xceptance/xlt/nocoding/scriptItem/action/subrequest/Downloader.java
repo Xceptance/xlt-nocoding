@@ -1,5 +1,6 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.subrequest;
 
+import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ import com.xceptance.xlt.engine.XltWebClient;
  * Loads all the static content stuff with a passed {@link XltWebClient}, distributed on some threads. For this the
  * {@link StaticContentDownloader} is used.
  */
-public class Downloader
+public class Downloader implements Serializable
 {
     private final List<String> urls = new ArrayList<>();
 

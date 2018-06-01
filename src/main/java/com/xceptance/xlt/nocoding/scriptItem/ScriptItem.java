@@ -1,11 +1,13 @@
 package com.xceptance.xlt.nocoding.scriptItem;
 
+import java.io.Serializable;
+
 import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Defines the behavior of a scriptItem. A script item is either an "Action", "Store", or default definitions.
  */
-public interface ScriptItem
+public interface ScriptItem extends Serializable
 {
 
     /**

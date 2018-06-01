@@ -22,6 +22,7 @@ import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.Action;
 import com.xceptance.xlt.nocoding.util.FileFinderUtils;
 import com.xceptance.xlt.nocoding.util.NoCodingPropertyAdmin;
+import com.xceptance.xlt.nocoding.util.ObjectUtils;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.context.DomContext;
 import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
@@ -110,7 +111,15 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
         // Create the appropriate parser
         this.parser = getParserFor(filepath);
         // Get or parse the file
-        itemList = getOrParse(filepath);
+        try
+        {
+            itemList = getOrParse(filepath);
+        }
+        catch (final Exception e)
+        {
+            XltLogger.runTimeLogger.error("Error while cloning.");
+            throw new IOException(e.getMessage());
+        }
     }
 
     /**
@@ -203,15 +212,14 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
     /**
      * Gets the list of <code>ScriptItem</code>s either by parsing them or from the cache. <br>
      * On the first execution, it gets the list from the parser and saves it in {@link #DATA_CACHE}. Then, it gets the list
-     * out of the {@link #DATA_CACHE}.
+     * out of a deep copy from the {@link #DATA_CACHE}.
      * 
      * @param filePath
      *            The path to the file that is to be parsed
      * @return A list of <code>ScriptItem</code>s generated from the provided file
-     * @throws IOException
-     *             Thrown when the parser encounters an error
+     * @throws Exception
      */
-    protected List<ScriptItem> getOrParse(final String filePath) throws IOException
+    protected List<ScriptItem> getOrParse(final String filePath) throws Exception
     {
         synchronized (DATA_CACHE)
         {
@@ -220,7 +228,13 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
             {
                 XltLogger.runTimeLogger.debug("Parsing file...");
                 result = parser.parse(filePath);
-                DATA_CACHE.put(filePath, result);
+                // Put a clone of the parsed data in the cache
+                DATA_CACHE.put(filePath, ObjectUtils.cloneObject(result));
+            }
+            // Otherwise, clone the objects, so we do not have problems with concurrency
+            else
+            {
+                result = ObjectUtils.cloneObject(DATA_CACHE.get(filePath));
             }
             return result;
         }

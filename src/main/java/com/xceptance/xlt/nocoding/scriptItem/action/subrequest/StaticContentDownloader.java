@@ -16,6 +16,7 @@
  */
 package com.xceptance.xlt.nocoding.scriptItem.action.subrequest;
 
+import java.io.Serializable;
 import java.net.URL;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -36,7 +37,7 @@ import com.xceptance.xlt.engine.XltWebClient;
  * simulate the download behavior of real browsers. The number of threads working in parallel is controlled by
  * configuration. Note that there is no differentiation between requests to different domains.
  */
-public class StaticContentDownloader
+public class StaticContentDownloader implements Serializable
 {
     /**
      * The maximum time to wait for {@link #ongoingRequestsCount} to become 0.

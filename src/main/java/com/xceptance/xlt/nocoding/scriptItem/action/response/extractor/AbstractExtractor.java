@@ -1,5 +1,6 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.response.extractor;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
  * 
  * @author ckeiner
  */
-public abstract class AbstractExtractor
+public abstract class AbstractExtractor implements Serializable
 {
 
     /**
