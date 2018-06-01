@@ -6,7 +6,7 @@
 
     <groupId>com.xceptance</groupId>
     <artifactId>xlt-nocoding</artifactId>
-    <version>1.1.0-snapshot</version>
+    <version>2.0.0</version>
 
     <name>xlt-nocoding</name>
     <description>A library based on XLT to run Web test cases that are written in either YAML or CSV format.</description>
