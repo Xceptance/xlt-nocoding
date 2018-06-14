@@ -3,6 +3,7 @@ package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.req
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -50,7 +51,7 @@ public class RequestParser extends AbstractActionItemParser
         String encodeParameters = null;
         final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
         final Map<String, String> headers = new HashMap<String, String>();
-        final List<NameValuePair> cookies = new ArrayList<NameValuePair>();
+        final Map<String, String> cookies = new LinkedHashMap<String, String>();
         String body = null;
         String encodeBody = null;
 
@@ -104,7 +105,7 @@ public class RequestParser extends AbstractActionItemParser
                     break;
 
                 case Constants.COOKIES:
-                    cookies.addAll(new CookieParser().parse(requestNode.get(fieldName)));
+                    cookies.putAll(new CookieParser().parse(requestNode.get(fieldName)));
                     break;
 
                 case Constants.BODY:

@@ -217,7 +217,7 @@ public abstract class Context<T>
      * Data Storage
      */
 
-    public DuplicateStorage getDefaultCookies()
+    public UniqueStorage getDefaultCookies()
     {
         return getDataStorage().getDefaultCookies();
     }

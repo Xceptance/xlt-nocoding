@@ -3,7 +3,7 @@ package com.xceptance.xlt.nocoding.scriptItem.storeDefault;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.context.Context;
-import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.DuplicateStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage.UniqueStorage;
 
 /**
  * Stores a default cookie.
@@ -35,7 +35,7 @@ public class StoreDefaultCookie extends StoreDefault
         // Resolve values
         super.resolveValues(context);
         // Get the appropriate storage
-        final DuplicateStorage storage = context.getDefaultCookies();
+        final UniqueStorage storage = context.getDefaultCookies();
         // If the value is not "delete"
         if (!value.equals(Constants.DELETE))
         {

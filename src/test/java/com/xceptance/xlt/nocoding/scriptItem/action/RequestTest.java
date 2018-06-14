@@ -7,8 +7,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.junit.Assert;
@@ -18,8 +20,10 @@ import org.openqa.selenium.InvalidArgumentException;
 
 import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebRequest;
+import com.gargoylesoftware.htmlunit.util.Cookie;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.api.util.XltProperties;
+import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultHeader;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultParameter;
@@ -495,7 +499,10 @@ public class RequestTest
     }
 
     /**
-     * Verifies cookies can be set
+     * Verifies cookies are set in the {@link XltWebClient}.<br>
+     * Given two cookies are set in the {@link Request},<br>
+     * when the {@link WebRequest} is built,<br>
+     * Then the WebClient should have both cookies.
      * 
      * @throws InvalidArgumentException
      * @throws MalformedURLException
@@ -506,47 +513,26 @@ public class RequestTest
     {
         final Request request = new Request(url);
         request.fillDefaultData(context);
-        List<NameValuePair> cookies = null;
+        Map<String, String> cookies = null;
         request.setCookies(cookies);
         WebRequest webRequest = request.buildWebRequest(context);
-        Map<String, String> headers = webRequest.getAdditionalHeaders();
+        final Map<String, String> headers = webRequest.getAdditionalHeaders();
         Assert.assertFalse(headers.containsKey(Constants.COOKIE));
 
-        cookies = new ArrayList<NameValuePair>();
-        cookies.add(new NameValuePair("headerCookie", "cookieValue"));
+        cookies = new LinkedHashMap<String, String>();
+        cookies.put("headerCookie1", "cookieValue1");
+        cookies.put("headerCookie2", "cookieValue2");
         request.setCookies(cookies);
         webRequest = request.buildWebRequest(context);
-        headers = webRequest.getAdditionalHeaders();
-        Assert.assertTrue(headers.containsKey(Constants.COOKIE));
-        final String cookieString = headers.get(Constants.COOKIE);
-        Assert.assertEquals("headerCookie=cookieValue;", cookieString);
-    }
-
-    /**
-     * Cookies can be set with {@link Request#setHeaders(Map)} and via {@link Request#setCookies(List)}. This test case
-     * verifies, that ,regardless of how the cookies are set, all cookies of both methods are in the {@link WebRequest}.
-     * 
-     * @throws InvalidArgumentException
-     * @throws MalformedURLException
-     * @throws UnsupportedEncodingException
-     */
-    @Test
-    public void testSetHeaderCookieAndSetCookie() throws InvalidArgumentException, MalformedURLException, UnsupportedEncodingException
-    {
-        final Request request = new Request(url);
-        request.fillDefaultData(context);
-        final List<NameValuePair> cookies = new ArrayList<NameValuePair>();
-        cookies.add(new NameValuePair("cookieName", "cookieValue"));
-        request.setCookies(cookies);
-        final Map<String, String> requestHeaders = new HashMap<String, String>();
-        requestHeaders.put(Constants.COOKIE, "headerCookie=headerValue");
-        request.setHeaders(requestHeaders);
-        final WebRequest webRequest = request.buildWebRequest(context);
-        final Map<String, String> headers = webRequest.getAdditionalHeaders();
-
-        Assert.assertTrue(headers.containsKey(Constants.COOKIE));
-        final String cookieString = headers.get(Constants.COOKIE);
-        Assert.assertEquals("headerCookie=headerValue;cookieName=cookieValue;", cookieString);
+        final Set<Cookie> webRequestCookies = context.getWebClient().getCookies(new URL(url));
+        Assert.assertEquals(2, webRequestCookies.size());
+        int i = 1;
+        for (final Cookie cookie : webRequestCookies)
+        {
+            Assert.assertEquals("headerCookie" + i, cookie.getName());
+            Assert.assertEquals("cookieValue" + i, cookie.getValue());
+            i++;
+        }
     }
 
     /**

@@ -14,7 +14,7 @@ import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage.Un
  */
 public class DataStorage
 {
-    protected DuplicateStorage defaultCookies;
+    protected UniqueStorage defaultCookies;
 
     protected DuplicateStorage defaultParameters;
 
@@ -28,7 +28,7 @@ public class DataStorage
 
     public DataStorage()
     {
-        this.defaultCookies = new DuplicateStorage();
+        this.defaultCookies = new UniqueStorage();
         this.defaultParameters = new DuplicateStorage();
         this.defaultStatics = new SingleStorage();
         this.defaultHeaders = new RecentKeyUniqueStorage();
@@ -36,7 +36,7 @@ public class DataStorage
         this.defaultItems = new DefaultKeyValueStorage();
     }
 
-    public DuplicateStorage getDefaultCookies()
+    public UniqueStorage getDefaultCookies()
     {
         return defaultCookies;
     }

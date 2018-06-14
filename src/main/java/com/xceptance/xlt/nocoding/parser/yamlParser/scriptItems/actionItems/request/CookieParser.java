@@ -1,30 +1,29 @@
 package com.xceptance.xlt.nocoding.parser.yamlParser.scriptItems.actionItems.request;
 
-import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
- * The class for parsing the cookies item to a list of {@link NameValuePair}s
+ * The class for parsing the cookies item to a map with a String key and a String value.
  * 
  * @author ckeiner
  */
 public class CookieParser
 {
     /**
-     * Parses a cookie item to a list of <code>NameValuePair</code>s
+     * Parses the cookie item to a map with a String key and a String value
      * 
-     * @param parameterNode
-     *            The {@link JsonNode} with the parameters in it
-     * @return A list of <code>NameValuePair</code>s containing the parsed parameters
+     * @param cookiesNode
+     *            The {@link JsonNode} with the cookies in it
+     * @return A map containing the parsed cookies
      */
-    public List<NameValuePair> parse(final JsonNode cookiesNode)
+    public Map<String, String> parse(final JsonNode cookiesNode)
     {
-        // Transform the JsonNode to a list of NameValuePairs
-        final List<NameValuePair> cookies = ParserUtils.getArrayNodeAsNameValuePair(cookiesNode);
-        // Return the list
+        // Parse the JsonNode to a Map<String, String>
+        final Map<String, String> cookies = ParserUtils.getArrayNodeAsMap(cookiesNode);
+        // Parse cookies and return them
         return cookies;
     }
 

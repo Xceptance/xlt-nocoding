@@ -7,6 +7,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,7 +60,7 @@ public class Request extends AbstractActionItem
     /**
      * The list of cookies
      */
-    private List<NameValuePair> cookies;
+    private Map<String, String> cookies;
 
     /**
      * A map that defines the headers
@@ -94,7 +95,7 @@ public class Request extends AbstractActionItem
     {
         this.url = url;
         parameters = new ArrayList<NameValuePair>();
-        cookies = new ArrayList<NameValuePair>();
+        cookies = new LinkedHashMap<String, String>();
         headers = new RecentKeyTreeMap();
     }
 
@@ -148,12 +149,12 @@ public class Request extends AbstractActionItem
         this.parameters = parameters;
     }
 
-    public List<NameValuePair> getCookies()
+    public Map<String, String> getCookies()
     {
         return cookies;
     }
 
-    public void setCookies(final List<NameValuePair> cookies)
+    public void setCookies(final Map<String, String> cookies)
     {
         this.cookies = cookies;
     }
@@ -258,18 +259,18 @@ public class Request extends AbstractActionItem
         if (context.getDefaultCookies() != null)
         {
             // Get default cookies
-            final List<NameValuePair> defaultCookies = context.getDefaultCookies().getItems();
+            final Map<String, String> defaultCookies = context.getDefaultCookies().getItems();
             // Overwrite the default values with the current ones or add the current ones
-            if (getCookies() != null)
+            if (getCookies() == null)
             {
-                for (final NameValuePair defaultCookie : defaultCookies)
-                {
-                    if (!getCookies().contains(defaultCookie))
-                    {
-                        getCookies().add(defaultCookie);
-                    }
-                }
+                setCookies(new LinkedHashMap<String, String>(defaultCookies.size()));
             }
+            defaultCookies.forEach((key, value) -> {
+                if (!getCookies().containsKey(key))
+                {
+                    getCookies().put(key, value);
+                }
+            });
         }
 
         /*
@@ -421,6 +422,25 @@ public class Request extends AbstractActionItem
     }
 
     /**
+     * Sets the cookies at the web client
+     * 
+     * @param context
+     *            The current {@link Context}
+     * @throws MalformedURLException
+     *             If {@link #url} of this request cannot be transformed to a URL
+     */
+    private void setCookiesAtWebClient(final Context<?> context) throws MalformedURLException
+    {
+        if (getCookies() != null && !getCookies().isEmpty())
+        {
+            final URL url = new URL(this.getUrl());
+            cookies.forEach((key, value) -> {
+                context.getWebClient().addCookie(key + "=" + value, url, this);
+            });
+        }
+    }
+
+    /**
      * Builds the {@link WebRequest} that is specified by this object
      * 
      * @param context
@@ -435,7 +455,6 @@ public class Request extends AbstractActionItem
         final URL url = new URL(this.url);
         // Create a WebRequest
         final WebRequest webRequest = new WebRequest(url, HttpMethod.valueOf(getHttpMethod()));
-
         // Set headers if they aren't null or empty
         if (getHeaders() != null || !getHeaders().isEmpty())
         {
@@ -481,32 +500,35 @@ public class Request extends AbstractActionItem
             webRequest.setRequestBody(body);
         }
 
-        // Set cookies
-        if (getCookies() != null && !getCookies().isEmpty())
-        {
-            // Get already defined cookies
-            String cookieString = webRequest.getAdditionalHeaders().get(Constants.COOKIE);
-            // If there are already cookies
-            if (cookieString != null)
-            {
-                // Make sure there is a semicolon at the end
-                if (!cookieString.endsWith(";"))
-                {
-                    cookieString += ";";
-                }
-            }
-            // Else, make the string empty
-            else
-            {
-                cookieString = "";
-            }
-            // Append all cookies at the end
-            for (final NameValuePair cookie : cookies)
-            {
-                cookieString += cookie.getName() + "=" + cookie.getValue() + ";";
-            }
-            webRequest.setAdditionalHeader(Constants.COOKIE, cookieString);
-        }
+        // Sets the cookies at the web client
+        setCookiesAtWebClient(context);
+
+        // // Set cookies
+        // if (getCookies() != null && !getCookies().isEmpty())
+        // {
+        // // Get already defined cookies
+        // String cookieString = webRequest.getAdditionalHeaders().get(Constants.COOKIE);
+        // // If there are already cookies
+        // if (cookieString != null)
+        // {
+        // // Make sure there is a semicolon at the end
+        // if (!cookieString.endsWith(";"))
+        // {
+        // cookieString += ";";
+        // }
+        // }
+        // // Else, make the string empty
+        // else
+        // {
+        // cookieString = "";
+        // }
+        // // Append all cookies at the end
+        // for (final NameValuePair cookie : cookies)
+        // {
+        // cookieString += cookie.getName() + "=" + cookie.getValue() + ";";
+        // }
+        // webRequest.setAdditionalHeader(Constants.COOKIE, cookieString);
+        // }
 
         // Return the webRequest
         return webRequest;
