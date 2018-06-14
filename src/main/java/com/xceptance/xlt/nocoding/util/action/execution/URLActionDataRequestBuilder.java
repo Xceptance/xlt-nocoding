@@ -151,9 +151,15 @@ public class URLActionDataRequestBuilder
         if (!cookies.isEmpty())
         {
             String cookieString = "";
+            boolean first = true;
             for (final NameValuePair cookie : cookies)
             {
-                cookieString = cookieString + cookie.getName() + "=" + cookie.getValue() + ";";
+                if (!first)
+                {
+                    cookieString += ";";
+                }
+                first = false;
+                cookieString = cookieString + cookie.getName() + "=" + cookie.getValue();
             }
             request.setAdditionalHeader("Cookie", cookieString);
         }
