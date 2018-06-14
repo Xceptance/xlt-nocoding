@@ -50,6 +50,7 @@ public class RequestParser extends AbstractActionItemParser
         String encodeParameters = null;
         final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
         final Map<String, String> headers = new HashMap<String, String>();
+        final List<NameValuePair> cookies = new ArrayList<NameValuePair>();
         String body = null;
         String encodeBody = null;
 
@@ -102,6 +103,10 @@ public class RequestParser extends AbstractActionItemParser
                     headers.putAll(new HeaderParser().parse(requestNode.get(fieldName)));
                     break;
 
+                case Constants.COOKIES:
+                    cookies.addAll(new CookieParser().parse(requestNode.get(fieldName)));
+                    break;
+
                 case Constants.BODY:
                     body = ParserUtils.readValue(requestNode, fieldName);
                     // XltLogger.runTimeLogger.debug("Body: " + body);
@@ -125,6 +130,7 @@ public class RequestParser extends AbstractActionItemParser
         request.setEncodeParameters(encodeParameters);
         request.setParameters(parameters);
         request.setHeaders(headers);
+        request.setCookies(cookies);
         request.setBody(body);
         request.setEncodeBody(encodeBody);
 
