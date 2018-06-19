@@ -50,7 +50,7 @@ public class SingleStorage
      * 
      * @param itemName
      *            The value of the item
-     * @return True if an item was removed. Otherwise, returns falls
+     * @return True if an item was removed. Otherwise, returns false
      */
     public boolean remove(final String itemName)
     {

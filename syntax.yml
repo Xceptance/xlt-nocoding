@@ -107,9 +107,9 @@
 
 
 #Delete default values
-- Cookies : delete
-- Headers : delete
-- Httpcode : delete
-- Url : delete
-- Method : delete
-- Xhr : delete
+- Cookies : Delete
+- Headers : Delete
+- Httpcode : Delete
+- Url : Delete
+- Method : Delete
+- Xhr : Delete

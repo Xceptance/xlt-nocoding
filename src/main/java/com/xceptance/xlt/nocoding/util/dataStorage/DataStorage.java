@@ -3,7 +3,8 @@ package com.xceptance.xlt.nocoding.util.dataStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.DuplicateStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.SingleStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage.DefaultKeyValueStorage;
-import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage.RecentKeyUniqueStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage.RecentKeyUniqueSingleStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage.UniqueSingleStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage.UniqueStorage;
 
 /**
@@ -20,7 +21,7 @@ public class DataStorage
 
     protected SingleStorage defaultStatics;
 
-    protected UniqueStorage defaultHeaders;
+    protected UniqueSingleStorage defaultHeaders;
 
     protected UniqueStorage variables;
 
@@ -31,7 +32,7 @@ public class DataStorage
         this.defaultCookies = new UniqueStorage();
         this.defaultParameters = new DuplicateStorage();
         this.defaultStatics = new SingleStorage();
-        this.defaultHeaders = new RecentKeyUniqueStorage();
+        this.defaultHeaders = new RecentKeyUniqueSingleStorage();
         this.variables = new UniqueStorage();
         this.defaultItems = new DefaultKeyValueStorage();
     }
@@ -51,7 +52,7 @@ public class DataStorage
         return defaultStatics;
     }
 
-    public UniqueStorage getDefaultHeaders()
+    public UniqueSingleStorage getDefaultHeaders()
     {
         return defaultHeaders;
     }

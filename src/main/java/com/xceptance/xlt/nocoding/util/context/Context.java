@@ -14,6 +14,7 @@ import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.DuplicateStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.SingleStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage.DefaultKeyValueStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage.UniqueSingleStorage;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage.UniqueStorage;
 import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
@@ -232,7 +233,7 @@ public abstract class Context<T>
         return getDataStorage().getDefaultStatics();
     }
 
-    public UniqueStorage getDefaultHeaders()
+    public UniqueSingleStorage getDefaultHeaders()
     {
         return getDataStorage().getDefaultHeaders();
     }
