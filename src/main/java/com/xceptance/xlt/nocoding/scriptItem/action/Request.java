@@ -200,7 +200,8 @@ public class Request extends AbstractActionItem
     }
 
     /**
-     * Fills in the default values for all unspecified attributes
+     * Fills in the default values for all unspecified attributes.<br>
+     * Note, that default headers and cookies are already set at the WebClient..
      * 
      * @param context
      *            The {@link Context} with the {@link DataStorage}
@@ -250,46 +251,6 @@ public class Request extends AbstractActionItem
                     }
                 }
             }
-        }
-
-        /*
-         * Set default cookies
-         */
-
-        if (context.getDefaultCookies() != null)
-        {
-            // Get default cookies
-            final Map<String, String> defaultCookies = context.getDefaultCookies().getItems();
-            // Overwrite the default values with the current ones or add the current ones
-            if (getCookies() == null)
-            {
-                setCookies(new LinkedHashMap<String, String>(defaultCookies.size()));
-            }
-            defaultCookies.forEach((key, value) -> {
-                if (!getCookies().containsKey(key))
-                {
-                    getCookies().put(key, value);
-                }
-            });
-        }
-
-        /*
-         * Set default headers
-         */
-
-        if (context.getDefaultHeaders() != null)
-        {
-            // Create a tree map that is case insensitive (since headers are case insensitive
-            final RecentKeyTreeMap defaultHeaders = new RecentKeyTreeMap();
-            // Get the default headers
-            defaultHeaders.putAll(context.getDefaultHeaders().getItems());
-            // Overwrite the default values with the current ones and/or add the current ones
-            if (getHeaders() != null)
-            {
-                defaultHeaders.putAll(getHeaders());
-            }
-            // Assign default headers as headers for this request
-            setHeaders(defaultHeaders);
         }
 
         // Set default body if it isn't specified
@@ -502,36 +463,6 @@ public class Request extends AbstractActionItem
 
         // Sets the cookies at the web client
         setCookiesAtWebClient(context);
-
-        // // Set cookies
-        // if (getCookies() != null && !getCookies().isEmpty())
-        // {
-        // // Get already defined cookies
-        // String cookieString = webRequest.getAdditionalHeaders().get(Constants.COOKIE);
-        // // If there are already cookies
-        // if (cookieString != null)
-        // {
-        // // Make sure there is a semicolon at the end
-        // if (!cookieString.endsWith(";"))
-        // {
-        // cookieString += ";";
-        // }
-        // }
-        // // Else, make the string empty
-        // else
-        // {
-        // cookieString = "";
-        // }
-        // for(String cookieKey : cookies.keySet()) {
-        //
-        // }
-        // // Append all cookies at the end
-        // for (final NameValuePair cookie : cookies)
-        // {
-        // cookieString += cookie.getName() + "=" + cookie.getValue() + ";";
-        // }
-        // webRequest.setAdditionalHeader(Constants.COOKIE, cookieString);
-        // }
 
         // Return the webRequest
         return webRequest;

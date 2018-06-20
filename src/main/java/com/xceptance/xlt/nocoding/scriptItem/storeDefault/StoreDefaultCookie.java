@@ -1,8 +1,11 @@
 package com.xceptance.xlt.nocoding.scriptItem.storeDefault;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.stream.Stream;
 
 import com.gargoylesoftware.htmlunit.CookieManager;
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.util.Cookie;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.engine.XltWebClient;
@@ -11,7 +14,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage.UniqueStorage;
 
 /**
- * Stores a default cookie.
+ * Stores a default cookie and sets it at the {@link WebClient}.
  * 
  * @author ckeiner
  */
@@ -33,9 +36,11 @@ public class StoreDefaultCookie extends StoreDefault
     /**
      * If {@link #getValue()} is {@link Constants#DELETE}, the list of default cookies is deleted. Else, it stores a default
      * cookie.
+     * 
+     * @throws MalformedURLException
      */
     @Override
-    public void execute(final Context<?> context)
+    public void execute(final Context<?> context) throws MalformedURLException
     {
         // Resolve values
         super.resolveValues(context);
@@ -45,6 +50,8 @@ public class StoreDefaultCookie extends StoreDefault
         if (!value.equals(Constants.DELETE))
         {
             storage.store(variableName, value);
+            // TODO What does the URL do with different specified variables
+            context.getWebClient().addCookie(variableName + "=" + value, new URL("http://www.google.de"), this);
             XltLogger.runTimeLogger.debug("Added \"" + variableName.toLowerCase() + "\" with the value \"" + value
                                           + "\" to default cookies");
         }
