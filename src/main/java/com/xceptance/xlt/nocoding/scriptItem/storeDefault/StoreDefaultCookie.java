@@ -50,8 +50,8 @@ public class StoreDefaultCookie extends StoreDefault
         if (!value.equals(Constants.DELETE))
         {
             storage.store(variableName, value);
-            // TODO What does the URL do with different specified variables
-            context.getWebClient().addCookie(variableName + "=" + value, new URL("http://www.google.de"), this);
+            // Add a cookie with a non-existing url
+            context.getWebClient().addCookie(variableName + "=" + value, new URL("http://thisIsno.existingDo.main"), this);
             XltLogger.runTimeLogger.debug("Added \"" + variableName.toLowerCase() + "\" with the value \"" + value
                                           + "\" to default cookies");
         }
