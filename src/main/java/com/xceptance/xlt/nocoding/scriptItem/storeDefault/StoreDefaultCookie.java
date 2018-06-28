@@ -1,8 +1,9 @@
 package com.xceptance.xlt.nocoding.scriptItem.storeDefault;
 
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.stream.Stream;
+import java.util.StringTokenizer;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.gargoylesoftware.htmlunit.CookieManager;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -34,8 +35,8 @@ public class StoreDefaultCookie extends StoreDefault
     }
 
     /**
-     * If {@link #getValue()} is {@link Constants#DELETE}, the list of default cookies is deleted. Else, it stores a default
-     * cookie.
+     * If {@link #getValue()} is {@link Constants#DELETE}, the list of default cookies is deleted. Else, it stores a
+     * default cookie.
      * 
      * @throws MalformedURLException
      */
@@ -50,10 +51,8 @@ public class StoreDefaultCookie extends StoreDefault
         if (!value.equals(Constants.DELETE))
         {
             storage.store(variableName, value);
-            // Add a cookie with a non-existing url
-            context.getWebClient().addCookie(variableName + "=" + value, new URL("http://thisIsno.existingDo.main"), this);
-            XltLogger.runTimeLogger.debug("Added \"" + variableName.toLowerCase() + "\" with the value \"" + value
-                                          + "\" to default cookies");
+            // Parse 'variableName=value' as cookie and add it to the webclient's cookie manager
+            addCookie(variableName, value, context);
         }
         else
         {
@@ -87,20 +86,140 @@ public class StoreDefaultCookie extends StoreDefault
      *            The name of the cookie
      * @param context
      *            The current {@link Context}
-     * @return True if the cookie was found, else false
      */
-    private boolean deleteCookie(final String cookieName, final Context<?> context)
+    private void deleteCookie(final String cookieName, final Context<?> context)
     {
-        final boolean wasRemoved = false;
         final CookieManager cookieManager = context.getWebClient().getCookieManager();
-        // Find the first occurence of the cookie
-        final Stream<Cookie> cookieStream = cookieManager.getCookies()
-                                                         .stream()
-                                                         .filter(singleCookie -> singleCookie.getName().equals(cookieName));
-        cookieStream.forEach((cookie) -> {
-            cookieManager.removeCookie(cookie);
-        });
-        return wasRemoved;
+        cookieManager.getCookies()
+                     .stream()
+                     .filter(singleCookie -> singleCookie.getName().equals(cookieName))
+                     .forEach(cookieManager::removeCookie);
     }
 
+    /**
+     * Adds the cookie parsed from the passed name and definition to the webclient's cookie manager.
+     * 
+     * @param cookieName
+     *            The name of the cookie
+     * @param cookieDefinition
+     *            The cookie definition as per RFC 2965
+     * @param context
+     *            The current {@link Context}
+     * @see #parseCookie(String, String)
+     */
+    private void addCookie(final String cookieName, final String cookieDefinition, final Context<?> context)
+    {
+        final Cookie cookie = parseCookie(cookieName, cookieDefinition);
+        if (cookie != null)
+        {
+            context.getWebClient().getCookieManager().addCookie(cookie);
+            XltLogger.runTimeLogger.debug("Added cookie \"" + cookie.getName() + "\" with value \"" + cookie.getValue()
+                                          + "\" to default cookies");
+
+        }
+    }
+
+    /**
+     * Interprets the given arguments as they would have been returned by a server as response header {@code
+     * Set-Cookie: cookieName=cookieDefinition} and returns the parsed cookie if valid, and {@code null} otherwise.
+     * 
+     * @param cookieName
+     *            The name of the cookie
+     * @param cookieDefinition
+     *            The cookie definition as per RFC 2965
+     * @return parsed cookie given name and definition are valid, {@code null} otherwise
+     */
+    private Cookie parseCookie(final String cookieName, final String cookieDefinition)
+    {
+        Cookie cookie = null;
+        if (StringUtils.isNoneBlank(cookieName, cookieDefinition))
+        {
+            final StringTokenizer tokenizer = new StringTokenizer(cookieDefinition, ";");
+
+            String cookieVal = null;
+            String path = "/";
+            String domain = "";
+            String maxAge = "";
+            boolean secure = false;
+
+            while (tokenizer.hasMoreTokens())
+            {
+                final String token = tokenizer.nextToken().trim();
+                if (cookieVal == null)
+                {
+                    cookieVal = token;
+                    continue;
+                }
+
+                String att = token;
+                String val = "";
+                final int idx = token.indexOf('=');
+                if (idx > -1)
+                {
+                    att = token.substring(0, idx).trim();
+                    if (idx < token.length() - 1)
+                    {
+                        val = token.substring(idx + 1).trim();
+                    }
+                }
+
+                // attribute value might be quoted -> remove wrapping quotes
+                val = StringUtils.unwrap(val, '"');
+
+                if (att.equalsIgnoreCase("domain"))
+                {
+                    final int lastDotPos = val.lastIndexOf('.');
+                    // check for an embedded dot
+                    if (lastDotPos > 0 && lastDotPos < val.length() - 1)
+                    {
+                        domain = val;
+                        // append leading dot if missing
+                        if (domain.charAt(0) != '.')
+                        {
+                            domain = "." + domain;
+                        }
+                    }
+                }
+                else if (att.equalsIgnoreCase("path"))
+                {
+                    path = StringUtils.defaultIfBlank(val, "/");
+                    // append leading slash if missing
+                    if (path.charAt(0) != '/')
+                    {
+                        path = "/" + path;
+                    }
+                }
+                else if (att.equalsIgnoreCase("max-age"))
+                {
+                    maxAge = val;
+                }
+                else if (att.equalsIgnoreCase("secure"))
+                {
+                    secure = true;
+                }
+            }
+
+            if (cookieVal != null && StringUtils.isNotBlank(domain))
+            {
+                int expires = -1;
+                if (StringUtils.isNotBlank(maxAge))
+                {
+                    try
+                    {
+                        expires = Integer.parseInt(maxAge);
+                    }
+                    catch (final NumberFormatException nfe)
+                    {
+                        XltLogger.runTimeLogger.warn("Value '" + maxAge + "' of 'max-age' attribute for cookie '" + cookieName
+                                                     + "' is invalid");
+                    }
+                }
+
+                cookie = new Cookie(domain, cookieName, cookieVal, path, expires, secure);
+            }
+
+        }
+
+        return cookie;
+    }
 }
