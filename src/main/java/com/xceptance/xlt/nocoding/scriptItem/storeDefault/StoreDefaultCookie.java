@@ -12,7 +12,7 @@ import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.context.Context;
-import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage.UniqueStorage;
+import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.SingleStorage;
 
 /**
  * Stores a default cookie and sets it at the {@link WebClient}.
@@ -35,8 +35,8 @@ public class StoreDefaultCookie extends StoreDefault
     }
 
     /**
-     * If {@link #getValue()} is {@link Constants#DELETE}, the list of default cookies is deleted. Else, it stores a
-     * default cookie.
+     * If {@link #getValue()} is {@link Constants#DELETE}, the list of default cookies is deleted. Else, it stores a default
+     * cookie.
      * 
      * @throws MalformedURLException
      */
@@ -46,11 +46,10 @@ public class StoreDefaultCookie extends StoreDefault
         // Resolve values
         super.resolveValues(context);
         // Get the appropriate storage
-        final UniqueStorage storage = context.getDefaultCookies();
+        final SingleStorage storage = context.getDefaultCookies();
         // If the value is not "delete"
         if (!value.equals(Constants.DELETE))
         {
-            storage.store(variableName, value);
             // Parse 'variableName=value' as cookie and add it to the webclient's cookie manager
             addCookie(variableName, value, context);
         }
@@ -61,7 +60,7 @@ public class StoreDefaultCookie extends StoreDefault
             {
 
                 // Delete all cookies from the WebClient
-                storage.getItems().forEach((key, value) -> {
+                storage.getItems().forEach((key) -> {
                     deleteCookie(key, context);
                 });
                 // Delete default cookies from the storage
@@ -113,9 +112,9 @@ public class StoreDefaultCookie extends StoreDefault
         if (cookie != null)
         {
             context.getWebClient().getCookieManager().addCookie(cookie);
+            context.getDefaultCookies().store(variableName);
             XltLogger.runTimeLogger.debug("Added cookie \"" + cookie.getName() + "\" with value \"" + cookie.getValue()
                                           + "\" to default cookies");
-
         }
     }
 
@@ -216,6 +215,18 @@ public class StoreDefaultCookie extends StoreDefault
                 }
 
                 cookie = new Cookie(domain, cookieName, cookieVal, path, expires, secure);
+            }
+            else
+            {
+                final String warning = "Cookie will be ignored!";
+                if (cookieVal == null)
+                {
+                    XltLogger.runTimeLogger.warn("No value specified! " + warning);
+                }
+                else
+                {
+                    XltLogger.runTimeLogger.warn("No domain specified! Domains must be specified for default cookies. " + warning);
+                }
             }
 
         }

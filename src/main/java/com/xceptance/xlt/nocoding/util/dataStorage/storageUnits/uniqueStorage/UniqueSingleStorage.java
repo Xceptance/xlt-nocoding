@@ -3,6 +3,11 @@ package com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Saves items in a {@link Set} so that there are no duplicates.
+ * 
+ * @author ckeiner
+ */
 public class UniqueSingleStorage
 {
 

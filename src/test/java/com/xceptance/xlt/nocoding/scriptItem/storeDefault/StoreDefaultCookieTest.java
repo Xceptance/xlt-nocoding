@@ -6,6 +6,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.gargoylesoftware.htmlunit.util.Cookie;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.util.Constants;
 
@@ -17,19 +18,74 @@ import com.xceptance.xlt.nocoding.util.Constants;
 public class StoreDefaultCookieTest extends StoreDefaultTest
 {
 
+    final String prefixDomain = "domain=";
+
+    final String prefixPath = "path=";
+
+    final String prefixMaxAge = "max-age=";
+
+    final String prefixSecure = "secure=";
+
     /**
-     * Verifies {@link StoreDefaultCookie} can store one default cookie
+     * Verifies {@link StoreDefaultCookie} can store a minimal default cookie. A minimal default cookie consists of a name,
+     * a value and a domain.
      * 
      * @throws Throwable
      */
     @Test
     public void singleStore() throws Throwable
     {
-        final ScriptItem store = new StoreDefaultCookie("name_1", "value_1");
-        Assert.assertTrue(context.getDefaultCookies().get("name_1") == null);
+        final String name = "name";
+        final String value = "value";
+        final String domain = ".xceptance.com";
+
+        final String cookieValue = value + ";" + prefixDomain + domain + ";";
+        final ScriptItem store = new StoreDefaultCookie(name, cookieValue);
+        Assert.assertFalse(context.getDefaultCookies().getItems().contains(name));
+        Assert.assertNull(context.getWebClient().getCookieManager().getCookie(name));
         store.execute(context);
-        Assert.assertTrue(context.getDefaultCookies().get("name_1") != null && !context.getDefaultCookies().get("name_1").isEmpty());
-        Assert.assertEquals("value_1", context.getDefaultCookies().get("name_1"));
+        Assert.assertTrue(context.getDefaultCookies().getItems().contains(name));
+        Assert.assertNotNull(context.getWebClient().getCookieManager().getCookie(name));
+        final Cookie cookie = context.getWebClient().getCookieManager().getCookie(name);
+        Assert.assertEquals(value, cookie.getValue());
+        Assert.assertEquals(domain, cookie.getDomain());
+
+    }
+
+    /**
+     * Verifies {@link StoreDefaultCookie} doesn't save the cookie when no value is set
+     * 
+     * @throws Throwable
+     */
+    @Test
+    public void shouldNotStoreWhenNoValueIsSet() throws Throwable
+    {
+        final String name = "name";
+        final String value = ";";
+        final ScriptItem store = new StoreDefaultCookie(name, value);
+        Assert.assertFalse(context.getDefaultCookies().getItems().contains(name));
+        Assert.assertNull(context.getWebClient().getCookieManager().getCookie(name));
+        store.execute(context);
+        Assert.assertFalse(context.getDefaultCookies().getItems().contains(name));
+        Assert.assertNull(context.getWebClient().getCookieManager().getCookie(name));
+    }
+
+    /**
+     * Verifies {@link StoreDefaultCookie} doesn't save the cookie when no value is set
+     * 
+     * @throws Throwable
+     */
+    @Test
+    public void shouldNotStoreWhenNoDomainSet() throws Throwable
+    {
+        final String name = "name";
+        final String value = "value";
+        final ScriptItem store = new StoreDefaultCookie(name, value);
+        Assert.assertFalse(context.getDefaultCookies().getItems().contains(name));
+        Assert.assertNull(context.getWebClient().getCookieManager().getCookie(name));
+        store.execute(context);
+        Assert.assertFalse(context.getDefaultCookies().getItems().contains(name));
+        Assert.assertNull(context.getWebClient().getCookieManager().getCookie(name));
     }
 
     /**
@@ -40,36 +96,52 @@ public class StoreDefaultCookieTest extends StoreDefaultTest
     @Test
     public void deleteStore() throws Throwable
     {
-        ScriptItem store = new StoreDefaultCookie("name_1", "value_1");
-        Assert.assertTrue(context.getDefaultCookies().get("name_1") == null);
+        final String name = "name";
+        final String value = "value";
+        final String domain = ".xceptance.com";
+        final String cookieValue = value + ";" + prefixDomain + domain + ";";
+
+        ScriptItem store = new StoreDefaultCookie(name, cookieValue);
+        Assert.assertFalse(context.getDefaultCookies().getItems().contains(name));
+        Assert.assertNull(context.getWebClient().getCookieManager().getCookie(name));
         store.execute(context);
-        Assert.assertTrue(context.getDefaultCookies().get("name_1") != null && !context.getDefaultCookies().get("name_1").isEmpty());
-        Assert.assertEquals("value_1", context.getDefaultCookies().get("name_1"));
-        store = new StoreDefaultCookie("name_1", Constants.DELETE);
+        Assert.assertTrue(context.getDefaultCookies().getItems().contains(name));
+        Assert.assertNotNull(context.getWebClient().getCookieManager().getCookie(name));
+        final Cookie cookie = context.getWebClient().getCookieManager().getCookie(name);
+        Assert.assertEquals(value, cookie.getValue());
+        Assert.assertEquals(domain, cookie.getDomain());
+
+        store = new StoreDefaultCookie(name, Constants.DELETE);
         store.execute(context);
-        Assert.assertTrue(context.getDefaultCookies().get("name_1") == null);
+        Assert.assertFalse(context.getDefaultCookies().getItems().contains(name));
+        Assert.assertNull(context.getWebClient().getCookieManager().getCookie(name));
     }
 
     /**
      * Verifies {@link StoreDefaultCookie} can delete all cookies
-     * 
+     *
      * @throws Throwable
      */
     @Test
     public void deleteAllDefaultCookies() throws Throwable
     {
+        final String name = "name_";
+        final String value = "value";
+        final String domain = ".xceptance.com";
+        final String cookieValue = value + ";" + prefixDomain + domain + ";";
+
         final List<ScriptItem> store = new ArrayList<ScriptItem>();
-        store.add(new StoreDefaultCookie("name_1", "value"));
-        store.add(new StoreDefaultCookie("name_2", "value"));
-        store.add(new StoreDefaultCookie("name_3", "value"));
-        store.add(new StoreDefaultCookie("name_4", "value"));
-        store.add(new StoreDefaultCookie("name_5", "value"));
-        Assert.assertTrue(context.getDefaultCookies().get("param_1") == null);
+        store.add(new StoreDefaultCookie(name + "1", cookieValue));
+        store.add(new StoreDefaultCookie(name + "2", cookieValue));
+        store.add(new StoreDefaultCookie(name + "3", cookieValue));
+        store.add(new StoreDefaultCookie(name + "4", cookieValue));
+        store.add(new StoreDefaultCookie(name + "5", cookieValue));
+        Assert.assertTrue(context.getDefaultCookies().getItems().isEmpty());
         int i = 1;
         for (final ScriptItem scriptItem : store)
         {
             scriptItem.execute(context);
-            Assert.assertEquals("value", context.getDefaultCookies().get("name_" + i));
+            Assert.assertTrue(context.getDefaultCookies().getItems().contains("name_" + i));
             i++;
         }
         final ScriptItem deleteIt = new StoreDefaultCookie(Constants.COOKIES, Constants.DELETE);
