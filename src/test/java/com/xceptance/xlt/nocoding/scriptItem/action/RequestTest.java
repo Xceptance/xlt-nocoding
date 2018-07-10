@@ -57,7 +57,7 @@ public class RequestTest
 
     /**
      * Verifies {@link Request} builds the {@link WebRequest} correctly
-     * 
+     *
      * @throws InvalidArgumentException
      * @throws MalformedURLException
      * @throws UnsupportedEncodingException
@@ -66,11 +66,11 @@ public class RequestTest
     public void buildWebRequest() throws InvalidArgumentException, MalformedURLException, UnsupportedEncodingException
     {
         final HttpMethod method = HttpMethod.GET;
-        final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+        final List<NameValuePair> parameters = new ArrayList<>();
         final String body = null;
         final Boolean encodeBody = false;
         final Boolean encodeParameters = false;
-        final Map<String, String> headers = new HashMap<String, String>();
+        final Map<String, String> headers = new HashMap<>();
         final Boolean xhr = false;
 
         request = new Request(url);
@@ -110,7 +110,7 @@ public class RequestTest
 
     /**
      * Verifies {@link Request} with variables builds the {@link WebRequest} correctly
-     * 
+     *
      * @throws InvalidArgumentException
      * @throws MalformedURLException
      * @throws UnsupportedEncodingException
@@ -122,11 +122,11 @@ public class RequestTest
     {
         String key, value;
         final HttpMethod method = HttpMethod.GET;
-        final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+        final List<NameValuePair> parameters = new ArrayList<>();
         final String body = null;
         final Boolean encodeBody = false;
         final Boolean encodeParameters = false;
-        final Map<String, String> headers = new HashMap<String, String>();
+        final Map<String, String> headers = new HashMap<>();
         final Boolean xhr = false;
 
         context.getVariables().store(Constants.URL, url);
@@ -139,11 +139,11 @@ public class RequestTest
         context.getVariables().store(Constants.XHR, xhr.toString());
         final String url_var = "${" + Constants.URL + "}";
         final String method_var = "${" + Constants.METHOD + "}";
-        final List<NameValuePair> parameters_var = new ArrayList<NameValuePair>();
+        final List<NameValuePair> parameters_var = new ArrayList<>();
         final String body_var = "${" + Constants.BODY + "}";
         final String encodeBody_var = "${" + Constants.ENCODEBODY + "}";
         final String encodeParameters_var = "${" + Constants.ENCODEPARAMETERS + "}";
-        final Map<String, String> headers_var = new HashMap<String, String>();
+        final Map<String, String> headers_var = new HashMap<>();
         final String xhr_var = "${" + Constants.XHR + "}";
 
         // Parameters
@@ -236,7 +236,7 @@ public class RequestTest
 
     /**
      * Verifies a {@link Request} with no default url throws an {@link InvalidArgumentException}
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = InvalidArgumentException.class)
@@ -255,7 +255,7 @@ public class RequestTest
 
     /**
      * Verifies the headers in {@link Request} are case insensitive
-     * 
+     *
      * @throws Throwable
      */
     @Test
@@ -263,10 +263,10 @@ public class RequestTest
     @Ignore
     public void testCaseInsensitiveHeaders() throws Throwable
     {
-        final Map<String, String> defaultValues = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
+        final Map<String, String> defaultValues = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         defaultValues.put("Accept", "text/html");
         defaultValues.put("Cookie", "cookie1=value1");
-        final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
+        final List<ScriptItem> scriptItems = new ArrayList<>();
         defaultValues.forEach((key, value) -> {
             scriptItems.add(new StoreDefaultHeader(key, value));
         });
@@ -302,7 +302,7 @@ public class RequestTest
 
     /**
      * Verifies all default data is added, this means: Url, HttpMethod, Xhr, EncodeParameters, EncodeBody
-     * 
+     *
      * @throws InvalidArgumentException
      * @throws MalformedURLException
      * @throws UnsupportedEncodingException
@@ -324,7 +324,7 @@ public class RequestTest
 
     /**
      * Verifies defaulöt headers are added correctly
-     * 
+     *
      * @throws Throwable
      */
     @Test
@@ -333,12 +333,12 @@ public class RequestTest
     public void testDefaultHeaders() throws Throwable
     {
         // Simply use default headers
-        final Map<String, String> defaultValues = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
+        final Map<String, String> defaultValues = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         defaultValues.put("Accept", "text/html");
         defaultValues.put("Accept-Encoding", "gzip");
         defaultValues.put("Cookie", "cookie1=value1");
         defaultValues.put("Referer", "https://www.xceptance.com");
-        final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
+        final List<ScriptItem> scriptItems = new ArrayList<>();
         defaultValues.forEach((key, value) -> {
             scriptItems.add(new StoreDefaultHeader(key, value));
         });
@@ -361,7 +361,7 @@ public class RequestTest
 
     /**
      * Verifies default headers are overwritten when specified in {@link Request#getHeaders()}
-     * 
+     *
      * @throws Throwable
      */
     @Test
@@ -369,12 +369,12 @@ public class RequestTest
     @Ignore
     public void testOverwriteDefaultHeaders() throws Throwable
     {
-        final Map<String, String> defaultValues = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
+        final Map<String, String> defaultValues = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         defaultValues.put("Accept", "text/html");
         defaultValues.put("Accept-Encoding", "gzip");
         defaultValues.put("Cookie", "cookie1=value1");
         defaultValues.put("Referer", "https://www.xceptance.com");
-        final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
+        final List<ScriptItem> scriptItems = new ArrayList<>();
         defaultValues.forEach((key, value) -> {
             scriptItems.add(new StoreDefaultHeader(key, value));
         });
@@ -385,7 +385,7 @@ public class RequestTest
         }
 
         request = new Request(url);
-        final Map<String, String> newHeader = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
+        final Map<String, String> newHeader = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         newHeader.put("Accept", "application/xhtml+xml");
         newHeader.put("Cookie", "cookieName=cookieValue");
         request.setHeaders(newHeader);
@@ -409,18 +409,18 @@ public class RequestTest
 
     /**
      * Verifies default parameters are added
-     * 
+     *
      * @throws Throwable
      */
     @Test
     public void testDefaultParameters() throws Throwable
     {
-        final Map<String, String> defaultValues = new HashMap<String, String>();
+        final Map<String, String> defaultValues = new HashMap<>();
         defaultValues.put("param_1", "value_1");
         defaultValues.put("param_2", "value_2");
         defaultValues.put("param_3", "value_3");
         defaultValues.put("param_4", "value_4");
-        final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
+        final List<ScriptItem> scriptItems = new ArrayList<>();
         defaultValues.forEach((key, value) -> {
             scriptItems.add(new StoreDefaultParameter(key, value));
         });
@@ -449,18 +449,18 @@ public class RequestTest
 
     /**
      * Verifies default parameters are added and not overwritten
-     * 
+     *
      * @throws Throwable
      */
     @Test
     public void testOverwriteDefaultParameters() throws Throwable
     {
-        final Map<String, String> defaultValues = new HashMap<String, String>();
+        final Map<String, String> defaultValues = new HashMap<>();
         defaultValues.put("param_1", "value_1");
         defaultValues.put("param_2", "value_2");
         defaultValues.put("param_3", "value_3");
         defaultValues.put("param_4", "value_4");
-        final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
+        final List<ScriptItem> scriptItems = new ArrayList<>();
         defaultValues.forEach((key, value) -> {
             scriptItems.add(new StoreDefaultParameter(key, value));
         });
@@ -476,7 +476,7 @@ public class RequestTest
             scriptItem.execute(context);
         }
         request = new Request(url);
-        final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+        final List<NameValuePair> parameters = new ArrayList<>();
         parameters.add(new NameValuePair("param_1", "aDifferentValue"));
         parameters.add(new NameValuePair("param_5", "anotherDifferentValue"));
         request.fillDefaultData(context);
@@ -506,7 +506,7 @@ public class RequestTest
         request.setHeaders(headers);
         Assert.assertTrue(request.getHeaders() instanceof RecentKeyTreeMap);
         Assert.assertTrue(request.getHeaders().isEmpty());
-        headers = new HashMap<String, String>();
+        headers = new HashMap<>();
         headers.put("Accept", "text/html");
         request.setHeaders(headers);
         Assert.assertTrue(request.getHeaders() instanceof RecentKeyTreeMap);
@@ -518,7 +518,7 @@ public class RequestTest
      * Given two cookies are set in the {@link Request},<br>
      * when the {@link WebRequest} is built,<br>
      * Then the WebClient should have both cookies.
-     * 
+     *
      * @throws InvalidArgumentException
      * @throws MalformedURLException
      * @throws UnsupportedEncodingException
@@ -534,7 +534,7 @@ public class RequestTest
         final Map<String, String> headers = webRequest.getAdditionalHeaders();
         Assert.assertFalse(headers.containsKey(Constants.COOKIE));
 
-        cookies = new LinkedHashMap<String, String>();
+        cookies = new LinkedHashMap<>();
         cookies.put("headerCookie1", "cookieValue1");
         cookies.put("headerCookie2", "cookieValue2");
         request.setCookies(cookies);
@@ -552,7 +552,7 @@ public class RequestTest
 
     /**
      * Verifies that cookies set via {@link Request#setHeaders(Map)} are in {@link WebRequest}.
-     * 
+     *
      * @throws InvalidArgumentException
      * @throws MalformedURLException
      * @throws UnsupportedEncodingException
@@ -562,7 +562,7 @@ public class RequestTest
     {
         final Request request = new Request(url);
         request.fillDefaultData(context);
-        final Map<String, String> requestHeaders = new HashMap<String, String>();
+        final Map<String, String> requestHeaders = new HashMap<>();
         requestHeaders.put(Constants.COOKIE, "headerCookie=headerValue");
         request.setHeaders(requestHeaders);
         final WebRequest webRequest = request.buildWebRequest(context);
@@ -574,13 +574,43 @@ public class RequestTest
     }
 
     /**
-     * Verifies parameters are handled correctly for Get and Get-a-like Requests.
+     * Verifies post-a-like requests without parameters are built correctly.
      * 
      * @throws MalformedURLException
      * @throws UnsupportedEncodingException
      */
     @Test
-    public void testParameterBuilderWithGetalike() throws MalformedURLException, UnsupportedEncodingException
+    public void postalikeParameterRequestWithoutAny() throws MalformedURLException, UnsupportedEncodingException
+    {
+        final List<String> httpMethods = new ArrayList<>();
+        httpMethods.add("PATCH");
+        httpMethods.add("POST");
+        httpMethods.add("PUT");
+        final String urlString = "https://www.xceptance.net/en/";
+        final URL normalUrl = new URL(urlString);
+
+        for (final String httpMethod : httpMethods)
+        {
+            // Build the request
+            final Request normalRequest = new Request(urlString);
+            normalRequest.setHttpMethod(httpMethod);
+            // Build the WebRequest
+            final WebRequest normalWebRequest = normalRequest.buildWebRequest(context);
+            // Verify that the url is the same as the normal one
+            Assert.assertTrue(normalWebRequest.getUrl().sameFile(normalUrl));
+            // Verify that there is no query
+            Assert.assertNull(normalWebRequest.getUrl().getQuery());
+        }
+    }
+
+    /**
+     * Verifies get-a-like requests without parameters are built correctly.
+     * 
+     * @throws MalformedURLException
+     * @throws UnsupportedEncodingException
+     */
+    @Test
+    public void getalikeParameterRequestWithoutAny() throws MalformedURLException, UnsupportedEncodingException
     {
         final List<String> httpMethods = new ArrayList<>();
         httpMethods.add("DELETE");
@@ -588,22 +618,11 @@ public class RequestTest
         httpMethods.add("HEAD");
         httpMethods.add("OPTIONS");
         httpMethods.add("TRACE");
-
         final String urlString = "https://www.xceptance.net/en/";
-        final String urlQuery = "urlParam=urlValue";
-        final String urlQueryString = urlString + "?" + urlQuery;
-        final List<NameValuePair> parameters = new ArrayList<>();
-        parameters.add(new NameValuePair("parameterParam_1", "parameterValue_1"));
-        parameters.add(new NameValuePair("parameterParam_2", "parameterValue_2"));
-        final String parameterQuery = "parameterParam_1=parameterValue_1&parameterParam_2=parameterValue_2";
-        final String fullParamQueryString = urlQuery + "&" + parameterQuery;
         final URL normalUrl = new URL(urlString);
-        final URL queryUrl = new URL(urlQueryString);
 
-        // Iterate over all get-a-like methods
         for (final String httpMethod : httpMethods)
         {
-
             // Request without Query and Param
             // Build request
             final Request normalRequest = new Request(urlString);
@@ -614,7 +633,66 @@ public class RequestTest
             Assert.assertTrue(normalWebRequest.getUrl().sameFile(normalUrl));
             // Assert that there is no query
             Assert.assertNull(normalWebRequest.getUrl().getQuery());
+        }
+    }
 
+    /**
+     * Verifies post-a-like requests with specified parameters attribute are built correctly.
+     * 
+     * @throws MalformedURLException
+     * @throws UnsupportedEncodingException
+     */
+    @Test
+    public void postalikeParameterRequestWithParameter() throws MalformedURLException, UnsupportedEncodingException
+    {
+        final List<String> httpMethods = new ArrayList<>();
+        httpMethods.add("PATCH");
+        httpMethods.add("POST");
+        httpMethods.add("PUT");
+        final String urlString = "https://www.xceptance.net/en/";
+        final List<NameValuePair> parameters = new ArrayList<>();
+        parameters.add(new NameValuePair("parameterParam_1", "parameterValue_1"));
+        parameters.add(new NameValuePair("parameterParam_2", "parameterValue_2"));
+
+        for (final String httpMethod : httpMethods)
+        {
+            // Request with Param and without Query
+            // Build the request with parameters
+            final Request paramRequest = new Request(urlString);
+            paramRequest.setHttpMethod(httpMethod);
+            paramRequest.setParameters(parameters);
+            // Build the WebRequest
+            final WebRequest paramWebRequest = paramRequest.buildWebRequest(context);
+            // Verify there is no query
+            Assert.assertNull(paramWebRequest.getUrl().getQuery());
+            // Verify the parameters are the parameters of the WebRequest
+            Assert.assertEquals(parameters, paramWebRequest.getRequestParameters());
+        }
+    }
+
+    /**
+     * Verifies get-a-like requests with specified parameters attribute are built correctly.
+     * 
+     * @throws MalformedURLException
+     * @throws UnsupportedEncodingException
+     */
+    @Test
+    public void getalikeParameterRequestWithParameter() throws MalformedURLException, UnsupportedEncodingException
+    {
+        final List<String> httpMethods = new ArrayList<>();
+        httpMethods.add("DELETE");
+        httpMethods.add("GET");
+        httpMethods.add("HEAD");
+        httpMethods.add("OPTIONS");
+        httpMethods.add("TRACE");
+        final String urlString = "https://www.xceptance.net/en/";
+        final List<NameValuePair> parameters = new ArrayList<>();
+        parameters.add(new NameValuePair("parameterParam_1", "parameterValue_1"));
+        parameters.add(new NameValuePair("parameterParam_2", "parameterValue_2"));
+        final String parameterQuery = "parameterParam_1=parameterValue_1&parameterParam_2=parameterValue_2";
+
+        for (final String httpMethod : httpMethods)
+        {
             // Request with Param and without Query
             // Build request with parameters
             final Request paramRequest = new Request(urlString);
@@ -628,7 +706,72 @@ public class RequestTest
             Assert.assertEquals(parameterQuery, paramWebRequest.getUrl().getQuery());
             // Verify the url is still correct
             Assert.assertEquals(urlString + "?" + parameterQuery, paramWebRequest.getUrl().toString());
+        }
+    }
 
+    /**
+     * Verifies post-a-like requests with a query in their URL are built correctly.
+     * 
+     * @throws MalformedURLException
+     * @throws UnsupportedEncodingException
+     */
+    @Test
+    public void postalikeParameterRequestWithQueryUrl() throws MalformedURLException, UnsupportedEncodingException
+    {
+        final List<String> httpMethods = new ArrayList<>();
+        httpMethods.add("PATCH");
+        httpMethods.add("POST");
+        httpMethods.add("PUT");
+
+        final String urlString = "https://www.xceptance.net/en/";
+        final String urlQuery = "urlParam=urlValue";
+        final String urlQueryString = urlString + "?" + urlQuery;
+        final URL queryUrl = new URL(urlQueryString);
+
+        // Iterate over all post-a-like methods
+        for (final String httpMethod : httpMethods)
+        {
+            // Request with Query and without Param
+            // Build the request with the query
+            final Request queryRequest = new Request(urlQueryString);
+            queryRequest.setHttpMethod(httpMethod);
+            // Build the WebRequest
+            final WebRequest queryWebRequest = queryRequest.buildWebRequest(context);
+            // Verify the url is the same as the query url
+            Assert.assertTrue(queryWebRequest.getUrl().sameFile(queryUrl));
+            // Verify that there is a query
+            Assert.assertNotNull(queryWebRequest.getUrl().getQuery());
+            // Verify the query is the correct one
+            Assert.assertEquals(urlQuery, queryWebRequest.getUrl().getQuery());
+            // Verify the url is correct
+            Assert.assertEquals(urlQueryString, queryWebRequest.getUrl().toString());
+        }
+    }
+
+    /**
+     * Verifies get-a-like requests with a query in their URL are built correctly.
+     * 
+     * @throws MalformedURLException
+     * @throws UnsupportedEncodingException
+     */
+    @Test
+    public void getalikeParameterRequestWithQueryUrl() throws MalformedURLException, UnsupportedEncodingException
+    {
+        final List<String> httpMethods = new ArrayList<>();
+        httpMethods.add("DELETE");
+        httpMethods.add("GET");
+        httpMethods.add("HEAD");
+        httpMethods.add("OPTIONS");
+        httpMethods.add("TRACE");
+
+        final String urlString = "https://www.xceptance.net/en/";
+        final String urlQuery = "urlParam=urlValue";
+        final String urlQueryString = urlString + "?" + urlQuery;
+        final URL queryUrl = new URL(urlQueryString);
+
+        // Iterate over all get-a-like methods
+        for (final String httpMethod : httpMethods)
+        {
             // Request with Query and without Param
             // Build Request with Query
             final Request queryRequest = new Request(urlQueryString);
@@ -643,32 +786,17 @@ public class RequestTest
             Assert.assertEquals(urlQuery, queryWebRequest.getUrl().getQuery());
             // Verify that the url is the same as the url query string
             Assert.assertEquals(urlQueryString, queryWebRequest.getUrl().toString());
-
-            // Request with Query and Param
-            // Build the request with query and parameters
-            final Request paramQueryRequest = new Request(urlQueryString);
-            paramQueryRequest.setHttpMethod(httpMethod);
-            paramQueryRequest.setParameters(parameters);
-            // Build the WebRequest
-            final WebRequest paramQueryWebRequest = paramQueryRequest.buildWebRequest(context);
-            // Verify a query exists
-            Assert.assertNotNull(paramQueryWebRequest.getUrl().getQuery());
-            // Verify that the query is the same as the query from the url and the parameters
-            Assert.assertEquals(fullParamQueryString, paramQueryWebRequest.getUrl().getQuery());
-            // Verify the url is correct
-            Assert.assertEquals(urlQueryString + "&" + parameterQuery, paramQueryWebRequest.getUrl().toString());
-
         }
     }
 
     /**
      * Verifies parameters are handled correctly for Post and Post-a-like Requests.
-     * 
+     *
      * @throws MalformedURLException
      * @throws UnsupportedEncodingException
      */
     @Test
-    public void testParameterBuilderWithPostalike() throws MalformedURLException, UnsupportedEncodingException
+    public void postalikeParameterRequestWithQueryUrlAndParameter() throws MalformedURLException, UnsupportedEncodingException
     {
         final List<String> httpMethods = new ArrayList<>();
         httpMethods.add("PATCH");
@@ -681,36 +809,11 @@ public class RequestTest
         final List<NameValuePair> parameters = new ArrayList<>();
         parameters.add(new NameValuePair("parameterParam_1", "parameterValue_1"));
         parameters.add(new NameValuePair("parameterParam_2", "parameterValue_2"));
-        final URL normalUrl = new URL(urlString);
         final URL queryUrl = new URL(urlQueryString);
 
         // Iterate over all post-a-like methods
         for (final String httpMethod : httpMethods)
         {
-
-            // Request without Query and Param
-            // Build the request
-            final Request normalRequest = new Request(urlString);
-            normalRequest.setHttpMethod(httpMethod);
-            // Build the WebRequest
-            final WebRequest normalWebRequest = normalRequest.buildWebRequest(context);
-            // Verify that the url is the same as the normal one
-            Assert.assertTrue(normalWebRequest.getUrl().sameFile(normalUrl));
-            // Verify that there is no query
-            Assert.assertNull(normalWebRequest.getUrl().getQuery());
-
-            // Request with Param and without Query
-            // Build the request with parameters
-            final Request paramRequest = new Request(urlString);
-            paramRequest.setHttpMethod(httpMethod);
-            paramRequest.setParameters(parameters);
-            // Build the WebRequest
-            final WebRequest paramWebRequest = paramRequest.buildWebRequest(context);
-            // Verify there is no query
-            Assert.assertNull(paramWebRequest.getUrl().getQuery());
-            // Verify the parameters are the parameters of the WebRequest
-            Assert.assertEquals(parameters, paramWebRequest.getRequestParameters());
-
             // Request with Query and without Param
             // Build the request with the query
             final Request queryRequest = new Request(urlQueryString);
@@ -741,6 +844,50 @@ public class RequestTest
             Assert.assertEquals(urlQueryString, paramQueryWebRequest.getUrl().toString());
             // Verify the parameters are the parameters of the WebRequest
             Assert.assertEquals(parameters, paramQueryWebRequest.getRequestParameters());
+        }
+    }
+
+    /**
+     * Verifies parameters are handled correctly for Get and Get-a-like Requests.
+     *
+     * @throws MalformedURLException
+     * @throws UnsupportedEncodingException
+     */
+    @Test
+    public void getalikeParameterRequestWithQueryUrlAndParameter() throws MalformedURLException, UnsupportedEncodingException
+    {
+        final List<String> httpMethods = new ArrayList<>();
+        httpMethods.add("DELETE");
+        httpMethods.add("GET");
+        httpMethods.add("HEAD");
+        httpMethods.add("OPTIONS");
+        httpMethods.add("TRACE");
+
+        final String urlString = "https://www.xceptance.net/en/";
+        final String urlQuery = "urlParam=urlValue";
+        final String urlQueryString = urlString + "?" + urlQuery;
+        final List<NameValuePair> parameters = new ArrayList<>();
+        parameters.add(new NameValuePair("parameterParam_1", "parameterValue_1"));
+        parameters.add(new NameValuePair("parameterParam_2", "parameterValue_2"));
+        final String parameterQuery = "parameterParam_1=parameterValue_1&parameterParam_2=parameterValue_2";
+        final String fullParamQueryString = urlQuery + "&" + parameterQuery;
+
+        // Iterate over all get-a-like methods
+        for (final String httpMethod : httpMethods)
+        {
+            // Request with Query and Param
+            // Build the request with query and parameters
+            final Request paramQueryRequest = new Request(urlQueryString);
+            paramQueryRequest.setHttpMethod(httpMethod);
+            paramQueryRequest.setParameters(parameters);
+            // Build the WebRequest
+            final WebRequest paramQueryWebRequest = paramQueryRequest.buildWebRequest(context);
+            // Verify a query exists
+            Assert.assertNotNull(paramQueryWebRequest.getUrl().getQuery());
+            // Verify that the query is the same as the query from the url and the parameters
+            Assert.assertEquals(fullParamQueryString, paramQueryWebRequest.getUrl().getQuery());
+            // Verify the url is correct
+            Assert.assertEquals(urlQueryString + "&" + parameterQuery, paramQueryWebRequest.getUrl().toString());
         }
     }
 
