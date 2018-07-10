@@ -214,12 +214,22 @@ public class RequestTest
         {
             expected.setRequestBody(body);
         }
+        else
+        {
+            String paramQuery = "";
+            for (final NameValuePair parameter : expected.getRequestParameters())
+            {
+                paramQuery += parameter.getName() + "=" + parameter.getValue() + "&";
+            }
+            paramQuery = paramQuery.substring(0, paramQuery.lastIndexOf("&"));
+            Assert.assertEquals(paramQuery, webRequest.getUrl().getQuery());
+        }
 
         Assert.assertEquals(expected.getRequestBody(), webRequest.getRequestBody());
-        Assert.assertEquals(expected.getRequestParameters(), webRequest.getRequestParameters());
         Assert.assertEquals(expected.getAdditionalHeaders(), webRequest.getAdditionalHeaders());
         Assert.assertEquals(expected.getHttpMethod(), webRequest.getHttpMethod());
-        Assert.assertEquals(expected.getUrl(), webRequest.getUrl());
+        final String url = webRequest.getUrl().toString().replaceFirst("\\?.*$", "");
+        Assert.assertEquals(expected.getUrl().toString(), url);
         Assert.assertEquals(expected.isXHR(), webRequest.isXHR());
 
     }
@@ -561,6 +571,125 @@ public class RequestTest
         Assert.assertTrue(headers.containsKey(Constants.COOKIE));
         final String cookieString = headers.get(Constants.COOKIE);
         Assert.assertEquals("headerCookie=headerValue", cookieString);
+    }
+
+    @Test
+    public void testParameterBuilderWithGetalike() throws MalformedURLException, UnsupportedEncodingException
+    {
+        final List<String> httpMethods = new ArrayList<>();
+        httpMethods.add("DELETE");
+        httpMethods.add("GET");
+        httpMethods.add("HEAD");
+        httpMethods.add("OPTIONS");
+        httpMethods.add("TRACE");
+
+        for (final String httpMethod : httpMethods)
+        {
+            final String urlString = "https://www.xceptance.net/en/";
+            final String urlQuery = "urlParam=urlValue";
+            final String urlQueryString = urlString + "?" + urlQuery;
+            final List<NameValuePair> parameters = new ArrayList<>();
+            parameters.add(new NameValuePair("parameterParam_1", "parameterValue_1"));
+            parameters.add(new NameValuePair("parameterParam_2", "parameterValue_2"));
+            final String parameterQuery = "parameterParam_1=parameterValue_1&parameterParam_2=parameterValue_2";
+            final String fullParamQueryString = urlQuery + "&" + parameterQuery;
+            final URL normalUrl = new URL(urlString);
+            final URL queryUrl = new URL(urlQueryString);
+
+            // Request without Query and Param
+            final Request normalRequest = new Request(urlString);
+            normalRequest.setHttpMethod(httpMethod);
+            final WebRequest normalWebRequest = normalRequest.buildWebRequest(context);
+            Assert.assertTrue(normalWebRequest.getUrl().sameFile(normalUrl));
+            Assert.assertNull(normalWebRequest.getUrl().getQuery());
+
+            // Request with Param and without Query
+            final Request paramRequest = new Request(urlString);
+            paramRequest.setHttpMethod(httpMethod);
+            paramRequest.setParameters(parameters);
+            final WebRequest paramWebRequest = paramRequest.buildWebRequest(context);
+            Assert.assertNotNull(paramWebRequest.getUrl().getQuery());
+            Assert.assertEquals(parameterQuery, paramWebRequest.getUrl().getQuery());
+            Assert.assertEquals(urlString + "?" + parameterQuery, paramWebRequest.getUrl().toString());
+
+            // Request with Query and without Param
+            final Request queryRequest = new Request(urlQueryString);
+            queryRequest.setHttpMethod(httpMethod);
+            final WebRequest queryWebRequest = queryRequest.buildWebRequest(context);
+            Assert.assertTrue(queryWebRequest.getUrl().sameFile(queryUrl));
+            Assert.assertNotNull(queryWebRequest.getUrl().getQuery());
+            Assert.assertEquals(urlQuery, queryWebRequest.getUrl().getQuery());
+            Assert.assertEquals(urlQueryString, queryWebRequest.getUrl().toString());
+
+            // Request with Query and Param
+            final Request paramQueryRequest = new Request(urlQueryString);
+            paramQueryRequest.setHttpMethod(httpMethod);
+            paramQueryRequest.setParameters(parameters);
+            final WebRequest paramQueryWebRequest = paramQueryRequest.buildWebRequest(context);
+            Assert.assertNotNull(paramQueryWebRequest.getUrl().getQuery());
+            Assert.assertEquals(fullParamQueryString, paramQueryWebRequest.getUrl().getQuery());
+            Assert.assertEquals(urlQueryString + "&" + parameterQuery, paramQueryWebRequest.getUrl().toString());
+
+        }
+    }
+
+    /**
+     * @throws MalformedURLException
+     * @throws UnsupportedEncodingException
+     */
+    @Test
+    public void testParameterBuilderWithPostalike() throws MalformedURLException, UnsupportedEncodingException
+    {
+        final List<String> httpMethods = new ArrayList<>();
+        httpMethods.add("PATCH");
+        httpMethods.add("POST");
+        httpMethods.add("PUT");
+
+        for (final String httpMethod : httpMethods)
+        {
+            final String urlString = "https://www.xceptance.net/en/";
+            final String urlQuery = "urlParam=urlValue";
+            final String urlQueryString = urlString + "?" + urlQuery;
+            final List<NameValuePair> parameters = new ArrayList<>();
+            parameters.add(new NameValuePair("parameterParam_1", "parameterValue_1"));
+            parameters.add(new NameValuePair("parameterParam_2", "parameterValue_2"));
+            final URL normalUrl = new URL(urlString);
+            final URL queryUrl = new URL(urlQueryString);
+
+            // Request without Query and Param
+            final Request normalRequest = new Request(urlString);
+            normalRequest.setHttpMethod(httpMethod);
+            final WebRequest normalWebRequest = normalRequest.buildWebRequest(context);
+            Assert.assertTrue(normalWebRequest.getUrl().sameFile(normalUrl));
+            Assert.assertNull(normalWebRequest.getUrl().getQuery());
+
+            // Request with Param and without Query
+            final Request paramRequest = new Request(urlString);
+            paramRequest.setHttpMethod(httpMethod);
+            paramRequest.setParameters(parameters);
+            final WebRequest paramWebRequest = paramRequest.buildWebRequest(context);
+            Assert.assertNull(paramWebRequest.getUrl().getQuery());
+            Assert.assertEquals(parameters, paramWebRequest.getRequestParameters());
+
+            // Request with Query and without Param
+            final Request queryRequest = new Request(urlQueryString);
+            queryRequest.setHttpMethod(httpMethod);
+            final WebRequest queryWebRequest = queryRequest.buildWebRequest(context);
+            Assert.assertTrue(queryWebRequest.getUrl().sameFile(queryUrl));
+            Assert.assertNotNull(queryWebRequest.getUrl().getQuery());
+            Assert.assertEquals(urlQuery, queryWebRequest.getUrl().getQuery());
+            Assert.assertEquals(urlQueryString, queryWebRequest.getUrl().toString());
+
+            // Request with Query and Param
+            final Request paramQueryRequest = new Request(urlQueryString);
+            paramQueryRequest.setHttpMethod(httpMethod);
+            paramQueryRequest.setParameters(parameters);
+            final WebRequest paramQueryWebRequest = paramQueryRequest.buildWebRequest(context);
+            Assert.assertNotNull(paramQueryWebRequest.getUrl().getQuery());
+            Assert.assertEquals(urlQuery, paramQueryWebRequest.getUrl().getQuery());
+            Assert.assertEquals(urlQueryString, paramQueryWebRequest.getUrl().toString());
+            Assert.assertEquals(parameters, paramQueryWebRequest.getRequestParameters());
+        }
     }
 
 }

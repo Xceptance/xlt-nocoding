@@ -18,6 +18,7 @@ import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
+import com.gargoylesoftware.htmlunit.util.UrlUtils;
 import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.RecentKeyTreeMap;
@@ -236,7 +237,7 @@ public class Request extends AbstractActionItem
          * Set default parameters
          */
 
-        if (context.getDefaultParameters() != null)
+        if (context.getDefaultParameters() != null && !context.getDefaultParameters().getItems().isEmpty())
         {
             // Get default parameters
             final List<NameValuePair> defaultParameters = context.getDefaultParameters().getItems();
@@ -447,7 +448,7 @@ public class Request extends AbstractActionItem
             {
                 decodeParameters();
             }
-            webRequest.setRequestParameters(parameters);
+            handleParameters(webRequest, parameters);
         }
 
         // Set Body if specified and no parameters are set
@@ -508,6 +509,50 @@ public class Request extends AbstractActionItem
         final String output = "Request-URL: " + url + " with Method." + httpMethod;
 
         return output;
+    }
+
+    private void handleParameters(final WebRequest webRequest, final List<NameValuePair> parameters) throws MalformedURLException
+    {
+        final HttpMethod method = webRequest.getHttpMethod();
+        if (parameters != null && !parameters.isEmpty())
+        {
+            // POST as well as PUT and PATCH
+            if (method.equals(HttpMethod.POST) || method.equals(HttpMethod.PUT) || method.equals(HttpMethod.PATCH))
+            {
+
+                final String query = webRequest.getUrl().getQuery();
+                webRequest.setRequestParameters(parameters);
+            }
+            else
+            {
+                final URL url = buildNewUrl(webRequest.getUrl(), parameters);
+                webRequest.setUrl(url);
+            }
+
+        }
+    }
+
+    private static URL buildNewUrl(final URL url, final List<NameValuePair> parameters) throws MalformedURLException
+    {
+        URL newUrl = url;
+        if (parameters != null && !parameters.isEmpty())
+        {
+            final String query = url.getQuery();
+            String parameterToQuery = "";
+
+            // Add query and "&" to the url
+            if (query != null)
+            {
+                parameterToQuery += query + "&";
+            }
+            for (final NameValuePair parameter : parameters)
+            {
+                parameterToQuery += parameter.getName() + "=" + parameter.getValue() + "&";
+            }
+            parameterToQuery = parameterToQuery.substring(0, parameterToQuery.lastIndexOf("&"));
+            newUrl = UrlUtils.getUrlWithNewQuery(url, parameterToQuery);
+        }
+        return newUrl;
     }
 
 }
