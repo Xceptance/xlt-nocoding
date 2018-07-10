@@ -121,7 +121,7 @@ public class YamlParser implements Parser
                     // If the item wasn't a permitted list item, throw an exception
                     else
                     {
-                        throw new JsonParseException(parser, "No permitted list item: " + parser.getText());
+                        throw new JsonParseException(parser, "No permitted list item: " + currentName);
                     }
                 }
             }

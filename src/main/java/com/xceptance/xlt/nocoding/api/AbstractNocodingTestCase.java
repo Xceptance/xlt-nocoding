@@ -1,7 +1,6 @@
 package com.xceptance.xlt.nocoding.api;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -73,11 +72,10 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
     /**
      * Prepares a test case by parsing the contents of the file to {@link #itemList}
      * 
-     * @throws IOException
-     *             Thrown when the file is not found or the parser encounters an error
+     * @throws Exception
      */
     @Before
-    public void initialize() throws IOException
+    public void initialize() throws Exception
     {
         // Instantiate the properties
         final XltProperties properties = XltProperties.getInstance();
@@ -111,15 +109,7 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
         // Create the appropriate parser
         this.parser = getParserFor(filepath);
         // Get or parse the file
-        try
-        {
-            itemList = getOrParse(filepath);
-        }
-        catch (final Exception e)
-        {
-            XltLogger.runTimeLogger.error("Error while cloning.");
-            throw new IOException(e.getMessage());
-        }
+        itemList = getOrParse(filepath);
     }
 
     /**
