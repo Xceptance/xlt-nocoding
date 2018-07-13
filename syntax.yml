@@ -1,5 +1,5 @@
 #########################################
-#   TestSuite-NoCoding - YAML Cheatsheet
+#   Testsuite-nocoding - YAML Cheatsheet
 #########################################
 
 - Action :
@@ -93,13 +93,12 @@
     - header_2 : value
     - header_3 : value
 
-- Cookies :
-    - cookie_name_1 : value
-    - cookie_name_2 : value
-
 - Parameters :
     - p_1 : v_1
     - p_2 : v_2
+
+- Cookies :
+    - name_1 : value_1; domain=*.xceptance.com # domain is required
 
 - Static :
     - https://www.xceptance.com
