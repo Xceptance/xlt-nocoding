@@ -15,42 +15,34 @@ This is a library for Xceptance LoadTest (XLT) - http://www.xceptance-loadtest.c
  * Matthias Mitterreiter, Xceptance Software Technologies GmbH
  * Christoph Keiner, Xceptance Software Technologies GmbH
 
-
-***
-
 ### Introduction
 
 One is often faced with the requirement to just fire a couple of simple URLs, to verify the performance or functionality of a single feature, to create load in order to stress environments and monitor certain things, or simply to create load in addition to another load test.
 
 XLT-NoCoding is a library for XLT and delivers an easy way to define and fire HTTP requests and offers various tools to validate the responses.
-Additionally it is possible to filter, select and store data from the response in view of inserting it into the next request or its validation. This is a fast and likewise easy way to define test cases, since **no programming** is needed!
+Additionally it is possible to filter, select and store data from the response with the view of inserting it into the next request or its validation. This is a fast and likewise easy way to define test cases, since **no programming** is needed!
 
 Since the source is open and licensed under the Apache License V2.0, feel free to extend and customize it.
 
-***
+## Features
 
-#### [Getting Started](https://github.com/Xceptance/testsuite-nocoding/wiki)
-
-***
-
-### Features
-
-* Reads test definitions from files.
-  Supported file types :
+* Reads test definitions from files. Supported file types:
   * YAML
+  * CSV
 * Supports the validation of:
-  * HTTP response headers.
+  * HTTP response headers
   * Cookies
-  * HTTP Response Content.
-* Offers various validation modes in order to validate data.
-* Supports one mode to run the test-cases:
-  * LIGHT : there exists no DOM, which makes the test case fast to execute.
+  * HTTP Response Content 
+* Offers various validation methods in order to validate data.
+* Supports two modes to run the test-cases:
+  * DOM: the response are parsed into the DOM, which allows to select elements by xpath for validation purpose
+  * LIGHT: there exists no DOM, which makes the test case fast to execute.
 * Cookie handling is automatic
 * JavaScript and Static Content can be handled automatically and also be switched off.
 * None of the XLT features are disabled.
 * ...
 
-### Getting Started
+## [Getting Started](https://github.com/Xceptance/testsuite-nocoding/wiki)
 
 To learn more, try one of the following links.
 
