@@ -30,7 +30,7 @@ Since the source is open and licensed under the Apache License V2.0, feel free t
   * YAML
   * CSV
 * Supports the validation of:
-  * HTTP response headers
+  * HTTP Response Headers
   * Cookies
   * HTTP Response Content 
 * Offers various validation methods in order to validate data.
