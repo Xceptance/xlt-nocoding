@@ -22,7 +22,7 @@ One is often faced with the requirement to just fire a couple of simple URLs, to
 XLT-NoCoding is a library for XLT and delivers an easy way to define and fire HTTP requests and offers various tools to validate the responses.
 Additionally it is possible to filter, select and store data from the response with the view of inserting it into the next request or its validation. This is a fast and likewise easy way to define test cases, since **no programming** is needed!
 
-Since the source is open and licensed under the Apache License V2.0, feel free to extend and customize it.
+Since this is an open-source project and licensed under the Apache License V2.0, feel free to extend and customize it.
 
 ## Features
 
@@ -30,12 +30,12 @@ Since the source is open and licensed under the Apache License V2.0, feel free t
   * YAML
   * CSV
 * Supports the validation of:
-  * HTTP response headers
   * Cookies
-  * HTTP Response Content 
+  * HTTP response headers
+  * HTTP response content 
 * Offers various validation methods in order to validate data.
 * Supports two modes to run the test-cases:
-  * DOM: the response are parsed into the DOM, which allows to select elements by xpath for validation purpose
+  * DOM: the responses are parsed into the DOM, which allows to select elements by xpath for validation purpose
   * LIGHT: there exists no DOM, which makes the test case fast to execute.
 * Cookie handling is automatic
 * JavaScript and Static Content can be handled automatically and also be switched off.
@@ -47,6 +47,6 @@ Since the source is open and licensed under the Apache License V2.0, feel free t
 To learn more, try one of the following links.
 
 * [Overview](https://github.com/Xceptance/testsuite-nocoding/wiki): In order to get an overview.
-* [Quickstart](https://github.com/Xceptance/testsuite-nocoding/wiki/Quickstart) : To get started.
+* [Quickstart](https://github.com/Xceptance/testsuite-nocoding/wiki/Quickstart): To get started.
 * [Examples](https://github.com/Xceptance/testsuite-nocoding/wiki/Examples): To see some examples.
 
