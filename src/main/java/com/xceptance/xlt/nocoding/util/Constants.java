@@ -3,6 +3,11 @@ package com.xceptance.xlt.nocoding.util;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Has all important constants, that are used throughout parsing and executing.
+ * 
+ * @author ckeiner
+ */
 public class Constants
 {
 
@@ -44,8 +49,6 @@ public class Constants
 
     public static final String DELETE = "Delete";
 
-    public static final String VARIABLES = "Variables";
-
     public static final String ENCODED = "Encoded";
 
     public static final String METHOD_POST = "POST";
@@ -68,6 +71,8 @@ public class Constants
 
     public static final String TEXT = "Text";
 
+    public static final String GROUP = "Group";
+
     public static final String HEADER = "Header";
 
     public static final String COOKIE = "Cookie";
@@ -79,24 +84,9 @@ public class Constants
     public static final String EXISTS = "Exists";
 
     /**
-     * Type for a general Http Request.
-     */
-    public static final String TYPE_ACTION = "A";
-
-    /**
-     * Type for a Http requests, that loads static content. <br>
-     */
-    public static final String TYPE_STATIC = "S";
-
-    /**
-     * Type for a XMLHttpRequest
-     */
-    public static final String TYPE_XHR = "Xhr";
-
-    /**
      * Supported list items:
      * <ul>
-     * {@link #ACTION}
+     * <li>{@link #ACTION}
      * <li>{@link #STORE}
      * <li>{@link #NAME}
      * <li>{@link #HTTPCODE}
@@ -104,12 +94,11 @@ public class Constants
      * <li>{@link #METHOD}
      * <li>{@link #ENCODEPARAMETERS}
      * <li>{@link #ENCODEBODY}
+     * <li>{@link #XHR}
      * <li>{@link #HEADERS}
      * <li>{@link #PARAMETERS}
      * <li>{@link #COOKIES}
-     * <li>{@link #VARIABLES}
      * <li>{@link #HEADER}
-     * <li>{@link #COOKIE}
      * <li>{@link #BODY}
      * <li>{@link #STATIC}
      * </ul>
@@ -118,6 +107,7 @@ public class Constants
 
     /**
      * Supported action items:
+     * <ul>
      * <li>{@link #NAME}
      * <li>{@link #REQUEST}
      * <li>{@link #RESPONSE}
@@ -128,6 +118,7 @@ public class Constants
 
     /**
      * Supported request items:
+     * <ul>
      * <li>{@link #URL}
      * <li>{@link #METHOD}
      * <li>{@link #XHR}
@@ -135,13 +126,14 @@ public class Constants
      * <li>{@link #PARAMETERS}
      * <li>{@link #HEADERS}
      * <li>{@link #BODY}
-     * <li>{@link #ENCODEBODYDY}
+     * <li>{@link #ENCODEBODY}
      * </ul>
      */
     public final static Set<String> PERMITTEDREQUESTITEMS = new HashSet<>();
 
     /**
      * Supported subrequest items:
+     * <ul>
      * <li>{@link #XHR}
      * <li>{@link #STATIC}
      * </ul>
@@ -167,7 +159,7 @@ public class Constants
      * <li>{@link #COOKIE}
      * </ul>
      */
-    public final static Set<String> PERMITTEDSELECTIONMODE = new HashSet<>();
+    public final static Set<String> PERMITTEDEXTRACTIONMODE = new HashSet<>();
 
     /**
      * Supported validation modes:
@@ -178,7 +170,7 @@ public class Constants
      * <li>{@link #EXISTS}
      * </ul>
      */
-    public final static Set<String> PERMITTEDVALIDATIONMODE = new HashSet<>();
+    public final static Set<String> PERMITTEDVALIDATIONMETHOD = new HashSet<>();
 
     static
     {
@@ -194,7 +186,6 @@ public class Constants
         PERMITTEDLISTITEMS.add(HEADERS);
         PERMITTEDLISTITEMS.add(PARAMETERS);
         PERMITTEDLISTITEMS.add(COOKIES);
-        PERMITTEDLISTITEMS.add(VARIABLES);
         PERMITTEDLISTITEMS.add(HEADER);
         PERMITTEDLISTITEMS.add(BODY);
         PERMITTEDLISTITEMS.add(STATIC);
@@ -209,6 +200,7 @@ public class Constants
         PERMITTEDREQUESTITEMS.add(XHR);
         PERMITTEDREQUESTITEMS.add(ENCODEPARAMETERS);
         PERMITTEDREQUESTITEMS.add(PARAMETERS);
+        PERMITTEDREQUESTITEMS.add(COOKIES);
         PERMITTEDREQUESTITEMS.add(HEADERS);
         PERMITTEDREQUESTITEMS.add(BODY);
         PERMITTEDREQUESTITEMS.add(ENCODEBODY);
@@ -221,15 +213,15 @@ public class Constants
         PERMITTEDSUBREQUESTITEMS.add(XHR);
         PERMITTEDSUBREQUESTITEMS.add(STATIC);
 
-        PERMITTEDSELECTIONMODE.add(XPATH);
-        PERMITTEDSELECTIONMODE.add(REGEXP);
-        PERMITTEDSELECTIONMODE.add(HEADER);
-        PERMITTEDSELECTIONMODE.add(COOKIE);
+        PERMITTEDEXTRACTIONMODE.add(XPATH);
+        PERMITTEDEXTRACTIONMODE.add(REGEXP);
+        PERMITTEDEXTRACTIONMODE.add(HEADER);
+        PERMITTEDEXTRACTIONMODE.add(COOKIE);
 
-        PERMITTEDVALIDATIONMODE.add(TEXT);
-        PERMITTEDVALIDATIONMODE.add(MATCHES);
-        PERMITTEDVALIDATIONMODE.add(COUNT);
-        PERMITTEDVALIDATIONMODE.add(EXISTS);
+        PERMITTEDVALIDATIONMETHOD.add(TEXT);
+        PERMITTEDVALIDATIONMETHOD.add(MATCHES);
+        PERMITTEDVALIDATIONMETHOD.add(COUNT);
+        PERMITTEDVALIDATIONMETHOD.add(EXISTS);
     }
 
     public static boolean isPermittedListItem(final String s)
@@ -257,14 +249,14 @@ public class Constants
         return PERMITTEDSUBREQUESTITEMS.contains(s);
     }
 
-    public static boolean isPermittedSelectionMode(final String s)
+    public static boolean isPermittedExtraction(final String s)
     {
-        return PERMITTEDSELECTIONMODE.contains(s);
+        return PERMITTEDEXTRACTIONMODE.contains(s);
     }
 
-    public static boolean isPermittedValidationMode(final String s)
+    public static boolean isPermittedValidationMethod(final String s)
     {
-        return PERMITTEDVALIDATIONMODE.contains(s);
+        return PERMITTEDVALIDATIONMETHOD.contains(s);
     }
 
 }

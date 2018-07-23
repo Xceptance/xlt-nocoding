@@ -24,6 +24,10 @@
     - variable_1 : value_1
     - variable_2 : value_2
 
+- Cookies :
+    - cookieName_1 : cookieValue_1
+    - cookieName_2 : cookieValue_2
+
 - Name : Delete
 - Url : Delete
 - Httpcode : Delete
@@ -35,4 +39,3 @@
 - Static : Delete
 - Encode-Parameters : Delete
 - Encode-Body : Delete
-    
