@@ -519,8 +519,6 @@ public class Request extends AbstractActionItem
             // POST as well as PUT and PATCH
             if (method.equals(HttpMethod.POST) || method.equals(HttpMethod.PUT) || method.equals(HttpMethod.PATCH))
             {
-
-                final String query = webRequest.getUrl().getQuery();
                 webRequest.setRequestParameters(parameters);
             }
             else
@@ -528,7 +526,6 @@ public class Request extends AbstractActionItem
                 final URL url = buildNewUrl(webRequest.getUrl(), parameters);
                 webRequest.setUrl(url);
             }
-
         }
     }
 
