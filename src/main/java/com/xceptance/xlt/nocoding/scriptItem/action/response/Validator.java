@@ -4,12 +4,12 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.AbstractValidationMethod;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.ExistsValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.AbstractValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.ExistsValidator;
 import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
- * Uses an {@link AbstractExtractor} and {@link AbstractValidationMethod} to validate the result of the extraction.
+ * Uses an {@link AbstractExtractor} and {@link AbstractValidator} to validate the result of the extraction.
  * 
  * @author ckeiner
  */
@@ -29,7 +29,7 @@ public class Validator extends AbstractResponseItem
     /**
      * The validation method
      */
-    private AbstractValidationMethod method;
+    private AbstractValidator method;
 
     /**
      * Creates an instance of {@link Validator} that sets the {@link #validationName}, {@link #extractor} and
@@ -42,7 +42,7 @@ public class Validator extends AbstractResponseItem
      * @param method
      *            The method for validating
      */
-    public Validator(final String validationName, final AbstractExtractor extractor, final AbstractValidationMethod method)
+    public Validator(final String validationName, final AbstractExtractor extractor, final AbstractValidator method)
     {
         this.validationName = validationName;
         this.extractor = extractor;
@@ -51,7 +51,7 @@ public class Validator extends AbstractResponseItem
 
     /**
      * Executes the validator. First, it executes the {@link #extractor}. Then, if {@link #method} is null, it sets it to
-     * {@link ExistsValidator}. Finally, it sets {@link AbstractValidationMethod#setExpressionToValidate(java.util.List)}
+     * {@link ExistsValidator}. Finally, it sets {@link AbstractValidator#setExpressionToValidate(java.util.List)}
      * with {@link AbstractExtractor#getResult()} and executes the {@link #method}.
      */
     @Override
@@ -107,7 +107,7 @@ public class Validator extends AbstractResponseItem
         return extractor;
     }
 
-    public AbstractValidationMethod getMethod()
+    public AbstractValidator getMethod()
     {
         return method;
     }
@@ -117,7 +117,7 @@ public class Validator extends AbstractResponseItem
         this.extractor = extractor;
     }
 
-    public void setMethod(final AbstractValidationMethod method)
+    public void setMethod(final AbstractValidator method)
     {
         this.method = method;
     }

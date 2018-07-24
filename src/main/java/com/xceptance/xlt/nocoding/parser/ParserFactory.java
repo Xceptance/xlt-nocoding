@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.xceptance.xlt.api.util.XltLogger;
-import com.xceptance.xlt.nocoding.parser.csvParser.CsvParser;
-import com.xceptance.xlt.nocoding.parser.yamlParser.YamlParser;
+import com.xceptance.xlt.nocoding.parser.csv.CsvParser;
+import com.xceptance.xlt.nocoding.parser.yaml.YamlParser;
 
 /**
  * The class for getting the accepted extensions and the associated {@link Parser} for the extension

@@ -14,11 +14,11 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractE
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.CookieExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.HeaderExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.RegexpExtractor;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.AbstractValidationMethod;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.CountValidator;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.ExistsValidator;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.MatchesValidator;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.TextValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.AbstractValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.CountValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.ExistsValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.MatchesValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.TextValidator;
 import com.xceptance.xlt.nocoding.util.MockObjects;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
@@ -47,7 +47,7 @@ public class ValidatorTest
     }
 
     /**
-     * Validates {@link CookieExtractor} with multiple {@link AbstractValidationMethod}.
+     * Validates {@link CookieExtractor} with multiple {@link AbstractValidator}.
      * 
      * @throws Exception
      */
@@ -57,7 +57,7 @@ public class ValidatorTest
         // Build Validator with ExistsModule
         final String validationName = "Cookie Validation";
         AbstractExtractor extractor = new CookieExtractor(mockObjects.cookieName1);
-        AbstractValidationMethod method = new ExistsValidator();
+        AbstractValidator method = new ExistsValidator();
         Validator validator = new Validator(validationName, extractor, method);
 
         executeInARequest(validator);
@@ -83,7 +83,7 @@ public class ValidatorTest
     }
 
     /**
-     * Validates {@link HeaderExtractor} with multiple {@link AbstractValidationMethod}.
+     * Validates {@link HeaderExtractor} with multiple {@link AbstractValidator}.
      * 
      * @throws Exception
      */
@@ -93,7 +93,7 @@ public class ValidatorTest
         // Build Validator with ExistsModule
         final String validationName = "Header Validation";
         AbstractExtractor extractor = new HeaderExtractor("Set-Cookie");
-        AbstractValidationMethod method = new ExistsValidator();
+        AbstractValidator method = new ExistsValidator();
         Validator validator = new Validator(validationName, extractor, method);
 
         executeInARequest(validator);
@@ -119,7 +119,7 @@ public class ValidatorTest
     }
 
     /**
-     * Validates {@link RegexpExtractor} with multiple {@link AbstractValidationMethod}.
+     * Validates {@link RegexpExtractor} with multiple {@link AbstractValidator}.
      * 
      * @throws Exception
      */
@@ -129,7 +129,7 @@ public class ValidatorTest
         // Build Validator with ExistsModule
         final String validationName = "Regexp Validation";
         AbstractExtractor extractor = new RegexpExtractor(mockObjects.regexString);
-        AbstractValidationMethod method = new ExistsValidator();
+        AbstractValidator method = new ExistsValidator();
         Validator validator = new Validator(validationName, extractor, method);
 
         executeInARequest(validator);
@@ -168,7 +168,7 @@ public class ValidatorTest
         context.getVariables().store(variableName, validationName);
         // Build Validator with ExistsModule
         final AbstractExtractor extractor = new RegexpExtractor(mockObjects.regexString);
-        final AbstractValidationMethod method = new ExistsValidator();
+        final AbstractValidator method = new ExistsValidator();
         final Validator validator = new Validator("${" + variableName + "}", extractor, method);
         executeInARequest(validator);
         Assert.assertNotEquals(validationName, validator.getValidationName());
@@ -185,7 +185,7 @@ public class ValidatorTest
         final String validationName = "Regexp Validation";
         // Build Validator with ExistsModule
         final AbstractExtractor extractor = new RegexpExtractor(mockObjects.regexString, "0");
-        final AbstractValidationMethod method = new ExistsValidator();
+        final AbstractValidator method = new ExistsValidator();
         final Validator validator = new Validator(validationName, extractor, method);
         executeInARequest(validator);
         Assert.assertTrue(extractor instanceof RegexpExtractor);
@@ -204,7 +204,7 @@ public class ValidatorTest
         final String validationName = "Validate Action-0";
         // Build Validator with ExistsModule
         final AbstractExtractor extractor = new RegexpExtractor(mockObjects.regexString, "0");
-        final AbstractValidationMethod method = new ExistsValidator();
+        final AbstractValidator method = new ExistsValidator();
         final Validator validator = new Validator("", extractor, method);
         executeInARequest(validator);
         Assert.assertEquals(validationName, validator.getValidationName());

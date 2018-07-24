@@ -19,16 +19,16 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractE
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.CookieExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.HeaderExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.RegexpExtractor;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.AbstractValidationMethod;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.CountValidator;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.ExistsValidator;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.MatchesValidator;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.validationMethod.TextValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.AbstractValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.CountValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.ExistsValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.MatchesValidator;
+import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.TextValidator;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
- * Test {@link Validator} with all combinations of {@link AbstractExtractor} and {@link AbstractValidationMethod}
+ * Test {@link Validator} with all combinations of {@link AbstractExtractor} and {@link AbstractValidator}
  * 
  * @author ckeiner
  */
@@ -97,7 +97,7 @@ public class ExtendedValidatorTest
     }
 
     /**
-     * Validates {@link HeaderExtractor} with multiple {@link AbstractValidationMethod}.
+     * Validates {@link HeaderExtractor} with multiple {@link AbstractValidator}.
      * 
      * @throws Exception
      */
@@ -136,7 +136,7 @@ public class ExtendedValidatorTest
     }
 
     /**
-     * Validates {@link CookieExtractor} with multiple {@link AbstractValidationMethod}.
+     * Validates {@link CookieExtractor} with multiple {@link AbstractValidator}.
      * 
      * @throws Exception
      */
@@ -180,7 +180,7 @@ public class ExtendedValidatorTest
     }
 
     /**
-     * Validates {@link RegexpExtractor} with multiple {@link AbstractValidationMethod}.
+     * Validates {@link RegexpExtractor} with multiple {@link AbstractValidator}.
      * 
      * @throws Exception
      */
@@ -221,7 +221,7 @@ public class ExtendedValidatorTest
     }
 
     /**
-     * Validates {@link HeaderExtractor} with multiple {@link AbstractValidationMethod}. Both have variables.
+     * Validates {@link HeaderExtractor} with multiple {@link AbstractValidator}. Both have variables.
      * 
      * @throws Exception
      */
@@ -265,7 +265,7 @@ public class ExtendedValidatorTest
     }
 
     /**
-     * Validates {@link CookieExtractor} with multiple {@link AbstractValidationMethod}. Both have variables.
+     * Validates {@link CookieExtractor} with multiple {@link AbstractValidator}. Both have variables.
      * 
      * @throws Exception
      */
@@ -315,7 +315,7 @@ public class ExtendedValidatorTest
     }
 
     /**
-     * Validates {@link RegexpExtractor} with multiple {@link AbstractValidationMethod}. Both have variables.
+     * Validates {@link RegexpExtractor} with multiple {@link AbstractValidator}. Both have variables.
      * 
      * @throws Exception
      */
