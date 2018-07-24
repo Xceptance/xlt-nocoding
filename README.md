@@ -3,17 +3,16 @@
 This is a library for Xceptance LoadTest (XLT) - http://www.xceptance-loadtest.com/.
 
 * Name: xlt-nocoding
-* Version: 2.0.1
-* Release: July 2015
+* Version: 2.0.0
 * License: Apache V2.0
 * License URI: http://www.apache.org/licenses/LICENSE-2.0.txt
 * Tags: load testing, performance testing, testing
 * Contributors:
- * Hartmut Arlt, Xceptance Software Technologies GmbH
- * René Schwietzke, Xceptance Software Technologies GmbH
- * Jörg Werner, Xceptance Software Technologies GmbH
- * Matthias Mitterreiter, Xceptance Software Technologies GmbH
- * Christoph Keiner, Xceptance Software Technologies GmbH
+    * Hartmut Arlt, Xceptance Software Technologies GmbH
+    * René Schwietzke, Xceptance Software Technologies GmbH
+    * Jörg Werner, Xceptance Software Technologies GmbH
+    * Matthias Mitterreiter, Xceptance Software Technologies GmbH
+    * Christoph Keiner, Xceptance Software Technologies GmbH
 
 ### Introduction
 
@@ -27,19 +26,18 @@ Since this is an open-source project and licensed under the Apache License V2.0,
 ## Features
 
 * Reads test definitions from files. Supported file types:
-  * YAML
-  * CSV
+    * YAML
+    * CSV
 * Supports the validation of:
-  * Cookies
-  * HTTP response headers
-  * HTTP response content 
+    * Cookies
+    * HTTP response headers
+    * HTTP response content 
 * Offers various validation methods in order to validate data.
 * Supports two modes to run the test-cases:
-  * DOM: the responses are parsed into the DOM, which allows to select elements by XPath for validation purpose
-  * LIGHT: there exists no DOM, which makes the test case fast to execute.
+    * DOM: the responses are parsed into the DOM, which allows to select elements by XPath for validation purpose
+    * LIGHT: there exists no DOM, which makes the test case fast to execute.
 * Cookie handling is automatic
 * JavaScript and Static Content can be handled automatically and also be switched off.
-* None of the XLT features are disabled.
 * ...
 
 ## [Getting Started](https://github.com/Xceptance/testsuite-nocoding/wiki)
