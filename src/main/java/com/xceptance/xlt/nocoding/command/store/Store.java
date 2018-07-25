@@ -24,7 +24,7 @@ public class Store implements Command
 
     /**
      * Creates an instance of {@link Store}, that sets {@link #variableName} and {@link #value}
-     * 
+     *
      * @param variableName
      * @param value
      */
@@ -65,7 +65,7 @@ public class Store implements Command
 
     /**
      * Resolves {@link #value}.
-     * 
+     *
      * @param context
      *            The {@link Context} with the {@link VariableResolver} and {@link DataStorage}.
      */

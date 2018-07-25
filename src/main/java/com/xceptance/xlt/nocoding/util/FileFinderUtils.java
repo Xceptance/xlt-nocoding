@@ -12,15 +12,15 @@ import com.xceptance.xlt.nocoding.parser.ParserFactory;
 
 /**
  * Provides methods for verifying if a file exists and getting an existing file from a list of Strings.
- * 
+ *
  * @author ckeiner
  */
 public class FileFinderUtils
 {
     /**
-     * Goes through all provided file paths and tries to find a path to an existing file. If the extension is missing, it
-     * adds all known extensions via {@link ParserFactory#getExtensions()} and searches for the file.
-     * 
+     * Goes through all provided file paths and tries to find a path to an existing file. If the extension is missing,
+     * it adds all known extensions via {@link ParserFactory#getExtensions()} and searches for the file.
+     *
      * @param possiblePaths
      *            All possible filepaths to look into, with or without file extension
      * @return The path to a found file
@@ -97,9 +97,10 @@ public class FileFinderUtils
 
     /**
      * Checks if at the location of <code>fullPath</code> anything can be found.<br>
-     * At first, it creates a file at the path and if it exists, the function returns true. If no File exists, it creates a
-     * URL and tries to open the Stream. If the Stream can be opened, then we can read from there and return true.<br>
-     * 
+     * At first, it creates a file at the path and if it exists, the function returns true. If no File exists, it
+     * creates a URL and tries to open the Stream. If the Stream can be opened, then we can read from there and return
+     * true.<br>
+     *
      * @param fullPath
      *            The path to the file, with the file extension
      * @return True if either a File or URL can read from the provided <code>fullPath</code><br>
@@ -128,7 +129,8 @@ public class FileFinderUtils
                     exists = true;
                 }
             }
-            // Catch MalformedURLException and every other IO exception that occurs when opening the Stream, thus telling us, that
+            // Catch MalformedURLException and every other IO exception that occurs when opening the Stream, thus
+            // telling us, that
             // we cannot find something at the location
             catch (final IOException e)
             {

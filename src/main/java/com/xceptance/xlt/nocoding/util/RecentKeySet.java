@@ -12,7 +12,7 @@ public class RecentKeySet extends TreeSet<String>
     @Override
     public boolean add(final String item)
     {
-        if (this.contains(item))
+        if (contains(item))
         {
             super.remove(item);
         }

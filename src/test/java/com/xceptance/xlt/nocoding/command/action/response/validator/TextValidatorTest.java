@@ -5,12 +5,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.xceptance.xlt.nocoding.command.action.response.validator.AbstractValidator;
-import com.xceptance.xlt.nocoding.command.action.response.validator.TextValidator;
-
 /**
  * Tests {@link TextValidator}
- * 
+ *
  * @author ckeiner
  */
 public class TextValidatorTest extends ValidationMethodTest
@@ -18,7 +15,7 @@ public class TextValidatorTest extends ValidationMethodTest
 
     /**
      * Verifies {@link TextValidator} validates the content of the first result
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -34,7 +31,7 @@ public class TextValidatorTest extends ValidationMethodTest
     /**
      * Verifies {@link TextValidator} validates the content of the first result. The expected content is hidden behind a
      * variable
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -51,8 +48,9 @@ public class TextValidatorTest extends ValidationMethodTest
     }
 
     /**
-     * Verifies {@link TextValidator} throws an {@link AssertionError} if the content and the expected content are not equal
-     * 
+     * Verifies {@link TextValidator} throws an {@link AssertionError} if the content and the expected content are not
+     * equal
+     *
      * @throws Exception
      */
     @Test(expected = AssertionError.class)
@@ -67,7 +65,7 @@ public class TextValidatorTest extends ValidationMethodTest
 
     /**
      * Verifies {@link TextValidator} throws an {@link AssertionError} when the result list is null
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = AssertionError.class)
@@ -80,7 +78,7 @@ public class TextValidatorTest extends ValidationMethodTest
 
     /**
      * Verifies {@link TextValidator} throws an {@link AssertionError} when the result list is empty
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = AssertionError.class)

@@ -9,12 +9,10 @@ import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
-import com.xceptance.xlt.nocoding.util.storage.DataStorage;
-import com.xceptance.xlt.nocoding.util.storage.DefaultValues;
 
 /**
  * Tests {@link DataStorage}
- * 
+ *
  * @author ckeiner
  */
 public class DataStorageTest
@@ -27,7 +25,7 @@ public class DataStorageTest
     @Before
     public void init()
     {
-        this.context = new LightWeightContext(XltProperties.getInstance());
+        context = new LightWeightContext(XltProperties.getInstance());
     }
 
     @Test

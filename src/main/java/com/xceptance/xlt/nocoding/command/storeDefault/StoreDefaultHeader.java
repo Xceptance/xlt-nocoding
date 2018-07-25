@@ -10,7 +10,7 @@ import com.xceptance.xlt.nocoding.util.storage.unit.unique.UniqueSingleStorage;
 
 /**
  * Stores a default header and sets it at the {@link WebClient}.
- * 
+ *
  * @author ckeiner
  */
 public class StoreDefaultHeader extends AbstractStoreDefaultItem
@@ -18,7 +18,7 @@ public class StoreDefaultHeader extends AbstractStoreDefaultItem
 
     /**
      * Creates an instance of {@link StoreDefaultHeader} that sets {@link #getVariableName()} and {@link #getValue()}
-     * 
+     *
      * @param variableName
      *            The name of the header
      * @param value
@@ -30,8 +30,8 @@ public class StoreDefaultHeader extends AbstractStoreDefaultItem
     }
 
     /**
-     * If {@link #getValue()} is {@link Constants#DELETE}, the list of default headers is deleted. Else, it stores a default
-     * header.
+     * If {@link #getValue()} is {@link Constants#DELETE}, the list of default headers is deleted. Else, it stores a
+     * default header.
      */
     @Override
     public void execute(final Context<?> context)

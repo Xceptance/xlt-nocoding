@@ -14,14 +14,14 @@ import com.xceptance.xlt.nocoding.command.Command;
 
 /**
  * Defines the behavior of all parsers.
- * 
+ *
  * @author ckeiner
  */
 public interface Parser
 {
     /**
      * Parses the content of the file at <code>pathToFile</code> to a list of {@link Command}s
-     * 
+     *
      * @param pathToFile
      *            The String that describes the path to the file
      * @return The list of <code>ScriptItem</code>s that is described in the file
@@ -31,16 +31,16 @@ public interface Parser
 
     /**
      * Returns all acceptable extensions for this Parser
-     * 
+     *
      * @return A list of extensions that are associated with this Parser
      */
     public abstract List<String> getExtensions();
 
     /**
-     * Creates a {@link Reader} based on <code>pathToFile</code>. First, it tries to create a {@link FileReader} by creating
-     * a file. If a {@link FileNotFoundException} is encountered, it creates a {@link URL} from the <code>pathToFile</code>
-     * and creates a {@link InputStreamReader} based on {@link URL#openStream()}.
-     * 
+     * Creates a {@link Reader} based on <code>pathToFile</code>. First, it tries to create a {@link FileReader} by
+     * creating a file. If a {@link FileNotFoundException} is encountered, it creates a {@link URL} from the
+     * <code>pathToFile</code> and creates a {@link InputStreamReader} based on {@link URL#openStream()}.
+     *
      * @param pathToFile
      *            The path to the file
      * @return A <code>Reader</code> with the information of the file

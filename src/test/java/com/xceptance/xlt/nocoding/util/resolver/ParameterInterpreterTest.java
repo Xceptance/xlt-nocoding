@@ -23,9 +23,6 @@ import org.junit.Test;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
-import com.xceptance.xlt.nocoding.util.resolver.ParameterInterpreterNow;
-import com.xceptance.xlt.nocoding.util.resolver.ParameterInterpreterRandom;
-import com.xceptance.xlt.nocoding.util.resolver.VariableResolver;
 
 /**
  * Tests {@link VariableResolver}

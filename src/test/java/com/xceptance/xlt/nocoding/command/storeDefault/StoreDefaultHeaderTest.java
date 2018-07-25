@@ -8,20 +8,18 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.xceptance.xlt.nocoding.command.Command;
-import com.xceptance.xlt.nocoding.command.storeDefault.AbstractStoreDefaultItem;
-import com.xceptance.xlt.nocoding.command.storeDefault.StoreDefaultHeader;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
  * Tests {@link StoreDefaultHeader}
- * 
+ *
  * @author ckeiner
  */
 public class StoreDefaultHeaderTest extends AbstractStoreDefaultTest
 {
     /**
      * Verifies {@link StoreDefaultHeader} can store one default header
-     * 
+     *
      * @throws Throwable
      */
     @Test
@@ -35,7 +33,7 @@ public class StoreDefaultHeaderTest extends AbstractStoreDefaultTest
 
     /**
      * Verifies {@link StoreDefaultHeader} can delete a specified header
-     * 
+     *
      * @throws Throwable
      */
     @Test
@@ -52,13 +50,13 @@ public class StoreDefaultHeaderTest extends AbstractStoreDefaultTest
 
     /**
      * Verifies {@link StoreDefaultHeader} can delete all headers
-     * 
+     *
      * @throws Throwable
      */
     @Test
     public void deleteAllDefaultHeaders() throws Throwable
     {
-        final List<Command> store = new ArrayList<Command>();
+        final List<Command> store = new ArrayList<>();
         store.add(new StoreDefaultHeader("header_1", "value"));
         store.add(new StoreDefaultHeader("header_2", "value"));
         store.add(new StoreDefaultHeader("header_3", "value"));
@@ -80,7 +78,7 @@ public class StoreDefaultHeaderTest extends AbstractStoreDefaultTest
 
     /**
      * Verifies headers stored via {@link StoreDefaultHeader} are stored case insensitive
-     * 
+     *
      * @throws Throwable
      */
     @Test

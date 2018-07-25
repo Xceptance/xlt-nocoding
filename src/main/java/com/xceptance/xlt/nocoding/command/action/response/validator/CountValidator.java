@@ -6,7 +6,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Validates that {@link #getExpressionToValidate()} has the size of the Integer value of {@link #count}.
- * 
+ *
  * @author ckeiner
  */
 public class CountValidator extends AbstractValidator
@@ -18,7 +18,7 @@ public class CountValidator extends AbstractValidator
 
     /**
      * Creates an instance of {@link CountValidator}, that sets {@link #count}.
-     * 
+     *
      * @param count
      *            The expected size of {@link #getExpressionToValidate()} as String
      */
@@ -28,8 +28,8 @@ public class CountValidator extends AbstractValidator
     }
 
     /**
-     * Resolves values, parses {@link #count} to an Integer and finally asserts that {@link #getExpressionToValidate()} has
-     * a size of the Integer value of <code>value</code>.
+     * Resolves values, parses {@link #count} to an Integer and finally asserts that {@link #getExpressionToValidate()}
+     * has a size of the Integer value of <code>value</code>.
      */
     @Override
     public void execute(final Context<?> context)

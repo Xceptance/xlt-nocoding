@@ -10,7 +10,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
 /**
  * Validates that the first result in {@link #getExpressionToValidate()} matches the {@link Pattern} provided by
  * {@link #validationExpression}.
- * 
+ *
  * @author ckeiner
  */
 public class MatchesValidator extends AbstractValidator
@@ -23,7 +23,7 @@ public class MatchesValidator extends AbstractValidator
 
     /**
      * Creates an instance of {@link MatchesValidator} that sets {@link #validationExpression}
-     * 
+     *
      * @param validationExpression
      *            The {@link Pattern} to match {@link #getExpressionToValidate()} against as String
      */
@@ -33,9 +33,9 @@ public class MatchesValidator extends AbstractValidator
     }
 
     /**
-     * Resolves values, verifies {@link #getExpressionToValidate()} is neither null nor empty, and matches the first result
-     * of {@link #getExpressionToValidate()} against the {@link Pattern} provided by {@link #validationExpression}. Finally,
-     * it verifies there is at least one result.
+     * Resolves values, verifies {@link #getExpressionToValidate()} is neither null nor empty, and matches the first
+     * result of {@link #getExpressionToValidate()} against the {@link Pattern} provided by
+     * {@link #validationExpression}. Finally, it verifies there is at least one result.
      */
     @Override
     public void execute(final Context<?> context)

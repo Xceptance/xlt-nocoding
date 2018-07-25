@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
-import com.xceptance.xlt.nocoding.command.action.response.extractor.xpath.JsonXpathExtractorExecutor;
 import com.xceptance.xlt.nocoding.util.MockWebResponse;
 
 public class JsonXpathExtractorTest extends AbstractXpathExtractorExecutorTest

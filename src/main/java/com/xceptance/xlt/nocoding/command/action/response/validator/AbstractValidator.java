@@ -7,7 +7,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * The abstract class for every response item that specifies how to validate the {@link #expressionToValidate}.
- * 
+ *
  * @author ckeiner
  */
 public abstract class AbstractValidator implements Serializable
@@ -20,7 +20,7 @@ public abstract class AbstractValidator implements Serializable
 
     /**
      * Executes the validation method. Therefore, this method should use at least one assertion.
-     * 
+     *
      * @param context
      *            The {@link Context} to use
      */
@@ -38,7 +38,7 @@ public abstract class AbstractValidator implements Serializable
 
     /**
      * Resolves values.
-     * 
+     *
      * @param context
      *            The {@link Context} to use
      */

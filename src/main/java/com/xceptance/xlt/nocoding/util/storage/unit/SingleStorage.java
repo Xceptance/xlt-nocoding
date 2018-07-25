@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * A storage unit, that stores a {@link String} in a {@link List}.
- * 
+ *
  * @author ckeiner
  */
 public class SingleStorage
@@ -25,7 +25,7 @@ public class SingleStorage
 
     /**
      * Creates a new instance of {@link SingleStorage}
-     * 
+     *
      * @param items
      *            The items you want
      */
@@ -36,7 +36,7 @@ public class SingleStorage
 
     /**
      * Stores item in {@link #items}
-     * 
+     *
      * @param item
      *            The item you want to store
      */
@@ -47,7 +47,7 @@ public class SingleStorage
 
     /**
      * Removes all {@link String} with the value of itemName
-     * 
+     *
      * @param itemName
      *            The value of the item
      * @return True if an item was removed. Otherwise, returns false

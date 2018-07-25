@@ -29,7 +29,7 @@ import com.xceptance.xlt.nocoding.util.storage.DataStorage;
 
 /**
  * Describes a HTTP Request, that gets transformed to a {@link WebRequest} and then sent via the {@link XltWebClient}.
- * 
+ *
  * @author ckeiner
  */
 public class Request extends AbstractActionSubItem
@@ -89,15 +89,15 @@ public class Request extends AbstractActionSubItem
 
     /**
      * Creates an instance of {@link Request}, that sets {@link #url}.
-     * 
+     *
      * @param url
      *            The URL as {@link String}.
      */
     public Request(final String url)
     {
         this.url = url;
-        parameters = new ArrayList<NameValuePair>();
-        cookies = new LinkedHashMap<String, String>();
+        parameters = new ArrayList<>();
+        cookies = new LinkedHashMap<>();
         headers = new RecentKeyTreeMap();
     }
 
@@ -168,7 +168,7 @@ public class Request extends AbstractActionSubItem
 
     /**
      * Create a {@link RecentKeyTreeMap} out of the specified map, so headers are always treated case insensitive.
-     * 
+     *
      * @param headers
      *            The map with the headers
      */
@@ -204,7 +204,7 @@ public class Request extends AbstractActionSubItem
     /**
      * Fills in the default values for all unspecified attributes.<br>
      * Note, that default headers and cookies are already set at the WebClient..
-     * 
+     *
      * @param context
      *            The {@link Context} with the {@link DataStorage}
      */
@@ -217,19 +217,19 @@ public class Request extends AbstractActionSubItem
         }
 
         // Set default HttpMethod if it isn't specified
-        if (this.getHttpMethod() == null)
+        if (getHttpMethod() == null)
         {
             setHttpMethod(context.getDefaultItems().get(Constants.METHOD));
         }
 
         // Set default Xhr if it isn't specified
-        if (this.getXhr() == null)
+        if (getXhr() == null)
         {
             setXhr(context.getDefaultItems().get(Constants.XHR));
         }
 
         // Set default encodeParameters if it isn't specified
-        if (this.getEncodeParameters() == null)
+        if (getEncodeParameters() == null)
         {
             setEncodeParameters(context.getDefaultItems().get(Constants.ENCODEPARAMETERS));
         }
@@ -256,13 +256,13 @@ public class Request extends AbstractActionSubItem
         }
 
         // Set default body if it isn't specified
-        if (this.getBody() == null)
+        if (getBody() == null)
         {
             setBody(context.getDefaultItems().get(Constants.BODY));
         }
 
         // Set default encodeBody if it isn't specified
-        if (this.getEncodeBody() == null)
+        if (getEncodeBody() == null)
         {
             setEncodeBody(context.getDefaultItems().get(Constants.ENCODEBODY));
         }
@@ -271,7 +271,7 @@ public class Request extends AbstractActionSubItem
 
     /**
      * Tries to resolve all variables of non-null attributes
-     * 
+     *
      * @param context
      *            The {@link Context} with the {@link VariableResolver}
      * @throws InvalidArgumentException
@@ -305,7 +305,7 @@ public class Request extends AbstractActionSubItem
         // Resolve each parameter in parameters if is neither null nor empty
         if (getParameters() != null && !getParameters().isEmpty())
         {
-            final List<NameValuePair> resolvedParameters = new ArrayList<NameValuePair>();
+            final List<NameValuePair> resolvedParameters = new ArrayList<>();
             String resolvedParameterName, resolvedParameterValue;
             // Iterate over the list
             for (final NameValuePair parameter : parameters)
@@ -325,7 +325,7 @@ public class Request extends AbstractActionSubItem
         if (getHeaders() != null && !getHeaders().isEmpty())
         {
             // Create a new map
-            final Map<String, String> resolvedHeaders = new HashMap<String, String>();
+            final Map<String, String> resolvedHeaders = new HashMap<>();
             // And insert the resolved key and value of the old map into the new one
             getHeaders().forEach((final String key, final String value) -> {
                 resolvedHeaders.put(context.resolveString(key), context.resolveString(value));
@@ -352,7 +352,7 @@ public class Request extends AbstractActionSubItem
     /**
      * Builds the {@link WebRequest} with the given {@link Context} and sends the <code>WebRequest</code>. Finally, it
      * stores the corresponding {@link WebResponse} with {@link Context#setWebResponse(WebResponse)}.
-     * 
+     *
      * @param context
      *            The {@link Context} with the {@link DataStorage}, {@link VariableResolver} and {@link XltWebClient}
      * @throws IOException
@@ -368,7 +368,7 @@ public class Request extends AbstractActionSubItem
         resolveValues(context);
 
         // Throw an error if the url is null or empty
-        if (this.url == null || this.url.isEmpty())
+        if (url == null || url.isEmpty())
         {
             throw new InvalidArgumentException("Url is empty. Please set a default url or specify a url.");
         }
@@ -386,7 +386,7 @@ public class Request extends AbstractActionSubItem
 
     /**
      * Sets the cookies at the web client
-     * 
+     *
      * @param context
      *            The current {@link Context}
      * @throws MalformedURLException
@@ -396,7 +396,7 @@ public class Request extends AbstractActionSubItem
     {
         if (getCookies() != null && !getCookies().isEmpty())
         {
-            final URL url = new URL(this.getUrl());
+            final URL url = new URL(getUrl());
             cookies.forEach((key, value) -> {
                 context.getWebClient().addCookie(key + "=" + value, url, this);
             });
@@ -405,7 +405,7 @@ public class Request extends AbstractActionSubItem
 
     /**
      * Builds the {@link WebRequest} that is specified by this object
-     * 
+     *
      * @param context
      *            The current {@link Context}
      * @return The <code>WebRequest</code> that is specified by this object
@@ -472,7 +472,7 @@ public class Request extends AbstractActionSubItem
 
     /**
      * Decodes the body.
-     * 
+     *
      * @throws UnsupportedEncodingException
      */
     private void decodeBody() throws UnsupportedEncodingException
@@ -483,7 +483,7 @@ public class Request extends AbstractActionSubItem
 
     /**
      * Decodes each parameter in {@link #parameters}.
-     * 
+     *
      * @throws UnsupportedEncodingException
      */
     private void decodeParameters() throws UnsupportedEncodingException

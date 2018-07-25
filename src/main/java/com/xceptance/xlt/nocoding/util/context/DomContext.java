@@ -18,14 +18,14 @@ import com.xceptance.xlt.nocoding.util.storage.DataStorage;
 
 /**
  * The {@link Context} used in the Dom mode of the execution. Therefore, it extends <code>Context&lt;SgmlPage&gt;</code>
- * 
+ *
  * @author ckeiner
  */
 public class DomContext extends Context<SgmlPage>
 {
     /**
      * Calls {@link DomContext#DomContext(XltProperties, DataStorage)}, with a new {@link DataStorage}.
-     * 
+     *
      * @param xltProperties
      *            The properties to use - normally {@link XltProperties#getInstance()}
      * @see Context#Context(XltProperties)
@@ -38,7 +38,7 @@ public class DomContext extends Context<SgmlPage>
     /**
      * Creates a new {@link DomContext}, with the provided {@link DataStorage}, creates a new {@link XltWebClient} and
      * {@link VariableResolver} and finally calls {@link Context#initialize()}.
-     * 
+     *
      * @param xltProperties
      *            The properties to use - normally {@link XltProperties#getInstance()}
      * @param dataStorage
@@ -52,7 +52,7 @@ public class DomContext extends Context<SgmlPage>
 
     /**
      * Creates a new {@link DomContext} out of the old {@link DomContext}
-     * 
+     *
      * @param context
      *            The Context to copy the values from
      * @see Context#Context(Context)
@@ -66,7 +66,7 @@ public class DomContext extends Context<SgmlPage>
      * Loads the {@link WebResponse} corresponding to the {@link WebRequest}. <br>
      * If {@link WebRequest#isXHR()} is <code>false</code>, it loads the {@link SgmlPage} and sets the WebResponse.<br>
      * If <code>WebRequest.isXHR()</code> is <code>true</code>, it only sets the WebResponse.
-     * 
+     *
      * @param webRequest
      *            The request to send
      * @throws IOException
@@ -79,7 +79,7 @@ public class DomContext extends Context<SgmlPage>
         if (!webRequest.isXHR())
         {
             // Load and set page
-            setPage(this.getWebClient().getPage(webRequest));
+            setPage(getWebClient().getPage(webRequest));
             // Set webResponse
             setWebResponse(getPage().getWebResponse());
         }
@@ -87,14 +87,14 @@ public class DomContext extends Context<SgmlPage>
         else
         {
             // Loads the page, but only saves the webResponse
-            setWebResponse(this.getWebClient().getPage(webRequest).getWebResponse());
+            setWebResponse(getWebClient().getPage(webRequest).getWebResponse());
         }
     }
 
     /**
      * Appends {@link #getPage()} to the result browser, if it is an instance of {@link HtmlPage}. <br>
      * Otherwise, it creates a new {@link LightWeightPage} and appends it.
-     * 
+     *
      * @throws IOException
      * @throws FailingHttpStatusCodeException
      */
@@ -129,7 +129,7 @@ public class DomContext extends Context<SgmlPage>
 
     /**
      * Creates a new {@link DomContext} out of the current one.
-     * 
+     *
      * @return A new <code>DomContext</code> via {@link #DomContext(Context)}
      */
     @Override

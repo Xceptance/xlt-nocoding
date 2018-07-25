@@ -7,7 +7,7 @@ import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 
 /**
  * The class for parsing the header items to a map with a String key and a String value
- * 
+ *
  * @author ckeiner
  */
 public class HeaderParser
@@ -15,7 +15,7 @@ public class HeaderParser
 
     /**
      * Parses the header item to a map with a String key and a String value
-     * 
+     *
      * @param headersNode
      *            The {@link JsonNode} with the headers in it
      * @return A map containing the parsed headers

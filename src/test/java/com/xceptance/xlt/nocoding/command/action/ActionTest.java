@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.command.Command;
-import com.xceptance.xlt.nocoding.command.action.Action;
 import com.xceptance.xlt.nocoding.command.action.request.Request;
 import com.xceptance.xlt.nocoding.command.action.response.Response;
 import com.xceptance.xlt.nocoding.command.action.subrequest.StaticSubrequest;
@@ -20,7 +19,7 @@ import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
  * Tests {@link Action}
- * 
+ *
  * @author ckeiner
  */
 public class ActionTest
@@ -61,14 +60,14 @@ public class ActionTest
 
     /**
      * Verifies {@link Action} adds default {@link StaticSubrequest}
-     * 
+     *
      * @throws Throwable
      */
     @Test
     public void testDefaultStatic() throws Throwable
     {
         final String url = "http://www.xceptance.net";
-        final List<Command> store = new ArrayList<Command>();
+        final List<Command> store = new ArrayList<>();
         store.add(new StoreDefaultStaticSubrequest(url));
         store.add(new StoreDefaultStaticSubrequest(url));
         store.add(new StoreDefaultStaticSubrequest(url));
@@ -138,7 +137,7 @@ public class ActionTest
 
     /**
      * Verifies {@link Action} does resolve {@link Action#getName()}
-     * 
+     *
      * @throws Throwable
      */
     @Test

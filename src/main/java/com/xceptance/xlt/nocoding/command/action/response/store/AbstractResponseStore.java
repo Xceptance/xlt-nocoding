@@ -5,7 +5,7 @@ import com.xceptance.xlt.nocoding.command.action.response.extractor.AbstractExtr
 
 /**
  * The abstract class for every response item that interacts with the storage.
- * 
+ *
  * @author ckeiner
  */
 public abstract class AbstractResponseStore extends AbstractResponseItem
@@ -22,7 +22,7 @@ public abstract class AbstractResponseStore extends AbstractResponseItem
 
     /**
      * Sets {@link #variableName} and {@link #extractor}.
-     * 
+     *
      * @param variableName
      *            The name of the variable
      * @param extractor

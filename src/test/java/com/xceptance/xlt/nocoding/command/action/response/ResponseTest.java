@@ -10,16 +10,13 @@ import org.junit.Test;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.api.validators.HttpResponseCodeValidator;
-import com.xceptance.xlt.nocoding.command.action.response.AbstractResponseItem;
-import com.xceptance.xlt.nocoding.command.action.response.HttpcodeValidator;
-import com.xceptance.xlt.nocoding.command.action.response.Response;
 import com.xceptance.xlt.nocoding.util.MockObjects;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
  * Tests {@link Response}
- * 
+ *
  * @author ckeiner
  */
 public class ResponseTest
@@ -42,7 +39,7 @@ public class ResponseTest
 
     /**
      * Verifies a {@link HttpcodeValidator} is added when {@link Response#Response()} is used
-     * 
+     *
      * @throws Throwable
      */
     @Test
@@ -58,7 +55,7 @@ public class ResponseTest
     /**
      * Verifies a {@link HttpcodeValidator} is added when {@link Response#Response(List)} is used and the specified
      * {@link List} does not contain a {@link HttpResponseCodeValidator}.
-     * 
+     *
      * @throws Throwable
      */
     @Test
@@ -73,14 +70,14 @@ public class ResponseTest
 
     /**
      * Verifies no {@link HttpcodeValidator} is added when already specified
-     * 
+     *
      * @throws Throwable
      */
     @Test
     public void testDefaultResponseItemsSpecified() throws Throwable
     {
         final String httpcode = "303";
-        final List<AbstractResponseItem> responseItems = new ArrayList<AbstractResponseItem>();
+        final List<AbstractResponseItem> responseItems = new ArrayList<>();
         responseItems.add(new HttpcodeValidator(httpcode));
         final Response response = new Response(responseItems);
         response.fillDefaultData(context);

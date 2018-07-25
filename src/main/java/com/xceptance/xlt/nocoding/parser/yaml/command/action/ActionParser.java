@@ -23,7 +23,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
  * The class for parsing an action item.
- * 
+ *
  * @author ckeiner
  */
 public class ActionParser extends AbstractCommandParser
@@ -31,7 +31,7 @@ public class ActionParser extends AbstractCommandParser
 
     /**
      * Parses the action item to a list of {@link Command}s.
-     * 
+     *
      * @param actionNode
      *            The {@link JsonNode} with the the action item
      * @return A list of <code>ScriptItem</code>s containing a single {@link Action}.
@@ -41,8 +41,8 @@ public class ActionParser extends AbstractCommandParser
     {
         // Initialize variables
         String name = null;
-        final List<AbstractActionSubItem> actionItems = new ArrayList<AbstractActionSubItem>(3);
-        final List<Command> scriptItems = new ArrayList<Command>(1);
+        final List<AbstractActionSubItem> actionItems = new ArrayList<>(3);
+        final List<Command> scriptItems = new ArrayList<>(1);
 
         // Verify that this is either a NullNode or an ObjectNode
         if (!(actionNode instanceof NullNode) && !(actionNode instanceof ObjectNode))

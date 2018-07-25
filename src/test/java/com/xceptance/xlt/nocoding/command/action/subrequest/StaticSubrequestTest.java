@@ -8,7 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.xceptance.xlt.api.util.XltProperties;
-import com.xceptance.xlt.nocoding.command.action.subrequest.StaticSubrequest;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
@@ -27,7 +26,7 @@ public class StaticSubrequestTest
     public void textConstructor()
     {
         final String url = "http://www.xceptance.net";
-        final List<String> urls = new ArrayList<String>();
+        final List<String> urls = new ArrayList<>();
         urls.add(url);
         final StaticSubrequest subrequest = new StaticSubrequest(urls);
         subrequest.getUrls().forEach((subrequestUrl) -> {
@@ -39,7 +38,7 @@ public class StaticSubrequestTest
     public void testExecute() throws Exception
     {
         final String url = "http://www.xceptance.net";
-        final List<String> urls = new ArrayList<String>();
+        final List<String> urls = new ArrayList<>();
         urls.add(url);
         final StaticSubrequest subrequest = new StaticSubrequest(urls);
         subrequest.execute(context);

@@ -10,7 +10,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Uses an {@link AbstractExtractor} and {@link AbstractValidator} to validate the result of the extraction.
- * 
+ *
  * @author ckeiner
  */
 public class Validator extends AbstractResponseItem
@@ -34,7 +34,7 @@ public class Validator extends AbstractResponseItem
     /**
      * Creates an instance of {@link Validator} that sets the {@link #validationName}, {@link #extractor} and
      * {@link #method}.
-     * 
+     *
      * @param validationName
      *            The name of the validation
      * @param extractor
@@ -50,8 +50,8 @@ public class Validator extends AbstractResponseItem
     }
 
     /**
-     * Executes the validator. First, it executes the {@link #extractor}. Then, if {@link #method} is null, it sets it to
-     * {@link ExistsValidator}. Finally, it sets {@link AbstractValidator#setExpressionToValidate(java.util.List)}
+     * Executes the validator. First, it executes the {@link #extractor}. Then, if {@link #method} is null, it sets it
+     * to {@link ExistsValidator}. Finally, it sets {@link AbstractValidator#setExpressionToValidate(java.util.List)}
      * with {@link AbstractExtractor#getResult()} and executes the {@link #method}.
      */
     @Override

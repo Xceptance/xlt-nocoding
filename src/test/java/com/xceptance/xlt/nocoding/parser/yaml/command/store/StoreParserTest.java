@@ -6,15 +6,15 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.command.store.Store;
 import com.xceptance.xlt.nocoding.parser.AbstractParserTest;
+import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParser;
 
 /**
  * Tests for parsing the "Store" tag
- * 
+ *
  * @author ckeiner
  */
 public class StoreParserTest extends AbstractParserTest
@@ -25,7 +25,7 @@ public class StoreParserTest extends AbstractParserTest
 
     /**
      * Verifies two store items can be parsed
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -76,7 +76,7 @@ public class StoreParserTest extends AbstractParserTest
 
     /**
      * Verifies an error happens when "Store" has objects beneath it and not an array
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = JsonParseException.class)

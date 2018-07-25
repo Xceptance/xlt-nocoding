@@ -8,12 +8,11 @@ import org.junit.Test;
 
 import com.gargoylesoftware.htmlunit.util.Cookie;
 import com.xceptance.xlt.nocoding.command.Command;
-import com.xceptance.xlt.nocoding.command.storeDefault.StoreDefaultCookie;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
  * Tests {@link StoreDefaultCookie}
- * 
+ *
  * @author ckeiner
  */
 public class StoreDefaultCookieTest extends AbstractStoreDefaultTest
@@ -28,9 +27,9 @@ public class StoreDefaultCookieTest extends AbstractStoreDefaultTest
     final String prefixSecure = "secure=";
 
     /**
-     * Verifies {@link StoreDefaultCookie} can store a minimal default cookie. A minimal default cookie consists of a name,
-     * a value and a domain.
-     * 
+     * Verifies {@link StoreDefaultCookie} can store a minimal default cookie. A minimal default cookie consists of a
+     * name, a value and a domain.
+     *
      * @throws Throwable
      */
     @Test
@@ -55,7 +54,7 @@ public class StoreDefaultCookieTest extends AbstractStoreDefaultTest
 
     /**
      * Verifies {@link StoreDefaultCookie} doesn't save the cookie when no value is set
-     * 
+     *
      * @throws Throwable
      */
     @Test
@@ -73,7 +72,7 @@ public class StoreDefaultCookieTest extends AbstractStoreDefaultTest
 
     /**
      * Verifies {@link StoreDefaultCookie} doesn't save the cookie when no value is set
-     * 
+     *
      * @throws Throwable
      */
     @Test
@@ -91,7 +90,7 @@ public class StoreDefaultCookieTest extends AbstractStoreDefaultTest
 
     /**
      * Verifies {@link StoreDefaultCookie} can delete a specified cookie
-     * 
+     *
      * @throws Throwable
      */
     @Test
@@ -131,7 +130,7 @@ public class StoreDefaultCookieTest extends AbstractStoreDefaultTest
         final String domain = ".xceptance.com";
         final String cookieValue = value + ";" + prefixDomain + domain + ";";
 
-        final List<Command> store = new ArrayList<Command>();
+        final List<Command> store = new ArrayList<>();
         store.add(new StoreDefaultCookie(name + "1", cookieValue));
         store.add(new StoreDefaultCookie(name + "2", cookieValue));
         store.add(new StoreDefaultCookie(name + "3", cookieValue));

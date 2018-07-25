@@ -12,7 +12,7 @@ import com.xceptance.xlt.nocoding.util.storage.DataStorage;
 /**
  * Utility class for {@link AbstractActionSubItem}. Provides static methods for verifying the order, and filling default
  * data.
- * 
+ *
  * @author ckeiner
  */
 public class ActionItemUtil
@@ -20,7 +20,7 @@ public class ActionItemUtil
 
     /**
      * Asserts that the order of {@link Request}, {@link Response}, and {@link AbstractSubrequest} is correct.
-     * 
+     *
      * @param actionItems
      *            The list of {@link AbstractActionSubItem}s you want to assert the order of
      */
@@ -63,7 +63,7 @@ public class ActionItemUtil
     /**
      * Adds a default {@link Request} and default {@link Response} if none is found in the list of
      * {@link AbstractActionSubItem}.
-     * 
+     *
      * @param actionItems
      *            The list of {@link AbstractActionSubItem}s to add the default items to
      * @param context
@@ -95,9 +95,9 @@ public class ActionItemUtil
     }
 
     /**
-     * Either gets a default name from {@link Context#getDefaultItems()} or calculates a name out of the <code>start</code>
-     * and {@link Context#getActionIndex()}.
-     * 
+     * Either gets a default name from {@link Context#getDefaultItems()} or calculates a name out of the
+     * <code>start</code> and {@link Context#getActionIndex()}.
+     *
      * @param start
      *            The String the defaultName should start with if no default name was defined
      * @param context

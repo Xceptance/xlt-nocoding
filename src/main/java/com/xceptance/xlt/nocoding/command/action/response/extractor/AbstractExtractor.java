@@ -13,7 +13,7 @@ import com.xceptance.xlt.nocoding.util.storage.DataStorage;
  * Extracts an element from the {@link WebResponse} in the {@link Context}. The extraction happens in
  * {@link AbstractExtractor#execute(Context)}. To get the result, you need to use {@link AbstractExtractor#getResult()}.
  * However, you should not reuse an instance twice.
- * 
+ *
  * @author ckeiner
  */
 public abstract class AbstractExtractor implements Serializable
@@ -31,20 +31,20 @@ public abstract class AbstractExtractor implements Serializable
 
     /**
      * Sets {@link #extractionExpression} and creates an ArrayList for {@link #result}.
-     * 
+     *
      * @param extractionExpression
      *            The {@link #extractionExpression} to use for extracting
      */
     public AbstractExtractor(final String extractionExpression)
     {
         this.extractionExpression = extractionExpression;
-        result = new ArrayList<String>(1);
+        result = new ArrayList<>(1);
     }
 
     /**
      * Executes the extractor. Looks into the {@link WebResponse} located in {@link Context}. Then sets the extracted
      * expression via {@link #addResult(String)}.
-     * 
+     *
      * @param context
      *            The {@link Context} to use
      */
@@ -52,7 +52,7 @@ public abstract class AbstractExtractor implements Serializable
 
     /**
      * Adds a string to the result list.
-     * 
+     *
      * @param result
      *            The string to be added to the result.
      */
@@ -63,7 +63,7 @@ public abstract class AbstractExtractor implements Serializable
 
     /**
      * Adds all strings in the list to the result list.
-     * 
+     *
      * @param resultList
      *            The list of strings to be added to the result.
      */
@@ -74,7 +74,7 @@ public abstract class AbstractExtractor implements Serializable
 
     /**
      * Resolves {@link #extractionExpression}.
-     * 
+     *
      * @param context
      *            The {@link Context} with the {@link VariableResolver} and {@link DataStorage}.
      */

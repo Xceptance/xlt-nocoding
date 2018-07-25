@@ -14,7 +14,7 @@ import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
  * XPath Extractor for "html/text" content type
- * 
+ *
  * @author ckeiner
  */
 public class HtmlXmlXpathExtractorExecutor extends XpathExtractorExecutor
@@ -61,7 +61,7 @@ public class HtmlXmlXpathExtractorExecutor extends XpathExtractorExecutor
 
     /**
      * Creates a new {@link HtmlXmlXpathExtractorExecutor} for Html and Xml content types
-     * 
+     *
      * @param extractionExpression
      *            The {@link #extractionExpression} to use for extracting
      * @see XpathExtractorExecutor#XpathExtractorExecutor(String)
@@ -109,7 +109,7 @@ public class HtmlXmlXpathExtractorExecutor extends XpathExtractorExecutor
 
     /**
      * Gets the TextContent of a {@link DomNode}
-     * 
+     *
      * @param node
      *            The node from which to extract the text content
      * @return
@@ -130,7 +130,7 @@ public class HtmlXmlXpathExtractorExecutor extends XpathExtractorExecutor
 
     /**
      * Gets all matching elements from the xPath expression from {@link #sgmlPage}
-     * 
+     *
      * @param xPath
      *            The xPath expression with which to extract information
      * @return A list of {@link DomNode}s that can be extracted via xPath

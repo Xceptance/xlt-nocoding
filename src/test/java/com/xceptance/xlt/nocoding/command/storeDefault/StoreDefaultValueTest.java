@@ -4,12 +4,11 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.xceptance.xlt.nocoding.command.Command;
-import com.xceptance.xlt.nocoding.command.storeDefault.StoreDefaultValue;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
  * Tests {@link StoreDefaultValue}
- * 
+ *
  * @author ckeiner
  */
 public class StoreDefaultValueTest extends AbstractStoreDefaultTest
@@ -17,7 +16,7 @@ public class StoreDefaultValueTest extends AbstractStoreDefaultTest
 
     /**
      * Verifies {@link StoreDefaultValue} can store one default item
-     * 
+     *
      * @throws Throwable
      */
     @Test
@@ -31,7 +30,7 @@ public class StoreDefaultValueTest extends AbstractStoreDefaultTest
 
     /**
      * Verifies {@link StoreDefaultValue} can delete one default item
-     * 
+     *
      * @throws Throwable
      */
     @Test
@@ -48,7 +47,7 @@ public class StoreDefaultValueTest extends AbstractStoreDefaultTest
 
     /**
      * Verifies {@link StoreDefaultValue} can delete a default item. However, the fallback value is still there
-     * 
+     *
      * @throws Throwable
      */
     @Test

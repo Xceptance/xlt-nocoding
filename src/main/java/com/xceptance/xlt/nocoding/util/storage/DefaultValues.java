@@ -4,7 +4,7 @@ import com.gargoylesoftware.htmlunit.HttpMethod;
 
 /**
  * Definitions for normal default values.
- * 
+ *
  * @author ckeiner
  */
 public class DefaultValues

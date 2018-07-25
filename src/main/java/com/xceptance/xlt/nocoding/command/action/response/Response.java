@@ -10,7 +10,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
 /**
  * The expected response to a request. A response has a list of response items, which validate or store something of the
  * {@link WebResponse} defined in the {@link Context}.
- * 
+ *
  * @author ckeiner
  */
 public class Response extends AbstractActionSubItem
@@ -33,7 +33,7 @@ public class Response extends AbstractActionSubItem
 
     /**
      * Creates an instance of {@link Response} with the specified responseItems
-     * 
+     *
      * @param responseItems
      *            The list of {@link AbstractResponseItem} to execute
      */

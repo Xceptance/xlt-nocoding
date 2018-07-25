@@ -11,7 +11,6 @@ import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.SgmlPage;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.util.XltProperties;
-import com.xceptance.xlt.nocoding.command.action.response.extractor.xpath.HtmlXmlXpathExtractorExecutor;
 import com.xceptance.xlt.nocoding.util.MockWebResponse;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.context.DomContext;
@@ -47,7 +46,7 @@ public class HtmlXmlXpathExtractorTest extends AbstractXpathExtractorExecutorTes
 
     /**
      * Verifies you can get XML Content with Dom Mode
-     * 
+     *
      * @throws IOException
      * @throws FailingHttpStatusCodeException
      */
@@ -57,8 +56,8 @@ public class HtmlXmlXpathExtractorTest extends AbstractXpathExtractorExecutorTes
         final String url = "http://www.xceptance.net";
         final WebResponse xmlResponse = new MockWebResponse(xmlContent, new URL(url), xmlType);
         context.setWebResponse(xmlResponse);
-        ((DomContext) context).setPage((SgmlPage) context.getWebClient().loadWebResponseInto(xmlResponse,
-                                                                                             context.getWebClient().getCurrentWindow()));
+        ((DomContext) context).setPage((SgmlPage) context.getWebClient()
+                                                         .loadWebResponseInto(xmlResponse, context.getWebClient().getCurrentWindow()));
         final HtmlXmlXpathExtractorExecutor xpathResponse = new HtmlXmlXpathExtractorExecutor("//title");
         xpathResponse.execute(context);
         final List<String> list = xpathResponse.getResult();
@@ -70,7 +69,7 @@ public class HtmlXmlXpathExtractorTest extends AbstractXpathExtractorExecutorTes
 
     /**
      * Verifies an error is thrown when the Xml Content is faulty and in Dom Mode
-     * 
+     *
      * @throws IOException
      * @throws FailingHttpStatusCodeException
      */
@@ -81,15 +80,16 @@ public class HtmlXmlXpathExtractorTest extends AbstractXpathExtractorExecutorTes
         final String url = "http://www.xceptance.net";
         final WebResponse maliciousXmlContentResponse = new MockWebResponse(maliciousXmlContent, new URL(url), xmlType);
         context.setWebResponse(maliciousXmlContentResponse);
-        ((DomContext) context).setPage((SgmlPage) context.getWebClient().loadWebResponseInto(maliciousXmlContentResponse,
-                                                                                             context.getWebClient().getCurrentWindow()));
+        ((DomContext) context).setPage((SgmlPage) context.getWebClient()
+                                                         .loadWebResponseInto(maliciousXmlContentResponse,
+                                                                              context.getWebClient().getCurrentWindow()));
         final HtmlXmlXpathExtractorExecutor xpathResponse = new HtmlXmlXpathExtractorExecutor("//title");
         xpathResponse.execute(context);
     }
 
     /**
      * Verifies you can get XML Content with Lightweight Mode
-     * 
+     *
      * @throws IOException
      * @throws FailingHttpStatusCodeException
      */
@@ -111,7 +111,7 @@ public class HtmlXmlXpathExtractorTest extends AbstractXpathExtractorExecutorTes
 
     /**
      * Verifies an error is thrown when the Xml Content is faulty and in Lightweight Mode
-     * 
+     *
      * @throws IOException
      * @throws FailingHttpStatusCodeException
      */

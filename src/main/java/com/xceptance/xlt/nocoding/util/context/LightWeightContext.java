@@ -21,7 +21,7 @@ import com.xceptance.xlt.nocoding.util.storage.DataStorage;
 /**
  * The {@link Context} used in the LightWeight mode of the execution. Therefore, it extends
  * <code>Context&lt;LightWeightPage&gt;</code>
- * 
+ *
  * @author ckeiner
  */
 public class LightWeightContext extends Context<LightWeightPage>
@@ -33,7 +33,7 @@ public class LightWeightContext extends Context<LightWeightPage>
 
     /**
      * Calls {@link LightWeightContext#LightWeightContext(XltProperties, DataStorage)}, with a new {@link DataStorage}.
-     * 
+     *
      * @param xltProperties
      *            The properties to use - normally {@link XltProperties#getInstance()}
      * @see Context#Context(XltProperties)
@@ -44,9 +44,9 @@ public class LightWeightContext extends Context<LightWeightPage>
     }
 
     /**
-     * Creates a new {@link LightWeightContext}, with the provided {@link DataStorage}, creates a new {@link XltWebClient}
-     * and {@link VariableResolver} and finally calls {@link Context#initialize()}.
-     * 
+     * Creates a new {@link LightWeightContext}, with the provided {@link DataStorage}, creates a new
+     * {@link XltWebClient} and {@link VariableResolver} and finally calls {@link Context#initialize()}.
+     *
      * @param xltProperties
      *            The properties to use - normally {@link XltProperties#getInstance()}
      * @param dataStorage
@@ -60,7 +60,7 @@ public class LightWeightContext extends Context<LightWeightPage>
 
     /**
      * Creates a new {@link LightWeightContext} out of the old {@link LightWeightContext}
-     * 
+     *
      * @param context
      *            The Context to copy the values from
      * @see Context#Context(Context)
@@ -71,8 +71,9 @@ public class LightWeightContext extends Context<LightWeightPage>
     }
 
     /**
-     * Gets the {@link SgmlPage} if it isn't <code>null</code>. Else, it builds the SgmlPage from the {@link WebResponse}.
-     * 
+     * Gets the {@link SgmlPage} if it isn't <code>null</code>. Else, it builds the SgmlPage from the
+     * {@link WebResponse}.
+     *
      * @return
      */
     public SgmlPage getSgmlPage()
@@ -119,7 +120,7 @@ public class LightWeightContext extends Context<LightWeightPage>
      * If {@link WebRequest#isXHR()} is <code>false</code>, it loads the {@link LightWeightPage} and sets the
      * {@link WebResponse}.<br>
      * If <code>WebRequest.isXHR()</code> is <code>true</code>, it only loads the WebResponse.
-     * 
+     *
      * @param webRequest
      *            The webRequest that should be send
      * @throws IOException
@@ -134,22 +135,22 @@ public class LightWeightContext extends Context<LightWeightPage>
         if (!webRequest.isXHR())
         {
             // Load and set page
-            this.setPage(this.getWebClient().getLightWeightPage(webRequest));
+            setPage(getWebClient().getLightWeightPage(webRequest));
             // Set webResponse
-            setWebResponse(this.getPage().getWebResponse());
+            setWebResponse(getPage().getWebResponse());
         }
         // If the webRequest is a Xhr
         else
         {
             // Load and set the WebResponse
-            setWebResponse(this.getWebClient().loadWebResponse(webRequest));
+            setWebResponse(getWebClient().loadWebResponse(webRequest));
         }
     }
 
     /**
      * Appends the {@link #getPage()} to the result browser, if it is not <code>null</code>.<br>
      * Otherwise, it creates a new {@link LightWeightPage}.
-     * 
+     *
      * @throws IOException
      * @throws FailingHttpStatusCodeException
      */
@@ -183,7 +184,7 @@ public class LightWeightContext extends Context<LightWeightPage>
 
     /**
      * Creates a new {@link LightWeightContext} out of the current one.
-     * 
+     *
      * @return A new <code>LightWeightContext</code> via {@link #LightWeightContext(Context)}
      */
     @Override

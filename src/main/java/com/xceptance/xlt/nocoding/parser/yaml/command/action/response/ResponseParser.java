@@ -19,7 +19,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
  * The class for parsing the response.
- * 
+ *
  * @author ckeiner
  */
 public class ResponseParser extends AbstractActionSubItemParser
@@ -27,7 +27,7 @@ public class ResponseParser extends AbstractActionSubItemParser
 
     /**
      * Parses the response item to a {@link Response} wrapped in a list of {@link AbstractActionSubItem}s.
-     * 
+     *
      * @param responseNode
      *            The {@link JsonNode} with the response item
      * @return The <code>Response</code> wrapped in a list of <code>AbstractActionItem</code>s
@@ -42,9 +42,9 @@ public class ResponseParser extends AbstractActionSubItemParser
         }
 
         // Initialize variables
-        final List<AbstractActionSubItem> actionItems = new ArrayList<AbstractActionSubItem>();
+        final List<AbstractActionSubItem> actionItems = new ArrayList<>();
         String httpcode = null;
-        final List<AbstractResponseItem> responseItems = new ArrayList<AbstractResponseItem>();
+        final List<AbstractResponseItem> responseItems = new ArrayList<>();
 
         // Get an iterator over the fieldNames
         final Iterator<String> fieldNames = responseNode.fieldNames();

@@ -7,7 +7,7 @@ import com.gargoylesoftware.htmlunit.util.NameValuePair;
 
 /**
  * A storage unit, that can have duplicate items.
- * 
+ *
  * @author ckeiner
  */
 public class DuplicateStorage
@@ -27,7 +27,7 @@ public class DuplicateStorage
 
     /**
      * Creates a new instance of {@link DuplicateStorage}
-     * 
+     *
      * @param items
      *            The items you want
      */
@@ -38,7 +38,7 @@ public class DuplicateStorage
 
     /**
      * Stores itemName and value in {@link #items}
-     * 
+     *
      * @param itemName
      *            The name of the {@link NameValuePair}
      * @param value
@@ -51,7 +51,7 @@ public class DuplicateStorage
 
     /**
      * Return all {@link NameValuePair} with the specified itemName as name
-     * 
+     *
      * @param itemName
      *            The name of the {@link NameValuePair}
      * @return The value of the {@link NameValuePair} with the specified itemName as name. Returns an emtpy list if no
@@ -59,7 +59,7 @@ public class DuplicateStorage
      */
     public List<String> get(final String itemName)
     {
-        final List<String> value = new ArrayList<String>();
+        final List<String> value = new ArrayList<>();
         // Iterate over all items
         for (final NameValuePair item : getItems())
         {
@@ -75,7 +75,7 @@ public class DuplicateStorage
 
     /**
      * Removes all {@link NameValuePair} with the name itemName
-     * 
+     *
      * @param itemName
      *            The name of the {@link NameValuePair}
      * @return True if an item was removed. Otherwise, returns falls

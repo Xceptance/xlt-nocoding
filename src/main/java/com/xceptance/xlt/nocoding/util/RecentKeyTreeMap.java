@@ -8,7 +8,7 @@ import java.util.TreeMap;
  * put method, it always uses the newest key, while the normal {@link TreeMap} uses the first added key. That means, if
  * the Comparator is {@link String#CASE_INSENSITIVE_ORDER} and K, V are {@link String}s, the newest capitalization of K
  * is stored and the old one is deleted.
- * 
+ *
  * @author ckeiner
  */
 public class RecentKeyTreeMap extends TreeMap<String, String>
@@ -36,7 +36,7 @@ public class RecentKeyTreeMap extends TreeMap<String, String>
     public String put(final String arg0, final String arg1)
     {
         String output = null;
-        if (this.containsKey(arg0))
+        if (containsKey(arg0))
         {
             output = this.remove(arg0);
             super.put(arg0, arg1);

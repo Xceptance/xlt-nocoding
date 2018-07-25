@@ -13,15 +13,16 @@ import com.xceptance.xlt.nocoding.util.Constants;
  * The class for parsing single, default key-value items. <br>
  * Therefore, it does not parse {@link Constants#HEADERS}, nor {@link Constants#PARAMETERS}, nor
  * {@link Constants#STATIC}, etc.
- * 
+ *
  * @author ckeiner
  */
 public class StoreDefaultValuesParser extends AbstractStoreDefaultSubItemsParser
 {
 
     /**
-     * Parses the default item to a list of {@link AbstractStoreDefaultItem}s which consists of a single {@link StoreDefaultValue}.
-     * 
+     * Parses the default item to a list of {@link AbstractStoreDefaultItem}s which consists of a single
+     * {@link StoreDefaultValue}.
+     *
      * @param defaultItemNode
      *            The {@link JsonNode} the default key-value item start at
      * @return A list of <code>StoreDefault</code>s with the parsed default key-value item.

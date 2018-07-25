@@ -16,14 +16,14 @@ import com.xceptance.xlt.nocoding.util.storage.unit.SingleStorage;
 
 /**
  * Stores a default cookie and sets it at the {@link WebClient}.
- * 
+ *
  * @author ckeiner
  */
 public class StoreDefaultCookie extends AbstractStoreDefaultItem
 {
     /**
      * Creates an instance of {@link StoreDefaultHeader} that sets {@link #getVariableName()} and {@link #getValue()}
-     * 
+     *
      * @param variableName
      *            The name of the cookie
      * @param value
@@ -35,9 +35,9 @@ public class StoreDefaultCookie extends AbstractStoreDefaultItem
     }
 
     /**
-     * If {@link #getValue()} is {@link Constants#DELETE}, the list of default cookies is deleted. Else, it stores a default
-     * cookie.
-     * 
+     * If {@link #getValue()} is {@link Constants#DELETE}, the list of default cookies is deleted. Else, it stores a
+     * default cookie.
+     *
      * @throws MalformedURLException
      */
     @Override
@@ -80,7 +80,7 @@ public class StoreDefaultCookie extends AbstractStoreDefaultItem
 
     /**
      * Removes every default cookie from the {@link XltWebClient}.
-     * 
+     *
      * @param cookieName
      *            The name of the cookie
      * @param context
@@ -97,7 +97,7 @@ public class StoreDefaultCookie extends AbstractStoreDefaultItem
 
     /**
      * Adds the cookie parsed from the passed name and definition to the webclient's cookie manager.
-     * 
+     *
      * @param cookieName
      *            The name of the cookie
      * @param cookieDefinition
@@ -121,7 +121,7 @@ public class StoreDefaultCookie extends AbstractStoreDefaultItem
     /**
      * Interprets the given arguments as they would have been returned by a server as response header {@code
      * Set-Cookie: cookieName=cookieDefinition} and returns the parsed cookie if valid, and {@code null} otherwise.
-     * 
+     *
      * @param cookieName
      *            The name of the cookie
      * @param cookieDefinition

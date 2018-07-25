@@ -8,7 +8,7 @@ import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 
 /**
  * The class for parsing the parameter items to a list of {@link NameValuePair}s
- * 
+ *
  * @author ckeiner
  */
 public class ParameterParser
@@ -16,7 +16,7 @@ public class ParameterParser
 
     /**
      * Parses a parameter item to a list of <code>NameValuePair</code>s
-     * 
+     *
      * @param parameterNode
      *            The {@link JsonNode} with the parameters in it
      * @return A list of <code>NameValuePair</code>s containing the parsed parameters

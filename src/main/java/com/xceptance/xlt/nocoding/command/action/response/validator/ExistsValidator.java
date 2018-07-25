@@ -6,7 +6,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Validates that {@link #getExpressionToValidate()} is neither null nor empty.
- * 
+ *
  * @author ckeiner
  */
 public class ExistsValidator extends AbstractValidator

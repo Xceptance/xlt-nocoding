@@ -9,7 +9,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
  * Extracts the specified cookie from the headers located in {@link Context#getWebResponse()}. The cookie is extracted
  * via name provided by {@link #getExtractionExpression()}. The value of the cookie is then accessible with
  * {@link #getResult()}.
- * 
+ *
  * @author ckeiner
  */
 public class CookieExtractor extends AbstractExtractor
@@ -18,7 +18,7 @@ public class CookieExtractor extends AbstractExtractor
     /**
      * Creates an instance of {@link CookieExtractor}, sets {@link #extractionExpression} and creates an ArrayList for
      * {@link #result}.
-     * 
+     *
      * @param extractionExpression
      *            The name of the cookie
      */
@@ -30,7 +30,7 @@ public class CookieExtractor extends AbstractExtractor
     /**
      * Iterates over the headers in {@link Context#getWebResponse()} and extracts the cookie with the name provided by
      * {@link #getExtractionExpression()}. Finally, it stores the value in the results via {@link #addResult(String)}.
-     * 
+     *
      * @param context
      *            The {@link Context} to use
      */

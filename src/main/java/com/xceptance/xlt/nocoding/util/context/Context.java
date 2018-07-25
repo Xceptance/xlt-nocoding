@@ -21,7 +21,7 @@ import com.xceptance.xlt.nocoding.util.storage.unit.unique.UniqueStorage;
 /**
  * A template for the context during the execution. Thus, it has methods for handling the {@link DataStorage},
  * {@link XltWebClient}, resolving variables, creating a {@link WebResponse} and accessing properties.
- * 
+ *
  * @param T
  *            The type of the loaded page to load
  * @author ckeiner
@@ -65,7 +65,7 @@ public abstract class Context<T>
 
     /**
      * Creates a new {@link Context#Context(XltProperties, DataStorage)}, with a new {@link DataStorage}.
-     * 
+     *
      * @param xltProperties
      *            The properties to use - normally {@link XltProperties#getInstance()}
      */
@@ -77,7 +77,7 @@ public abstract class Context<T>
     /**
      * Creates a new {@link Context}, with the provided {@link DataStorage}, creates a new {@link XltWebClient} and
      * {@link VariableResolver} and finally calls {@link #initialize()}.
-     * 
+     *
      * @param xltProperties
      *            The properties to use - normally {@link XltProperties#getInstance()}
      * @param dataStorage
@@ -94,7 +94,7 @@ public abstract class Context<T>
 
     /**
      * Creates a new {@link Context} out of the old {@link Context}
-     * 
+     *
      * @param context
      *            The context that should be copied
      */
@@ -120,7 +120,7 @@ public abstract class Context<T>
 
     /**
      * Gets the {@link DataStorage}
-     * 
+     *
      * @return
      */
     public DataStorage getDataStorage()
@@ -146,7 +146,7 @@ public abstract class Context<T>
 
     /**
      * Sets {@link #webResponse}
-     * 
+     *
      * @param webResponse
      */
     public void setWebResponse(final WebResponse webResponse)
@@ -156,7 +156,7 @@ public abstract class Context<T>
 
     /**
      * Gets the {@link VariableResolver}
-     * 
+     *
      * @return
      */
     public VariableResolver getResolver()
@@ -174,7 +174,7 @@ public abstract class Context<T>
 
     /**
      * Gets the index of the last action
-     * 
+     *
      * @return
      */
     public int getActionIndex()
@@ -184,7 +184,7 @@ public abstract class Context<T>
 
     /**
      * Sets the index as new {@link #actionIndex}
-     * 
+     *
      * @param actionIndex
      *            The index to set {@link #actionIndex} to
      */
@@ -195,7 +195,7 @@ public abstract class Context<T>
 
     /**
      * Gets the page.
-     * 
+     *
      * @return The page corresponding to the {@link #webResponse}
      */
     public T getPage()
@@ -205,7 +205,7 @@ public abstract class Context<T>
 
     /**
      * Sets the page.
-     * 
+     *
      * @param page
      *            The page corresponding to the {@link #webResponse}
      */
@@ -255,7 +255,7 @@ public abstract class Context<T>
     /**
      * Resolves every variable of a specified string. If a variable is specified and no value for it can be found, the
      * variable doesn't get resolved
-     * 
+     *
      * @param toResolve
      *            The string which might have variables
      * @return A string with the resolved variables
@@ -309,7 +309,7 @@ public abstract class Context<T>
 
     /**
      * Defines how the {@link WebResponse} is loaded
-     * 
+     *
      * @param webRequest
      *            The {@link WebRequest} for the <code>WebResponse</code>
      * @throws IOException
@@ -319,7 +319,7 @@ public abstract class Context<T>
 
     /**
      * Appends the {@link #webResponse} to the Xlt Result Browser
-     * 
+     *
      * @throws IOException
      * @throws FailingHttpStatusCodeException
      */
@@ -327,7 +327,7 @@ public abstract class Context<T>
 
     /**
      * Creates a new Context out of the current one
-     * 
+     *
      * @return Context with the type T
      */
     public abstract Context<T> buildNewContext();

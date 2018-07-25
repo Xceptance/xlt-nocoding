@@ -24,7 +24,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
  * Reads a Yaml file and generates a list filled with {@link Command}s out of the Yaml file.
- * 
+ *
  * @author ckeiner
  */
 public class YamlParser implements Parser
@@ -32,7 +32,7 @@ public class YamlParser implements Parser
 
     /**
      * Parses the content of the file at the <code>pathToFile</code> to a list of {@link Command}s
-     * 
+     *
      * @param pathToFile
      *            The String that describes the path to the file
      * @return A list of {@link Command}s
@@ -43,7 +43,7 @@ public class YamlParser implements Parser
     @Override
     public List<Command> parse(final String pathToFile) throws IOException
     {
-        final List<Command> scriptItems = new ArrayList<Command>();
+        final List<Command> scriptItems = new ArrayList<>();
         // Build the factory
         final YAMLFactory factory = new YAMLFactory();
 
@@ -112,7 +112,8 @@ public class YamlParser implements Parser
                                     break;
                             }
                         }
-                        // Catch any exception while parsing, so we can print the current line/column number with the error
+                        // Catch any exception while parsing, so we can print the current line/column number with the
+                        // error
                         catch (final Exception e)
                         {
                             throw new JsonParseException(parser, e.getMessage(), e);

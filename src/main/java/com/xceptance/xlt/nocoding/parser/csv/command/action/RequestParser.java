@@ -12,18 +12,19 @@ import com.xceptance.xlt.nocoding.parser.csv.CsvConstants;
 
 /**
  * Extracts the information of a {@link Request} from a {@link CSVRecord}.
- * 
+ *
  * @author ckeiner
  */
 public class RequestParser implements AbstractActionSubItemParser
 {
     /**
      * Extracts the information needed for a {@link Request} from the {@link CSVRecord}
-     * 
+     *
      * @param record
      *            The {@link CSVRecord} with the action item
      * @return The request defined by the CSVRecord
      */
+    @Override
     public Request parse(final CSVRecord record)
     {
         // Initialize variables
@@ -71,7 +72,7 @@ public class RequestParser implements AbstractActionSubItemParser
 
     /**
      * Converts the given string to a {@link List}<{@link NameValuePair}>.
-     * 
+     *
      * @param parameterString
      *            String, in which name and value of a single parameter is divided by an equal sign, '=', and multiple
      *            parameters divided by an ampersand, '&'.
@@ -80,7 +81,7 @@ public class RequestParser implements AbstractActionSubItemParser
     private List<NameValuePair> readParameters(final String parameterString)
     {
         // Create an empty parameter list
-        final List<NameValuePair> parameterList = new ArrayList<NameValuePair>();
+        final List<NameValuePair> parameterList = new ArrayList<>();
         // Split the String at '&' and save each in tokens
         final StringTokenizer tokenizer = new StringTokenizer(parameterString, "&");
         // While we have tokens

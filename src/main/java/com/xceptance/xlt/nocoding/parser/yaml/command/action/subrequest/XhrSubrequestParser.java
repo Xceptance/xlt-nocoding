@@ -20,7 +20,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
  * The class for parsing the Xhr Subrequest item.
- * 
+ *
  * @author ckeiner
  */
 public class XhrSubrequestParser
@@ -28,7 +28,7 @@ public class XhrSubrequestParser
 
     /**
      * Parses the Xhr item to a {@link XhrSubrequest}.
-     * 
+     *
      * @param xhrNode
      *            The {@link JsonNode} with the xhr subrequest item
      * @return The <code>XhrSubrequest</code> with the parsed data
@@ -43,7 +43,7 @@ public class XhrSubrequestParser
         }
         // Initialize variables
         String name = null;
-        final List<AbstractActionSubItem> actionItems = new ArrayList<AbstractActionSubItem>();
+        final List<AbstractActionSubItem> actionItems = new ArrayList<>();
 
         // Extract all fieldNames of the node, which is the information of the node (i.e. Name, Request)
         final Iterator<String> fieldNames = xhrNode.fieldNames();

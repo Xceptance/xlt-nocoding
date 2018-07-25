@@ -11,7 +11,7 @@ import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 
 /**
  * The class for parsing static subrequests.
- * 
+ *
  * @author ckeiner
  */
 public class StaticSubrequestParser
@@ -19,7 +19,7 @@ public class StaticSubrequestParser
 
     /**
      * Parses the static subrequest item in the static block to a {@link StaticSubrequest}.
-     * 
+     *
      * @param staticNode
      *            The {@link JsonNode} the static subrequest item starts at
      * @return A <code>StaticSubrequest</code> with the parsed URLs

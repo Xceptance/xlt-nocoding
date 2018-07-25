@@ -15,7 +15,6 @@ import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.XltMockWebConnection;
-import com.xceptance.xlt.nocoding.command.action.response.Validator;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.AbstractExtractor;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.CookieExtractor;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.HeaderExtractor;
@@ -30,7 +29,7 @@ import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
  * Test {@link Validator} with all combinations of {@link AbstractExtractor} and {@link AbstractValidator}
- * 
+ *
  * @author ckeiner
  */
 public class ExtendedValidatorTest
@@ -43,7 +42,7 @@ public class ExtendedValidatorTest
 
     /**
      * Instantiate the fields and set answers to localhost/posters/ and localhost/posters/POST
-     * 
+     *
      * @throws MalformedURLException
      */
     @Before
@@ -57,7 +56,7 @@ public class ExtendedValidatorTest
         List<NameValuePair> headers;
         String name;
         String value;
-        this.context = new LightWeightContext(XltProperties.getInstance());
+        context = new LightWeightContext(XltProperties.getInstance());
         webConnection = new XltMockWebConnection(context.getWebClient());
 
         // Set answer to localhost/posters/
@@ -73,7 +72,7 @@ public class ExtendedValidatorTest
         statusCode = 200;
         statusMessage = "A-OK";
         contentType = "text/html";
-        headers = new ArrayList<NameValuePair>();
+        headers = new ArrayList<>();
 
         name = "Cache-Control";
         value = "no-cache, no-store, max-age=0, must-revalidate";
@@ -90,7 +89,7 @@ public class ExtendedValidatorTest
         statusCode = 200;
         statusMessage = "A-OK";
         contentType = "text/html";
-        headers = new ArrayList<NameValuePair>();
+        headers = new ArrayList<>();
         name = "Set-Cookie";
         value = "NINJA_FLASH=success=Login+successful.+Have+fun+in+our+shop%21;Path=/";
         headers.add(new NameValuePair(name, value));
@@ -99,7 +98,7 @@ public class ExtendedValidatorTest
 
     /**
      * Validates {@link HeaderExtractor} with multiple {@link AbstractValidator}.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -138,7 +137,7 @@ public class ExtendedValidatorTest
 
     /**
      * Validates {@link CookieExtractor} with multiple {@link AbstractValidator}.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -148,7 +147,7 @@ public class ExtendedValidatorTest
         final URL url = new URL("https://localhost:8443/posters/login/POST");
         final WebRequest settings = new WebRequest(url, HttpMethod.POST);
         // Add the login parameters
-        final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+        final List<NameValuePair> parameters = new ArrayList<>();
         parameters.add(new NameValuePair("email", "john@doe.com"));
         parameters.add(new NameValuePair("password", "topsecret"));
         parameters.add(new NameValuePair("btnSignIn", ""));
@@ -182,7 +181,7 @@ public class ExtendedValidatorTest
 
     /**
      * Validates {@link RegexpExtractor} with multiple {@link AbstractValidator}.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -214,7 +213,8 @@ public class ExtendedValidatorTest
         // Execute
         validator.execute(context);
         ;
-        // Build a validator, that searches for the pattern and verifies text is the match in the matching group of group
+        // Build a validator, that searches for the pattern and verifies text is the match in the matching group of
+        // group
         validator = new Validator("RegExpValidation Text+Group", new RegexpExtractor(pattern, group), new TextValidator(text));
         context.setWebResponse(webResponse);
         // Execute
@@ -223,7 +223,7 @@ public class ExtendedValidatorTest
 
     /**
      * Validates {@link HeaderExtractor} with multiple {@link AbstractValidator}. Both have variables.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -267,7 +267,7 @@ public class ExtendedValidatorTest
 
     /**
      * Validates {@link CookieExtractor} with multiple {@link AbstractValidator}. Both have variables.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -283,7 +283,7 @@ public class ExtendedValidatorTest
         final URL url = new URL("https://localhost:8443/posters/login/POST");
         final WebRequest settings = new WebRequest(url, HttpMethod.POST);
         // Add the login parameters
-        final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+        final List<NameValuePair> parameters = new ArrayList<>();
         parameters.add(new NameValuePair("email", "john@doe.com"));
         parameters.add(new NameValuePair("password", "topsecret"));
         parameters.add(new NameValuePair("btnSignIn", ""));
@@ -317,7 +317,7 @@ public class ExtendedValidatorTest
 
     /**
      * Validates {@link RegexpExtractor} with multiple {@link AbstractValidator}. Both have variables.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -355,7 +355,8 @@ public class ExtendedValidatorTest
         // Execute
         validator.execute(context);
         ;
-        // Build a validator, that searches for the pattern and verifies text is the match in the matching group of group
+        // Build a validator, that searches for the pattern and verifies text is the match in the matching group of
+        // group
         validator = new Validator("RegExpValidation Text+Group", new RegexpExtractor(pattern, group), new TextValidator(text));
         context.setWebResponse(webResponse);
         // Execute

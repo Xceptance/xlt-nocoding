@@ -5,20 +5,19 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.xceptance.xlt.nocoding.command.action.response.extractor.AbstractExtractor;
-import com.xceptance.xlt.nocoding.command.action.response.extractor.RegexpExtractor;
 import com.xceptance.xlt.nocoding.util.MockObjects;
 
 /**
  * Tests for {@link RegexpExtractor}
- * 
+ *
  * @author ckeiner
  */
 public class RegexpExtractorTest extends ExtractorTest
 {
 
     /**
-     * Verifies {@link RegexpExtractor} extracts the correct string with the pattern from {@link MockObjects#regexString}
+     * Verifies {@link RegexpExtractor} extracts the correct string with the pattern from
+     * {@link MockObjects#regexString}
      */
     @Test
     public void testRegExpSelector()
@@ -31,8 +30,8 @@ public class RegexpExtractorTest extends ExtractorTest
     }
 
     /**
-     * Verifies {@link RegexpExtractor} extracts the correct string with the pattern from {@link MockObjects#regexString} if
-     * the pattern is a variable
+     * Verifies {@link RegexpExtractor} extracts the correct string with the pattern from
+     * {@link MockObjects#regexString} if the pattern is a variable
      */
     @Test
     public void testRegExpSelectorWithVariables()

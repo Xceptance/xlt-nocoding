@@ -9,9 +9,6 @@ import org.junit.Test;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.util.XltProperties;
-import com.xceptance.xlt.nocoding.command.action.response.AbstractResponseItem;
-import com.xceptance.xlt.nocoding.command.action.response.Response;
-import com.xceptance.xlt.nocoding.command.action.response.Validator;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.AbstractExtractor;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.CookieExtractor;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.HeaderExtractor;
@@ -28,7 +25,7 @@ import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
  * Tests {@link Validator}
- * 
+ *
  * @author ckeiner
  */
 public class ValidatorTest
@@ -51,7 +48,7 @@ public class ValidatorTest
 
     /**
      * Validates {@link CookieExtractor} with multiple {@link AbstractValidator}.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -87,7 +84,7 @@ public class ValidatorTest
 
     /**
      * Validates {@link HeaderExtractor} with multiple {@link AbstractValidator}.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -123,7 +120,7 @@ public class ValidatorTest
 
     /**
      * Validates {@link RegexpExtractor} with multiple {@link AbstractValidator}.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -158,7 +155,7 @@ public class ValidatorTest
 
     /**
      * Verifies the {@link Validator#getValidationName()} does not get resolved if it is a variable definition
-     * 
+     *
      * @throws Throwable
      */
     @Test
@@ -179,7 +176,7 @@ public class ValidatorTest
 
     /**
      * Verifies {@link RegexpExtractor} can extract a group
-     * 
+     *
      * @throws Throwable
      */
     @Test
@@ -198,7 +195,7 @@ public class ValidatorTest
     /**
      * Verifies, that when {@link Validator#getValidationName()} is null or empty, the default name is
      * <code>"Validate Action-" +</code> {@link Context#getActionIndex()}
-     * 
+     *
      * @throws Throwable
      */
     @Test
@@ -219,14 +216,14 @@ public class ValidatorTest
 
     /**
      * Creates a {@link Response} object out of the {@link Validator}. Then calls {@link Response#execute(Context)}
-     * 
+     *
      * @param validator
      * @throws Throwable
      */
     public void executeInARequest(final Validator validator) throws Throwable
     {
         // Build Response
-        final List<AbstractResponseItem> responseItems = new ArrayList<AbstractResponseItem>();
+        final List<AbstractResponseItem> responseItems = new ArrayList<>();
         responseItems.add(validator);
         final Response response = new Response(responseItems);
         // Execute Response

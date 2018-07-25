@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
-import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.command.action.Action;
 import com.xceptance.xlt.nocoding.command.action.request.Request;
@@ -23,11 +22,12 @@ import com.xceptance.xlt.nocoding.command.action.response.store.AbstractResponse
 import com.xceptance.xlt.nocoding.command.action.response.store.ResponseStore;
 import com.xceptance.xlt.nocoding.command.action.response.validator.MatchesValidator;
 import com.xceptance.xlt.nocoding.parser.AbstractParserTest;
+import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParser;
 
 /**
  * Tests for parsing the "Action" tag
- * 
+ *
  * @author ckeiner
  */
 public class ActionParserTest extends AbstractParserTest
@@ -58,7 +58,7 @@ public class ActionParserTest extends AbstractParserTest
 
     /**
      * Verifies an action is parsed correctly
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -89,7 +89,7 @@ public class ActionParserTest extends AbstractParserTest
             Assert.assertEquals("parameter_value_" + counter.toString(), parameter.getValue());
             counter++;
         }
-        final Map<String, String> expectedHeader = new HashMap<String, String>(2);
+        final Map<String, String> expectedHeader = new HashMap<>(2);
         expectedHeader.put("header_1", "header_value_1");
         expectedHeader.put("header_2", "header_value_2");
         Assert.assertTrue(expectedHeader.equals(request.getHeaders()));
@@ -137,7 +137,7 @@ public class ActionParserTest extends AbstractParserTest
 
     /**
      * Verifies all tags can be parsed
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -149,7 +149,7 @@ public class ActionParserTest extends AbstractParserTest
 
     /**
      * Verifies "Action: " with nothing in it can be parsed
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -162,7 +162,7 @@ public class ActionParserTest extends AbstractParserTest
 
     /**
      * Verifies no error is thrown when "Name" beneath "Action" is empty
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -178,7 +178,7 @@ public class ActionParserTest extends AbstractParserTest
 
     /**
      * Verifies an error happens when "Action" has an invalid tag
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = JsonParseException.class)
@@ -190,7 +190,7 @@ public class ActionParserTest extends AbstractParserTest
 
     /**
      * Verifies an error happens when "Action" has an array beneath it and not objects
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = JsonParseException.class)
@@ -202,7 +202,7 @@ public class ActionParserTest extends AbstractParserTest
 
     /**
      * Verifies an error happens when "Response" is defined before "Request"
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = JsonParseException.class)
@@ -214,7 +214,7 @@ public class ActionParserTest extends AbstractParserTest
 
     /**
      * Verifies an error happens when "Subrequests" is defined before "Request"
-     * 
+     *
      * @throws Throwable
      */
     @Test(expected = JsonParseException.class)

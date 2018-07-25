@@ -13,13 +13,12 @@ import com.xceptance.xlt.nocoding.command.action.response.extractor.xpath.XpathE
 import com.xceptance.xlt.nocoding.command.action.response.store.ResponseStore;
 import com.xceptance.xlt.nocoding.parser.csv.CsvConstants;
 import com.xceptance.xlt.nocoding.parser.csv.command.CsvParserTestUtils;
-import com.xceptance.xlt.nocoding.parser.csv.command.action.ResponseParser;
 
 public class ResponseParserTest
 {
     /**
      * Verifies a XPath variable declaration can be parsed
-     * 
+     *
      * @throws IOException
      */
     @Test
@@ -41,7 +40,7 @@ public class ResponseParserTest
 
     /**
      * Verifies a Regexp variable declaration can be parsed
-     * 
+     *
      * @throws IOException
      */
     @Test
@@ -64,7 +63,7 @@ public class ResponseParserTest
     /**
      * Verifies that if {@link CsvConstants#NAME} is mapped and neither null nor empty, the name of the validation is
      * "Validate " with the value of <code>CsvConstants.NAME</code> added
-     * 
+     *
      * @throws IOException
      */
     @Test
@@ -89,7 +88,7 @@ public class ResponseParserTest
 
     /**
      * Verifies that if {@link CsvConstants#NAME} is mapped and null, the name of the validation is also empty
-     * 
+     *
      * @throws IOException
      */
     @Test
@@ -112,7 +111,7 @@ public class ResponseParserTest
 
     /**
      * Verifies you cannot combine Regexp validation and Xpath store
-     * 
+     *
      * @throws IOException
      */
     @Test(expected = IllegalArgumentException.class)
@@ -131,7 +130,7 @@ public class ResponseParserTest
 
     /**
      * Verifies you cannot combine Regexp store and Xpath validation
-     * 
+     *
      * @throws IOException
      */
     @Test(expected = IllegalArgumentException.class)
@@ -150,7 +149,7 @@ public class ResponseParserTest
 
     /**
      * Verifies you cannot combine Regexp store and Xpath store
-     * 
+     *
      * @throws IOException
      */
     @Test(expected = IllegalArgumentException.class)
@@ -169,7 +168,7 @@ public class ResponseParserTest
 
     /**
      * Verifies you cannot combine Regexp and Xpath validations
-     * 
+     *
      * @throws IOException
      */
     @Test(expected = IllegalArgumentException.class)
@@ -188,7 +187,7 @@ public class ResponseParserTest
 
     /**
      * Verifies you cannot combine Regexp store and Xpath store
-     * 
+     *
      * @throws IOException
      */
     @Test(expected = IllegalArgumentException.class)

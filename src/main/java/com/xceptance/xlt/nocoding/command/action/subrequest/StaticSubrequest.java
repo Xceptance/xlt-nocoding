@@ -9,7 +9,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
 /**
  * Creates a static subrequest, that downloads all specified URLs. The amount of parallel download is specified in the
  * properties with the Key "com.xceptance.xlt.staticContent.downloadThreads".
- * 
+ *
  * @author ckeiner
  */
 public class StaticSubrequest extends AbstractSubrequest
@@ -21,7 +21,7 @@ public class StaticSubrequest extends AbstractSubrequest
 
     /**
      * Creates an instance of {@link StaticSubrequest} that sets {@link #urls}.
-     * 
+     *
      * @param urls
      *            The list of all URLs that are to be downloaded
      */
@@ -76,12 +76,12 @@ public class StaticSubrequest extends AbstractSubrequest
 
     /**
      * Resolves each static url
-     * 
+     *
      * @param context
      */
     public void resolveValues(final Context<?> context)
     {
-        final List<String> newUrls = new ArrayList<String>();
+        final List<String> newUrls = new ArrayList<>();
         for (final String url : urls)
         {
             newUrls.add(context.resolveString(url));

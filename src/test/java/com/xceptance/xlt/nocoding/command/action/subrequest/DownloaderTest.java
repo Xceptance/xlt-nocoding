@@ -8,11 +8,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.xceptance.xlt.engine.XltWebClient;
-import com.xceptance.xlt.nocoding.command.action.subrequest.Downloader;
 
 /**
  * Tests {@link Downloader}
- * 
+ *
  * @author ckeiner
  */
 public class DownloaderTest
@@ -75,7 +74,7 @@ public class DownloaderTest
 
     /**
      * {@link Downloader} loads content linear
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -94,7 +93,7 @@ public class DownloaderTest
 
     /**
      * {@link Downloader} loads content parallel
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -114,7 +113,7 @@ public class DownloaderTest
     /**
      * Uses {@link Downloader} with {@link Downloader#Downloader(XltWebClient, int, boolean)} whereas the last argument
      * (boolean userAgentUID) is true
-     * 
+     *
      * @throws Exception
      */
     @Test

@@ -2,11 +2,9 @@ package com.xceptance.xlt.nocoding.util.resolver;
 
 import org.junit.Test;
 
-import com.xceptance.xlt.nocoding.util.resolver.ParameterInterpreterRandom;
-
 /**
  * Tests {@link ParameterInterpreterRandom}
- * 
+ *
  * @author ckeiner
  */
 public class ParameterInterpreterRandomTest

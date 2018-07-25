@@ -18,7 +18,7 @@ import bsh.Interpreter;
  * Tries to resolve variables. A variable is specified as "${(.)*}". Resolves values from the inside to the outside by
  * first looking into the dataStorage, then tries resolving it via beanshell and lastly it looks into the property
  * files. If nothing is found, it returns the original string. If it finds a recursion, it throws an error.
- * 
+ *
  * @author ckeiner
  */
 public class VariableResolver
@@ -49,14 +49,14 @@ public class VariableResolver
 
     /**
      * Resolves the string as long as it can resolve it, but throws an error if it detects recursion
-     * 
+     *
      * @param toResolve
      * @param context
      * @return The resolved string with no variables
      */
     public String resolveString(final String toResolve, final Context<?> context)
     {
-        final List<String> resolvedValues = new ArrayList<String>();
+        final List<String> resolvedValues = new ArrayList<>();
         String resolvedValue = resolveExpression(toResolve, false, context).getLeft();
         resolvedValues.add(resolvedValue);
         // As long as we can still resolve another value, continue
@@ -86,7 +86,7 @@ public class VariableResolver
 
     /**
      * Resolves the string once
-     * 
+     *
      * @param expression
      * @param mustBeResolved
      * @param context
@@ -160,18 +160,18 @@ public class VariableResolver
             resolvedValue = "${" + resolvedValue;
         }
 
-        return new ImmutablePair<String, Integer>(resolvedValue, index);
+        return new ImmutablePair<>(resolvedValue, index);
     }
 
     /**
-     * Asks the {@link DataStorage}, then beanshell, then the property files for the value of the variable. If none of these
-     * know the variable, it returns the variable with ${ at the beginning and } at the end
-     * 
+     * Asks the {@link DataStorage}, then beanshell, then the property files for the value of the variable. If none of
+     * these know the variable, it returns the variable with ${ at the beginning and } at the end
+     *
      * @param variableName
      *            The name of the variable
      * @param context
-     * @return The value provided in either {@link DataStorage}, beanshell, or the property files. If no value was found,
-     *         returns "${variableName}"
+     * @return The value provided in either {@link DataStorage}, beanshell, or the property files. If no value was
+     *         found, returns "${variableName}"
      */
     private String resolveVariable(final String variableName, final Context<?> context)
     {

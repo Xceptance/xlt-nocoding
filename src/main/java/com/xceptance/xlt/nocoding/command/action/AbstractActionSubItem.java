@@ -8,14 +8,14 @@ import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * The wrapper class for every action item, i.e. {@link Request}, {@link Response}
- * 
+ *
  * @author ckeiner
  */
 public abstract class AbstractActionSubItem implements Serializable
 {
     /**
      * Executes the action item
-     * 
+     *
      * @param context
      *            The {@link Context} for the {@link AbstractActionSubItem}
      * @throws Exception

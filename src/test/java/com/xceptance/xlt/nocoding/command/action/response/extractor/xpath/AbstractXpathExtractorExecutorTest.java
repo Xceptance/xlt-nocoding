@@ -15,7 +15,8 @@ public abstract class AbstractXpathExtractorExecutorTest
     protected MockObjects mockObjects;
 
     /**
-     * Prepares the test run by storing the {@link WebResponse} from {@link MockObjects#loadResponse()} in {@link Context}.
+     * Prepares the test run by storing the {@link WebResponse} from {@link MockObjects#loadResponse()} in
+     * {@link Context}.
      */
     @Before
     public void init()

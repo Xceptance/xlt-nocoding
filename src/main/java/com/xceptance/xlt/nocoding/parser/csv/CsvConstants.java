@@ -7,7 +7,7 @@ import org.apache.commons.csv.CSVFormat;
 
 /**
  * This class has all important constants for parsing a CSV file
- * 
+ *
  * @author ckeiner
  */
 public class CsvConstants

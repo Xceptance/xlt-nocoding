@@ -10,7 +10,7 @@ import com.xceptance.xlt.nocoding.parser.csv.CsvConstants;
 
 /**
  * The class for parsing Static Subrequests from a {@link CSVRecord}.
- * 
+ *
  * @author ckeiner
  */
 public class StaticSubrequestParser
@@ -19,7 +19,7 @@ public class StaticSubrequestParser
     /**
      * Extracts the information needed for a Static Subrequest from the {@link CSVRecord} and creates a
      * {@link StaticSubrequest} out of it.
-     * 
+     *
      * @param record
      *            The CSVRecord that describes the Static Subrequest
      * @return A <code>StaticSubrequest</code> with the parsed URL
@@ -27,7 +27,7 @@ public class StaticSubrequestParser
     public StaticSubrequest parse(final CSVRecord record)
     {
         // Initialize variables
-        final List<String> urls = new ArrayList<String>();
+        final List<String> urls = new ArrayList<>();
 
         String url = record.get(CsvConstants.URL);
 

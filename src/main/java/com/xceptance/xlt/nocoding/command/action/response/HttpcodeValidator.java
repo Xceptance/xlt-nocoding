@@ -9,7 +9,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Validates the Httpcode of a {@link WebResponse}. Httpcode can be specified or defaulted.
- * 
+ *
  * @author ckeiner
  */
 public class HttpcodeValidator extends AbstractResponseItem
@@ -21,7 +21,7 @@ public class HttpcodeValidator extends AbstractResponseItem
 
     /**
      * Creates an instance of {@link HttpcodeValidator} and sets {@link #httpcode}.
-     * 
+     *
      * @param httpcode
      *            The expected Http Responsecode
      */
@@ -39,7 +39,7 @@ public class HttpcodeValidator extends AbstractResponseItem
     {
         fillDefaultData(context);
         resolveValues(context);
-        Assert.assertEquals(Integer.parseInt(this.httpcode), context.getWebResponse().getStatusCode());
+        Assert.assertEquals(Integer.parseInt(httpcode), context.getWebResponse().getStatusCode());
     }
 
     /**
@@ -55,7 +55,7 @@ public class HttpcodeValidator extends AbstractResponseItem
 
     /**
      * Resolves {@link #httpcode}
-     * 
+     *
      * @param context
      */
     private void resolveValues(final Context<?> context)

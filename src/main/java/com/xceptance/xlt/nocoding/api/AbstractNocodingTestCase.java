@@ -29,7 +29,7 @@ import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 /**
  * Executes a xlt-nocoding test case by parsing the file specified in the classpath or the properties and executing the
  * parsed commands.
- * 
+ *
  * @author ckeiner
  */
 public abstract class AbstractNocodingTestCase extends AbstractTestCase
@@ -71,7 +71,7 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
 
     /**
      * Prepares a test case by parsing the contents of the file to {@link #itemList}
-     * 
+     *
      * @throws Exception
      */
     @Before
@@ -107,19 +107,19 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
         // Find the path that returns an existing File
         final String filepath = FileFinderUtils.getExistingFilepath(filepaths);
         // Create the appropriate parser
-        this.parser = getParserFor(filepath);
+        parser = getParserFor(filepath);
         // Get or parse the file
         itemList = getOrParse(filepath);
     }
 
     /**
      * Gets all possible filepaths, that is: Classpath and the provided directory in the properties
-     * 
+     *
      * @return A list of Strings, that contain all file paths
      */
     protected List<String> getAllPossibleFilepaths()
     {
-        final List<String> filepaths = new ArrayList<String>(2);
+        final List<String> filepaths = new ArrayList<>(2);
         // Get the fileName from the property files
         String fileName = context.getPropertyByKey(NoCodingPropertyAdmin.FILENAME);
         // If the fileName is empty
@@ -140,7 +140,7 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
 
     /**
      * Gets the directory from the file paths, ending with {@link File#separatorChar}
-     * 
+     *
      * @return String that describes the path to the directory defined in the properties
      */
     protected String getDirectoryFromProperties()
@@ -164,7 +164,7 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
 
     /**
      * Gets the directory from the classpath, ending with {@link File#separatorChar}
-     * 
+     *
      * @return String that describes the path to the classpath directory
      */
     protected String getDirectoryToClasspath()
@@ -187,9 +187,9 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
     }
 
     /**
-     * Creates the correct parser depending on the file extension. For example, it creates a {@link YamlParser} for yml/yaml
-     * files and a {@link CsvParser} for CSV files.
-     * 
+     * Creates the correct parser depending on the file extension. For example, it creates a {@link YamlParser} for
+     * yml/yaml files and a {@link CsvParser} for CSV files.
+     *
      * @param path
      *            The path to the file with the file extension
      * @return The {@link Parser} that should be used for the specified file.
@@ -201,9 +201,9 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
 
     /**
      * Gets the list of <code>ScriptItem</code>s either by parsing them or from the cache. <br>
-     * On the first execution, it gets the list from the parser and saves it in {@link #DATA_CACHE}. Then, it gets the list
-     * out of a deep copy from the {@link #DATA_CACHE}.
-     * 
+     * On the first execution, it gets the list from the parser and saves it in {@link #DATA_CACHE}. Then, it gets the
+     * list out of a deep copy from the {@link #DATA_CACHE}.
+     *
      * @param filePath
      *            The path to the file that is to be parsed
      * @return A list of <code>ScriptItem</code>s generated from the provided file
@@ -232,14 +232,14 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
 
     /**
      * Executes the test case
-     * 
+     *
      * @throws Throwable
      *             Most Throwable that happen during execution
      */
     @Test
     public void execute() throws Throwable
     {
-        XltLogger.runTimeLogger.info("Starting Testcase : " + this.toString());
+        XltLogger.runTimeLogger.info("Starting Testcase : " + toString());
         // If there are ScriptItems in the itemList
         if (getItemList() != null && !getItemList().isEmpty())
         {

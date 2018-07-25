@@ -6,13 +6,12 @@ import org.junit.Test;
 
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.command.Command;
-import com.xceptance.xlt.nocoding.command.store.Store;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
  * Tests {@link Store}
- * 
+ *
  * @author ckeiner
  */
 public class StoreTest
@@ -30,7 +29,7 @@ public class StoreTest
 
     /**
      * Verifies {@link Store} can store a single item
-     * 
+     *
      * @throws Throwable
      */
     @Test
@@ -44,7 +43,7 @@ public class StoreTest
 
     /**
      * Verifies {@link Store} can overwrite a stored item
-     * 
+     *
      * @throws Throwable
      */
     @Test
@@ -61,7 +60,7 @@ public class StoreTest
 
     /**
      * Verifies {@link Store#getValue()} is resolved before storing the variable with its value
-     * 
+     *
      * @throws Throwable
      */
     @Test

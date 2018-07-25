@@ -12,7 +12,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
  * Matches the pattern provided via {@link #getExtractionExpression()} and applies it to the
  * {@link LightWeightPage#getContent()} which is created with the {@link Context#getWebResponse()}. Then, stores the
  * match in {@link #addResult(String)}.
- * 
+ *
  * @author ckeiner
  */
 public class RegexpExtractor extends AbstractExtractor
@@ -23,7 +23,7 @@ public class RegexpExtractor extends AbstractExtractor
     /**
      * Creates an instance of {@link RegexpExtractor}, sets {@link #extractionExpression} and creates an ArrayList for
      * {@link #result}.
-     * 
+     *
      * @param extractionExpression
      *            The regular expression to use on the content of the {@link WebResponse}.
      */
@@ -33,9 +33,9 @@ public class RegexpExtractor extends AbstractExtractor
     }
 
     /**
-     * Creates an instance of {@link RegexpExtractor}, sets {@link #extractionExpression} and creates an {@link ArrayList}
-     * for {@link #result}.
-     * 
+     * Creates an instance of {@link RegexpExtractor}, sets {@link #extractionExpression} and creates an
+     * {@link ArrayList} for {@link #result}.
+     *
      * @param extractionExpression
      *            The regular expression to use on the content of the {@link WebResponse}.
      * @param group
@@ -64,7 +64,7 @@ public class RegexpExtractor extends AbstractExtractor
         final Matcher matcher = Pattern.compile(extractionExpression).matcher(pageContent);
 
         // If we don't have a group, add all matches
-        if (this.group == null)
+        if (group == null)
         {
             // If we find matches
             while (matcher.find())
@@ -78,7 +78,7 @@ public class RegexpExtractor extends AbstractExtractor
         {
             if (matcher.find())
             {
-                addResult(matcher.group(Integer.parseInt(this.group)));
+                addResult(matcher.group(Integer.parseInt(group)));
             }
         }
     }

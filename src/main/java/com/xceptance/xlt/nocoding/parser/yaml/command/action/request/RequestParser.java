@@ -21,7 +21,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
  * The class for parsing request items to {@link Request}s wrapped in a list of {@link AbstractActionSubItem}s.
- * 
+ *
  * @author ckeiner
  */
 public class RequestParser extends AbstractActionSubItemParser
@@ -29,7 +29,7 @@ public class RequestParser extends AbstractActionSubItemParser
 
     /**
      * Parses a request item to a <code>Request</code>.
-     * 
+     *
      * @param requestNode
      *            The {@link JsonNode} with the request in it
      * @return The <code>Request</code> wrapped in a list of <code>AbstractActionItem</code>s.
@@ -44,14 +44,14 @@ public class RequestParser extends AbstractActionSubItemParser
         }
 
         // Initialize variables
-        final List<AbstractActionSubItem> actionItems = new ArrayList<AbstractActionSubItem>();
+        final List<AbstractActionSubItem> actionItems = new ArrayList<>();
         String url = "";
         String method = null;
         String xhr = null;
         String encodeParameters = null;
-        final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-        final Map<String, String> headers = new HashMap<String, String>();
-        final Map<String, String> cookies = new LinkedHashMap<String, String>();
+        final List<NameValuePair> parameters = new ArrayList<>();
+        final Map<String, String> headers = new HashMap<>();
+        final Map<String, String> cookies = new LinkedHashMap<>();
         String body = null;
         String encodeBody = null;
 

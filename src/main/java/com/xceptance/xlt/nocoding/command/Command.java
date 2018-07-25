@@ -12,7 +12,7 @@ public interface Command extends Serializable
 
     /**
      * The method, which executes the ScriptItem.
-     * 
+     *
      * @param context
      *            The current {@link Context}
      * @throws Throwable

@@ -12,7 +12,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
  * The class for parsing default headers.
- * 
+ *
  * @author ckeiner
  */
 public class StoreDefaultHeadersParser extends AbstractStoreDefaultSubItemsParser
@@ -21,7 +21,7 @@ public class StoreDefaultHeadersParser extends AbstractStoreDefaultSubItemsParse
     /**
      * Parses the headers list item to a list of {@link AbstractStoreDefaultItem}s which consists of multiple
      * {@link StoreDefaultHeader}.
-     * 
+     *
      * @param defaultHeadersNode
      *            The {@link JsonNode} the default headers start at
      * @return A list of <code>StoreDefault</code>s with the parsed default headers.

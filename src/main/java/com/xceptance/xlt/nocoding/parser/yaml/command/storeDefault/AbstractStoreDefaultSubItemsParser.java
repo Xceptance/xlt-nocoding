@@ -7,14 +7,14 @@ import com.xceptance.xlt.nocoding.command.storeDefault.AbstractStoreDefaultItem;
 
 /**
  * Abstract class that defines the method for parsing default items.
- * 
+ *
  * @author ckeiner
  */
 public abstract class AbstractStoreDefaultSubItemsParser
 {
     /**
      * Parses the default item at the specified {@link JsonNode}.
-     * 
+     *
      * @param defaultItemNode
      *            The <code>JsonNode</code> the default item starts at
      * @return {@link AbstractStoreDefaultItem}

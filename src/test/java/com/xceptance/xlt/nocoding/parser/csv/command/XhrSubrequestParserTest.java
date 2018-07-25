@@ -18,14 +18,13 @@ import com.xceptance.xlt.nocoding.command.action.response.store.ResponseStore;
 import com.xceptance.xlt.nocoding.command.action.response.validator.MatchesValidator;
 import com.xceptance.xlt.nocoding.command.action.subrequest.XhrSubrequest;
 import com.xceptance.xlt.nocoding.parser.csv.CsvConstants;
-import com.xceptance.xlt.nocoding.parser.csv.command.XhrSubrequestParser;
 
 public class XhrSubrequestParserTest extends CsvParserTestUtils
 {
 
     /**
      * Verifies all headers are parsed properly
-     * 
+     *
      * @throws IOException
      */
     @Test

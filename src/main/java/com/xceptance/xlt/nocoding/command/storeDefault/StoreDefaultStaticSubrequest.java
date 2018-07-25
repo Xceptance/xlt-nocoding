@@ -8,16 +8,16 @@ import com.xceptance.xlt.nocoding.util.storage.unit.SingleStorage;
 /**
  * Stores a default static request. This class does not use the variableName with the single exception of "Static:
  * Delete", which deletes all default static requests.
- * 
+ *
  * @author ckeiner
  */
 public class StoreDefaultStaticSubrequest extends AbstractStoreDefaultItem
 {
 
     /**
-     * Creates an instance of {@link StoreDefaultStaticSubrequest} that sets {@link #getVariableName()} to {@link Constants#STATIC}
-     * and {@link #getValue()}
-     * 
+     * Creates an instance of {@link StoreDefaultStaticSubrequest} that sets {@link #getVariableName()} to
+     * {@link Constants#STATIC} and {@link #getValue()}
+     *
      * @param value
      *            The URL of the default static request
      */
@@ -28,8 +28,8 @@ public class StoreDefaultStaticSubrequest extends AbstractStoreDefaultItem
     }
 
     /**
-     * If {@link #getValue()} is {@link Constants#DELETE}, the list of default static requests is deleted. Else, it stores a
-     * default static requests.
+     * If {@link #getValue()} is {@link Constants#DELETE}, the list of default static requests is deleted. Else, it
+     * stores a default static requests.
      */
     @Override
     public void execute(final Context<?> context)

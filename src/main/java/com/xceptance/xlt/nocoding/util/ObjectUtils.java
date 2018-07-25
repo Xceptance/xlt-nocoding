@@ -46,8 +46,8 @@ public final class ObjectUtils
     }
 
     /**
-     * Creates a deep copy of the passed object. For this method to work, the object to be cloned and all contained objects
-     * must be serializable.
+     * Creates a deep copy of the passed object. For this method to work, the object to be cloned and all contained
+     * objects must be serializable.
      *
      * @param o
      *            the object to clone

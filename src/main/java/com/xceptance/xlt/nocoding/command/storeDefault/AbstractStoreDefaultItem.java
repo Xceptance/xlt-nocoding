@@ -9,7 +9,7 @@ import com.xceptance.xlt.nocoding.util.storage.DataStorage;
 /**
  * The abstract class for every default store item. A default store item is an item that sets the default value for
  * certain fields. These fields are specified by {@link Constants#PERMITTEDLISTITEMS}.
- * 
+ *
  * @author ckeiner
  */
 public abstract class AbstractStoreDefaultItem implements Command
@@ -26,7 +26,7 @@ public abstract class AbstractStoreDefaultItem implements Command
 
     /**
      * Creates a {@link AbstractStoreDefaultItem} that sets {@link #variableName} and {@link #value}
-     * 
+     *
      * @param variableName
      *            The name of the variable
      * @param value
@@ -50,7 +50,7 @@ public abstract class AbstractStoreDefaultItem implements Command
 
     /**
      * Resolves {@link #value}.
-     * 
+     *
      * @param context
      *            The {@link Context} with the {@link VariableResolver} and {@link DataStorage}
      */

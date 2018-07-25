@@ -16,7 +16,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
  * The class for parsing store items in the response item.
- * 
+ *
  * @author ckeiner
  */
 public class ResponseStoreParser
@@ -24,7 +24,7 @@ public class ResponseStoreParser
 
     /**
      * Parses the store item in the response block to a list of {@link AbstractResponseStore}
-     * 
+     *
      * @param responseStoreNode
      *            The {@link JsonNode} the store item starts at
      * @return A list of all <code>AbstractResponseStore</code>s with the parsed content
@@ -36,7 +36,7 @@ public class ResponseStoreParser
         {
             throw new IllegalArgumentException("Expected ArrayNode after Store, but was " + responseStoreNode.getClass().getSimpleName());
         }
-        final List<AbstractResponseStore> responseStores = new ArrayList<AbstractResponseStore>();
+        final List<AbstractResponseStore> responseStores = new ArrayList<>();
         // Get an Iterator over every ResponseStore
         final Iterator<JsonNode> iteratorOverStores = responseStoreNode.elements();
 

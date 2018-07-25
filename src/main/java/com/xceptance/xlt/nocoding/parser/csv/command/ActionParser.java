@@ -14,7 +14,7 @@ import com.xceptance.xlt.nocoding.parser.csv.command.action.ResponseParser;
 
 /**
  * The class for parsing an action item.
- * 
+ *
  * @author ckeiner
  */
 public class ActionParser
@@ -22,7 +22,7 @@ public class ActionParser
 
     /**
      * Parses the action item to a list of {@link Command}s.
-     * 
+     *
      * @param record
      *            The {@link CSVRecord} with the the action item
      * @return The {@link Action} defined by the CSVRecord

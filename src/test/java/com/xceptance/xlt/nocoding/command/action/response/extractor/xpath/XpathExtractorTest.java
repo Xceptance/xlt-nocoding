@@ -6,7 +6,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.xceptance.xlt.nocoding.command.action.response.extractor.ExtractorTest;
-import com.xceptance.xlt.nocoding.command.action.response.extractor.xpath.XpathExtractor;
 import com.xceptance.xlt.nocoding.util.MockWebResponse;
 
 public class XpathExtractorTest extends ExtractorTest

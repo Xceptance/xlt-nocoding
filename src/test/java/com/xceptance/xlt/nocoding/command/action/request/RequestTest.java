@@ -26,7 +26,6 @@ import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.command.Command;
-import com.xceptance.xlt.nocoding.command.action.request.Request;
 import com.xceptance.xlt.nocoding.command.storeDefault.StoreDefaultHeader;
 import com.xceptance.xlt.nocoding.command.storeDefault.StoreDefaultParameter;
 import com.xceptance.xlt.nocoding.util.Constants;
@@ -576,7 +575,7 @@ public class RequestTest
 
     /**
      * Verifies post-a-like requests without parameters are built correctly.
-     * 
+     *
      * @throws MalformedURLException
      * @throws UnsupportedEncodingException
      */
@@ -606,7 +605,7 @@ public class RequestTest
 
     /**
      * Verifies get-a-like requests without parameters are built correctly.
-     * 
+     *
      * @throws MalformedURLException
      * @throws UnsupportedEncodingException
      */
@@ -639,7 +638,7 @@ public class RequestTest
 
     /**
      * Verifies post-a-like requests with specified parameters attribute are built correctly.
-     * 
+     *
      * @throws MalformedURLException
      * @throws UnsupportedEncodingException
      */
@@ -673,7 +672,7 @@ public class RequestTest
 
     /**
      * Verifies get-a-like requests with specified parameters attribute are built correctly.
-     * 
+     *
      * @throws MalformedURLException
      * @throws UnsupportedEncodingException
      */
@@ -712,7 +711,7 @@ public class RequestTest
 
     /**
      * Verifies post-a-like requests with a query in their URL are built correctly.
-     * 
+     *
      * @throws MalformedURLException
      * @throws UnsupportedEncodingException
      */
@@ -751,7 +750,7 @@ public class RequestTest
 
     /**
      * Verifies get-a-like requests with a query in their URL are built correctly.
-     * 
+     *
      * @throws MalformedURLException
      * @throws UnsupportedEncodingException
      */

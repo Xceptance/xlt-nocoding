@@ -12,7 +12,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
-import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.command.store.Store;
 import com.xceptance.xlt.nocoding.command.storeDefault.AbstractStoreDefaultItem;
@@ -21,16 +20,13 @@ import com.xceptance.xlt.nocoding.command.storeDefault.StoreDefaultHeader;
 import com.xceptance.xlt.nocoding.command.storeDefault.StoreDefaultParameter;
 import com.xceptance.xlt.nocoding.command.storeDefault.StoreDefaultStaticSubrequest;
 import com.xceptance.xlt.nocoding.parser.AbstractParserTest;
+import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParser;
-import com.xceptance.xlt.nocoding.parser.yaml.command.storeDefault.StoreDefaultCookiesParser;
-import com.xceptance.xlt.nocoding.parser.yaml.command.storeDefault.StoreDefaultHeadersParser;
-import com.xceptance.xlt.nocoding.parser.yaml.command.storeDefault.StoreDefaultParametersParser;
-import com.xceptance.xlt.nocoding.parser.yaml.command.storeDefault.StoreDefaultStaticSubrequestsParser;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
  * Tests for parsing default items
- * 
+ *
  * @author ckeiner
  */
 public class StoreDefaultParserTest extends AbstractParserTest
@@ -42,7 +38,7 @@ public class StoreDefaultParserTest extends AbstractParserTest
 
     /**
      * Verifies Name and Url can be parsed on root level
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -67,7 +63,7 @@ public class StoreDefaultParserTest extends AbstractParserTest
 
     /**
      * Verifies all default tags are parsed properly
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -76,17 +72,18 @@ public class StoreDefaultParserTest extends AbstractParserTest
         final Parser parser = new YamlParser();
         final List<Command> scriptItems = parser.parse(fileTestData);
         // We only check for "bigger than 22", since we might have more than 22 elements, due to some default items.
-        // Default Lists are stored with key "listname_name_x" and value "listname_value_x" whereas x is the count of the
+        // Default Lists are stored with key "listname_name_x" and value "listname_value_x" whereas x is the count of
+        // the
         // element
         Assert.assertTrue("Expected element count does not match", scriptItems.size() >= 22);
 
         // Headers are stored in an arbitrary order
-        final Map<String, String> defaultHeaders = new HashMap<String, String>();
+        final Map<String, String> defaultHeaders = new HashMap<>();
         defaultHeaders.put("header_1", "value");
         defaultHeaders.put("header_2", "value");
         defaultHeaders.put("header_3", "value");
 
-        final List<NameValuePair> listOfDefaults = new ArrayList<NameValuePair>();
+        final List<NameValuePair> listOfDefaults = new ArrayList<>();
         listOfDefaults.add(new NameValuePair("Name", "t_name"));
         listOfDefaults.add(new NameValuePair("Url", "http://www.xceptance.com"));
         listOfDefaults.add(new NameValuePair("Httpcode", "400"));
@@ -166,7 +163,7 @@ public class StoreDefaultParserTest extends AbstractParserTest
 
     /**
      * Verifies default cookies can be parsed
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -188,7 +185,7 @@ public class StoreDefaultParserTest extends AbstractParserTest
 
     /**
      * Verifies default parameters can be parsed
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -210,7 +207,7 @@ public class StoreDefaultParserTest extends AbstractParserTest
 
     /**
      * Verifies default headers can be parsed
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -232,7 +229,7 @@ public class StoreDefaultParserTest extends AbstractParserTest
 
     /**
      * Verifies default static urls can be parsed
-     * 
+     *
      * @throws Exception
      */
     @Test

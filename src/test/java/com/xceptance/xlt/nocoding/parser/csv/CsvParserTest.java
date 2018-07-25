@@ -6,14 +6,13 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.command.action.Action;
 import com.xceptance.xlt.nocoding.command.action.request.Request;
 import com.xceptance.xlt.nocoding.command.action.response.Response;
 import com.xceptance.xlt.nocoding.command.action.subrequest.StaticSubrequest;
 import com.xceptance.xlt.nocoding.parser.AbstractParserTest;
-import com.xceptance.xlt.nocoding.parser.csv.CsvParser;
+import com.xceptance.xlt.nocoding.parser.Parser;
 
 public class CsvParserTest extends AbstractParserTest
 {
@@ -33,7 +32,7 @@ public class CsvParserTest extends AbstractParserTest
 
     /**
      * Verifies a simple csv file can be parsed
-     * 
+     *
      * @throws IOException
      */
     @Test
@@ -53,7 +52,7 @@ public class CsvParserTest extends AbstractParserTest
 
     /**
      * Verifies static requests are parsed correctly
-     * 
+     *
      * @throws IOException
      */
     @Test
@@ -86,7 +85,7 @@ public class CsvParserTest extends AbstractParserTest
 
     /**
      * Verifies correctly formed Regexp Store header can be parsed
-     * 
+     *
      * @throws IOException
      */
     @Test
@@ -98,7 +97,7 @@ public class CsvParserTest extends AbstractParserTest
 
     /**
      * Verifies correctly formed Xpath Store header can be parsed
-     * 
+     *
      * @throws IOException
      */
     @Test
@@ -110,7 +109,7 @@ public class CsvParserTest extends AbstractParserTest
 
     /**
      * Verifies a Regexp Store header with letters can be parsed
-     * 
+     *
      * @throws IOException
      */
     @Test

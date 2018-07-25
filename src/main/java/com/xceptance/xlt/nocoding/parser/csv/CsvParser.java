@@ -20,7 +20,7 @@ import com.xceptance.xlt.nocoding.parser.csv.command.XhrSubrequestParser;
 
 /**
  * Reads a CSV file, and generates a list filled with {@link Command}s out of the CSV file.
- * 
+ *
  * @author ckeiner
  */
 public class CsvParser implements Parser
@@ -28,7 +28,7 @@ public class CsvParser implements Parser
 
     /**
      * Parses the content of the file at <code>pathToFile</code> to a list of {@link Command}s
-     * 
+     *
      * @param pathToFile
      *            The String that describes the path to the file
      * @return A list of {@link Command}s
@@ -39,7 +39,7 @@ public class CsvParser implements Parser
     public List<Command> parse(final String pathToFile) throws IOException
     {
         // Initialize variables
-        final List<Command> scriptItems = new ArrayList<Command>();
+        final List<Command> scriptItems = new ArrayList<>();
         Action lastAction = null;
         StaticSubrequest lastStatic = null;
 
@@ -101,7 +101,8 @@ public class CsvParser implements Parser
                         // If there was a last static request
                         else
                         {
-                            // Simply add the url of the current static request to the lastStatic request, so they can be executed parallel
+                            // Simply add the url of the current static request to the lastStatic request, so they can
+                            // be executed parallel
                             lastStatic.getUrls().addAll(new StaticSubrequestParser().parse(record).getUrls());
                         }
                         break;
@@ -130,7 +131,7 @@ public class CsvParser implements Parser
 
     /**
      * Validates the headers are permitted
-     * 
+     *
      * @param headers
      */
     private void validateHeader(final Set<String> headers)

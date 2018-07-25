@@ -7,12 +7,11 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.xceptance.xlt.nocoding.command.Command;
-import com.xceptance.xlt.nocoding.command.storeDefault.StoreDefaultParameter;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
  * Tests {@link StoreDefaultParameter}
- * 
+ *
  * @author ckeiner
  */
 public class StoreDefaultParameterTest extends AbstractStoreDefaultTest
@@ -20,7 +19,7 @@ public class StoreDefaultParameterTest extends AbstractStoreDefaultTest
 
     /**
      * Verifies {@link StoreDefaultParameter} can store one default parameter
-     * 
+     *
      * @throws Throwable
      */
     @Test
@@ -34,7 +33,7 @@ public class StoreDefaultParameterTest extends AbstractStoreDefaultTest
 
     /**
      * Verifies {@link StoreDefaultParameter} can delete one default parameter
-     * 
+     *
      * @throws Throwable
      */
     @Test
@@ -51,13 +50,13 @@ public class StoreDefaultParameterTest extends AbstractStoreDefaultTest
 
     /**
      * Verifies {@link StoreDefaultParameter} can delete all default parameter
-     * 
+     *
      * @throws Throwable
      */
     @Test
     public void deleteAllDefaultParameters() throws Throwable
     {
-        final List<Command> store = new ArrayList<Command>();
+        final List<Command> store = new ArrayList<>();
         store.add(new StoreDefaultParameter("param_1", "value"));
         store.add(new StoreDefaultParameter("param_2", "value"));
         store.add(new StoreDefaultParameter("param_3", "value"));

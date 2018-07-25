@@ -11,7 +11,7 @@ import com.xceptance.xlt.nocoding.util.storage.DataStorage;
 
 /**
  * The class that executes the actual extraction of the xpath expression
- * 
+ *
  * @author ckeiner
  */
 public abstract class XpathExtractorExecutor implements Serializable
@@ -29,20 +29,20 @@ public abstract class XpathExtractorExecutor implements Serializable
 
     /**
      * Sets {@link #extractionExpression} and creates an {@link ArrayList} for {@link #result}.
-     * 
+     *
      * @param extractionExpression
      *            The {@link #extractionExpression} to use for extracting
      */
     public XpathExtractorExecutor(final String extractionExpression)
     {
         this.extractionExpression = extractionExpression;
-        result = new ArrayList<String>(1);
+        result = new ArrayList<>(1);
     }
 
     /**
      * Executes the extractor. Looks into the {@link WebResponse} located in {@link Context}. Then sets the extracted
      * expression via {@link #addResult(String)}.
-     * 
+     *
      * @param context
      *            The {@link Context} to use
      */
@@ -50,7 +50,7 @@ public abstract class XpathExtractorExecutor implements Serializable
 
     /**
      * Adds a string to the result list.
-     * 
+     *
      * @param result
      *            The String to be added to the result.
      */
@@ -61,7 +61,7 @@ public abstract class XpathExtractorExecutor implements Serializable
 
     /**
      * Resolves {@link #extractionExpression}.
-     * 
+     *
      * @param context
      *            The {@link Context} with the {@link VariableResolver} and {@link DataStorage}.
      */

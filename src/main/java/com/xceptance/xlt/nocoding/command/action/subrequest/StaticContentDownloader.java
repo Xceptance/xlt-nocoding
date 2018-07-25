@@ -107,9 +107,9 @@ public class StaticContentDownloader implements Serializable
     }
 
     /**
-     * Adds the given URL to the list of URLs to be loaded. Whether the URL is loaded by the calling or a separate thread is
-     * controlled by the parallelModeEnabled flag. If the flag is false, the method does not return until the URL is loaded.
-     * If the flag is true, as many URLs as threadCount can be added without blocking.
+     * Adds the given URL to the list of URLs to be loaded. Whether the URL is loaded by the calling or a separate
+     * thread is controlled by the parallelModeEnabled flag. If the flag is false, the method does not return until the
+     * URL is loaded. If the flag is true, as many URLs as threadCount can be added without blocking.
      *
      * @param url
      *            the URL to load

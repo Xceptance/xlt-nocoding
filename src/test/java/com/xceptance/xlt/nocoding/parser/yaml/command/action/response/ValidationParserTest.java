@@ -14,12 +14,11 @@ import com.xceptance.xlt.nocoding.command.action.response.validator.AbstractVali
 import com.xceptance.xlt.nocoding.command.action.response.validator.CountValidator;
 import com.xceptance.xlt.nocoding.command.action.response.validator.MatchesValidator;
 import com.xceptance.xlt.nocoding.command.action.response.validator.TextValidator;
-import com.xceptance.xlt.nocoding.parser.yaml.command.action.response.ValidationParser;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
  * Tests for parsing the "Validate" tag beneath "Response"
- * 
+ *
  * @author ckeiner
  */
 public class ValidationParserTest
@@ -27,7 +26,7 @@ public class ValidationParserTest
 
     /**
      * Verifies an error is thrown if two validation modes are found
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = IllegalArgumentException.class)
@@ -48,7 +47,7 @@ public class ValidationParserTest
 
     /**
      * Verifies an error is thrown if two extractors are found
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = IllegalArgumentException.class)
@@ -69,7 +68,7 @@ public class ValidationParserTest
 
     /**
      * Verifies an error is thrown if a group is parsed but the extractor is not a {@link RegexpExtractor}
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = IllegalArgumentException.class)
@@ -90,7 +89,7 @@ public class ValidationParserTest
 
     /**
      * Verifies {@link RegexpExtractor} and {@link MatchesValidator} can be parsed
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -119,7 +118,7 @@ public class ValidationParserTest
 
     /**
      * Verifies {@link CookieExtractor} and {@link TextValidator} can be parsed
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -147,7 +146,7 @@ public class ValidationParserTest
 
     /**
      * Verifies {@link HeaderExtractor} and no {@link AbstractValidator} can be parsed
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -170,7 +169,7 @@ public class ValidationParserTest
 
     /**
      * Validates {@link HeaderExtractor} and {@link CountValidator} can be parsed
-     * 
+     *
      * @throws Exception
      */
     @Test

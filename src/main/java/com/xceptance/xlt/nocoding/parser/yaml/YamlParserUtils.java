@@ -19,7 +19,7 @@ import com.google.gson.JsonParseException;
 
 /**
  * Utility methods for parsing.
- * 
+ *
  * @author ckeiner
  */
 public class YamlParserUtils
@@ -27,7 +27,7 @@ public class YamlParserUtils
 
     /**
      * Converts an ArrayNode consisting of ObjectNodes with simple Key/Value-Pairs to a Map
-     * 
+     *
      * @param jsonNode
      *            The ArrayNode consisting of ObjectNodes
      * @return A map of the parsed content
@@ -39,7 +39,7 @@ public class YamlParserUtils
             throw new IllegalArgumentException("Expected ArrayNode but was " + jsonNode.getClass().getSimpleName());
         }
 
-        final Map<String, String> map = new HashMap<String, String>();
+        final Map<String, String> map = new HashMap<>();
         // Get iterator for all elements of the ArrayNode
         final Iterator<JsonNode> iterator = jsonNode.elements();
 
@@ -66,7 +66,7 @@ public class YamlParserUtils
 
     /**
      * Converts an ArrayNode consisting of ObjectNodes with simple Key/Value-Pairs to a List of {@link NameValuePair}s
-     * 
+     *
      * @param jsonNode
      *            The ArrayNode consisting of ObjectNodes
      * @return A list of <code>NameValuePair</code>s that describe the parameters
@@ -78,7 +78,7 @@ public class YamlParserUtils
             throw new IllegalArgumentException("Expected ArrayNode but was " + jsonNode.getClass().getSimpleName());
         }
 
-        final List<NameValuePair> nvp = new ArrayList<NameValuePair>();
+        final List<NameValuePair> nvp = new ArrayList<>();
         // Get iterator for all elements of the ArrayNode
         final Iterator<JsonNode> iterator = jsonNode.elements();
 
@@ -105,8 +105,9 @@ public class YamlParserUtils
     }
 
     /**
-     * Gets the root <code>ObjectNode</code> in the {@link JsonParser} parser via {@link ObjectMapper#readTree(JsonParser)}.
-     * 
+     * Gets the root <code>ObjectNode</code> in the {@link JsonParser} parser via
+     * {@link ObjectMapper#readTree(JsonParser)}.
+     *
      * @param parser
      *            The parser in which to look for the node
      * @return The JsonNode with the specified name
@@ -121,7 +122,7 @@ public class YamlParserUtils
 
     /**
      * Gets the JsonNode with the specified <code>fieldName</code> in the JsonParser parser
-     * 
+     *
      * @param fieldName
      *            The name of the field
      * @param parser
@@ -139,7 +140,7 @@ public class YamlParserUtils
 
     /**
      * Parses the value at <code>node</code> with the field name <code>fieldName</code> to a String.
-     * 
+     *
      * @param node
      *            The node from which to read the <code>fieldName</code>
      * @param fieldName
@@ -153,7 +154,7 @@ public class YamlParserUtils
 
     /**
      * Parses the value at <code>node</code> to a String.
-     * 
+     *
      * @param node
      *            The node from which to read the value
      * @return The value as {@link String}

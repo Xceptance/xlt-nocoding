@@ -11,7 +11,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
 /**
  * Creates a {@link XhrSubrequest} that has a name and consists of a {@link Request}, and optionally a {@link Response}
  * and maybe multiple {@link AbstractSubrequest}.
- * 
+ *
  * @author ckeiner
  */
 public class XhrSubrequest extends AbstractSubrequest
@@ -28,7 +28,7 @@ public class XhrSubrequest extends AbstractSubrequest
 
     /**
      * Creates an instance of {@link XhrSubrequest} that sets the {@link #name} and {@link #actionItems}
-     * 
+     *
      * @param name
      *            The name of the subrequest
      * @param actionItems
@@ -41,9 +41,9 @@ public class XhrSubrequest extends AbstractSubrequest
     }
 
     /**
-     * Executes the subrequest by first creating a local {@link Context} out of the method parameter. Then, it asserts the
-     * order of the {@link #actionItems}. Then, sets the {@link Request} in the {@link #actionItems} up. Finally, executes
-     * the {@link #actionItems}.
+     * Executes the subrequest by first creating a local {@link Context} out of the method parameter. Then, it asserts
+     * the order of the {@link #actionItems}. Then, sets the {@link Request} in the {@link #actionItems} up. Finally,
+     * executes the {@link #actionItems}.
      */
     @Override
     public void execute(final Context<?> context) throws Exception

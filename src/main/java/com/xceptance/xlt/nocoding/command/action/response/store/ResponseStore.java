@@ -6,16 +6,16 @@ import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Takes an {@link AbstractExtractor} and stores the result in {@link Context#getVariables()}.
- * 
+ *
  * @author ckeiner
  */
 public class ResponseStore extends AbstractResponseStore
 {
 
     /**
-     * Creates an instance of {@link ResponseStore}, that stores the result from {@link AbstractExtractor} under the name
-     * {@link #getVariableName()}.
-     * 
+     * Creates an instance of {@link ResponseStore}, that stores the result from {@link AbstractExtractor} under the
+     * name {@link #getVariableName()}.
+     *
      * @param variableName
      *            The name of the variable
      * @param extractor
@@ -28,7 +28,7 @@ public class ResponseStore extends AbstractResponseStore
 
     /**
      * Resolves values, then stores the result in {@link Context#getVariables()}.
-     * 
+     *
      * @param context
      *            The {@link Context} to use
      */

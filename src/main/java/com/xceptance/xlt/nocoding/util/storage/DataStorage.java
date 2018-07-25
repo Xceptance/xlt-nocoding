@@ -10,7 +10,7 @@ import com.xceptance.xlt.nocoding.util.storage.unit.unique.UniqueStorage;
 /**
  * Handles all data storage related matters. This means, the class saves variables, default
  * definitions/headers/parameters/static requests.
- * 
+ *
  * @author ckeiner
  */
 public class DataStorage
@@ -29,12 +29,12 @@ public class DataStorage
 
     public DataStorage()
     {
-        this.defaultCookies = new SingleStorage();
-        this.defaultParameters = new DuplicateStorage();
-        this.defaultStatics = new SingleStorage();
-        this.defaultHeaders = new RecentKeyUniqueSingleStorage();
-        this.variables = new UniqueStorage();
-        this.defaultItems = new DefaultKeyValueStorage();
+        defaultCookies = new SingleStorage();
+        defaultParameters = new DuplicateStorage();
+        defaultStatics = new SingleStorage();
+        defaultHeaders = new RecentKeyUniqueSingleStorage();
+        variables = new UniqueStorage();
+        defaultItems = new DefaultKeyValueStorage();
     }
 
     public SingleStorage getDefaultCookies()

@@ -9,7 +9,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.command.action.response.AbstractResponseItem;
 import com.xceptance.xlt.nocoding.command.action.response.HttpcodeValidator;
 import com.xceptance.xlt.nocoding.command.action.response.Response;
@@ -18,13 +17,13 @@ import com.xceptance.xlt.nocoding.command.action.response.extractor.CookieExtrac
 import com.xceptance.xlt.nocoding.command.action.response.extractor.RegexpExtractor;
 import com.xceptance.xlt.nocoding.command.action.response.store.ResponseStore;
 import com.xceptance.xlt.nocoding.parser.AbstractParserTest;
+import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParser;
-import com.xceptance.xlt.nocoding.parser.yaml.command.action.response.ResponseParser;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
  * Tests for parsing the Response Tag
- * 
+ *
  * @author ckeiner
  */
 public class ResponseParserTest extends AbstractParserTest
@@ -46,7 +45,7 @@ public class ResponseParserTest extends AbstractParserTest
 
     /**
      * Verifies an error happens when "Response" has an invalid tag
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = JsonParseException.class)
@@ -58,7 +57,7 @@ public class ResponseParserTest extends AbstractParserTest
 
     /**
      * Verifies an error happens when "Response" has an array beneath it and not objects
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = JsonParseException.class)
@@ -71,7 +70,7 @@ public class ResponseParserTest extends AbstractParserTest
     /**
      * Verifies an error happens when the variable beneath "Store" beneath "Response" has an array beneath it and not
      * objects
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = JsonParseException.class)
@@ -83,7 +82,7 @@ public class ResponseParserTest extends AbstractParserTest
 
     /**
      * Verifies an error happens when "Store" beneath "Response" has an object beneath it and not an array
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = JsonParseException.class)
@@ -94,9 +93,9 @@ public class ResponseParserTest extends AbstractParserTest
     }
 
     /**
-     * Verifies an error happens when the validation beneath "Validate" beneath "Response" has an array beneath it and not
-     * objects
-     * 
+     * Verifies an error happens when the validation beneath "Validate" beneath "Response" has an array beneath it and
+     * not objects
+     *
      * @throws Exception
      */
     @Test(expected = JsonParseException.class)
@@ -108,7 +107,7 @@ public class ResponseParserTest extends AbstractParserTest
 
     /**
      * Verifies an error happens when "Validate" beneath "Response" has an object beneath it and not an array
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = JsonParseException.class)
@@ -120,7 +119,7 @@ public class ResponseParserTest extends AbstractParserTest
 
     /**
      * Verifies Response is parsed correctly
-     * 
+     *
      * @throws Exception
      */
     @Test

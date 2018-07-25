@@ -17,7 +17,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
  * The class for parsing validations.
- * 
+ *
  * @author ckeiner
  */
 public class ValidationParser
@@ -25,7 +25,7 @@ public class ValidationParser
 
     /**
      * Parses the validation items in the response block to a list of {@link Validator}.
-     * 
+     *
      * @param validateNode
      *            The {@link JsonNode} with the validation item
      * @return A list of <code>Validator</code>
@@ -38,7 +38,7 @@ public class ValidationParser
             throw new IllegalArgumentException("Expected ArrayNode after Validate, but was " + validateNode.getClass().getSimpleName());
         }
         // Initialize variables
-        final List<Validator> validatorList = new ArrayList<Validator>();
+        final List<Validator> validatorList = new ArrayList<>();
 
         // Get an Iterator over every validation
         final Iterator<JsonNode> iteratorOverValidations = validateNode.elements();

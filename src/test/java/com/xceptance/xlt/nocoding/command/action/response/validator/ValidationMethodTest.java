@@ -3,13 +3,12 @@ package com.xceptance.xlt.nocoding.command.action.response.validator;
 import org.junit.Before;
 
 import com.xceptance.xlt.api.util.XltProperties;
-import com.xceptance.xlt.nocoding.command.action.response.validator.AbstractValidator;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
  * Prepares {@link AbstractValidator} tests by creating a new context
- * 
+ *
  * @author ckeiner
  */
 public abstract class ValidationMethodTest

@@ -6,7 +6,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Validates that the first result in {@link #getExpressionToValidate()} equals {@link #validationExpression}.
- * 
+ *
  * @author ckeiner
  */
 public class TextValidator extends AbstractValidator
@@ -19,7 +19,7 @@ public class TextValidator extends AbstractValidator
 
     /**
      * Creates a {@link TextValidator} that sets {@link #validationExpression}.
-     * 
+     *
      * @param validationExpression
      *            The expected value of the first result in {@link #getExpressionToValidate()}
      */
@@ -29,8 +29,8 @@ public class TextValidator extends AbstractValidator
     }
 
     /**
-     * Resolves values, verifies {@link #getExpressionToValidate()} is neither null nor empty, and verifies, that the first
-     * result in {@link #getExpressionToValidate()} equals {@link #validationExpression}
+     * Resolves values, verifies {@link #getExpressionToValidate()} is neither null nor empty, and verifies, that the
+     * first result in {@link #getExpressionToValidate()} equals {@link #validationExpression}
      */
     @Override
     public void execute(final Context<?> context)

@@ -14,11 +14,10 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
-import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 
 /**
  * Tests {@link YamlParserUtils}
- * 
+ *
  * @author ckeiner
  */
 public class YamlParserUtilsTest
@@ -50,7 +49,7 @@ public class YamlParserUtilsTest
 
     /**
      * Verifies that {@link YamlParserUtils#getNodeAt(JsonParser)} returns the correct node
-     * 
+     *
      * @throws IOException
      */
     @Test
@@ -71,7 +70,7 @@ public class YamlParserUtilsTest
 
     /**
      * Verifies {@link YamlParserUtils#getNodeAt(String, JsonParser)} gets the correct node
-     * 
+     *
      * @throws IOException
      */
     @Test
@@ -95,7 +94,7 @@ public class YamlParserUtilsTest
 
     /**
      * Verifies {@link YamlParserUtils#getArrayNodeAsMap(JsonNode)} returns a correct {@link Map}
-     * 
+     *
      * @throws IOException
      */
     @Test
@@ -122,8 +121,9 @@ public class YamlParserUtilsTest
     }
 
     /**
-     * Verifies {@link YamlParserUtils#getArrayNodeAsNameValuePair(JsonNode)} returns a correct list of {@link NameValuePair}s
-     * 
+     * Verifies {@link YamlParserUtils#getArrayNodeAsNameValuePair(JsonNode)} returns a correct list of
+     * {@link NameValuePair}s
+     *
      * @throws IOException
      */
     @Test
@@ -150,9 +150,9 @@ public class YamlParserUtilsTest
     }
 
     /**
-     * Reads an {@link ArrayNode} with {@link YamlParserUtils#getArrayNodeAsMap(JsonNode)}. Verifies an {@link ArrayNode} with
-     * different values stored in the node can be read.
-     * 
+     * Reads an {@link ArrayNode} with {@link YamlParserUtils#getArrayNodeAsMap(JsonNode)}. Verifies an
+     * {@link ArrayNode} with different values stored in the node can be read.
+     *
      * @throws IOException
      */
     @Test
@@ -189,7 +189,7 @@ public class YamlParserUtilsTest
     /**
      * Reads an {@link ArrayNode} with {@link YamlParserUtils#getArrayNodeAsNameValuePair(JsonNode)}. Verifies an
      * {@link ArrayNode} with different values stored in the node can be read
-     * 
+     *
      * @throws IOException
      */
     @Test
@@ -225,7 +225,7 @@ public class YamlParserUtilsTest
 
     /**
      * Verifies a boolean can be read
-     * 
+     *
      * @throws IOException
      */
     @Test
@@ -249,7 +249,7 @@ public class YamlParserUtilsTest
 
     /**
      * Verifies a single decimal can be read
-     * 
+     *
      * @throws IOException
      */
     @Test
@@ -273,7 +273,7 @@ public class YamlParserUtilsTest
 
     /**
      * Verifies a decimal with at least two digits can be read
-     * 
+     *
      * @throws IOException
      */
     @Test
@@ -297,7 +297,7 @@ public class YamlParserUtilsTest
 
     /**
      * Verifies an empty string can be read
-     * 
+     *
      * @throws IOException
      */
     @Test
@@ -321,7 +321,7 @@ public class YamlParserUtilsTest
 
     /**
      * Verifies a string can be read
-     * 
+     *
      * @throws IOException
      */
     @Test
@@ -345,7 +345,7 @@ public class YamlParserUtilsTest
 
     /**
      * Verifies an {@link ObjectNode} is correctly read
-     * 
+     *
      * @throws IOException
      */
     @Test

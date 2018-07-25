@@ -10,7 +10,7 @@ import com.xceptance.xlt.engine.XltWebClient;
 
 /**
  * Handles all property related matters.
- * 
+ *
  * @author ckeiner
  */
 public class NoCodingPropertyAdmin

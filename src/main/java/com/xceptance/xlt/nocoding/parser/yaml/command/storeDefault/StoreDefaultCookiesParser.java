@@ -12,7 +12,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
  * The class for parsing default cookies.
- * 
+ *
  * @author ckeiner
  */
 public class StoreDefaultCookiesParser extends AbstractStoreDefaultSubItemsParser
@@ -21,7 +21,7 @@ public class StoreDefaultCookiesParser extends AbstractStoreDefaultSubItemsParse
     /**
      * Parses the cookies list item to a list of {@link AbstractStoreDefaultItem}s which consists of multiple
      * {@link StoreDefaultCookie}.
-     * 
+     *
      * @param defaultCookiesNode
      *            The {@link JsonNode} the default cookies start at
      * @return A list of <code>StoreDefault</code>s with the parsed default cookies.

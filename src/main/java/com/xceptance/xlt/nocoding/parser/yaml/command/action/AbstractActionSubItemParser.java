@@ -7,7 +7,7 @@ import com.xceptance.xlt.nocoding.command.action.AbstractActionSubItem;
 
 /**
  * The class for parsing action items.
- * 
+ *
  * @author ckeiner
  */
 public abstract class AbstractActionSubItemParser
@@ -15,7 +15,7 @@ public abstract class AbstractActionSubItemParser
 
     /**
      * Parses the defined action item at the node.
-     * 
+     *
      * @param actionItemNode
      *            The {@link JsonNode} the item starts at
      * @return A list of {@link AbstractActionSubItem}

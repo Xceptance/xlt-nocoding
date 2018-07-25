@@ -7,14 +7,14 @@ import com.xceptance.xlt.nocoding.util.storage.unit.DuplicateStorage;
 
 /**
  * Stores a default parameter.
- * 
+ *
  * @author ckeiner
  */
 public class StoreDefaultParameter extends AbstractStoreDefaultItem
 {
     /**
      * Creates an instance of {@link StoreDefaultParameter} that sets {@link #getVariableName()} and {@link #getValue()}
-     * 
+     *
      * @param variableName
      *            The name of the parameter
      * @param value

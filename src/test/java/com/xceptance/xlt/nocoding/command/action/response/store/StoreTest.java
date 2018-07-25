@@ -18,14 +18,12 @@ import com.xceptance.xlt.nocoding.XltMockWebConnection;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.CookieExtractor;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.HeaderExtractor;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.RegexpExtractor;
-import com.xceptance.xlt.nocoding.command.action.response.store.AbstractResponseStore;
-import com.xceptance.xlt.nocoding.command.action.response.store.ResponseStore;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
  * Tests {@link AbstractResponseStore}
- * 
+ *
  * @author ckeiner
  */
 public class StoreTest
@@ -38,7 +36,7 @@ public class StoreTest
 
     /**
      * Instantiate the fields and set answers to localhost/posters/ and localhost/posters/POST
-     * 
+     *
      * @throws MalformedURLException
      */
     @Before
@@ -52,7 +50,7 @@ public class StoreTest
         List<NameValuePair> headers;
         String name;
         String value;
-        this.context = new LightWeightContext(XltProperties.getInstance());
+        context = new LightWeightContext(XltProperties.getInstance());
         webConnection = new XltMockWebConnection(context.getWebClient());
         // Set answer to localhost/posters/
         url = new URL("https://localhost:8443/posters/");
@@ -67,7 +65,7 @@ public class StoreTest
         statusCode = 200;
         statusMessage = "A-OK";
         contentType = "text/html";
-        headers = new ArrayList<NameValuePair>();
+        headers = new ArrayList<>();
 
         name = "Cache-Control";
         value = "no-cache, no-store, max-age=0, must-revalidate";
@@ -84,7 +82,7 @@ public class StoreTest
         statusCode = 200;
         statusMessage = "A-OK";
         contentType = "text/html";
-        headers = new ArrayList<NameValuePair>();
+        headers = new ArrayList<>();
         name = "Set-Cookie";
         value = "NINJA_FLASH=success=Login+successful.+Have+fun+in+our+shop%21;Path=/";
         headers.add(new NameValuePair(name, value));
@@ -93,7 +91,7 @@ public class StoreTest
 
     /**
      * Verifies a header can be stored
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -120,7 +118,7 @@ public class StoreTest
 
     /**
      * Verifies a cookie can be stored
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -130,7 +128,7 @@ public class StoreTest
         final URL url = new URL("https://localhost:8443/posters/login/POST");
         final WebRequest settings = new WebRequest(url, HttpMethod.POST);
         // Add the login parameters
-        final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+        final List<NameValuePair> parameters = new ArrayList<>();
         parameters.add(new NameValuePair("email", "john@doe.com"));
         parameters.add(new NameValuePair("password", "topsecret"));
         parameters.add(new NameValuePair("btnSignIn", ""));
@@ -154,7 +152,7 @@ public class StoreTest
 
     /**
      * Verifies a result found via regular expression can be stored
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -182,7 +180,8 @@ public class StoreTest
 
         // Define the group the text should be in
         final String group = "1";
-        // Build a validator, that searches for the pattern and verifies text is the match in the matching group of group
+        // Build a validator, that searches for the pattern and verifies text is the match in the matching group of
+        // group
         store = new ResponseStore("firstClassWithGroup", new RegexpExtractor(pattern, group));
         context.setWebResponse(webResponse);
         // Execute

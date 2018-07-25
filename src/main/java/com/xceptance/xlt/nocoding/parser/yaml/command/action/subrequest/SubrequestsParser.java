@@ -15,7 +15,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
  * The class for parsing subrequests.
- * 
+ *
  * @author ckeiner
  */
 public class SubrequestsParser extends AbstractActionSubItemParser
@@ -24,7 +24,7 @@ public class SubrequestsParser extends AbstractActionSubItemParser
     /**
      * Parses the subrequest item in the action block to a list of {@link AbstractSubrequest}s. A subrequest item can
      * consist of multiple subrequests.
-     * 
+     *
      * @param subrequestNode
      *            The {@link JsonNode} the subrequest item starts at
      * @return A list with all specified subrequest in the node
@@ -38,7 +38,7 @@ public class SubrequestsParser extends AbstractActionSubItemParser
             throw new IllegalArgumentException("Expected ArrayNode in Subrequest but was " + subrequestNode.getClass().getSimpleName());
         }
         // Initialize Variables
-        final List<AbstractSubrequest> subrequests = new ArrayList<AbstractSubrequest>();
+        final List<AbstractSubrequest> subrequests = new ArrayList<>();
 
         // Get an iterator over the elements, that is every single subrequest
         final Iterator<JsonNode> iterator = subrequestNode.elements();
@@ -48,7 +48,8 @@ public class SubrequestsParser extends AbstractActionSubItemParser
         {
             // Get the current node, which describes a single subrequest
             final JsonNode current = iterator.next();
-            // Get the fieldNames of the current node, which should only contain the type of the subrequest (i.e. XHR, Static)
+            // Get the fieldNames of the current node, which should only contain the type of the subrequest (i.e. XHR,
+            // Static)
             final Iterator<String> fieldNames = current.fieldNames();
 
             // Iterate over the fieldNames
@@ -84,7 +85,7 @@ public class SubrequestsParser extends AbstractActionSubItemParser
 
         }
         // Create a new AbstractActionItem list
-        final List<AbstractActionSubItem> actionItems = new ArrayList<AbstractActionSubItem>();
+        final List<AbstractActionSubItem> actionItems = new ArrayList<>();
         // Add all subrequests to it
         actionItems.addAll(subrequests);
         // Return the list with all subrequests

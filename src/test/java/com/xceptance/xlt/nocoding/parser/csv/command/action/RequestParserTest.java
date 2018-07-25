@@ -10,13 +10,12 @@ import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.command.action.request.Request;
 import com.xceptance.xlt.nocoding.parser.csv.CsvConstants;
 import com.xceptance.xlt.nocoding.parser.csv.command.CsvParserTestUtils;
-import com.xceptance.xlt.nocoding.parser.csv.command.action.RequestParser;
 
 public class RequestParserTest
 {
     /**
      * Verifies the minimal declaration of a csv, that is only the URL is provided, can be parsed
-     * 
+     *
      * @throws IOException
      */
     @Test
@@ -36,7 +35,7 @@ public class RequestParserTest
 
     /**
      * Verifies parameters are properly parsed to {@link NameValuePair}s
-     * 
+     *
      * @throws IOException
      */
     @Test

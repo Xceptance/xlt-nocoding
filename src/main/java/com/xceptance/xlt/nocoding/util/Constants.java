@@ -5,7 +5,7 @@ import java.util.Set;
 
 /**
  * Has all important constants, that are used throughout parsing and executing.
- * 
+ *
  * @author ckeiner
  */
 public class Constants

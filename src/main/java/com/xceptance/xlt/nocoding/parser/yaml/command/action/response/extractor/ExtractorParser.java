@@ -14,7 +14,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
 /**
  * Takes an identifier (which is an element of {@link JsonNode#fieldNames()}) of a <code>JsonNode</code> with the
  * extraction item in it and parses it to an {@link AbstractExtractor}.
- * 
+ *
  * @author ckeiner
  */
 public class ExtractorParser
@@ -31,9 +31,9 @@ public class ExtractorParser
 
     /**
      * Parses the extraction item in the {@link JsonNode} to an {@link AbstractExtractor}. Also checks if
-     * {@link Constants#GROUP} is specified in the item at the <code>JsonNode</code> and if <code>Constants#GROUP</code> is
-     * specified, verifies the <code>AbstractExtractor</code> is a {@link RegexpExtractor}.
-     * 
+     * {@link Constants#GROUP} is specified in the item at the <code>JsonNode</code> and if <code>Constants#GROUP</code>
+     * is specified, verifies the <code>AbstractExtractor</code> is a {@link RegexpExtractor}.
+     *
      * @param node
      *            The <code>JsonNode</code> with the extraction item in it
      * @return The <code>AbstractExtractor</code> corresponding to the identifier. <br>

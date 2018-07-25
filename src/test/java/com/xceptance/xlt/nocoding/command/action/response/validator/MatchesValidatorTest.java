@@ -5,12 +5,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.xceptance.xlt.nocoding.command.action.response.validator.AbstractValidator;
-import com.xceptance.xlt.nocoding.command.action.response.validator.MatchesValidator;
-
 /**
  * Tests {@link MatchesValidator}
- * 
+ *
  * @author ckeiner
  */
 public class MatchesValidatorTest extends ValidationMethodTest
@@ -18,7 +15,7 @@ public class MatchesValidatorTest extends ValidationMethodTest
 
     /**
      * Verifies {@link MatchesValidator} matches the content of the first result with the expected content
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -32,9 +29,9 @@ public class MatchesValidatorTest extends ValidationMethodTest
     }
 
     /**
-     * Verifies {@link MatchesValidator} matches the content of the first result with the expected content, which is hidden
-     * behind a variable.
-     * 
+     * Verifies {@link MatchesValidator} matches the content of the first result with the expected content, which is
+     * hidden behind a variable.
+     *
      * @throws Exception
      */
     @Test
@@ -53,7 +50,7 @@ public class MatchesValidatorTest extends ValidationMethodTest
     /**
      * Verifies {@link MatchesValidator} throws an {@link AssertionError} if the content and the expected content do not
      * match
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = AssertionError.class)
@@ -68,7 +65,7 @@ public class MatchesValidatorTest extends ValidationMethodTest
 
     /**
      * Verifies {@link MatchesValidator} throws an {@link AssertionError} when the result list is null
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = AssertionError.class)
@@ -81,7 +78,7 @@ public class MatchesValidatorTest extends ValidationMethodTest
 
     /**
      * Verifies {@link MatchesValidator} throws an {@link AssertionError} when the result list is empty
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = AssertionError.class)

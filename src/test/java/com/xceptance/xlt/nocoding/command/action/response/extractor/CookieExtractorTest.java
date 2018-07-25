@@ -5,13 +5,11 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.xceptance.xlt.nocoding.command.action.response.extractor.AbstractExtractor;
-import com.xceptance.xlt.nocoding.command.action.response.extractor.CookieExtractor;
 import com.xceptance.xlt.nocoding.util.MockObjects;
 
 /**
  * Tests for {@link CookieExtractor}
- * 
+ *
  * @author ckeiner
  */
 public class CookieExtractorTest extends ExtractorTest
@@ -19,7 +17,7 @@ public class CookieExtractorTest extends ExtractorTest
 
     /**
      * Verifies the {@link CookieExtractor} extracts the cookie from {@link MockObjects}
-     * 
+     *
      * @throws Throwable
      */
     @Test
@@ -34,7 +32,7 @@ public class CookieExtractorTest extends ExtractorTest
 
     /**
      * Verifies the {@link CookieExtractor} can extract a cookie when its a variable
-     * 
+     *
      * @throws Throwable
      */
     @Test
@@ -52,7 +50,7 @@ public class CookieExtractorTest extends ExtractorTest
 
     /**
      * Verifies the {@link CookieExtractor} finds nothing if the name of the cookie is not found
-     * 
+     *
      * @throws Throwable
      */
     @Test

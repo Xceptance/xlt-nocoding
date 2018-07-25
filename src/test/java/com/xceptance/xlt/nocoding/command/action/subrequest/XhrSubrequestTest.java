@@ -15,15 +15,13 @@ import com.xceptance.xlt.nocoding.command.action.response.HttpcodeValidator;
 import com.xceptance.xlt.nocoding.command.action.response.Response;
 import com.xceptance.xlt.nocoding.command.action.response.Validator;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.RegexpExtractor;
-import com.xceptance.xlt.nocoding.command.action.subrequest.AbstractSubrequest;
-import com.xceptance.xlt.nocoding.command.action.subrequest.XhrSubrequest;
 import com.xceptance.xlt.nocoding.util.MockObjects;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
  * Tests {@link XhrSubrequest}
- * 
+ *
  * @author ckeiner
  */
 public class XhrSubrequestTest
@@ -47,17 +45,17 @@ public class XhrSubrequestTest
 
     /**
      * Creates an {@link XhrSubrequest} with request, response and executes the subrequest
-     * 
+     *
      * @throws Throwable
      */
     @Test
     public void testExecute() throws Throwable
     {
-        final List<AbstractActionSubItem> actionItems = new ArrayList<AbstractActionSubItem>();
+        final List<AbstractActionSubItem> actionItems = new ArrayList<>();
         AbstractActionSubItem actionItem = new Request(mockObjects.urlStringDemoHtml);
         actionItems.add(actionItem);
 
-        final List<AbstractResponseItem> responseItems = new ArrayList<AbstractResponseItem>();
+        final List<AbstractResponseItem> responseItems = new ArrayList<>();
         responseItems.add(new HttpcodeValidator("200"));
         final AbstractResponseItem responseItem = new Validator("Validate Title", new RegexpExtractor(mockObjects.regexStringExpected),
                                                                 null);

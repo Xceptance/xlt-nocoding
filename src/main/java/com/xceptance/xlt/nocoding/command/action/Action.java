@@ -17,7 +17,7 @@ import com.xceptance.xlt.nocoding.util.storage.DataStorage;
 /**
  * <code>Action</code> is the data model for the "Action" type of the execution.<br>
  * Therefore, it consists of a {@link #name} and list of {@link AbstractActionSubItem}s.
- * 
+ *
  * @author ckeiner
  */
 public class Action implements Command
@@ -37,12 +37,12 @@ public class Action implements Command
      */
     public Action()
     {
-        actionItems = new ArrayList<AbstractActionSubItem>(1);
+        actionItems = new ArrayList<>(1);
     }
 
     /**
      * Creates an instance of {@link Action} that sets {@link #name} and {@link #actionItems}.
-     * 
+     *
      * @param name
      *            The name of the action
      * @param actionItems
@@ -70,9 +70,9 @@ public class Action implements Command
     }
 
     /**
-     * Fills in the default data for name, request, response if it isn't specified and verifies there is only one request,
-     * response and in the correct order. Finally, it adds the default static subrequests.
-     * 
+     * Fills in the default data for name, request, response if it isn't specified and verifies there is only one
+     * request, response and in the correct order. Finally, it adds the default static subrequests.
+     *
      * @param context
      *            The {@link Context} with the {@link DataStorage}.
      */
@@ -95,7 +95,7 @@ public class Action implements Command
 
     /**
      * Tries to resolve all variables of non-null attributes
-     * 
+     *
      * @param context
      *            The {@link Context} with the {@link VariableResolver}
      * @throws InvalidArgumentException
@@ -109,9 +109,10 @@ public class Action implements Command
     }
 
     /**
-     * Executes the {@link Action} by building a {@link WebAction} with the {@link #actionItems}. The <code>WebAction</code>
-     * then executes the <code>actionItems</code>. In the end, the loaded page gets appended to the result browser.
-     * 
+     * Executes the {@link Action} by building a {@link WebAction} with the {@link #actionItems}. The
+     * <code>WebAction</code> then executes the <code>actionItems</code>. In the end, the loaded page gets appended to
+     * the result browser.
+     *
      * @throws Throwable
      *             if a Throwable occurs during the execution or when the page is appended to the result browser
      */

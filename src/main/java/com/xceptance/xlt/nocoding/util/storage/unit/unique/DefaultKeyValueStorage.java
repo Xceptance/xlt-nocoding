@@ -9,26 +9,26 @@ import com.xceptance.xlt.nocoding.util.storage.DefaultValues;
 /**
  * A storage unit, that stores simple key value pairs for default values. However, some have a fallback value provided
  * by {@link DefaultValues}.
- * 
+ *
  * @author ckeiner
  */
 public class DefaultKeyValueStorage extends UniqueStorage
 {
     /**
-     * If a key cannot be found in {@link #getItems()} (returns null), the key is looked up in {@link #fallback}. Therefore,
-     * if a key is deleted in {@link #getItems()}, some keys still have a default value.
+     * If a key cannot be found in {@link #getItems()} (returns null), the key is looked up in {@link #fallback}.
+     * Therefore, if a key is deleted in {@link #getItems()}, some keys still have a default value.
      */
     protected Map<String, String> fallback;
 
     /**
-     * Creates an instance of {@link DefaultKeyValueStorage}, that sets {@link #getItems()} and {@link #fallback} to a new
-     * {@link HashMap}. Then, initializes {@link #getItems()} and {@link #fallback} with default values from
+     * Creates an instance of {@link DefaultKeyValueStorage}, that sets {@link #getItems()} and {@link #fallback} to a
+     * new {@link HashMap}. Then, initializes {@link #getItems()} and {@link #fallback} with default values from
      * {@link DefaultValues}.
      */
     public DefaultKeyValueStorage()
     {
         super(new HashMap<String, String>());
-        fallback = new HashMap<String, String>();
+        fallback = new HashMap<>();
         initialize();
     }
 
@@ -46,13 +46,13 @@ public class DefaultKeyValueStorage extends UniqueStorage
     }
 
     /**
-     * Returns the item with the specified key. If the key cannot be found, the method searches in {@link #fallback}. If it
-     * still cannot be found, the method returns null.
-     * 
+     * Returns the item with the specified key. If the key cannot be found, the method searches in {@link #fallback}. If
+     * it still cannot be found, the method returns null.
+     *
      * @param key
      *            The key you want to search for
-     * @return Null if the key is neither in the {@link #fallback} nor in {@link #getItems()}, else the value corresponding
-     *         to the key
+     * @return Null if the key is neither in the {@link #fallback} nor in {@link #getItems()}, else the value
+     *         corresponding to the key
      */
     @Override
     public String get(final String key)
@@ -73,7 +73,7 @@ public class DefaultKeyValueStorage extends UniqueStorage
 
     /**
      * Stores an item with a default value of {@link #fallback}.
-     * 
+     *
      * @param itemName
      *            The key/name you want to store your item with
      * @param value

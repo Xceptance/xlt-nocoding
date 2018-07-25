@@ -11,7 +11,7 @@ import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 /**
  * Abstract class for extractor tests. Stores the {@link WebResponse} from {@link MockObjects#loadResponse()} in
  * {@link Context}.
- * 
+ *
  * @author ckeiner
  */
 public abstract class ExtractorTest
@@ -21,7 +21,8 @@ public abstract class ExtractorTest
     protected MockObjects mockObjects;
 
     /**
-     * Prepares the test run by storing the {@link WebResponse} from {@link MockObjects#loadResponse()} in {@link Context}.
+     * Prepares the test run by storing the {@link WebResponse} from {@link MockObjects#loadResponse()} in
+     * {@link Context}.
      */
     @Before
     public void init()

@@ -8,7 +8,7 @@ import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
  * Abstract class for all store default tests. Creates a new {@link Context}.
- * 
+ *
  * @author ckeiner
  */
 public abstract class AbstractStoreDefaultTest

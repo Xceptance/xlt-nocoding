@@ -22,27 +22,28 @@ import com.xceptance.xlt.nocoding.parser.csv.CsvConstants;
 
 /**
  * Extracts the information of a {@link Response} from a {@link CSVRecord}.
- * 
+ *
  * @author ckeiner
  */
 public class ResponseParser implements AbstractActionSubItemParser
 {
     /**
      * Extracts the information needed for a {@link Response} from the {@link CSVRecord}
-     * 
+     *
      * @param record
      *            The {@link CSVRecord} with the action item
      * @return The response defined by the CSVRecord
      */
+    @Override
     public Response parse(final CSVRecord record)
     {
         // Initialize all needed variables for the response
-        final List<AbstractResponseItem> responseItems = new ArrayList<AbstractResponseItem>();
+        final List<AbstractResponseItem> responseItems = new ArrayList<>();
         String responsecode = null;
         AbstractExtractor extractor = null;
         AbstractValidator validationMethod = null;
 
-        final List<AbstractResponseStore> responseStores = new ArrayList<AbstractResponseStore>();
+        final List<AbstractResponseStore> responseStores = new ArrayList<>();
         boolean hasXpath = false;
         boolean hasRegexp = false;
 
@@ -161,13 +162,14 @@ public class ResponseParser implements AbstractActionSubItemParser
 
     /**
      * Creates a name for the validation out of the {@link CSVRecord} and <code>validationNameStart</code>.
-     * 
+     *
      * @param record
      *            The <code>CSVRecord</code> with the action item
      * @param validationNameStart
      *            The String the name of the validation should start with
-     * @return If {@link CsvConstants#NAME} is mapped and not null or empty, returns <code>validationNameStart + " "</code>
-     *         with the value of <code>CsvConstants.NAME</code>. Otherwise, returns an empty string.
+     * @return If {@link CsvConstants#NAME} is mapped and not null or empty, returns
+     *         <code>validationNameStart + " "</code> with the value of <code>CsvConstants.NAME</code>. Otherwise,
+     *         returns an empty string.
      */
     private String createValidationName(final CSVRecord record, final String validationNameStart)
     {
@@ -185,13 +187,13 @@ public class ResponseParser implements AbstractActionSubItemParser
 
     /**
      * Creates an {@link AbstractResponseStore} depending on the fieldName
-     * 
+     *
      * @param fieldName
      *            The name of the field
      * @param value
      *            The value of the field
-     * @return An {@link AbstractResponseStore} with the variableName of fieldName and the proper {@link AbstractExtractor}
-     *         with the extractionExpression of value
+     * @return An {@link AbstractResponseStore} with the variableName of fieldName and the proper
+     *         {@link AbstractExtractor} with the extractionExpression of value
      */
     private AbstractResponseStore handleStore(final String fieldName, final String value)
     {

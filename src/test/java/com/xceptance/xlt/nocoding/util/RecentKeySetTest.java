@@ -15,7 +15,7 @@ public class RecentKeySetTest
     @Before
     public void init()
     {
-        this.keySet = new RecentKeySet();
+        keySet = new RecentKeySet();
     }
 
     /**
@@ -43,7 +43,7 @@ public class RecentKeySetTest
     @Test
     public void testAddAllToSet()
     {
-        final List<String> items = new ArrayList<String>();
+        final List<String> items = new ArrayList<>();
         items.add("item");
         items.add("another item");
         items.add("different");
@@ -56,7 +56,7 @@ public class RecentKeySetTest
             Assert.assertTrue(keySet.contains(item));
         });
 
-        final List<String> sameItems = new ArrayList<String>();
+        final List<String> sameItems = new ArrayList<>();
         sameItems.add("iTEm");
         sameItems.add("anotHer iteM");
         sameItems.add("DIFFEreNt");

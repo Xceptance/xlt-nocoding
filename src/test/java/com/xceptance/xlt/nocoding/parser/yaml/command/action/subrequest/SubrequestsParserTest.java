@@ -5,13 +5,13 @@ import java.io.IOException;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.AbstractParserTest;
+import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParser;
 
 /**
  * Tests for parsing the "Subrequests" tag
- * 
+ *
  * @author ckeiner
  */
 public class SubrequestsParserTest extends AbstractParserTest
@@ -36,7 +36,7 @@ public class SubrequestsParserTest extends AbstractParserTest
 
     /**
      * Verifies a XhrSubrequest can be parsed
-     * 
+     *
      * @throws IOException
      */
     @Test
@@ -48,7 +48,7 @@ public class SubrequestsParserTest extends AbstractParserTest
 
     /**
      * Verifies a static subrequest can be parsed
-     * 
+     *
      * @throws IOException
      */
     @Test
@@ -60,7 +60,7 @@ public class SubrequestsParserTest extends AbstractParserTest
 
     /**
      * Verifies an error happens when "Subrequests" has an invalid tag
-     * 
+     *
      * @throws IOException
      */
     @Test(expected = JsonParseException.class)
@@ -72,7 +72,7 @@ public class SubrequestsParserTest extends AbstractParserTest
 
     /**
      * Verifies an error happens when "Subrequests" has objects beneath it and not arrays
-     * 
+     *
      * @throws IOException
      */
     @Test(expected = JsonParseException.class)
@@ -84,7 +84,7 @@ public class SubrequestsParserTest extends AbstractParserTest
 
     /**
      * Verifies an error happens when "Static" beneath "Subrequests" has objects beneath it and not arrays
-     * 
+     *
      * @throws IOException
      */
     @Test(expected = JsonParseException.class)
@@ -96,7 +96,7 @@ public class SubrequestsParserTest extends AbstractParserTest
 
     /**
      * Verifies an error happens when "Xhr" beneath "Subrequests" has an array beneath it and not objects
-     * 
+     *
      * @throws IOException
      */
     @Test(expected = JsonParseException.class)
@@ -108,7 +108,7 @@ public class SubrequestsParserTest extends AbstractParserTest
 
     /**
      * Verifies an error happens when "Xhr" beneath "Subrequests" has an invalid tag
-     * 
+     *
      * @throws IOException
      */
     @Test(expected = JsonParseException.class)
@@ -120,7 +120,7 @@ public class SubrequestsParserTest extends AbstractParserTest
 
     /**
      * Verifies an error happens when "Static" beneath "Subrequests" has a single value
-     * 
+     *
      * @throws IOException
      */
     @Test(expected = JsonParseException.class)

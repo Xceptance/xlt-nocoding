@@ -12,7 +12,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
  * The Class for parsing default parameters.
- * 
+ *
  * @author ckeiner
  */
 public class StoreDefaultParametersParser extends AbstractStoreDefaultSubItemsParser
@@ -21,7 +21,7 @@ public class StoreDefaultParametersParser extends AbstractStoreDefaultSubItemsPa
     /**
      * Parses the parameters list item to a list of {@link AbstractStoreDefaultItem}s, which consists of multiple
      * {@link StoreDefaultParameter}.
-     * 
+     *
      * @param defaultParametersNode
      *            The {@link JsonNode} the default parameters start at
      * @return A list of <code>StoreDefault</code>s with the parsed default parameters.

@@ -21,11 +21,9 @@ import java.util.Random;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.xceptance.xlt.nocoding.util.resolver.ParameterInterpreterNow;
-
 /**
  * Tests {@link ParameterInterpreterNow}
- * 
+ *
  * @author ckeiner
  */
 public class ParameterInterpreterNowTest

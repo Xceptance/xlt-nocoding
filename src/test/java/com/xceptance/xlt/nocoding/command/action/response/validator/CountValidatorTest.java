@@ -5,12 +5,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.xceptance.xlt.nocoding.command.action.response.validator.AbstractValidator;
-import com.xceptance.xlt.nocoding.command.action.response.validator.CountValidator;
-
 /**
  * Tests {@link CountValidator}
- * 
+ *
  * @author ckeiner
  */
 public class CountValidatorTest extends ValidationMethodTest
@@ -18,7 +15,7 @@ public class CountValidatorTest extends ValidationMethodTest
 
     /**
      * Verifies the {@link CountValidator} validates the correct amount of results
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -37,9 +34,9 @@ public class CountValidatorTest extends ValidationMethodTest
     }
 
     /**
-     * Verifies the {@link CountValidator} validates the correct amount of results. The expected amount of results is hidden
-     * behind a variable
-     * 
+     * Verifies the {@link CountValidator} validates the correct amount of results. The expected amount of results is
+     * hidden behind a variable
+     *
      * @throws Exception
      */
     @Test
@@ -57,7 +54,7 @@ public class CountValidatorTest extends ValidationMethodTest
 
     /**
      * Verifies {@link CountValidator} throws an {@link AssertionError} if the wrong amount of items is specified
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = AssertionError.class)
@@ -72,7 +69,7 @@ public class CountValidatorTest extends ValidationMethodTest
 
     /**
      * Verifies {@link CountValidator} throws an error if it cannot convert to a number
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = NumberFormatException.class)
@@ -87,7 +84,7 @@ public class CountValidatorTest extends ValidationMethodTest
 
     /**
      * Verifies {@link CountValidator} throws an error if there is no expression to validate
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = IllegalStateException.class)
@@ -100,7 +97,7 @@ public class CountValidatorTest extends ValidationMethodTest
 
     /**
      * Verifies {@link CountValidator} can validate that there is no item in the result list
-     * 
+     *
      * @throws Exception
      */
     @Test

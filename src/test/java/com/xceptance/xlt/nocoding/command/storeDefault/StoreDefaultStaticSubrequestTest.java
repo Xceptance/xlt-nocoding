@@ -7,12 +7,11 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.xceptance.xlt.nocoding.command.Command;
-import com.xceptance.xlt.nocoding.command.storeDefault.StoreDefaultStaticSubrequest;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
  * Tests {@link StoreDefaultStaticSubrequest}
- * 
+ *
  * @author ckeiner
  */
 public class StoreDefaultStaticSubrequestTest extends AbstractStoreDefaultTest
@@ -20,7 +19,7 @@ public class StoreDefaultStaticSubrequestTest extends AbstractStoreDefaultTest
 
     /**
      * Verifies {@link StoreDefaultStaticSubrequest} can store one default static url
-     * 
+     *
      * @throws Throwable
      */
     @Test
@@ -35,7 +34,7 @@ public class StoreDefaultStaticSubrequestTest extends AbstractStoreDefaultTest
 
     /**
      * Verifies {@link StoreDefaultStaticSubrequest} can delete one default static url
-     * 
+     *
      * @throws Throwable
      */
     @Test
@@ -54,14 +53,14 @@ public class StoreDefaultStaticSubrequestTest extends AbstractStoreDefaultTest
 
     /**
      * Verifies {@link StoreDefaultStaticSubrequest} can delete all default static url
-     * 
+     *
      * @throws Throwable
      */
     @Test
     public void deleteAllDefaultHeaders() throws Throwable
     {
         final String url = "http://www.xceptance.net";
-        final List<Command> store = new ArrayList<Command>();
+        final List<Command> store = new ArrayList<>();
         store.add(new StoreDefaultStaticSubrequest(url));
         store.add(new StoreDefaultStaticSubrequest(url));
         store.add(new StoreDefaultStaticSubrequest(url));

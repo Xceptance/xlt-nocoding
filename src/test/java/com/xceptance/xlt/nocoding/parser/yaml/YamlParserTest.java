@@ -7,14 +7,13 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.parser.AbstractParserTest;
-import com.xceptance.xlt.nocoding.parser.yaml.YamlParser;
+import com.xceptance.xlt.nocoding.parser.Parser;
 
 /**
  * Tests for parsing multiple tags, i.e. "Store" and "Action"
- * 
+ *
  * @author ckeiner
  */
 public class YamlParserTest extends AbstractParserTest
@@ -29,7 +28,7 @@ public class YamlParserTest extends AbstractParserTest
 
     /**
      * Verifies an empty file can be parsed
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -42,7 +41,7 @@ public class YamlParserTest extends AbstractParserTest
 
     /**
      * Verifies an error is thrown if the file is not found
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = FileNotFoundException.class)
@@ -55,7 +54,7 @@ public class YamlParserTest extends AbstractParserTest
 
     /**
      * Verifies an error is thrown when an invalid list item is found
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = JsonParseException.class)
@@ -67,7 +66,7 @@ public class YamlParserTest extends AbstractParserTest
 
     /**
      * Verifies an error is thrown when the list items are objects and not in an array
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = IllegalArgumentException.class)

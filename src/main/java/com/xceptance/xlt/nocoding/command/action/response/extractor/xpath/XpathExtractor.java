@@ -6,7 +6,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Decides which {@link XpathExtractorExecutor} is to be used and stores the result in {@link #getResult()}
- * 
+ *
  * @author ckeiner
  */
 public class XpathExtractor extends AbstractExtractor
@@ -26,10 +26,11 @@ public class XpathExtractor extends AbstractExtractor
 
     /**
      * Checks the type of the {@link WebResponse} and chooses the appropriate {@link XpathExtractorExecutor}
-     * 
+     *
      * @param context
      *            The {@link Context} with the WebResponse in it
-     * @return {@link HtmlXmlXpathExtractorExecutor} or {@link JsonXpathExtractorExecutor}, depending on the content type
+     * @return {@link HtmlXmlXpathExtractorExecutor} or {@link JsonXpathExtractorExecutor}, depending on the content
+     *         type
      */
     XpathExtractorExecutor getExecutor(final Context<?> context)
     {

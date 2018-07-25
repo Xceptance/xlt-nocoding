@@ -18,14 +18,13 @@ import com.xceptance.xlt.nocoding.command.action.response.extractor.RegexpExtrac
 import com.xceptance.xlt.nocoding.command.action.response.store.ResponseStore;
 import com.xceptance.xlt.nocoding.command.action.response.validator.MatchesValidator;
 import com.xceptance.xlt.nocoding.parser.csv.CsvConstants;
-import com.xceptance.xlt.nocoding.parser.csv.command.ActionParser;
 
 public class ActionParserTest
 {
 
     /**
      * Verifies all headers are parsed properly
-     * 
+     *
      * @throws IOException
      */
     @Test

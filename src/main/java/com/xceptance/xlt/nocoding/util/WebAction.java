@@ -17,7 +17,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
  * The WebAction extends the AbstractWebAction of the XLT framework. Therefore, this is the interface to XLT. A
  * WebAction fires a main (web) request, and afterwards an arbitrary amount of (XHR Sub)Request, {@link Response} and
  * {@link AbstractSubrequest}.
- * 
+ *
  * @author ckeiner
  */
 public class WebAction extends AbstractWebAction
@@ -39,7 +39,7 @@ public class WebAction extends AbstractWebAction
 
     /**
      * Creates a new instance of WebAction.
-     * 
+     *
      * @param timerName
      *            The name of the WebAction
      * @param context
@@ -51,13 +51,13 @@ public class WebAction extends AbstractWebAction
     {
         super(timerName);
         this.context = context;
-        this.webClient = context.getWebClient();
+        webClient = context.getWebClient();
         this.actionItems = actionItems;
     }
 
     /**
      * Execute the {@link WebAction} by executing {@link #actionItems}.
-     * 
+     *
      * @throws Exception
      *             Any Exception that happens during the execution
      */
@@ -69,12 +69,12 @@ public class WebAction extends AbstractWebAction
         pageLocalCache.clear();
 
         // Extract the action items
-        final List<AbstractActionSubItem> actionItems = this.getActionItems();
+        final List<AbstractActionSubItem> actionItems = getActionItems();
 
         // Check if the first actionItem is a Request
         if (!(actionItems.iterator().next() instanceof Request))
         {
-            throw new Exception("First item of action \"" + this.getTimerName() + "\" is not a Request!");
+            throw new Exception("First item of action \"" + getTimerName() + "\" is not a Request!");
         }
 
         // If there are actionItems
@@ -101,6 +101,7 @@ public class WebAction extends AbstractWebAction
     /**
      * Gets the WebClient if it is set, else it gets the WebClient via {@link AbstractWebAction#getWebClient()}.
      */
+    @Override
     public WebClient getWebClient()
     {
         WebClient webClient;

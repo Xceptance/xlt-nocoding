@@ -13,7 +13,7 @@ import com.xceptance.xlt.nocoding.parser.yaml.command.AbstractCommandParser;
 
 /**
  * The class for parsing store items.
- * 
+ *
  * @author ckeiner
  */
 public class StoreParser extends AbstractCommandParser
@@ -21,7 +21,7 @@ public class StoreParser extends AbstractCommandParser
 
     /**
      * Parses the store item to a list of {@link Command}s.
-     * 
+     *
      * @param storeNode
      *            The {@link JsonNode} with the store item
      * @return A list of <code>ScriptItem</code>s with all specified {@link Store}s.
@@ -29,7 +29,7 @@ public class StoreParser extends AbstractCommandParser
     @Override
     public List<Command> parse(final JsonNode storeNode)
     {
-        final List<Command> scriptItems = new ArrayList<Command>();
+        final List<Command> scriptItems = new ArrayList<>();
 
         // Convert the node to a list of NameValuePair so it retains its order
         final List<NameValuePair> storeItems = YamlParserUtils.getArrayNodeAsNameValuePair(storeNode);

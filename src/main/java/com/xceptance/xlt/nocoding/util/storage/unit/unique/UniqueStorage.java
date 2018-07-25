@@ -5,7 +5,7 @@ import java.util.Map;
 
 /**
  * A storage unit, that stores unique items in the sense of the key being unique.
- * 
+ *
  * @author ckeiner
  */
 public class UniqueStorage
@@ -26,7 +26,7 @@ public class UniqueStorage
 
     /**
      * Creates a new instance of {@link UniqueStorage}
-     * 
+     *
      * @param items
      *            The items you want
      */
@@ -37,7 +37,7 @@ public class UniqueStorage
 
     /**
      * Stores itemName and value in {@link #items}
-     * 
+     *
      * @param itemName
      *            The itemName/key
      * @param value
@@ -50,7 +50,7 @@ public class UniqueStorage
 
     /**
      * Returns the value mapped to the specified itemName/key
-     * 
+     *
      * @param itemName
      *            The itemName/key you want to search for
      * @return The value mapped to the specified key
@@ -62,7 +62,7 @@ public class UniqueStorage
 
     /**
      * Removes the specified itemName/key with its value
-     * 
+     *
      * @param itemName
      *            The name of the item
      * @return

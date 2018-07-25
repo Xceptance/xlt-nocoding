@@ -14,7 +14,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
 /**
  * The class for parsing default items. Default items are defined in {@link Constants#PERMITTEDLISTITEMS} and neither
  * {@link Constants#ACTION} nor {@link Constants#STORE}.
- * 
+ *
  * @author ckeiner
  */
 public class StoreDefaultParser extends AbstractCommandParser
@@ -28,7 +28,7 @@ public class StoreDefaultParser extends AbstractCommandParser
 
     /**
      * Parses the default item at the {@link JsonNode} to a list of {@link Command}s.
-     * 
+     *
      * @param defaultNode
      *            The {@link JsonNode} the default item starts at
      * @return A list of <code>ScriptItem</code>s with the specified {@link AbstractStoreDefaultItem}s.
@@ -36,7 +36,7 @@ public class StoreDefaultParser extends AbstractCommandParser
     @Override
     public List<Command> parse(final JsonNode defaultNode)
     {
-        final List<Command> scriptItems = new ArrayList<Command>();
+        final List<Command> scriptItems = new ArrayList<>();
 
         // Since it was a permitted action item, differentiate between the name of the item
         switch (variableName)

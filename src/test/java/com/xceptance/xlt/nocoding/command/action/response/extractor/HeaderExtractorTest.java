@@ -5,12 +5,9 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.xceptance.xlt.nocoding.command.action.response.extractor.AbstractExtractor;
-import com.xceptance.xlt.nocoding.command.action.response.extractor.HeaderExtractor;
-
 /**
  * Tests for {@link HeaderExtractor}
- * 
+ *
  * @author ckeiner
  */
 public class HeaderExtractorTest extends ExtractorTest
@@ -18,7 +15,7 @@ public class HeaderExtractorTest extends ExtractorTest
 
     /**
      * Verifies that {@link HeaderExtractor} can extract a header
-     * 
+     *
      * @throws Throwable
      */
     @Test
@@ -35,7 +32,7 @@ public class HeaderExtractorTest extends ExtractorTest
 
     /**
      * Verifies that {@link HeaderExtractor} can extract a header when its a variable
-     * 
+     *
      * @throws Throwable
      */
     @Test
@@ -55,7 +52,7 @@ public class HeaderExtractorTest extends ExtractorTest
 
     /**
      * Verifies the {@link HeaderExtractor} finds nothing if the name of the header is not found
-     * 
+     *
      * @throws Throwable
      */
     @Test

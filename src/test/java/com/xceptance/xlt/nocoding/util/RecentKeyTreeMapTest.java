@@ -17,7 +17,7 @@ public class RecentKeyTreeMapTest
     @Before
     public void init()
     {
-        this.treeMap = new RecentKeyTreeMap();
+        treeMap = new RecentKeyTreeMap();
     }
 
     @Test

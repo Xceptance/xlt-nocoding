@@ -11,7 +11,7 @@ import com.xceptance.xlt.nocoding.parser.yaml.YamlParser;
 
 /**
  * The class for getting the accepted extensions and the associated {@link Parser} for the extension
- * 
+ *
  * @author ckeiner
  */
 public class ParserFactory
@@ -27,8 +27,8 @@ public class ParserFactory
     private final Map<String, Parser> extensionsMap;
 
     /**
-     * Creates a new instance of <code>ParserFactory</code> and fills {@link #extensionsMap} with the known Parsers and its
-     * extensions
+     * Creates a new instance of <code>ParserFactory</code> and fills {@link #extensionsMap} with the known Parsers and
+     * its extensions
      */
     private ParserFactory()
     {
@@ -46,9 +46,9 @@ public class ParserFactory
     }
 
     /**
-     * Either creates an instance of <code>ParserFactory</code> if {@link #factoryInstance} is <code>null</code> or returns
-     * <code>factoryInstance</code>.
-     * 
+     * Either creates an instance of <code>ParserFactory</code> if {@link #factoryInstance} is <code>null</code> or
+     * returns <code>factoryInstance</code>.
+     *
      * @return the singleton instance of <code>ParserFactory</code>
      */
     public static synchronized ParserFactory getInstance()
@@ -63,17 +63,17 @@ public class ParserFactory
     /**
      * Returns a list of all known file extensions for the parser, therefore it returns the {@link Map#keySet()} of
      * {@link #extensionsMap}.
-     * 
+     *
      * @return A list with the content of {@link Map#keySet()} of {@link #extensionsMap}.
      */
     public List<String> getExtensions()
     {
-        return new ArrayList<String>(extensionsMap.keySet());
+        return new ArrayList<>(extensionsMap.keySet());
     }
 
     /**
      * Checks the parser for its file extensions and then creates the parser is the extension fits
-     * 
+     *
      * @param file
      * @return The Parser associated with the extension of <code>file</code>
      */

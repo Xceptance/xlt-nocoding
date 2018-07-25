@@ -12,7 +12,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
  * The class for parsing default static subrequests.
- * 
+ *
  * @author ckeiner
  */
 public class StoreDefaultStaticSubrequestsParser extends AbstractStoreDefaultSubItemsParser
@@ -21,7 +21,7 @@ public class StoreDefaultStaticSubrequestsParser extends AbstractStoreDefaultSub
     /**
      * Parses the static subrequest list item to a list of {@link AbstractStoreDefaultItem}s which consists of multiple
      * {@link StoreDefaultStaticSubrequest}.
-     * 
+     *
      * @param staticNode
      *            The {@link JsonNode} the default static subrequests start at
      * @return A list of <code>StoreDefault</code>s with the parsed default static subrequests.

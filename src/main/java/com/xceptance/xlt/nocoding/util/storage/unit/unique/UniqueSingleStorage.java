@@ -5,7 +5,7 @@ import java.util.Set;
 
 /**
  * Saves items in a {@link Set} so that there are no duplicates.
- * 
+ *
  * @author ckeiner
  */
 public class UniqueSingleStorage
@@ -23,7 +23,7 @@ public class UniqueSingleStorage
 
     /**
      * Creates a new instance of UniqueSingleStorage
-     * 
+     *
      * @param items
      *            The items you want
      */
@@ -34,7 +34,7 @@ public class UniqueSingleStorage
 
     /**
      * Stores item in {@link #items}
-     * 
+     *
      * @param item
      *            The item you want to store
      */
@@ -53,7 +53,7 @@ public class UniqueSingleStorage
 
     /**
      * Removes the item with the name itemName.
-     * 
+     *
      * @param itemName
      *            The value of the item
      * @return True if an item was removed. Otherwise, returns false

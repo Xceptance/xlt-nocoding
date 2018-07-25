@@ -27,7 +27,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Xpath Extractor for json content types
- * 
+ *
  * @author ckeiner
  */
 public class JsonXpathExtractorExecutor extends XpathExtractorExecutor
@@ -50,7 +50,7 @@ public class JsonXpathExtractorExecutor extends XpathExtractorExecutor
 
     /**
      * Creates a new {@link JsonXpathExtractorExecutor} for Html and Xml content types
-     * 
+     *
      * @param extractionExpression
      *            The {@link #extractionExpression} to use for extracting
      * @see XpathExtractorExecutor#XpathExtractorExecutor(String)
@@ -74,9 +74,9 @@ public class JsonXpathExtractorExecutor extends XpathExtractorExecutor
     }
 
     /**
-     * Creates a {@link Document} from the {@link WebResponse}, then extracts a {@link NodeList} via the xpath expression,
-     * and finally creates a list of Strings out of it
-     * 
+     * Creates a {@link Document} from the {@link WebResponse}, then extracts a {@link NodeList} via the xpath
+     * expression, and finally creates a list of Strings out of it
+     *
      * @param context
      * @return A list of strings that match the xpath expression
      */
@@ -91,7 +91,7 @@ public class JsonXpathExtractorExecutor extends XpathExtractorExecutor
 
     /**
      * Sets {@link #xmlInputSource} and {@link #xPath} if they are null
-     * 
+     *
      * @param context
      */
     private void loadContentFromWebResponseIfNecessary(final Context<?> context)
@@ -111,7 +111,7 @@ public class JsonXpathExtractorExecutor extends XpathExtractorExecutor
 
     /**
      * Sets {@link #xmlInputSource}. How the {@link Document} is created, depends on the content type.
-     * 
+     *
      * @param context
      */
     private void loadXMLSourceFromWebResponse(final Context<?> context) throws ParserConfigurationException, SAXException, IOException
@@ -133,7 +133,7 @@ public class JsonXpathExtractorExecutor extends XpathExtractorExecutor
 
     /**
      * Parses Json to Xml and creates a {@link Document} out of it.
-     * 
+     *
      * @param json
      *            The String with the Json content
      * @return The Json Content as Document
@@ -154,7 +154,7 @@ public class JsonXpathExtractorExecutor extends XpathExtractorExecutor
 
     /**
      * Creates a {@link Document} from the xml string
-     * 
+     *
      * @param xmlString
      *            The String with the xml content
      * @return The xml string as Document
@@ -170,7 +170,7 @@ public class JsonXpathExtractorExecutor extends XpathExtractorExecutor
 
     /**
      * Extracts a {@link NodeList} from {@link #xmlInputSource} via the supplied xPath expression
-     * 
+     *
      * @param xPath
      *            The xPath expression with which to extract the nodes
      * @return A list of nodes that match the xPath expression
@@ -205,7 +205,7 @@ public class JsonXpathExtractorExecutor extends XpathExtractorExecutor
 
     /**
      * Gets the text content from the {@link NodeList}.
-     * 
+     *
      * @param nodeList
      *            The <code>NodeList</code> from which to extract the text content
      * @return A list of String with the extracted text content

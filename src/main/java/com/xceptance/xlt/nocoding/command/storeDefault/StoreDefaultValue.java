@@ -7,7 +7,7 @@ import com.xceptance.xlt.nocoding.util.storage.unit.unique.DefaultKeyValueStorag
 
 /**
  * Stores a default item that is a simple name-value pair.
- * 
+ *
  * @author ckeiner
  */
 public class StoreDefaultValue extends AbstractStoreDefaultItem
@@ -15,7 +15,7 @@ public class StoreDefaultValue extends AbstractStoreDefaultItem
 
     /**
      * Creates an instance of {@link StoreDefaultValue} that sets {@link #getVariableName()} and {@link #getValue()}
-     * 
+     *
      * @param variableName
      *            The name of the default item
      * @param value
