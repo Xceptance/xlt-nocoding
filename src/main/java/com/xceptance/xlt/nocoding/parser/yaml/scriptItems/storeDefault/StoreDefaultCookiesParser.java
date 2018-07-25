@@ -5,10 +5,10 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
+import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.AbstractStoreDefaultItem;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultCookie;
 import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
  * The class for parsing default cookies.
@@ -49,7 +49,7 @@ public class StoreDefaultCookiesParser extends AbstractStoreDefaultSubItemParser
         else
         {
             // Parse the ArrayNode as NameValuePair
-            final List<NameValuePair> cookies = ParserUtils.getArrayNodeAsNameValuePair(defaultCookiesNode);
+            final List<NameValuePair> cookies = YamlParserUtils.getArrayNodeAsNameValuePair(defaultCookiesNode);
             for (final NameValuePair cookie : cookies)
             {
                 // Create a StoreDefaultHeader for every header key value pair

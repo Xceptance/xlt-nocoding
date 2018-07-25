@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.util;
+package com.xceptance.xlt.nocoding.parser.yaml;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import com.google.gson.JsonParseException;
  * 
  * @author ckeiner
  */
-public class ParserUtils
+public class YamlParserUtils
 {
 
     /**
@@ -57,7 +57,7 @@ public class ParserUtils
                 // Get the next field name (which is also the name of the variable we want to store)
                 final String fieldName = fieldNames.next();
                 // And extract the value (which is the value of the variable)
-                final String textValue = ParserUtils.readSingleValue(current.get(fieldName));
+                final String textValue = YamlParserUtils.readSingleValue(current.get(fieldName));
                 map.put(fieldName, textValue);
             }
         }
@@ -96,7 +96,7 @@ public class ParserUtils
                 // Get the next field name (which is also the name of the variable we want to store)
                 final String fieldName = fieldNames.next();
                 // And extract the value (which is the value of the variable)
-                final String textValue = ParserUtils.readSingleValue(current.get(fieldName));
+                final String textValue = YamlParserUtils.readSingleValue(current.get(fieldName));
                 // Construct the StoreItem with the fieldName and the textValue
                 nvp.add(new NameValuePair(fieldName, textValue));
             }
@@ -148,7 +148,7 @@ public class ParserUtils
      */
     public static String readValue(final JsonNode node, final String fieldName)
     {
-        return ParserUtils.readSingleValue(node.get(fieldName));
+        return YamlParserUtils.readSingleValue(node.get(fieldName));
     }
 
     /**

@@ -9,13 +9,13 @@ import org.apache.commons.lang3.NotImplementedException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xceptance.xlt.api.util.XltLogger;
+import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.action.AbstractActionSubItemParser;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionSubItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.HttpcodeValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
  * The class for parsing the response.
@@ -65,7 +65,7 @@ public class ResponseParser extends AbstractActionSubItemParser
             {
                 case Constants.HTTPCODE:
                     // Extract the httpcode
-                    httpcode = ParserUtils.readValue(responseNode, fieldName);
+                    httpcode = YamlParserUtils.readValue(responseNode, fieldName);
                     // Add the validator for the httpcode to the responseItems
                     responseItems.add(new HttpcodeValidator(httpcode));
                     XltLogger.runTimeLogger.debug("Added HttpcodeValidator with the Httpcode " + httpcode);

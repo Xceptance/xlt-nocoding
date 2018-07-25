@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.xceptance.xlt.nocoding.parser.Parser;
-import com.xceptance.xlt.nocoding.parser.ParserTest;
+import com.xceptance.xlt.nocoding.parser.AbstractParserTest;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 
@@ -17,7 +17,7 @@ import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
  * 
  * @author ckeiner
  */
-public class YamlParserTest extends ParserTest
+public class YamlParserTest extends AbstractParserTest
 {
     protected final String fileEmptyFile = path + "emptyFile.yml";
 

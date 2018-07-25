@@ -3,13 +3,13 @@ package com.xceptance.xlt.nocoding.parser.yaml.scriptItems.action.response.extra
 import org.apache.commons.lang3.NotImplementedException;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.CookieExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.HeaderExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.RegexpExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.xpath.XpathExtractor;
 import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
  * Takes an identifier (which is an element of {@link JsonNode#fieldNames()}) of a <code>JsonNode</code> with the
@@ -43,7 +43,7 @@ public class ExtractorParser
     {
         AbstractExtractor extractor = null;
         // Get the associated value
-        final String extractorExpression = ParserUtils.readValue(node, identifier);
+        final String extractorExpression = YamlParserUtils.readValue(node, identifier);
         final boolean hasGroup = node.has(Constants.GROUP);
         // Build a extractor depending on the name of the selector
         switch (identifier)
@@ -55,7 +55,7 @@ public class ExtractorParser
             case Constants.REGEXP:
                 if (hasGroup)
                 {
-                    extractor = new RegexpExtractor(extractorExpression, ParserUtils.readValue(node, Constants.GROUP));
+                    extractor = new RegexpExtractor(extractorExpression, YamlParserUtils.readValue(node, Constants.GROUP));
                 }
                 else
                 {

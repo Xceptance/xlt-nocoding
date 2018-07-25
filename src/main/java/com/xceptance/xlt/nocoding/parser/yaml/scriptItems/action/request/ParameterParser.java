@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
-import com.xceptance.xlt.nocoding.util.ParserUtils;
+import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 
 /**
  * The class for parsing the parameter items to a list of {@link NameValuePair}s
@@ -24,7 +24,7 @@ public class ParameterParser
     public List<NameValuePair> parse(final JsonNode parameterNode)
     {
         // Transform the JsonNode to a list of NameValuePairs
-        final List<NameValuePair> parameters = ParserUtils.getArrayNodeAsNameValuePair(parameterNode);
+        final List<NameValuePair> parameters = YamlParserUtils.getArrayNodeAsNameValuePair(parameterNode);
         // Return the list
         return parameters;
     }

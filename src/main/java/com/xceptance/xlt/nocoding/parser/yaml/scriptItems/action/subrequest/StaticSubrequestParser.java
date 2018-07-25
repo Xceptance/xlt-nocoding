@@ -6,8 +6,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
-import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
  * The class for parsing static subrequests.
@@ -38,7 +38,7 @@ public class StaticSubrequestParser
         while (staticUrlsIterator.hasNext())
         {
             // Read the url
-            final String url = ParserUtils.readSingleValue(staticUrlsIterator.next());
+            final String url = YamlParserUtils.readSingleValue(staticUrlsIterator.next());
             // Add it to the list
             urls.add(url);
         }

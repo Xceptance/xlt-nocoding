@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xceptance.xlt.nocoding.parser.Parser;
-import com.xceptance.xlt.nocoding.parser.ParserTest;
+import com.xceptance.xlt.nocoding.parser.AbstractParserTest;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParser;
 import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.action.response.ResponseParser;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseItem;
@@ -27,7 +27,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
  * 
  * @author ckeiner
  */
-public class ResponseParserTest extends ParserTest
+public class ResponseParserTest extends AbstractParserTest
 {
     protected final String path = super.path + "actionItems/response/";
 

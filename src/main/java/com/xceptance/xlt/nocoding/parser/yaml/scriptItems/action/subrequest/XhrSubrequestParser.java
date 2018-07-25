@@ -10,13 +10,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.NullNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xceptance.xlt.api.util.XltLogger;
+import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.action.request.RequestParser;
 import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.action.response.ResponseParser;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionSubItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.request.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.XhrSubrequest;
 import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
  * The class for parsing the Xhr Subrequest item.
@@ -67,7 +67,7 @@ public class XhrSubrequestParser
                     // Check that this is the first item we parse
                     if (actionItems.isEmpty())
                     {
-                        name = ParserUtils.readValue(xhrNode, fieldName);
+                        name = YamlParserUtils.readValue(xhrNode, fieldName);
                         if (name != null)
                         {
                             XltLogger.runTimeLogger.debug("Xhr Subrequest Name: " + name);
@@ -120,7 +120,7 @@ public class XhrSubrequestParser
                 case Constants.SUBREQUESTS:
                     XltLogger.runTimeLogger.debug("Subrequests: " + xhrNode.get(fieldName).toString());
                     // Create a new SubrequestParser and parse the subrequest
-                    actionItem = new SubrequestParser().parse(xhrNode.get(fieldName)).get(0);
+                    actionItem = new SubrequestsParser().parse(xhrNode.get(fieldName)).get(0);
                     break;
 
                 default:

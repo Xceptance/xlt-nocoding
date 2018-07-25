@@ -18,7 +18,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
  * 
  * @author ckeiner
  */
-public class SubrequestParser extends AbstractActionSubItemParser
+public class SubrequestsParser extends AbstractActionSubItemParser
 {
 
     /**

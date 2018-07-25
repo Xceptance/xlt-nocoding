@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.parser.Parser;
-import com.xceptance.xlt.nocoding.parser.ParserTest;
+import com.xceptance.xlt.nocoding.parser.AbstractParserTest;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParser;
 import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.storeDefault.StoreDefaultCookiesParser;
 import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.storeDefault.StoreDefaultHeadersParser;
@@ -33,7 +33,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
  * 
  * @author ckeiner
  */
-public class StoreDefaultParserTest extends ParserTest
+public class StoreDefaultParserTest extends AbstractParserTest
 {
 
     protected final String fileTestData = path + "testData.yml";

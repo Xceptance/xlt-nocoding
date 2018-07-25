@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.AbstractStoreDefaultItem;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultValue;
 import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
  * The class for parsing single, default key-value items. <br>
@@ -34,7 +34,7 @@ public class StoreDefaultValuesParser extends AbstractStoreDefaultSubItemParser
         // Get the name of the default item
         final String variableName = defaultItemNode.fieldNames().next();
         // Get the value of the default item
-        final String value = ParserUtils.readSingleValue(defaultItemNode.get(variableName));
+        final String value = YamlParserUtils.readSingleValue(defaultItemNode.get(variableName));
         // Create the new StoreDefaultItem and add it to the default items list
         defaultItems.add(new StoreDefaultValue(variableName, value));
 

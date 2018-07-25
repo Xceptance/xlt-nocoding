@@ -6,10 +6,10 @@ import java.util.List;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.api.util.XltLogger;
+import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.AbstractScriptItemParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.store.Store;
-import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
  * The class for parsing store items.
@@ -32,7 +32,7 @@ public class StoreParser extends AbstractScriptItemParser
         final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
 
         // Convert the node to a list of NameValuePair so it retains its order
-        final List<NameValuePair> storeItems = ParserUtils.getArrayNodeAsNameValuePair(storeNode);
+        final List<NameValuePair> storeItems = YamlParserUtils.getArrayNodeAsNameValuePair(storeNode);
 
         for (final NameValuePair storeItem : storeItems)
         {

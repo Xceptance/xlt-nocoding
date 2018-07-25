@@ -5,10 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.AbstractStoreDefaultItem;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultStaticRequest;
 import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
  * The class for parsing default static subrequests.
@@ -55,7 +55,7 @@ public class StoreDefaultStaticsParser extends AbstractStoreDefaultSubItemParser
                 // Get the next node
                 final JsonNode nextNode = elementIterator.next();
                 // Read the url
-                final String url = ParserUtils.readSingleValue(nextNode);
+                final String url = YamlParserUtils.readSingleValue(nextNode);
                 // Create a new StoreDefaultStatic and add it to the defaultItems
                 defaultItems.add(new StoreDefaultStaticRequest(url));
             }

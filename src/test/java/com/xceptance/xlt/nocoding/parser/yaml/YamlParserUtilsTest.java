@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.util;
+package com.xceptance.xlt.nocoding.parser.yaml;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -14,13 +14,14 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
+import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 
 /**
- * Tests {@link ParserUtils}
+ * Tests {@link YamlParserUtils}
  * 
  * @author ckeiner
  */
-public class ParserUtilsTest
+public class YamlParserUtilsTest
 {
 
     private final String booleanString = "booleanString : true";
@@ -48,7 +49,7 @@ public class ParserUtilsTest
                                              + "    element_6 : 123\n";
 
     /**
-     * Verifies that {@link ParserUtils#getNodeAt(JsonParser)} returns the correct node
+     * Verifies that {@link YamlParserUtils#getNodeAt(JsonParser)} returns the correct node
      * 
      * @throws IOException
      */
@@ -57,7 +58,7 @@ public class ParserUtilsTest
     {
         final YAMLFactory yaml = new YAMLFactory();
         final JsonParser parser = yaml.createParser(simpleString);
-        final ObjectNode objectNode = ParserUtils.getNodeAt(parser);
+        final ObjectNode objectNode = YamlParserUtils.getNodeAt(parser);
         final Iterator<JsonNode> elements = objectNode.elements();
         Assert.assertNotNull(elements);
         Assert.assertTrue(elements.hasNext());
@@ -69,7 +70,7 @@ public class ParserUtilsTest
     }
 
     /**
-     * Verifies {@link ParserUtils#getNodeAt(String, JsonParser)} gets the correct node
+     * Verifies {@link YamlParserUtils#getNodeAt(String, JsonParser)} gets the correct node
      * 
      * @throws IOException
      */
@@ -79,13 +80,13 @@ public class ParserUtilsTest
         final YAMLFactory yaml = new YAMLFactory();
         JsonParser parser = yaml.createParser(mixedObjectString);
 
-        JsonNode node = ParserUtils.getNodeAt("mixedObjectString", parser);
+        JsonNode node = YamlParserUtils.getNodeAt("mixedObjectString", parser);
         Assert.assertNotNull(node);
         Assert.assertTrue(node.fieldNames().hasNext());
 
         parser = yaml.createParser(mixedArrayString);
 
-        node = ParserUtils.getNodeAt("mixedArrayString", parser);
+        node = YamlParserUtils.getNodeAt("mixedArrayString", parser);
         Assert.assertNotNull(node);
         Assert.assertTrue(node.elements().hasNext());
         Assert.assertFalse(node.fieldNames().hasNext());
@@ -93,7 +94,7 @@ public class ParserUtilsTest
     }
 
     /**
-     * Verifies {@link ParserUtils#getArrayNodeAsMap(JsonNode)} returns a correct {@link Map}
+     * Verifies {@link YamlParserUtils#getArrayNodeAsMap(JsonNode)} returns a correct {@link Map}
      * 
      * @throws IOException
      */
@@ -102,7 +103,7 @@ public class ParserUtilsTest
     {
         final YAMLFactory yaml = new YAMLFactory();
         final JsonParser parser = yaml.createParser(arrayString);
-        final ObjectNode objectNode = ParserUtils.getNodeAt(parser);
+        final ObjectNode objectNode = YamlParserUtils.getNodeAt(parser);
         final Iterator<JsonNode> elements = objectNode.elements();
         Assert.assertEquals("arrayString", objectNode.fieldNames().next());
         Assert.assertNotNull(elements);
@@ -112,7 +113,7 @@ public class ParserUtilsTest
         Assert.assertFalse(elements.hasNext());
         Assert.assertTrue(node.isArray());
 
-        final Map<String, String> map = ParserUtils.getArrayNodeAsMap(node);
+        final Map<String, String> map = YamlParserUtils.getArrayNodeAsMap(node);
         Assert.assertEquals(2, map.size());
         Assert.assertTrue(map.containsKey("element_1"));
         Assert.assertEquals("value_1", map.get("element_1"));
@@ -121,7 +122,7 @@ public class ParserUtilsTest
     }
 
     /**
-     * Verifies {@link ParserUtils#getArrayNodeAsNameValuePair(JsonNode)} returns a correct list of {@link NameValuePair}s
+     * Verifies {@link YamlParserUtils#getArrayNodeAsNameValuePair(JsonNode)} returns a correct list of {@link NameValuePair}s
      * 
      * @throws IOException
      */
@@ -130,7 +131,7 @@ public class ParserUtilsTest
     {
         final YAMLFactory yaml = new YAMLFactory();
         final JsonParser parser = yaml.createParser(arrayString);
-        final ObjectNode objectNode = ParserUtils.getNodeAt(parser);
+        final ObjectNode objectNode = YamlParserUtils.getNodeAt(parser);
         final Iterator<JsonNode> elements = objectNode.elements();
         Assert.assertEquals("arrayString", objectNode.fieldNames().next());
         Assert.assertNotNull(elements);
@@ -140,7 +141,7 @@ public class ParserUtilsTest
         Assert.assertFalse(elements.hasNext());
         Assert.assertTrue(node.isArray());
 
-        final List<NameValuePair> nvp = ParserUtils.getArrayNodeAsNameValuePair(node);
+        final List<NameValuePair> nvp = YamlParserUtils.getArrayNodeAsNameValuePair(node);
         Assert.assertEquals(2, nvp.size());
         Assert.assertEquals("element_1", nvp.get(0).getName());
         Assert.assertEquals("value_1", nvp.get(0).getValue());
@@ -149,7 +150,7 @@ public class ParserUtilsTest
     }
 
     /**
-     * Reads an {@link ArrayNode} with {@link ParserUtils#getArrayNodeAsMap(JsonNode)}. Verifies an {@link ArrayNode} with
+     * Reads an {@link ArrayNode} with {@link YamlParserUtils#getArrayNodeAsMap(JsonNode)}. Verifies an {@link ArrayNode} with
      * different values stored in the node can be read.
      * 
      * @throws IOException
@@ -159,7 +160,7 @@ public class ParserUtilsTest
     {
         final YAMLFactory yaml = new YAMLFactory();
         final JsonParser parser = yaml.createParser(mixedArrayString);
-        final ObjectNode objectNode = ParserUtils.getNodeAt(parser);
+        final ObjectNode objectNode = YamlParserUtils.getNodeAt(parser);
         final Iterator<JsonNode> elements = objectNode.elements();
         Assert.assertEquals("mixedArrayString", objectNode.fieldNames().next());
         Assert.assertNotNull(elements);
@@ -169,7 +170,7 @@ public class ParserUtilsTest
         Assert.assertFalse(elements.hasNext());
         Assert.assertTrue(node.isArray());
 
-        final Map<String, String> map = ParserUtils.getArrayNodeAsMap(node);
+        final Map<String, String> map = YamlParserUtils.getArrayNodeAsMap(node);
         Assert.assertEquals(6, map.size());
         Assert.assertTrue(map.containsKey("element_1"));
         Assert.assertEquals("1", map.get("element_1"));
@@ -186,7 +187,7 @@ public class ParserUtilsTest
     }
 
     /**
-     * Reads an {@link ArrayNode} with {@link ParserUtils#getArrayNodeAsNameValuePair(JsonNode)}. Verifies an
+     * Reads an {@link ArrayNode} with {@link YamlParserUtils#getArrayNodeAsNameValuePair(JsonNode)}. Verifies an
      * {@link ArrayNode} with different values stored in the node can be read
      * 
      * @throws IOException
@@ -196,7 +197,7 @@ public class ParserUtilsTest
     {
         final YAMLFactory yaml = new YAMLFactory();
         final JsonParser parser = yaml.createParser(mixedArrayString);
-        final ObjectNode objectNode = ParserUtils.getNodeAt(parser);
+        final ObjectNode objectNode = YamlParserUtils.getNodeAt(parser);
         final Iterator<JsonNode> elements = objectNode.elements();
         Assert.assertEquals("mixedArrayString", objectNode.fieldNames().next());
         Assert.assertNotNull(elements);
@@ -206,7 +207,7 @@ public class ParserUtilsTest
         Assert.assertFalse(elements.hasNext());
         Assert.assertTrue(node.isArray());
 
-        final List<NameValuePair> nvp = ParserUtils.getArrayNodeAsNameValuePair(node);
+        final List<NameValuePair> nvp = YamlParserUtils.getArrayNodeAsNameValuePair(node);
         Assert.assertEquals(6, nvp.size());
         Assert.assertEquals("element_1", nvp.get(0).getName());
         Assert.assertEquals("1", nvp.get(0).getValue());
@@ -232,7 +233,7 @@ public class ParserUtilsTest
     {
         final YAMLFactory yaml = new YAMLFactory();
         final JsonParser parser = yaml.createParser(booleanString);
-        final ObjectNode objectNode = ParserUtils.getNodeAt(parser);
+        final ObjectNode objectNode = YamlParserUtils.getNodeAt(parser);
         final Iterator<JsonNode> elements = objectNode.elements();
         Assert.assertEquals("booleanString", objectNode.fieldNames().next());
         Assert.assertNotNull(elements);
@@ -242,7 +243,7 @@ public class ParserUtilsTest
         Assert.assertFalse(elements.hasNext());
         Assert.assertTrue(node.isBoolean());
 
-        final String data = ParserUtils.readSingleValue(node);
+        final String data = YamlParserUtils.readSingleValue(node);
         Assert.assertEquals("true", data);
     }
 
@@ -256,7 +257,7 @@ public class ParserUtilsTest
     {
         final YAMLFactory yaml = new YAMLFactory();
         final JsonParser parser = yaml.createParser(singleDecimalString);
-        final ObjectNode objectNode = ParserUtils.getNodeAt(parser);
+        final ObjectNode objectNode = YamlParserUtils.getNodeAt(parser);
         final Iterator<JsonNode> elements = objectNode.elements();
         Assert.assertEquals("singleDecimalString", objectNode.fieldNames().next());
         Assert.assertNotNull(elements);
@@ -266,7 +267,7 @@ public class ParserUtilsTest
         Assert.assertFalse(elements.hasNext());
         Assert.assertTrue(node.isInt());
 
-        final String data = ParserUtils.readSingleValue(node);
+        final String data = YamlParserUtils.readSingleValue(node);
         Assert.assertEquals("1", data);
     }
 
@@ -280,7 +281,7 @@ public class ParserUtilsTest
     {
         final YAMLFactory yaml = new YAMLFactory();
         final JsonParser parser = yaml.createParser(multipleDecimalString);
-        final ObjectNode objectNode = ParserUtils.getNodeAt(parser);
+        final ObjectNode objectNode = YamlParserUtils.getNodeAt(parser);
         final Iterator<JsonNode> elements = objectNode.elements();
         Assert.assertEquals("multipleDecimalString", objectNode.fieldNames().next());
         Assert.assertNotNull(elements);
@@ -290,7 +291,7 @@ public class ParserUtilsTest
         Assert.assertFalse(elements.hasNext());
         Assert.assertTrue(node.isInt());
 
-        final String data = ParserUtils.readSingleValue(node);
+        final String data = YamlParserUtils.readSingleValue(node);
         Assert.assertEquals("123", data);
     }
 
@@ -304,7 +305,7 @@ public class ParserUtilsTest
     {
         final YAMLFactory yaml = new YAMLFactory();
         final JsonParser parser = yaml.createParser(emtpyString);
-        final ObjectNode objectNode = ParserUtils.getNodeAt(parser);
+        final ObjectNode objectNode = YamlParserUtils.getNodeAt(parser);
         final Iterator<JsonNode> elements = objectNode.elements();
         Assert.assertEquals("emtpyString", objectNode.fieldNames().next());
         Assert.assertNotNull(elements);
@@ -314,7 +315,7 @@ public class ParserUtilsTest
         Assert.assertFalse(elements.hasNext());
         Assert.assertTrue(node.isNull());
 
-        final String data = ParserUtils.readSingleValue(node);
+        final String data = YamlParserUtils.readSingleValue(node);
         Assert.assertEquals("", data);
     }
 
@@ -328,7 +329,7 @@ public class ParserUtilsTest
     {
         final YAMLFactory yaml = new YAMLFactory();
         final JsonParser parser = yaml.createParser(simpleString);
-        final ObjectNode objectNode = ParserUtils.getNodeAt(parser);
+        final ObjectNode objectNode = YamlParserUtils.getNodeAt(parser);
         final Iterator<JsonNode> elements = objectNode.elements();
         Assert.assertEquals("simpleString", objectNode.fieldNames().next());
         Assert.assertNotNull(elements);
@@ -338,7 +339,7 @@ public class ParserUtilsTest
         Assert.assertFalse(elements.hasNext());
         Assert.assertTrue(node.isTextual());
 
-        final String data = ParserUtils.readSingleValue(node);
+        final String data = YamlParserUtils.readSingleValue(node);
         Assert.assertEquals("string", data);
     }
 
@@ -352,7 +353,7 @@ public class ParserUtilsTest
     {
         final YAMLFactory yaml = new YAMLFactory();
         final JsonParser parser = yaml.createParser(objectString);
-        final ObjectNode objectNode = ParserUtils.getNodeAt(parser);
+        final ObjectNode objectNode = YamlParserUtils.getNodeAt(parser);
         final Iterator<JsonNode> elements = objectNode.elements();
         Assert.assertEquals("objectString", objectNode.fieldNames().next());
         Assert.assertNotNull(elements);
@@ -361,9 +362,9 @@ public class ParserUtilsTest
         final JsonNode node = elements.next();
         Assert.assertFalse(elements.hasNext());
 
-        String data = ParserUtils.readValue(node, "element_1");
+        String data = YamlParserUtils.readValue(node, "element_1");
         Assert.assertEquals("value_1", data);
-        data = ParserUtils.readValue(node, "element_2");
+        data = YamlParserUtils.readValue(node, "element_2");
         Assert.assertEquals("value_2", data);
     }
 

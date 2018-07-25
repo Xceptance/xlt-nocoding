@@ -10,7 +10,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.parser.Parser;
-import com.xceptance.xlt.nocoding.parser.ParserTest;
+import com.xceptance.xlt.nocoding.parser.AbstractParserTest;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.Action;
@@ -30,7 +30,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.MatchesVa
  * 
  * @author ckeiner
  */
-public class ActionParserTest extends ParserTest
+public class ActionParserTest extends AbstractParserTest
 {
     /*
      * Function test

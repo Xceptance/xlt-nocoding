@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.xceptance.xlt.nocoding.parser.Parser;
-import com.xceptance.xlt.nocoding.parser.ParserTest;
+import com.xceptance.xlt.nocoding.parser.AbstractParserTest;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.store.Store;
@@ -17,7 +17,7 @@ import com.xceptance.xlt.nocoding.scriptItem.store.Store;
  * 
  * @author ckeiner
  */
-public class StoreParserTest extends ParserTest
+public class StoreParserTest extends AbstractParserTest
 {
     protected final String fileStore = path + "store.yml";
 

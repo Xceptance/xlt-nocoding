@@ -13,11 +13,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.api.util.XltLogger;
+import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.action.AbstractActionSubItemParser;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionSubItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.request.Request;
 import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
  * The class for parsing request items to {@link Request}s wrapped in a list of {@link AbstractActionSubItem}s.
@@ -74,23 +74,23 @@ public class RequestParser extends AbstractActionSubItemParser
             switch (fieldName)
             {
                 case Constants.URL:
-                    url = ParserUtils.readValue(requestNode, fieldName);
+                    url = YamlParserUtils.readValue(requestNode, fieldName);
                     // XltLogger.runTimeLogger.debug("URL: " + url);
                     break;
 
                 case Constants.METHOD:
-                    method = ParserUtils.readValue(requestNode, fieldName);
+                    method = YamlParserUtils.readValue(requestNode, fieldName);
                     // XltLogger.runTimeLogger.debug("Method: " + method);
                     break;
 
                 case Constants.XHR:
-                    xhr = ParserUtils.readValue(requestNode, fieldName);
+                    xhr = YamlParserUtils.readValue(requestNode, fieldName);
                     // final String xhr2 = node.get(fieldName).textValue();
                     // XltLogger.runTimeLogger.debug("Xhr: " + xhr);
                     break;
 
                 case Constants.ENCODEPARAMETERS:
-                    encodeParameters = ParserUtils.readValue(requestNode, fieldName);
+                    encodeParameters = YamlParserUtils.readValue(requestNode, fieldName);
                     // XltLogger.runTimeLogger.debug("EncodeParameters: " + encodeParameters);
                     break;
 
@@ -109,12 +109,12 @@ public class RequestParser extends AbstractActionSubItemParser
                     break;
 
                 case Constants.BODY:
-                    body = ParserUtils.readValue(requestNode, fieldName);
+                    body = YamlParserUtils.readValue(requestNode, fieldName);
                     // XltLogger.runTimeLogger.debug("Body: " + body);
                     break;
 
                 case Constants.ENCODEBODY:
-                    encodeBody = ParserUtils.readValue(requestNode, fieldName);
+                    encodeBody = YamlParserUtils.readValue(requestNode, fieldName);
                     // XltLogger.runTimeLogger.debug("EncodeBody: " + encodeBody);
                     break;
 

@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.AbstractScriptItemParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.AbstractStoreDefaultItem;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultValue;
 import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
  * The class for parsing default items. Default items are defined in {@link Constants#PERMITTEDLISTITEMS} and neither
@@ -101,7 +101,7 @@ public class StoreDefaultParser extends AbstractScriptItemParser
     private ScriptItem parseSingleItem(final JsonNode defaultNode)
     {
         // Get the value of the default item
-        final String value = ParserUtils.readSingleValue(defaultNode);
+        final String value = YamlParserUtils.readSingleValue(defaultNode);
         // Create the new StoreDefaultItem and return it
         return new StoreDefaultValue(variableName, value);
     }

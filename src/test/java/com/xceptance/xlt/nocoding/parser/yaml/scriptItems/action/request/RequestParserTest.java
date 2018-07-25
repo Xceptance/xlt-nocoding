@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.xceptance.xlt.nocoding.parser.Parser;
-import com.xceptance.xlt.nocoding.parser.ParserTest;
+import com.xceptance.xlt.nocoding.parser.AbstractParserTest;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParser;
 
 /**
@@ -14,7 +14,7 @@ import com.xceptance.xlt.nocoding.parser.yaml.YamlParser;
  * 
  * @author ckeiner
  */
-public class RequestParserTest extends ParserTest
+public class RequestParserTest extends AbstractParserTest
 {
 
     protected final String path = super.path + "actionItems/request/";

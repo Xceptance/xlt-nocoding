@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.xceptance.xlt.nocoding.parser.Parser;
-import com.xceptance.xlt.nocoding.parser.ParserTest;
+import com.xceptance.xlt.nocoding.parser.AbstractParserTest;
 import com.xceptance.xlt.nocoding.parser.csv.CsvParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.Action;
@@ -15,7 +15,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.request.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
 
-public class CsvParserTest extends ParserTest
+public class CsvParserTest extends AbstractParserTest
 {
     protected final String path = super.path + "csv/";
 

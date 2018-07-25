@@ -3,12 +3,12 @@ package com.xceptance.xlt.nocoding.parser.yaml.scriptItems.action.response.valid
 import org.apache.commons.lang3.NotImplementedException;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.AbstractValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.CountValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.MatchesValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.TextValidator;
 import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
  * Class for parsing the validation method. Takes an identifier (which is an element of {@link JsonNode#fieldNames()})
@@ -39,7 +39,7 @@ public class ValidatorParser
     {
         AbstractValidator method = null;
         // Get the associated value
-        final String validationExpression = ParserUtils.readValue(node, identifier);
+        final String validationExpression = YamlParserUtils.readValue(node, identifier);
         // Build a validation method depending on the name of the selector
         switch (identifier)
         {

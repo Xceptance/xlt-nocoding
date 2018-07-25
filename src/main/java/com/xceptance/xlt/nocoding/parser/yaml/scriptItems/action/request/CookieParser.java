@@ -3,7 +3,7 @@ package com.xceptance.xlt.nocoding.parser.yaml.scriptItems.action.request;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.xceptance.xlt.nocoding.util.ParserUtils;
+import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 
 /**
  * The class for parsing the cookies item to a map with a String key and a String value.
@@ -22,7 +22,7 @@ public class CookieParser
     public Map<String, String> parse(final JsonNode cookiesNode)
     {
         // Parse the JsonNode to a Map<String, String>
-        final Map<String, String> cookies = ParserUtils.getArrayNodeAsMap(cookiesNode);
+        final Map<String, String> cookies = YamlParserUtils.getArrayNodeAsMap(cookiesNode);
         // Parse cookies and return them
         return cookies;
     }

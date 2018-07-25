@@ -5,7 +5,7 @@ package com.xceptance.xlt.nocoding.parser;
  * 
  * @author ckeiner
  */
-public abstract class ParserTest
+public abstract class AbstractParserTest
 {
     /**
      * The path to the test scripts

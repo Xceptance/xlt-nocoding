@@ -1,4 +1,4 @@
-package com.xceptance.xlt.nocoding.util;
+package com.xceptance.xlt.nocoding.util.dataStorage;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -6,10 +6,9 @@ import org.junit.Test;
 
 import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.xceptance.xlt.api.util.XltProperties;
+import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
-import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
-import com.xceptance.xlt.nocoding.util.dataStorage.DefaultValues;
 
 /**
  * Tests {@link DataStorage}
@@ -120,8 +119,8 @@ public class DataStorageTest
     }
 
     /**
-     * Verifies default values can be overwritten. Furthermore verifies, when the values are deleted, these default values
-     * are used again
+     * Verifies default values can be overwritten. Furthermore verifies, when the values are deleted, these default
+     * values are used again
      */
     @Test
     public void overwriteDefaultValues()

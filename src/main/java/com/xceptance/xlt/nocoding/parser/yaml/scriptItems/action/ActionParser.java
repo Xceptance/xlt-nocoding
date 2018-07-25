@@ -10,16 +10,16 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.NullNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xceptance.xlt.api.util.XltLogger;
+import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.AbstractScriptItemParser;
 import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.action.request.RequestParser;
 import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.action.response.ResponseParser;
-import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.action.subrequest.SubrequestParser;
+import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.action.subrequest.SubrequestsParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionSubItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.Action;
 import com.xceptance.xlt.nocoding.scriptItem.action.request.Request;
 import com.xceptance.xlt.nocoding.util.Constants;
-import com.xceptance.xlt.nocoding.util.ParserUtils;
 
 /**
  * The class for parsing an action item.
@@ -73,7 +73,7 @@ public class ActionParser extends AbstractScriptItemParser
                     if (actionItems.isEmpty())
                     {
                         // Save the name
-                        name = ParserUtils.readValue(actionNode, fieldName);
+                        name = YamlParserUtils.readValue(actionNode, fieldName);
                         if (name != null)
                         {
                             XltLogger.runTimeLogger.debug("Actionname: " + name);
@@ -116,7 +116,7 @@ public class ActionParser extends AbstractScriptItemParser
                 case Constants.SUBREQUESTS:
                     XltLogger.runTimeLogger.debug("Subrequests: " + actionNode.get(fieldName).toString());
                     // Set parser to subrequest parser
-                    actionItemParser = new SubrequestParser();
+                    actionItemParser = new SubrequestsParser();
                     break;
 
                 default:
