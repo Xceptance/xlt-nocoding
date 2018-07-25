@@ -2,12 +2,12 @@ package com.xceptance.xlt.nocoding.util;
 
 import java.util.List;
 
-import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionSubItem;
-import com.xceptance.xlt.nocoding.scriptItem.action.request.Request;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
-import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
+import com.xceptance.xlt.nocoding.command.action.AbstractActionSubItem;
+import com.xceptance.xlt.nocoding.command.action.request.Request;
+import com.xceptance.xlt.nocoding.command.action.response.Response;
+import com.xceptance.xlt.nocoding.command.action.subrequest.AbstractSubrequest;
 import com.xceptance.xlt.nocoding.util.context.Context;
-import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
+import com.xceptance.xlt.nocoding.util.storage.DataStorage;
 
 /**
  * Utility class for {@link AbstractActionSubItem}. Provides static methods for verifying the order, and filling default

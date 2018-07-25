@@ -8,9 +8,9 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.xceptance.xlt.nocoding.parser.Parser;
+import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.parser.AbstractParserTest;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParser;
-import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 
 /**
  * Tests for parsing multiple tags, i.e. "Store" and "Action"
@@ -36,7 +36,7 @@ public class YamlParserTest extends AbstractParserTest
     public void testEmptyFileParsing() throws Exception
     {
         final Parser parser = new YamlParser();
-        final List<ScriptItem> scriptItems = parser.parse(fileEmptyFile);
+        final List<Command> scriptItems = parser.parse(fileEmptyFile);
         Assert.assertTrue(scriptItems.isEmpty());
     }
 
@@ -49,7 +49,7 @@ public class YamlParserTest extends AbstractParserTest
     public void testNotExistingFileParsing() throws Exception
     {
         final Parser parser = new YamlParser();
-        final List<ScriptItem> scriptItems = parser.parse(fileNotExistingFile);
+        final List<Command> scriptItems = parser.parse(fileNotExistingFile);
         Assert.assertTrue(scriptItems.isEmpty());
     }
 

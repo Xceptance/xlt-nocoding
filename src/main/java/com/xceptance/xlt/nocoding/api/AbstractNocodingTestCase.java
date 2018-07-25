@@ -13,12 +13,12 @@ import org.junit.Test;
 import com.xceptance.xlt.api.tests.AbstractTestCase;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.api.util.XltProperties;
+import com.xceptance.xlt.nocoding.command.Command;
+import com.xceptance.xlt.nocoding.command.action.Action;
 import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.ParserFactory;
 import com.xceptance.xlt.nocoding.parser.csv.CsvParser;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParser;
-import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
-import com.xceptance.xlt.nocoding.scriptItem.action.Action;
 import com.xceptance.xlt.nocoding.util.FileFinderUtils;
 import com.xceptance.xlt.nocoding.util.NoCodingPropertyAdmin;
 import com.xceptance.xlt.nocoding.util.ObjectUtils;
@@ -37,7 +37,7 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
     /**
      * Cache of all parsed data.
      */
-    private static final Map<String, List<ScriptItem>> DATA_CACHE = new HashMap<>();
+    private static final Map<String, List<Command>> DATA_CACHE = new HashMap<>();
 
     /**
      * The parser to use for parsing
@@ -45,9 +45,9 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
     private Parser parser;
 
     /**
-     * The list of {@link ScriptItem}s
+     * The list of {@link Command}s
      */
-    private List<ScriptItem> itemList;
+    private List<Command> itemList;
 
     /**
      * The {@link Context} of all <code>ScriptItems</code>
@@ -59,7 +59,7 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
         return parser;
     }
 
-    public List<ScriptItem> getItemList()
+    public List<Command> getItemList()
     {
         return itemList;
     }
@@ -209,11 +209,11 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
      * @return A list of <code>ScriptItem</code>s generated from the provided file
      * @throws Exception
      */
-    protected List<ScriptItem> getOrParse(final String filePath) throws Exception
+    protected List<Command> getOrParse(final String filePath) throws Exception
     {
         synchronized (DATA_CACHE)
         {
-            List<ScriptItem> result = DATA_CACHE.get(filePath);
+            List<Command> result = DATA_CACHE.get(filePath);
             if (result == null)
             {
                 XltLogger.runTimeLogger.debug("Parsing file...");
@@ -245,7 +245,7 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
         {
             int index = 0;
             // Execute every item
-            for (final ScriptItem item : itemList)
+            for (final Command item : itemList)
             {
                 XltLogger.runTimeLogger.info("Starting ScriptItem : " + item.toString());
                 if (item instanceof Action)

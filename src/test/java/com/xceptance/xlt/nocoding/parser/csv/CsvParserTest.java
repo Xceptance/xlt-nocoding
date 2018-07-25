@@ -7,13 +7,13 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.xceptance.xlt.nocoding.parser.Parser;
+import com.xceptance.xlt.nocoding.command.Command;
+import com.xceptance.xlt.nocoding.command.action.Action;
+import com.xceptance.xlt.nocoding.command.action.request.Request;
+import com.xceptance.xlt.nocoding.command.action.response.Response;
+import com.xceptance.xlt.nocoding.command.action.subrequest.StaticSubrequest;
 import com.xceptance.xlt.nocoding.parser.AbstractParserTest;
 import com.xceptance.xlt.nocoding.parser.csv.CsvParser;
-import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
-import com.xceptance.xlt.nocoding.scriptItem.action.Action;
-import com.xceptance.xlt.nocoding.scriptItem.action.request.Request;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
-import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
 
 public class CsvParserTest extends AbstractParserTest
 {
@@ -41,7 +41,7 @@ public class CsvParserTest extends AbstractParserTest
     {
         final String url = "http://hostname/";
         final Parser parser = new CsvParser();
-        final List<ScriptItem> scriptItems = parser.parse(fileSimpleFile);
+        final List<Command> scriptItems = parser.parse(fileSimpleFile);
 
         Assert.assertEquals(1, scriptItems.size());
         Assert.assertTrue(scriptItems.get(0) instanceof Action);
@@ -61,7 +61,7 @@ public class CsvParserTest extends AbstractParserTest
     {
         final String url = "http://www.xceptance.net";
         final Parser parser = new CsvParser();
-        final List<ScriptItem> scriptItems = parser.parse(fileStaticFile);
+        final List<Command> scriptItems = parser.parse(fileStaticFile);
 
         Assert.assertEquals(1, scriptItems.size());
         Assert.assertTrue(scriptItems.get(0) instanceof Action);

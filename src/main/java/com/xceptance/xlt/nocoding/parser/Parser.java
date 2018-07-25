@@ -10,7 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
-import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
+import com.xceptance.xlt.nocoding.command.Command;
 
 /**
  * Defines the behavior of all parsers.
@@ -20,14 +20,14 @@ import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 public interface Parser
 {
     /**
-     * Parses the content of the file at <code>pathToFile</code> to a list of {@link ScriptItem}s
+     * Parses the content of the file at <code>pathToFile</code> to a list of {@link Command}s
      * 
      * @param pathToFile
      *            The String that describes the path to the file
      * @return The list of <code>ScriptItem</code>s that is described in the file
      * @throws IOException
      */
-    public abstract List<ScriptItem> parse(String pathToFile) throws IOException;
+    public abstract List<Command> parse(String pathToFile) throws IOException;
 
     /**
      * Returns all acceptable extensions for this Parser

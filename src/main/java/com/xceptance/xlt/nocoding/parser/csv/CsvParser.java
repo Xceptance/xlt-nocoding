@@ -10,16 +10,16 @@ import java.util.Set;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
+import com.xceptance.xlt.nocoding.command.Command;
+import com.xceptance.xlt.nocoding.command.action.Action;
+import com.xceptance.xlt.nocoding.command.action.subrequest.StaticSubrequest;
 import com.xceptance.xlt.nocoding.parser.Parser;
-import com.xceptance.xlt.nocoding.parser.csv.scriptItems.ActionParser;
-import com.xceptance.xlt.nocoding.parser.csv.scriptItems.StaticSubrequestParser;
-import com.xceptance.xlt.nocoding.parser.csv.scriptItems.XhrSubrequestParser;
-import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
-import com.xceptance.xlt.nocoding.scriptItem.action.Action;
-import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
+import com.xceptance.xlt.nocoding.parser.csv.command.ActionParser;
+import com.xceptance.xlt.nocoding.parser.csv.command.StaticSubrequestParser;
+import com.xceptance.xlt.nocoding.parser.csv.command.XhrSubrequestParser;
 
 /**
- * Reads a CSV file, and generates a list filled with {@link ScriptItem}s out of the CSV file.
+ * Reads a CSV file, and generates a list filled with {@link Command}s out of the CSV file.
  * 
  * @author ckeiner
  */
@@ -27,19 +27,19 @@ public class CsvParser implements Parser
 {
 
     /**
-     * Parses the content of the file at <code>pathToFile</code> to a list of {@link ScriptItem}s
+     * Parses the content of the file at <code>pathToFile</code> to a list of {@link Command}s
      * 
      * @param pathToFile
      *            The String that describes the path to the file
-     * @return A list of {@link ScriptItem}s
+     * @return A list of {@link Command}s
      * @throws IOException
      *             if an I/O error occurs during creating the reader, parsing the file or closing the parser
      */
     @Override
-    public List<ScriptItem> parse(final String pathToFile) throws IOException
+    public List<Command> parse(final String pathToFile) throws IOException
     {
         // Initialize variables
-        final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
+        final List<Command> scriptItems = new ArrayList<Command>();
         Action lastAction = null;
         StaticSubrequest lastStatic = null;
 

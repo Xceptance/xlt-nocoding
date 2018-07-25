@@ -15,8 +15,8 @@ import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.engine.LightWeightPageImpl;
 import com.xceptance.xlt.engine.SessionImpl;
 import com.xceptance.xlt.engine.XltWebClient;
-import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
-import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
+import com.xceptance.xlt.nocoding.util.resolver.VariableResolver;
+import com.xceptance.xlt.nocoding.util.storage.DataStorage;
 
 /**
  * The {@link Context} used in the LightWeight mode of the execution. Therefore, it extends

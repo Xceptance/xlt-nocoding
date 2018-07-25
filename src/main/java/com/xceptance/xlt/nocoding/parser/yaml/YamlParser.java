@@ -15,15 +15,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.xceptance.xlt.api.util.XltLogger;
+import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.parser.Parser;
-import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.action.ActionParser;
-import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.store.StoreParser;
-import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.storeDefault.StoreDefaultParser;
-import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
+import com.xceptance.xlt.nocoding.parser.yaml.command.action.ActionParser;
+import com.xceptance.xlt.nocoding.parser.yaml.command.store.StoreParser;
+import com.xceptance.xlt.nocoding.parser.yaml.command.storeDefault.StoreDefaultParser;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
- * Reads a Yaml file and generates a list filled with {@link ScriptItem}s out of the Yaml file.
+ * Reads a Yaml file and generates a list filled with {@link Command}s out of the Yaml file.
  * 
  * @author ckeiner
  */
@@ -31,19 +31,19 @@ public class YamlParser implements Parser
 {
 
     /**
-     * Parses the content of the file at the <code>pathToFile</code> to a list of {@link ScriptItem}s
+     * Parses the content of the file at the <code>pathToFile</code> to a list of {@link Command}s
      * 
      * @param pathToFile
      *            The String that describes the path to the file
-     * @return A list of {@link ScriptItem}s
+     * @return A list of {@link Command}s
      * @throws IOException
      *             If a {@link Reader} or {@link JsonParser} cannot be created or the file cannot be mapped to a
      *             {@link JsonNode}.
      */
     @Override
-    public List<ScriptItem> parse(final String pathToFile) throws IOException
+    public List<Command> parse(final String pathToFile) throws IOException
     {
-        final List<ScriptItem> scriptItems = new ArrayList<ScriptItem>();
+        final List<Command> scriptItems = new ArrayList<Command>();
         // Build the factory
         final YAMLFactory factory = new YAMLFactory();
 

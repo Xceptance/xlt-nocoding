@@ -10,13 +10,13 @@ import com.xceptance.xlt.api.data.GeneralDataProvider;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.util.NoCodingPropertyAdmin;
-import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
-import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.DuplicateStorage;
-import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.SingleStorage;
-import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage.DefaultKeyValueStorage;
-import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage.UniqueSingleStorage;
-import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage.UniqueStorage;
-import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
+import com.xceptance.xlt.nocoding.util.resolver.VariableResolver;
+import com.xceptance.xlt.nocoding.util.storage.DataStorage;
+import com.xceptance.xlt.nocoding.util.storage.unit.DuplicateStorage;
+import com.xceptance.xlt.nocoding.util.storage.unit.SingleStorage;
+import com.xceptance.xlt.nocoding.util.storage.unit.unique.DefaultKeyValueStorage;
+import com.xceptance.xlt.nocoding.util.storage.unit.unique.UniqueSingleStorage;
+import com.xceptance.xlt.nocoding.util.storage.unit.unique.UniqueStorage;
 
 /**
  * A template for the context during the execution. Thus, it has methods for handling the {@link DataStorage},

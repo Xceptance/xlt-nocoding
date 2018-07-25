@@ -7,10 +7,10 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.common.lang.ReflectionUtils;
 import com.xceptance.xlt.api.actions.AbstractWebAction;
-import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionSubItem;
-import com.xceptance.xlt.nocoding.scriptItem.action.request.Request;
-import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
-import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
+import com.xceptance.xlt.nocoding.command.action.AbstractActionSubItem;
+import com.xceptance.xlt.nocoding.command.action.request.Request;
+import com.xceptance.xlt.nocoding.command.action.response.Response;
+import com.xceptance.xlt.nocoding.command.action.subrequest.AbstractSubrequest;
 import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
