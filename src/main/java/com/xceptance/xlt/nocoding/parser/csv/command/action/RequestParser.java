@@ -15,7 +15,7 @@ import com.xceptance.xlt.nocoding.parser.csv.CsvConstants;
  *
  * @author ckeiner
  */
-public class RequestParser implements AbstractActionSubItemParser
+public class RequestParser extends AbstractActionSubItemParser
 {
     /**
      * Extracts the information needed for a {@link Request} from the {@link CSVRecord}

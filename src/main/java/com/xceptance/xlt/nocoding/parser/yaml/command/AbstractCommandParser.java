@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.xceptance.xlt.nocoding.command.Command;
 
 /**
- * The abstract class for parsing script items.
+ * The abstract class for parsing commands.
  *
  * @author ckeiner
  */
@@ -14,10 +14,10 @@ public abstract class AbstractCommandParser
 {
 
     /**
-     * Parses the script item at the specified {@link JsonNode}.
+     * Parses the command from the given {@link JsonNode}.
      *
-     * @param scriptItemNode
-     *            The <code>JsonNode</code> the script item starts at
+     * @param node
+     *            The <code>JsonNode</code> the command starts at
      * @return A list of all {@link Command}s defined by the specified <code>JsonNode</code>
      */
     public abstract List<Command> parse(JsonNode scriptItemNode);

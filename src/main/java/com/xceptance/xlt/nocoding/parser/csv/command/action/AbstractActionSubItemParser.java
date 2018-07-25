@@ -9,7 +9,7 @@ import com.xceptance.xlt.nocoding.command.action.AbstractActionSubItem;
  *
  * @author ckeiner
  */
-public interface AbstractActionSubItemParser
+public abstract class AbstractActionSubItemParser
 {
     /**
      * Extracts the information needed for the {@link AbstractActionSubItem} from the {@link CSVRecord}
@@ -18,5 +18,5 @@ public interface AbstractActionSubItemParser
      *            The {@link CSVRecord} with the action item
      * @return The AbstractActionItem defined by the CSVRecord
      */
-    public AbstractActionSubItem parse(final CSVRecord record);
+    public abstract AbstractActionSubItem parse(final CSVRecord record);
 }

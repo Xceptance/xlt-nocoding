@@ -5,7 +5,7 @@ import java.util.List;
 import com.xceptance.xlt.nocoding.command.action.AbstractActionSubItem;
 import com.xceptance.xlt.nocoding.command.action.request.Request;
 import com.xceptance.xlt.nocoding.command.action.response.Response;
-import com.xceptance.xlt.nocoding.util.ActionItemUtil;
+import com.xceptance.xlt.nocoding.util.ActionSubItemUtil;
 import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
@@ -52,7 +52,7 @@ public class XhrSubrequest extends AbstractSubrequest
         final Context<?> localContext = context.buildNewContext();
 
         // Assert that the order of Request, Response, Subrequest is correct
-        ActionItemUtil.assertOrder(actionItems);
+        ActionSubItemUtil.assertOrder(actionItems);
         fillDefaultData(localContext);
 
         // Get the request
@@ -91,9 +91,9 @@ public class XhrSubrequest extends AbstractSubrequest
     {
         if (name == null || name.isEmpty())
         {
-            name = ActionItemUtil.getDefaultName(context, "XhrSubrequest");
+            name = ActionSubItemUtil.getDefaultName(context, "XhrSubrequest");
         }
-        ActionItemUtil.fillDefaultData(actionItems, context);
+        ActionSubItemUtil.fillDefaultData(actionItems, context);
     }
 
     public List<AbstractActionSubItem> getActionItems()

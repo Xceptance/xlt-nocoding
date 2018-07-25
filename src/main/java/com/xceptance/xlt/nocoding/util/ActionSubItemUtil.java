@@ -15,7 +15,7 @@ import com.xceptance.xlt.nocoding.util.storage.DataStorage;
  *
  * @author ckeiner
  */
-public class ActionItemUtil
+public class ActionSubItemUtil
 {
 
     /**

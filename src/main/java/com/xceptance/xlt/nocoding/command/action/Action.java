@@ -8,7 +8,7 @@ import org.openqa.selenium.InvalidArgumentException;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.command.action.subrequest.StaticSubrequest;
-import com.xceptance.xlt.nocoding.util.ActionItemUtil;
+import com.xceptance.xlt.nocoding.util.ActionSubItemUtil;
 import com.xceptance.xlt.nocoding.util.WebAction;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.resolver.VariableResolver;
@@ -80,10 +80,10 @@ public class Action implements Command
     {
         if (name == null || name.isEmpty())
         {
-            setName(ActionItemUtil.getDefaultName(context, "Action"));
+            setName(ActionSubItemUtil.getDefaultName(context, "Action"));
         }
-        ActionItemUtil.assertOrder(actionItems);
-        ActionItemUtil.fillDefaultData(actionItems, context);
+        ActionSubItemUtil.assertOrder(actionItems);
+        ActionSubItemUtil.fillDefaultData(actionItems, context);
 
         // Add default static requests
         if (context.getDefaultStatics() != null && !context.getDefaultStatics().getItems().isEmpty())

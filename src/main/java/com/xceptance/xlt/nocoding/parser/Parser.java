@@ -24,7 +24,7 @@ public interface Parser
      *
      * @param pathToFile
      *            The String that describes the path to the file
-     * @return The list of <code>ScriptItem</code>s that is described in the file
+     * @return The list of {@link Command}s that is described in the file
      * @throws IOException
      */
     public abstract List<Command> parse(String pathToFile) throws IOException;
