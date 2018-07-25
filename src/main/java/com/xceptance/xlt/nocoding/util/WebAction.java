@@ -7,8 +7,8 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.common.lang.ReflectionUtils;
 import com.xceptance.xlt.api.actions.AbstractWebAction;
-import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
-import com.xceptance.xlt.nocoding.scriptItem.action.Request;
+import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionSubItem;
+import com.xceptance.xlt.nocoding.scriptItem.action.request.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
 import com.xceptance.xlt.nocoding.util.context.Context;
@@ -35,7 +35,7 @@ public class WebAction extends AbstractWebAction
     /**
      * The list of action items
      */
-    private final List<AbstractActionItem> actionItems;
+    private final List<AbstractActionSubItem> actionItems;
 
     /**
      * Creates a new instance of WebAction.
@@ -45,9 +45,9 @@ public class WebAction extends AbstractWebAction
      * @param context
      *            The current {@link Context}
      * @param actionItems
-     *            The list of {@link AbstractActionItem}s that are to be executed
+     *            The list of {@link AbstractActionSubItem}s that are to be executed
      */
-    public WebAction(final String timerName, final Context<?> context, final List<AbstractActionItem> actionItems)
+    public WebAction(final String timerName, final Context<?> context, final List<AbstractActionSubItem> actionItems)
     {
         super(timerName);
         this.context = context;
@@ -69,7 +69,7 @@ public class WebAction extends AbstractWebAction
         pageLocalCache.clear();
 
         // Extract the action items
-        final List<AbstractActionItem> actionItems = this.getActionItems();
+        final List<AbstractActionSubItem> actionItems = this.getActionItems();
 
         // Check if the first actionItem is a Request
         if (!(actionItems.iterator().next() instanceof Request))
@@ -81,7 +81,7 @@ public class WebAction extends AbstractWebAction
         if (actionItems != null && !actionItems.isEmpty())
         {
             // Execute every actionItem, i.e. main request and validations.
-            for (final AbstractActionItem actionItem : actionItems)
+            for (final AbstractActionSubItem actionItem : actionItems)
             {
                 actionItem.execute(getContext());
             }
@@ -125,7 +125,7 @@ public class WebAction extends AbstractWebAction
         return context;
     }
 
-    public List<AbstractActionItem> getActionItems()
+    public List<AbstractActionSubItem> getActionItems()
     {
         return actionItems;
     }

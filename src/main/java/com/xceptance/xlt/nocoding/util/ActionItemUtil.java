@@ -2,15 +2,15 @@ package com.xceptance.xlt.nocoding.util;
 
 import java.util.List;
 
-import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
-import com.xceptance.xlt.nocoding.scriptItem.action.Request;
+import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionSubItem;
+import com.xceptance.xlt.nocoding.scriptItem.action.request.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.AbstractSubrequest;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.dataStorage.DataStorage;
 
 /**
- * Utility class for {@link AbstractActionItem}. Provides static methods for verifying the order, and filling default
+ * Utility class for {@link AbstractActionSubItem}. Provides static methods for verifying the order, and filling default
  * data.
  * 
  * @author ckeiner
@@ -22,14 +22,14 @@ public class ActionItemUtil
      * Asserts that the order of {@link Request}, {@link Response}, and {@link AbstractSubrequest} is correct.
      * 
      * @param actionItems
-     *            The list of {@link AbstractActionItem}s you want to assert the order of
+     *            The list of {@link AbstractActionSubItem}s you want to assert the order of
      */
-    public static void assertOrder(final List<AbstractActionItem> actionItems)
+    public static void assertOrder(final List<AbstractActionSubItem> actionItems)
     {
         boolean hasRequest = false;
         boolean hasResponse = false;
         boolean hasSubrequest = false;
-        for (final AbstractActionItem actionItem : actionItems)
+        for (final AbstractActionSubItem actionItem : actionItems)
         {
             // If it is a Request
             if (actionItem instanceof Request)
@@ -62,18 +62,18 @@ public class ActionItemUtil
 
     /**
      * Adds a default {@link Request} and default {@link Response} if none is found in the list of
-     * {@link AbstractActionItem}.
+     * {@link AbstractActionSubItem}.
      * 
      * @param actionItems
-     *            The list of {@link AbstractActionItem}s to add the default items to
+     *            The list of {@link AbstractActionSubItem}s to add the default items to
      * @param context
      *            The {@link Context} with the {@link DataStorage}.
      */
-    public static void fillDefaultData(final List<AbstractActionItem> actionItems, final Context<?> context)
+    public static void fillDefaultData(final List<AbstractActionSubItem> actionItems, final Context<?> context)
     {
         boolean hasRequest = false;
         boolean hasResponse = false;
-        for (final AbstractActionItem actionItem : actionItems)
+        for (final AbstractActionSubItem actionItem : actionItems)
         {
             if (actionItem instanceof Request)
             {

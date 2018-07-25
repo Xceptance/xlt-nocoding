@@ -8,8 +8,8 @@ import org.junit.Test;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.util.XltProperties;
-import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
-import com.xceptance.xlt.nocoding.scriptItem.action.Request;
+import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionSubItem;
+import com.xceptance.xlt.nocoding.scriptItem.action.request.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.AbstractResponseItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.HttpcodeValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
@@ -51,8 +51,8 @@ public class XhrSubrequestTest
     @Test
     public void testExecute() throws Throwable
     {
-        final List<AbstractActionItem> actionItems = new ArrayList<AbstractActionItem>();
-        AbstractActionItem actionItem = new Request(mockObjects.urlStringDemoHtml);
+        final List<AbstractActionSubItem> actionItems = new ArrayList<AbstractActionSubItem>();
+        AbstractActionSubItem actionItem = new Request(mockObjects.urlStringDemoHtml);
         actionItems.add(actionItem);
 
         final List<AbstractResponseItem> responseItems = new ArrayList<AbstractResponseItem>();

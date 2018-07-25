@@ -10,7 +10,7 @@ import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.DuplicateStorage
  * 
  * @author ckeiner
  */
-public class StoreDefaultParameter extends StoreDefault
+public class StoreDefaultParameter extends AbstractStoreDefaultItem
 {
     /**
      * Creates an instance of {@link StoreDefaultParameter} that sets {@link #getVariableName()} and {@link #getValue()}

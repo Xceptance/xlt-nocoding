@@ -16,9 +16,9 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.parser.Parser;
-import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.ActionItemParser;
-import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.StoreDefaultParser;
-import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.StoreItemParser;
+import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.action.ActionParser;
+import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.store.StoreParser;
+import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.storeDefault.StoreDefaultParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.util.Constants;
 
@@ -99,11 +99,11 @@ public class YamlParser implements Parser
                             {
                                 case Constants.STORE:
                                     // Set parser to StoreItemParser
-                                    scriptItems.addAll(new StoreItemParser().parse(node.get(currentName)));
+                                    scriptItems.addAll(new StoreParser().parse(node.get(currentName)));
                                     break;
                                 case Constants.ACTION:
                                     // Set parser to ActionItemParser
-                                    scriptItems.addAll(new ActionItemParser().parse(node.get(currentName)));
+                                    scriptItems.addAll(new ActionParser().parse(node.get(currentName)));
                                     break;
 
                                 default:

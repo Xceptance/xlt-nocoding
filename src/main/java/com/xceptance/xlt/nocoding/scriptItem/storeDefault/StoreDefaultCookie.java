@@ -19,7 +19,7 @@ import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.SingleStorage;
  * 
  * @author ckeiner
  */
-public class StoreDefaultCookie extends StoreDefault
+public class StoreDefaultCookie extends AbstractStoreDefaultItem
 {
     /**
      * Creates an instance of {@link StoreDefaultHeader} that sets {@link #getVariableName()} and {@link #getValue()}

@@ -15,7 +15,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
  * 
  * @author ckeiner
  */
-public class StoreDefaultHeaderTest extends StoreDefaultTest
+public class StoreDefaultHeaderTest extends AbstractStoreDefaultTest
 {
     /**
      * Verifies {@link StoreDefaultHeader} can store one default header
@@ -86,8 +86,8 @@ public class StoreDefaultHeaderTest extends StoreDefaultTest
     @Ignore
     public void storeCaseInsensitiveHeaders() throws Throwable
     {
-        final StoreDefault item1 = new StoreDefaultHeader("heAder_1", "heAder_1");
-        final StoreDefault item2 = new StoreDefaultHeader("header_1", "header_1");
+        final AbstractStoreDefaultItem item1 = new StoreDefaultHeader("heAder_1", "heAder_1");
+        final AbstractStoreDefaultItem item2 = new StoreDefaultHeader("header_1", "header_1");
         Assert.assertFalse(context.getDefaultHeaders().getItems().contains("header_1"));
         item1.execute(context);
         Assert.assertTrue(context.getDefaultHeaders().getItems().contains("header_1"));

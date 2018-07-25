@@ -9,9 +9,10 @@ import org.junit.Test;
 
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
+import com.xceptance.xlt.nocoding.scriptItem.action.request.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
-import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultStatic;
+import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultStaticRequest;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
@@ -67,11 +68,11 @@ public class ActionTest
     {
         final String url = "http://www.xceptance.net";
         final List<ScriptItem> store = new ArrayList<ScriptItem>();
-        store.add(new StoreDefaultStatic(url));
-        store.add(new StoreDefaultStatic(url));
-        store.add(new StoreDefaultStatic(url));
-        store.add(new StoreDefaultStatic(url));
-        store.add(new StoreDefaultStatic(url));
+        store.add(new StoreDefaultStaticRequest(url));
+        store.add(new StoreDefaultStaticRequest(url));
+        store.add(new StoreDefaultStaticRequest(url));
+        store.add(new StoreDefaultStaticRequest(url));
+        store.add(new StoreDefaultStaticRequest(url));
         Assert.assertTrue(context.getDefaultStatics().getItems().isEmpty());
         for (final ScriptItem scriptItem : store)
         {

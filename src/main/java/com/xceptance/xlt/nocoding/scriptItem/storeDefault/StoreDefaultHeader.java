@@ -13,7 +13,7 @@ import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.uniqueStorage.Un
  * 
  * @author ckeiner
  */
-public class StoreDefaultHeader extends StoreDefault
+public class StoreDefaultHeader extends AbstractStoreDefaultItem
 {
 
     /**

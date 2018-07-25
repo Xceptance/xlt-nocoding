@@ -5,8 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefault;
-import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultStatic;
+import com.xceptance.xlt.nocoding.scriptItem.storeDefault.AbstractStoreDefaultItem;
+import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultStaticRequest;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
 
@@ -15,22 +15,22 @@ import com.xceptance.xlt.nocoding.util.ParserUtils;
  * 
  * @author ckeiner
  */
-public class StoreDefaultStaticsParser extends AbstractStoreDefaultParser
+public class StoreDefaultStaticsParser extends AbstractStoreDefaultSubItemParser
 {
 
     /**
-     * Parses the static subrequest list item to a list of {@link StoreDefault}s which consists of multiple
-     * {@link StoreDefaultStatic}.
+     * Parses the static subrequest list item to a list of {@link AbstractStoreDefaultItem}s which consists of multiple
+     * {@link StoreDefaultStaticRequest}.
      * 
      * @param staticNode
      *            The {@link JsonNode} the default static subrequests start at
      * @return A list of <code>StoreDefault</code>s with the parsed default static subrequests.
      */
     @Override
-    public List<StoreDefault> parse(final JsonNode staticNode)
+    public List<AbstractStoreDefaultItem> parse(final JsonNode staticNode)
     {
         // Create list of defaultItems
-        final List<StoreDefault> defaultItems = new ArrayList<>();
+        final List<AbstractStoreDefaultItem> defaultItems = new ArrayList<>();
         // Check if the node is textual
         if (staticNode.isTextual())
         {
@@ -38,7 +38,7 @@ public class StoreDefaultStaticsParser extends AbstractStoreDefaultParser
             if (staticNode.textValue().equals(Constants.DELETE))
             {
                 // Create a StoreDefaultHeader item that deletes all default headers
-                defaultItems.add(new StoreDefaultStatic(Constants.DELETE));
+                defaultItems.add(new StoreDefaultStaticRequest(Constants.DELETE));
             }
             else
             {
@@ -57,7 +57,7 @@ public class StoreDefaultStaticsParser extends AbstractStoreDefaultParser
                 // Read the url
                 final String url = ParserUtils.readSingleValue(nextNode);
                 // Create a new StoreDefaultStatic and add it to the defaultItems
-                defaultItems.add(new StoreDefaultStatic(url));
+                defaultItems.add(new StoreDefaultStaticRequest(url));
             }
         }
         // Return all default items

@@ -1,6 +1,6 @@
 package com.xceptance.xlt.nocoding.scriptItem.action.subrequest;
 
-import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
+import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionSubItem;
 import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
@@ -8,7 +8,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
  * 
  * @author ckeiner
  */
-public abstract class AbstractSubrequest extends AbstractActionItem
+public abstract class AbstractSubrequest extends AbstractActionSubItem
 {
 
     /**

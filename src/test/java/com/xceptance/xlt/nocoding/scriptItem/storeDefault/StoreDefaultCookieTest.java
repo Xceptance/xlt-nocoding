@@ -15,7 +15,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
  * 
  * @author ckeiner
  */
-public class StoreDefaultCookieTest extends StoreDefaultTest
+public class StoreDefaultCookieTest extends AbstractStoreDefaultTest
 {
 
     final String prefixDomain = "domain=";

@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.actionItems.request.HeaderParser;
-import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefault;
+import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.action.request.HeaderParser;
+import com.xceptance.xlt.nocoding.scriptItem.storeDefault.AbstractStoreDefaultItem;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultHeader;
 import com.xceptance.xlt.nocoding.util.Constants;
 
@@ -15,11 +15,11 @@ import com.xceptance.xlt.nocoding.util.Constants;
  * 
  * @author ckeiner
  */
-public class StoreDefaultHeadersParser extends AbstractStoreDefaultParser
+public class StoreDefaultHeadersParser extends AbstractStoreDefaultSubItemParser
 {
 
     /**
-     * Parses the headers list item to a list of {@link StoreDefault}s which consists of multiple
+     * Parses the headers list item to a list of {@link AbstractStoreDefaultItem}s which consists of multiple
      * {@link StoreDefaultHeader}.
      * 
      * @param defaultHeadersNode
@@ -27,10 +27,10 @@ public class StoreDefaultHeadersParser extends AbstractStoreDefaultParser
      * @return A list of <code>StoreDefault</code>s with the parsed default headers.
      */
     @Override
-    public List<StoreDefault> parse(final JsonNode defaultHeadersNode)
+    public List<AbstractStoreDefaultItem> parse(final JsonNode defaultHeadersNode)
     {
         // Create list of defaultItems
-        final List<StoreDefault> defaultItems = new ArrayList<>();
+        final List<AbstractStoreDefaultItem> defaultItems = new ArrayList<>();
         // Check if the node is textual
         if (defaultHeadersNode.isTextual())
         {

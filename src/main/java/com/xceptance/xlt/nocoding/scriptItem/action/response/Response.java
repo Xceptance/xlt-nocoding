@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
-import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
+import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionSubItem;
 import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
@@ -13,7 +13,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
  * 
  * @author ckeiner
  */
-public class Response extends AbstractActionItem
+public class Response extends AbstractActionSubItem
 {
 
     /**

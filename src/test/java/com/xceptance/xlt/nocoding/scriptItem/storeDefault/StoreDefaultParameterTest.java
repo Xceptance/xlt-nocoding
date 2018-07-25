@@ -14,7 +14,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
  * 
  * @author ckeiner
  */
-public class StoreDefaultParameterTest extends StoreDefaultTest
+public class StoreDefaultParameterTest extends AbstractStoreDefaultTest
 {
 
     /**

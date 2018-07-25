@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.util.XltProperties;
-import com.xceptance.xlt.nocoding.scriptItem.StoreItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.AbstractExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.CookieExtractor;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.extractor.HeaderExtractor;
@@ -19,6 +18,7 @@ import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.CountVali
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.ExistsValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.MatchesValidator;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.validator.TextValidator;
+import com.xceptance.xlt.nocoding.scriptItem.store.Store;
 import com.xceptance.xlt.nocoding.util.MockObjects;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
@@ -163,7 +163,7 @@ public class ValidatorTest
     {
         final String variableName = "validationName";
         final String validationName = "Regexp Validation";
-        final StoreItem store = new StoreItem("${" + variableName + "}", validationName);
+        final Store store = new Store("${" + variableName + "}", validationName);
         store.execute(context);
         context.getVariables().store(variableName, validationName);
         // Build Validator with ExistsModule

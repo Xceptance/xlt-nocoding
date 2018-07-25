@@ -2,8 +2,8 @@ package com.xceptance.xlt.nocoding.scriptItem.action.subrequest;
 
 import java.util.List;
 
-import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionItem;
-import com.xceptance.xlt.nocoding.scriptItem.action.Request;
+import com.xceptance.xlt.nocoding.scriptItem.action.AbstractActionSubItem;
+import com.xceptance.xlt.nocoding.scriptItem.action.request.Request;
 import com.xceptance.xlt.nocoding.scriptItem.action.response.Response;
 import com.xceptance.xlt.nocoding.util.ActionItemUtil;
 import com.xceptance.xlt.nocoding.util.context.Context;
@@ -24,7 +24,7 @@ public class XhrSubrequest extends AbstractSubrequest
     /**
      * The request, response and subrequests of this subrequest
      */
-    private final List<AbstractActionItem> actionItems;
+    private final List<AbstractActionSubItem> actionItems;
 
     /**
      * Creates an instance of {@link XhrSubrequest} that sets the {@link #name} and {@link #actionItems}
@@ -32,9 +32,9 @@ public class XhrSubrequest extends AbstractSubrequest
      * @param name
      *            The name of the subrequest
      * @param actionItems
-     *            A list of {@link AbstractActionItem}s
+     *            A list of {@link AbstractActionSubItem}s
      */
-    public XhrSubrequest(final String name, final List<AbstractActionItem> actionItems)
+    public XhrSubrequest(final String name, final List<AbstractActionSubItem> actionItems)
     {
         this.name = name;
         this.actionItems = actionItems;
@@ -67,7 +67,7 @@ public class XhrSubrequest extends AbstractSubrequest
         try
         {
             // Execute every actionItem
-            for (final AbstractActionItem actionItem : actionItems)
+            for (final AbstractActionSubItem actionItem : actionItems)
             {
                 actionItem.execute(localContext);
             }
@@ -96,7 +96,7 @@ public class XhrSubrequest extends AbstractSubrequest
         ActionItemUtil.fillDefaultData(actionItems, context);
     }
 
-    public List<AbstractActionItem> getActionItems()
+    public List<AbstractActionSubItem> getActionItems()
     {
         return actionItems;
     }

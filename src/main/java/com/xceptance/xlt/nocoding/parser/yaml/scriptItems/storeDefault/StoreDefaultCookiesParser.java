@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
-import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefault;
+import com.xceptance.xlt.nocoding.scriptItem.storeDefault.AbstractStoreDefaultItem;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultCookie;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.ParserUtils;
@@ -15,11 +15,11 @@ import com.xceptance.xlt.nocoding.util.ParserUtils;
  * 
  * @author ckeiner
  */
-public class StoreDefaultCookiesParser extends AbstractStoreDefaultParser
+public class StoreDefaultCookiesParser extends AbstractStoreDefaultSubItemParser
 {
 
     /**
-     * Parses the cookies list item to a list of {@link StoreDefault}s which consists of multiple
+     * Parses the cookies list item to a list of {@link AbstractStoreDefaultItem}s which consists of multiple
      * {@link StoreDefaultCookie}.
      * 
      * @param defaultCookiesNode
@@ -27,10 +27,10 @@ public class StoreDefaultCookiesParser extends AbstractStoreDefaultParser
      * @return A list of <code>StoreDefault</code>s with the parsed default cookies.
      */
     @Override
-    public List<StoreDefault> parse(final JsonNode defaultCookiesNode)
+    public List<AbstractStoreDefaultItem> parse(final JsonNode defaultCookiesNode)
     {
         // Create list of defaultItems
-        final List<StoreDefault> defaultItems = new ArrayList<>();
+        final List<AbstractStoreDefaultItem> defaultItems = new ArrayList<>();
         // Check if the node is textual
         if (defaultCookiesNode.isTextual())
         {

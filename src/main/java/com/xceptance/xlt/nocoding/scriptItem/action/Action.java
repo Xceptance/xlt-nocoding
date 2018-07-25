@@ -16,7 +16,7 @@ import com.xceptance.xlt.nocoding.util.variableResolver.VariableResolver;
 
 /**
  * <code>Action</code> is the data model for the "Action" type of the execution.<br>
- * Therefore, it consists of a {@link #name} and list of {@link AbstractActionItem}s.
+ * Therefore, it consists of a {@link #name} and list of {@link AbstractActionSubItem}s.
  * 
  * @author ckeiner
  */
@@ -30,14 +30,14 @@ public class Action implements ScriptItem
     /**
      * The list of actionItems
      */
-    protected final List<AbstractActionItem> actionItems;
+    protected final List<AbstractActionSubItem> actionItems;
 
     /**
      * Creates an instance of {@link Action} that sets {@link #actionItems} to an ArrayList of size 1.
      */
     public Action()
     {
-        actionItems = new ArrayList<AbstractActionItem>(1);
+        actionItems = new ArrayList<AbstractActionSubItem>(1);
     }
 
     /**
@@ -46,15 +46,15 @@ public class Action implements ScriptItem
      * @param name
      *            The name of the action
      * @param actionItems
-     *            A list of {@link AbstractActionItem}s
+     *            A list of {@link AbstractActionSubItem}s
      */
-    public Action(final String name, final List<AbstractActionItem> actionItems)
+    public Action(final String name, final List<AbstractActionSubItem> actionItems)
     {
         this.name = name;
         this.actionItems = actionItems;
     }
 
-    public List<AbstractActionItem> getActionItems()
+    public List<AbstractActionSubItem> getActionItems()
     {
         return actionItems;
     }

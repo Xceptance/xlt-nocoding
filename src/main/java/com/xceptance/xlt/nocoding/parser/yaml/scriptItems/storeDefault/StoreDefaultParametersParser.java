@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
-import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.actionItems.request.ParameterParser;
-import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefault;
+import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.action.request.ParameterParser;
+import com.xceptance.xlt.nocoding.scriptItem.storeDefault.AbstractStoreDefaultItem;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultParameter;
 import com.xceptance.xlt.nocoding.util.Constants;
 
@@ -15,11 +15,11 @@ import com.xceptance.xlt.nocoding.util.Constants;
  * 
  * @author ckeiner
  */
-public class StoreDefaultParametersParser extends AbstractStoreDefaultParser
+public class StoreDefaultParametersParser extends AbstractStoreDefaultSubItemParser
 {
 
     /**
-     * Parses the parameters list item to a list of {@link StoreDefault}s, which consists of multiple
+     * Parses the parameters list item to a list of {@link AbstractStoreDefaultItem}s, which consists of multiple
      * {@link StoreDefaultParameter}.
      * 
      * @param defaultParametersNode
@@ -27,10 +27,10 @@ public class StoreDefaultParametersParser extends AbstractStoreDefaultParser
      * @return A list of <code>StoreDefault</code>s with the parsed default parameters.
      */
     @Override
-    public List<StoreDefault> parse(final JsonNode defaultParametersNode)
+    public List<AbstractStoreDefaultItem> parse(final JsonNode defaultParametersNode)
     {
         // Create list of defaultItems
-        final List<StoreDefault> defaultItems = new ArrayList<>();
+        final List<AbstractStoreDefaultItem> defaultItems = new ArrayList<>();
         // Check if the node is textual and has the value of Constants.DELETE
         if (defaultParametersNode.isTextual())
         {

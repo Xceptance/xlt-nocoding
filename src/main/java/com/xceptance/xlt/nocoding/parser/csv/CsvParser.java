@@ -11,9 +11,9 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
 import com.xceptance.xlt.nocoding.parser.Parser;
-import com.xceptance.xlt.nocoding.parser.csv.scriptItems.ActionItemParser;
-import com.xceptance.xlt.nocoding.parser.csv.scriptItems.StaticItemParser;
-import com.xceptance.xlt.nocoding.parser.csv.scriptItems.XhrItemParser;
+import com.xceptance.xlt.nocoding.parser.csv.scriptItems.ActionParser;
+import com.xceptance.xlt.nocoding.parser.csv.scriptItems.StaticSubrequestParser;
+import com.xceptance.xlt.nocoding.parser.csv.scriptItems.XhrSubrequestParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.action.Action;
 import com.xceptance.xlt.nocoding.scriptItem.action.subrequest.StaticSubrequest;
@@ -79,7 +79,7 @@ public class CsvParser implements Parser
                         // Reset the last static subrequest
                         lastStatic = null;
                         // Set the new action as last action
-                        lastAction = new ActionItemParser().parse(record);
+                        lastAction = new ActionParser().parse(record);
                         // And add it to the scriptItems
                         scriptItems.add(lastAction);
                         break;
@@ -94,7 +94,7 @@ public class CsvParser implements Parser
                         if (lastStatic == null)
                         {
                             // Read the static request and assign it to lastStatic
-                            lastStatic = new StaticItemParser().parse(record);
+                            lastStatic = new StaticSubrequestParser().parse(record);
                             // Assign last static as actionItem of the lastAction
                             lastAction.getActionItems().add(lastStatic);
                         }
@@ -102,7 +102,7 @@ public class CsvParser implements Parser
                         else
                         {
                             // Simply add the url of the current static request to the lastStatic request, so they can be executed parallel
-                            lastStatic.getUrls().addAll(new StaticItemParser().parse(record).getUrls());
+                            lastStatic.getUrls().addAll(new StaticSubrequestParser().parse(record).getUrls());
                         }
                         break;
 
@@ -115,7 +115,7 @@ public class CsvParser implements Parser
                             throw new IllegalArgumentException("Xhr Action Type must be defined after an Action Type");
                         }
                         // Add the Xhr Subrequest to the action items of the lastAction
-                        lastAction.getActionItems().add(new XhrItemParser().parse(record));
+                        lastAction.getActionItems().add(new XhrSubrequestParser().parse(record));
                         break;
 
                     default:
