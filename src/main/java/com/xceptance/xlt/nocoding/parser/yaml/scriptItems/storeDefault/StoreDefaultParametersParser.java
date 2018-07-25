@@ -15,7 +15,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
  * 
  * @author ckeiner
  */
-public class StoreDefaultParametersParser extends AbstractStoreDefaultSubItemParser
+public class StoreDefaultParametersParser extends AbstractStoreDefaultSubItemsParser
 {
 
     /**

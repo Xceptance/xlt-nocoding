@@ -10,7 +10,7 @@ import com.xceptance.xlt.nocoding.scriptItem.storeDefault.AbstractStoreDefaultIt
  * 
  * @author ckeiner
  */
-public abstract class AbstractStoreDefaultSubItemParser
+public abstract class AbstractStoreDefaultSubItemsParser
 {
     /**
      * Parses the default item at the specified {@link JsonNode}.

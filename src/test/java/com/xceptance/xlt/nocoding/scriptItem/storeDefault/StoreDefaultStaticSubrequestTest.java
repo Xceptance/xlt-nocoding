@@ -10,7 +10,7 @@ import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
- * Tests {@link StoreDefaultStaticRequest}
+ * Tests {@link StoreDefaultStaticSubrequest}
  * 
  * @author ckeiner
  */
@@ -18,7 +18,7 @@ public class StoreDefaultStaticSubrequestTest extends AbstractStoreDefaultTest
 {
 
     /**
-     * Verifies {@link StoreDefaultStaticRequest} can store one default static url
+     * Verifies {@link StoreDefaultStaticSubrequest} can store one default static url
      * 
      * @throws Throwable
      */
@@ -26,14 +26,14 @@ public class StoreDefaultStaticSubrequestTest extends AbstractStoreDefaultTest
     public void singleStore() throws Throwable
     {
         final String url = "http://www.xceptance.net";
-        final ScriptItem store = new StoreDefaultStaticRequest(url);
+        final ScriptItem store = new StoreDefaultStaticSubrequest(url);
         Assert.assertTrue(context.getDefaultStatics().getItems().isEmpty());
         store.execute(context);
         Assert.assertTrue(context.getDefaultStatics().getItems().contains(url));
     }
 
     /**
-     * Verifies {@link StoreDefaultStaticRequest} can delete one default static url
+     * Verifies {@link StoreDefaultStaticSubrequest} can delete one default static url
      * 
      * @throws Throwable
      */
@@ -41,18 +41,18 @@ public class StoreDefaultStaticSubrequestTest extends AbstractStoreDefaultTest
     public void deleteStore() throws Throwable
     {
         final String url = "http://www.xceptance.net";
-        ScriptItem store = new StoreDefaultStaticRequest(url);
+        ScriptItem store = new StoreDefaultStaticSubrequest(url);
         Assert.assertTrue(context.getDefaultStatics().getItems().isEmpty());
         store.execute(context);
         Assert.assertTrue(context.getDefaultStatics().getItems().contains(url));
 
-        store = new StoreDefaultStaticRequest(Constants.DELETE);
+        store = new StoreDefaultStaticSubrequest(Constants.DELETE);
         store.execute(context);
         Assert.assertTrue(context.getDefaultStatics().getItems().isEmpty());
     }
 
     /**
-     * Verifies {@link StoreDefaultStaticRequest} can delete all default static url
+     * Verifies {@link StoreDefaultStaticSubrequest} can delete all default static url
      * 
      * @throws Throwable
      */
@@ -61,11 +61,11 @@ public class StoreDefaultStaticSubrequestTest extends AbstractStoreDefaultTest
     {
         final String url = "http://www.xceptance.net";
         final List<ScriptItem> store = new ArrayList<ScriptItem>();
-        store.add(new StoreDefaultStaticRequest(url));
-        store.add(new StoreDefaultStaticRequest(url));
-        store.add(new StoreDefaultStaticRequest(url));
-        store.add(new StoreDefaultStaticRequest(url));
-        store.add(new StoreDefaultStaticRequest(url));
+        store.add(new StoreDefaultStaticSubrequest(url));
+        store.add(new StoreDefaultStaticSubrequest(url));
+        store.add(new StoreDefaultStaticSubrequest(url));
+        store.add(new StoreDefaultStaticSubrequest(url));
+        store.add(new StoreDefaultStaticSubrequest(url));
         Assert.assertTrue(context.getDefaultStatics().getItems().isEmpty());
         for (final ScriptItem scriptItem : store)
         {
@@ -73,7 +73,7 @@ public class StoreDefaultStaticSubrequestTest extends AbstractStoreDefaultTest
             Assert.assertTrue(context.getDefaultStatics().getItems().contains(url));
         }
         Assert.assertEquals(context.getDefaultStatics().getItems().size(), 5);
-        final ScriptItem deleteIt = new StoreDefaultStaticRequest(Constants.DELETE);
+        final ScriptItem deleteIt = new StoreDefaultStaticSubrequest(Constants.DELETE);
         deleteIt.execute(context);
         Assert.assertTrue(context.getDefaultStatics().getItems().isEmpty());
     }

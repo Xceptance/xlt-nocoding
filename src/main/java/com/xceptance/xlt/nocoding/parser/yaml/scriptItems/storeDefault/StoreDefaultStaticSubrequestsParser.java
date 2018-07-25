@@ -7,7 +7,7 @@ import java.util.List;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.AbstractStoreDefaultItem;
-import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultStaticRequest;
+import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultStaticSubrequest;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
@@ -15,12 +15,12 @@ import com.xceptance.xlt.nocoding.util.Constants;
  * 
  * @author ckeiner
  */
-public class StoreDefaultStaticsParser extends AbstractStoreDefaultSubItemParser
+public class StoreDefaultStaticSubrequestsParser extends AbstractStoreDefaultSubItemsParser
 {
 
     /**
      * Parses the static subrequest list item to a list of {@link AbstractStoreDefaultItem}s which consists of multiple
-     * {@link StoreDefaultStaticRequest}.
+     * {@link StoreDefaultStaticSubrequest}.
      * 
      * @param staticNode
      *            The {@link JsonNode} the default static subrequests start at
@@ -38,7 +38,7 @@ public class StoreDefaultStaticsParser extends AbstractStoreDefaultSubItemParser
             if (staticNode.textValue().equals(Constants.DELETE))
             {
                 // Create a StoreDefaultHeader item that deletes all default headers
-                defaultItems.add(new StoreDefaultStaticRequest(Constants.DELETE));
+                defaultItems.add(new StoreDefaultStaticSubrequest(Constants.DELETE));
             }
             else
             {
@@ -57,7 +57,7 @@ public class StoreDefaultStaticsParser extends AbstractStoreDefaultSubItemParser
                 // Read the url
                 final String url = YamlParserUtils.readSingleValue(nextNode);
                 // Create a new StoreDefaultStatic and add it to the defaultItems
-                defaultItems.add(new StoreDefaultStaticRequest(url));
+                defaultItems.add(new StoreDefaultStaticSubrequest(url));
             }
         }
         // Return all default items

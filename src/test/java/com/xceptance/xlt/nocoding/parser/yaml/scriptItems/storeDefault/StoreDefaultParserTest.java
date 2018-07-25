@@ -18,14 +18,14 @@ import com.xceptance.xlt.nocoding.parser.yaml.YamlParser;
 import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.storeDefault.StoreDefaultCookiesParser;
 import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.storeDefault.StoreDefaultHeadersParser;
 import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.storeDefault.StoreDefaultParametersParser;
-import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.storeDefault.StoreDefaultStaticsParser;
+import com.xceptance.xlt.nocoding.parser.yaml.scriptItems.storeDefault.StoreDefaultStaticSubrequestsParser;
 import com.xceptance.xlt.nocoding.scriptItem.ScriptItem;
 import com.xceptance.xlt.nocoding.scriptItem.store.Store;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.AbstractStoreDefaultItem;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultCookie;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultHeader;
 import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultParameter;
-import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultStaticRequest;
+import com.xceptance.xlt.nocoding.scriptItem.storeDefault.StoreDefaultStaticSubrequest;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
@@ -245,10 +245,10 @@ public class StoreDefaultParserTest extends AbstractParserTest
         array.add(url);
         array.add(url);
 
-        final List<AbstractStoreDefaultItem> storeDefaultList = new StoreDefaultStaticsParser().parse(array);
+        final List<AbstractStoreDefaultItem> storeDefaultList = new StoreDefaultStaticSubrequestsParser().parse(array);
         Assert.assertEquals(3, storeDefaultList.size());
         final AbstractStoreDefaultItem storeDefault = storeDefaultList.get(0);
-        Assert.assertTrue(storeDefault instanceof StoreDefaultStaticRequest);
+        Assert.assertTrue(storeDefault instanceof StoreDefaultStaticSubrequest);
         Assert.assertEquals(Constants.STATIC, storeDefault.getVariableName());
         Assert.assertEquals(url, storeDefault.getValue());
     }

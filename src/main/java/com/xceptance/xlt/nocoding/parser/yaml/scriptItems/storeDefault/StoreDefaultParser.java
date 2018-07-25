@@ -87,7 +87,7 @@ public class StoreDefaultParser extends AbstractScriptItemParser
                 break;
 
             case Constants.STATIC:
-                scriptItems.addAll(new StoreDefaultStaticsParser().parse(defaultNode));
+                scriptItems.addAll(new StoreDefaultStaticSubrequestsParser().parse(defaultNode));
                 break;
 
             default:

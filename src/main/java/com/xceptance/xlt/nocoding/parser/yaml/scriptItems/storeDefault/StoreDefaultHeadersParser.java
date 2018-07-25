@@ -15,7 +15,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
  * 
  * @author ckeiner
  */
-public class StoreDefaultHeadersParser extends AbstractStoreDefaultSubItemParser
+public class StoreDefaultHeadersParser extends AbstractStoreDefaultSubItemsParser
 {
 
     /**

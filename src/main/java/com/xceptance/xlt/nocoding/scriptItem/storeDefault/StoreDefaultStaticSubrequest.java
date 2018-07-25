@@ -11,17 +11,17 @@ import com.xceptance.xlt.nocoding.util.dataStorage.storageUnits.SingleStorage;
  * 
  * @author ckeiner
  */
-public class StoreDefaultStaticRequest extends AbstractStoreDefaultItem
+public class StoreDefaultStaticSubrequest extends AbstractStoreDefaultItem
 {
 
     /**
-     * Creates an instance of {@link StoreDefaultStaticRequest} that sets {@link #getVariableName()} to {@link Constants#STATIC}
+     * Creates an instance of {@link StoreDefaultStaticSubrequest} that sets {@link #getVariableName()} to {@link Constants#STATIC}
      * and {@link #getValue()}
      * 
      * @param value
      *            The URL of the default static request
      */
-    public StoreDefaultStaticRequest(final String value)
+    public StoreDefaultStaticSubrequest(final String value)
     {
         // variableName isn't used, so we set it to "Static" to remain some sort of meaning
         super(Constants.STATIC, value);
