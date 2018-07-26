@@ -10,8 +10,8 @@ import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.command.action.AbstractActionSubItem;
 import com.xceptance.xlt.nocoding.command.action.request.Request;
-import com.xceptance.xlt.nocoding.command.action.response.AbstractResponseItem;
-import com.xceptance.xlt.nocoding.command.action.response.HttpcodeValidator;
+import com.xceptance.xlt.nocoding.command.action.response.AbstractResponseSubItem;
+import com.xceptance.xlt.nocoding.command.action.response.HttpCodeValidator;
 import com.xceptance.xlt.nocoding.command.action.response.Response;
 import com.xceptance.xlt.nocoding.command.action.response.Validator;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.RegexpExtractor;
@@ -55,9 +55,9 @@ public class XhrSubrequestTest
         AbstractActionSubItem actionItem = new Request(mockObjects.urlStringDemoHtml);
         actionItems.add(actionItem);
 
-        final List<AbstractResponseItem> responseItems = new ArrayList<>();
-        responseItems.add(new HttpcodeValidator("200"));
-        final AbstractResponseItem responseItem = new Validator("Validate Title", new RegexpExtractor(mockObjects.regexStringExpected),
+        final List<AbstractResponseSubItem> responseItems = new ArrayList<>();
+        responseItems.add(new HttpCodeValidator("200"));
+        final AbstractResponseSubItem responseItem = new Validator("Validate Title", new RegexpExtractor(mockObjects.regexStringExpected),
                                                                 null);
         responseItems.add(responseItem);
         actionItem = new Response(responseItems);

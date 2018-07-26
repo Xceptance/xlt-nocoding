@@ -12,7 +12,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
  *
  * @author ckeiner
  */
-public class HttpcodeValidator extends AbstractResponseItem
+public class HttpCodeValidator extends AbstractResponseSubItem
 {
     /**
      * The expected httpcode
@@ -20,12 +20,12 @@ public class HttpcodeValidator extends AbstractResponseItem
     private String httpcode;
 
     /**
-     * Creates an instance of {@link HttpcodeValidator} and sets {@link #httpcode}.
+     * Creates an instance of {@link HttpCodeValidator} and sets {@link #httpcode}.
      *
      * @param httpcode
      *            The expected Http Responsecode
      */
-    public HttpcodeValidator(final String httpcode)
+    public HttpCodeValidator(final String httpcode)
     {
         this.httpcode = httpcode;
     }

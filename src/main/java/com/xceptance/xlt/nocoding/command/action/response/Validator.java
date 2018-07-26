@@ -13,7 +13,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
  *
  * @author ckeiner
  */
-public class Validator extends AbstractResponseItem
+public class Validator extends AbstractResponseSubItem
 {
 
     /**

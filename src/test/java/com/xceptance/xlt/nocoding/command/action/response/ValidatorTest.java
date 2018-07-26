@@ -223,7 +223,7 @@ public class ValidatorTest
     public void executeInARequest(final Validator validator) throws Throwable
     {
         // Build Response
-        final List<AbstractResponseItem> responseItems = new ArrayList<>();
+        final List<AbstractResponseSubItem> responseItems = new ArrayList<>();
         responseItems.add(validator);
         final Response response = new Response(responseItems);
         // Execute Response

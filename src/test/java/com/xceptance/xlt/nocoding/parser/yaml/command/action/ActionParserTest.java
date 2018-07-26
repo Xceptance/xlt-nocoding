@@ -12,8 +12,8 @@ import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.command.action.Action;
 import com.xceptance.xlt.nocoding.command.action.request.Request;
-import com.xceptance.xlt.nocoding.command.action.response.AbstractResponseItem;
-import com.xceptance.xlt.nocoding.command.action.response.HttpcodeValidator;
+import com.xceptance.xlt.nocoding.command.action.response.AbstractResponseSubItem;
+import com.xceptance.xlt.nocoding.command.action.response.HttpCodeValidator;
 import com.xceptance.xlt.nocoding.command.action.response.Response;
 import com.xceptance.xlt.nocoding.command.action.response.Validator;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.RegexpExtractor;
@@ -97,11 +97,11 @@ public class ActionParserTest extends AbstractParserTest
         // Assert response
         Assert.assertTrue(action.getActionItems().get(1) instanceof Response);
         final Response response = (Response) action.getActionItems().get(1);
-        final List<AbstractResponseItem> responseItems = response.getResponseItems();
+        final List<AbstractResponseSubItem> responseItems = response.getResponseItems();
 
         // Assert HttpcodeValidator
-        Assert.assertTrue(responseItems.get(0) instanceof HttpcodeValidator);
-        Assert.assertEquals("400", ((HttpcodeValidator) responseItems.get(0)).getHttpcode());
+        Assert.assertTrue(responseItems.get(0) instanceof HttpCodeValidator);
+        Assert.assertEquals("400", ((HttpCodeValidator) responseItems.get(0)).getHttpcode());
 
         // Assert first validation
         Assert.assertTrue(responseItems.get(1) instanceof Validator);

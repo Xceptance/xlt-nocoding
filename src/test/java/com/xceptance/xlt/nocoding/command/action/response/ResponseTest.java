@@ -38,7 +38,7 @@ public class ResponseTest
     }
 
     /**
-     * Verifies a {@link HttpcodeValidator} is added when {@link Response#Response()} is used
+     * Verifies a {@link HttpCodeValidator} is added when {@link Response#Response()} is used
      *
      * @throws Throwable
      */
@@ -49,11 +49,11 @@ public class ResponseTest
         response.execute(context);
         Assert.assertNotNull(response.getResponseItems());
         Assert.assertEquals(1, response.getResponseItems().size());
-        Assert.assertTrue(response.getResponseItems().get(0) instanceof HttpcodeValidator);
+        Assert.assertTrue(response.getResponseItems().get(0) instanceof HttpCodeValidator);
     }
 
     /**
-     * Verifies a {@link HttpcodeValidator} is added when {@link Response#Response(List)} is used and the specified
+     * Verifies a {@link HttpCodeValidator} is added when {@link Response#Response(List)} is used and the specified
      * {@link List} does not contain a {@link HttpResponseCodeValidator}.
      *
      * @throws Throwable
@@ -61,15 +61,15 @@ public class ResponseTest
     @Test
     public void testFillDefaultWithResponseItems() throws Throwable
     {
-        final Response response = new Response(new ArrayList<AbstractResponseItem>());
+        final Response response = new Response(new ArrayList<AbstractResponseSubItem>());
         response.execute(context);
         Assert.assertNotNull(response.getResponseItems());
         Assert.assertEquals(1, response.getResponseItems().size());
-        Assert.assertTrue(response.getResponseItems().get(0) instanceof HttpcodeValidator);
+        Assert.assertTrue(response.getResponseItems().get(0) instanceof HttpCodeValidator);
     }
 
     /**
-     * Verifies no {@link HttpcodeValidator} is added when already specified
+     * Verifies no {@link HttpCodeValidator} is added when already specified
      *
      * @throws Throwable
      */
@@ -77,14 +77,14 @@ public class ResponseTest
     public void testDefaultResponseItemsSpecified() throws Throwable
     {
         final String httpcode = "303";
-        final List<AbstractResponseItem> responseItems = new ArrayList<>();
-        responseItems.add(new HttpcodeValidator(httpcode));
+        final List<AbstractResponseSubItem> responseItems = new ArrayList<>();
+        responseItems.add(new HttpCodeValidator(httpcode));
         final Response response = new Response(responseItems);
         response.fillDefaultData(context);
         Assert.assertNotNull(response.getResponseItems());
         Assert.assertEquals(1, response.getResponseItems().size());
-        Assert.assertTrue(response.getResponseItems().get(0) instanceof HttpcodeValidator);
-        Assert.assertEquals(httpcode, ((HttpcodeValidator) response.getResponseItems().get(0)).getHttpcode());
+        Assert.assertTrue(response.getResponseItems().get(0) instanceof HttpCodeValidator);
+        Assert.assertEquals(httpcode, ((HttpCodeValidator) response.getResponseItems().get(0)).getHttpcode());
     }
 
 }

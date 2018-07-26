@@ -9,8 +9,8 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.xceptance.xlt.nocoding.command.action.response.AbstractResponseItem;
-import com.xceptance.xlt.nocoding.command.action.response.HttpcodeValidator;
+import com.xceptance.xlt.nocoding.command.action.response.AbstractResponseSubItem;
+import com.xceptance.xlt.nocoding.command.action.response.HttpCodeValidator;
 import com.xceptance.xlt.nocoding.command.action.response.Response;
 import com.xceptance.xlt.nocoding.command.action.response.Validator;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.CookieExtractor;
@@ -162,9 +162,9 @@ public class ResponseParserTest extends AbstractParserTest
         final Response response = (Response) new ResponseParser().parse(responseNode).get(0);
 
         // Verify response is correct
-        final List<AbstractResponseItem> responseItems = response.getResponseItems();
-        Assert.assertTrue(responseItems.get(0) instanceof HttpcodeValidator);
-        Assert.assertEquals(httpcode, ((HttpcodeValidator) responseItems.get(0)).getHttpcode());
+        final List<AbstractResponseSubItem> responseItems = response.getResponseItems();
+        Assert.assertTrue(responseItems.get(0) instanceof HttpCodeValidator);
+        Assert.assertEquals(httpcode, ((HttpCodeValidator) responseItems.get(0)).getHttpcode());
         Assert.assertTrue(responseItems.get(1) instanceof Validator);
         final Validator validator = (Validator) responseItems.get(1);
         Assert.assertEquals(validation_name, validator.getValidationName());

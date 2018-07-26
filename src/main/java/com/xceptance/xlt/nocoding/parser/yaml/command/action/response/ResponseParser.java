@@ -10,8 +10,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.command.action.AbstractActionSubItem;
-import com.xceptance.xlt.nocoding.command.action.response.AbstractResponseItem;
-import com.xceptance.xlt.nocoding.command.action.response.HttpcodeValidator;
+import com.xceptance.xlt.nocoding.command.action.response.AbstractResponseSubItem;
+import com.xceptance.xlt.nocoding.command.action.response.HttpCodeValidator;
 import com.xceptance.xlt.nocoding.command.action.response.Response;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 import com.xceptance.xlt.nocoding.parser.yaml.command.action.AbstractActionSubItemParser;
@@ -44,7 +44,7 @@ public class ResponseParser extends AbstractActionSubItemParser
         // Initialize variables
         final List<AbstractActionSubItem> actionItems = new ArrayList<>();
         String httpcode = null;
-        final List<AbstractResponseItem> responseItems = new ArrayList<>();
+        final List<AbstractResponseSubItem> responseItems = new ArrayList<>();
 
         // Get an iterator over the fieldNames
         final Iterator<String> fieldNames = responseNode.fieldNames();
@@ -67,7 +67,7 @@ public class ResponseParser extends AbstractActionSubItemParser
                     // Extract the httpcode
                     httpcode = YamlParserUtils.readValue(responseNode, fieldName);
                     // Add the validator for the httpcode to the responseItems
-                    responseItems.add(new HttpcodeValidator(httpcode));
+                    responseItems.add(new HttpCodeValidator(httpcode));
                     XltLogger.runTimeLogger.debug("Added HttpcodeValidator with the Httpcode " + httpcode);
                     break;
 

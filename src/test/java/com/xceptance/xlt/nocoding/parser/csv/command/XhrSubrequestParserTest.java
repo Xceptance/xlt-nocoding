@@ -9,8 +9,8 @@ import org.junit.Test;
 
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.command.action.request.Request;
-import com.xceptance.xlt.nocoding.command.action.response.AbstractResponseItem;
-import com.xceptance.xlt.nocoding.command.action.response.HttpcodeValidator;
+import com.xceptance.xlt.nocoding.command.action.response.AbstractResponseSubItem;
+import com.xceptance.xlt.nocoding.command.action.response.HttpCodeValidator;
 import com.xceptance.xlt.nocoding.command.action.response.Response;
 import com.xceptance.xlt.nocoding.command.action.response.Validator;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.RegexpExtractor;
@@ -76,11 +76,11 @@ public class XhrSubrequestParserTest extends CsvParserTestUtils
 
         // Validate response
         Assert.assertTrue(xhrSubrequest.getActionItems().get(1) instanceof Response);
-        final List<AbstractResponseItem> responseItems = ((Response) xhrSubrequest.getActionItems().get(1)).getResponseItems();
+        final List<AbstractResponseSubItem> responseItems = ((Response) xhrSubrequest.getActionItems().get(1)).getResponseItems();
         Assert.assertEquals(3, responseItems.size());
         // Validate httpcode
-        Assert.assertTrue(responseItems.get(0) instanceof HttpcodeValidator);
-        Assert.assertEquals(responsecode, ((HttpcodeValidator) responseItems.get(0)).getHttpcode());
+        Assert.assertTrue(responseItems.get(0) instanceof HttpCodeValidator);
+        Assert.assertEquals(responsecode, ((HttpCodeValidator) responseItems.get(0)).getHttpcode());
         // Validate validator
         Assert.assertTrue(responseItems.get(1) instanceof Validator);
         final Validator validator = (Validator) responseItems.get(1);

@@ -7,8 +7,8 @@ import java.util.List;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.StringUtils;
 
-import com.xceptance.xlt.nocoding.command.action.response.AbstractResponseItem;
-import com.xceptance.xlt.nocoding.command.action.response.HttpcodeValidator;
+import com.xceptance.xlt.nocoding.command.action.response.AbstractResponseSubItem;
+import com.xceptance.xlt.nocoding.command.action.response.HttpCodeValidator;
 import com.xceptance.xlt.nocoding.command.action.response.Response;
 import com.xceptance.xlt.nocoding.command.action.response.Validator;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.AbstractExtractor;
@@ -38,7 +38,7 @@ public class ResponseParser extends AbstractActionSubItemParser
     public Response parse(final CSVRecord record)
     {
         // Initialize all needed variables for the response
-        final List<AbstractResponseItem> responseItems = new ArrayList<>();
+        final List<AbstractResponseSubItem> responseItems = new ArrayList<>();
         String responsecode = null;
         AbstractExtractor extractor = null;
         AbstractValidator validationMethod = null;
@@ -141,7 +141,7 @@ public class ResponseParser extends AbstractActionSubItemParser
         // HttpcodeValidator
         if (responsecode != null)
         {
-            responseItems.add(new HttpcodeValidator(responsecode));
+            responseItems.add(new HttpCodeValidator(responsecode));
         }
         // Validator
         if (extractor != null)

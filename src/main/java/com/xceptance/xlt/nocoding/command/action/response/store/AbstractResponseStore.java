@@ -1,6 +1,6 @@
 package com.xceptance.xlt.nocoding.command.action.response.store;
 
-import com.xceptance.xlt.nocoding.command.action.response.AbstractResponseItem;
+import com.xceptance.xlt.nocoding.command.action.response.AbstractResponseSubItem;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.AbstractExtractor;
 
 /**
@@ -8,7 +8,7 @@ import com.xceptance.xlt.nocoding.command.action.response.extractor.AbstractExtr
  *
  * @author ckeiner
  */
-public abstract class AbstractResponseStore extends AbstractResponseItem
+public abstract class AbstractResponseStore extends AbstractResponseSubItem
 {
     /**
      * The name of the variable

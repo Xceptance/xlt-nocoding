@@ -17,27 +17,27 @@ public class Response extends AbstractActionSubItem
 {
 
     /**
-     * The list of {@link AbstractResponseItem} to execute
+     * The list of {@link AbstractResponseSubItem} to execute
      */
-    private final List<AbstractResponseItem> responseItems;
+    private final List<AbstractResponseSubItem> responseItems;
 
     /**
      * Creates an instance of {@link Response} that creates an ArrayList for {@link #responseItems} and adds a
-     * {@link HttpcodeValidator}.
+     * {@link HttpCodeValidator}.
      */
     public Response()
     {
-        this(new ArrayList<AbstractResponseItem>(1));
-        responseItems.add(new HttpcodeValidator(null));
+        this(new ArrayList<AbstractResponseSubItem>(1));
+        responseItems.add(new HttpCodeValidator(null));
     }
 
     /**
      * Creates an instance of {@link Response} with the specified responseItems
      *
      * @param responseItems
-     *            The list of {@link AbstractResponseItem} to execute
+     *            The list of {@link AbstractResponseSubItem} to execute
      */
-    public Response(final List<AbstractResponseItem> responseItems)
+    public Response(final List<AbstractResponseSubItem> responseItems)
     {
         this.responseItems = responseItems;
     }
@@ -51,27 +51,27 @@ public class Response extends AbstractActionSubItem
         // Fill default data
         fillDefaultData(context);
         // Execute every AbstractResponseItem
-        for (final AbstractResponseItem abstractResponseItem : responseItems)
+        for (final AbstractResponseSubItem abstractResponseItem : responseItems)
         {
             abstractResponseItem.execute(context);
         }
     }
 
-    public List<AbstractResponseItem> getResponseItems()
+    public List<AbstractResponseSubItem> getResponseItems()
     {
         return responseItems;
     }
 
     /**
-     * Adds a {@link HttpcodeValidator} to the {@link #responseItems} if none is specified
+     * Adds a {@link HttpCodeValidator} to the {@link #responseItems} if none is specified
      */
     void fillDefaultData(final Context<?> context)
     {
         boolean hasHttpcodeValidator = false;
         // Look for an instance of HttpcodeValidator
-        for (final AbstractResponseItem responseItem : responseItems)
+        for (final AbstractResponseSubItem responseItem : responseItems)
         {
-            if (responseItem instanceof HttpcodeValidator)
+            if (responseItem instanceof HttpCodeValidator)
             {
                 // If a HttpcodeValidator was found, set hasHttpcodeValidator to true
                 hasHttpcodeValidator = true;
@@ -80,7 +80,7 @@ public class Response extends AbstractActionSubItem
         // If no HttpcodeValidator was found, add one at the beginning
         if (!hasHttpcodeValidator)
         {
-            responseItems.add(0, new HttpcodeValidator(null));
+            responseItems.add(0, new HttpCodeValidator(null));
         }
     }
 
