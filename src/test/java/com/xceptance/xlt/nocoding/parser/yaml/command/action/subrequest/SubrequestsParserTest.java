@@ -3,6 +3,7 @@ package com.xceptance.xlt.nocoding.parser.yaml.command.action.subrequest;
 import java.io.IOException;
 
 import org.junit.Test;
+import org.yaml.snakeyaml.scanner.ScannerException;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.xceptance.xlt.nocoding.parser.AbstractParserTest;
@@ -83,11 +84,12 @@ public class SubrequestsParserTest extends AbstractParserTest
     }
 
     /**
-     * Verifies an error happens when "Static" beneath "Subrequests" has objects beneath it and not arrays
+     * Verifies an error happens when "Static" beneath "Subrequests" has objects beneath it and not arrays.<br>
+     * Since Snakeyml parses once before Jackson and this isn't valid syntax, a Snakeyml exception is excepted.
      *
      * @throws IOException
      */
-    @Test(expected = JsonParseException.class)
+    @Test(expected = ScannerException.class)
     public void testSyntaxErrorSubrequestsStaticItemObjectNotArrayParsing() throws IOException
     {
         final Parser parser = new YamlParser();

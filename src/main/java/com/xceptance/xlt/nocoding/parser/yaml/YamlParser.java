@@ -1,5 +1,7 @@
 package com.xceptance.xlt.nocoding.parser.yaml;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
@@ -7,11 +9,14 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import org.yaml.snakeyaml.Yaml;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SequenceWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.xceptance.xlt.api.util.XltLogger;
@@ -44,21 +49,20 @@ public class YamlParser implements Parser
     public List<Command> parse(final String pathToFile) throws IOException
     {
         final List<Command> scriptItems = new ArrayList<>();
-        // Build the factory
-        final YAMLFactory factory = new YAMLFactory();
-
-        // Generate a Reader based on the file
-        final Reader reader = createReader(pathToFile);
+        // Resolve Anchors
+        final ByteArrayOutputStream anchorlessYaml = resolveAnchors(pathToFile);
+        // Place the content inside an ByteArryInputSteam
+        final ByteArrayInputStream anchorlessYamlInputSteam = new ByteArrayInputStream(anchorlessYaml.toByteArray());
         // Create the parser
-        final JsonParser parser = factory.createParser(reader);
+        final JsonParser parser = new YAMLFactory().createParser(anchorlessYamlInputSteam);
         // Allow comments in the parser, so we have the correct line numbers
         parser.enable(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS);
         parser.enable(Feature.ALLOW_YAML_COMMENTS);
 
         // Create an ObjectMapper
-        final ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper mapperYaml = new ObjectMapper();
         // Map the parsed content to JsonNodes, which are easier to use
-        final JsonNode root = mapper.readTree(parser);
+        final JsonNode root = mapperYaml.readTree(parser);
 
         // Check that the root, which consists of the list items, is an ArrayNode
         if (root != null)
@@ -89,7 +93,7 @@ public class YamlParser implements Parser
                     // Check if we have a permitted list item
                     if (Constants.isPermittedListItem(currentName))
                     {
-                        XltLogger.runTimeLogger.info(numberObject + ".th ScriptItem: " + currentName);
+                        XltLogger.runTimeLogger.info(numberObject + ". ScriptItem: " + currentName);
 
                         // Try and catch, so we can use a JsonParseException, which prints the line/column number
                         try
@@ -129,6 +133,31 @@ public class YamlParser implements Parser
         }
         // Return all scriptItems
         return scriptItems;
+    }
+
+    /**
+     * Resolves anchors and aliases in the Yaml-file and returns an ByteArrayOutputStream.<br>
+     * Since Jackson cannot resolve anchors and aliases, snakeyml is used to parse it to objects, which are then
+     * transformed via Jackson's {@link SequenceWriter}.
+     * 
+     * @param pathToFile
+     *            The String that describes the path to the file
+     * @return A ByteArrayOutputStream with the anchors resolved as their own object.
+     * @throws IOException
+     *             If a {@link Reader} or {@link SequenceWriter} cannot be created.
+     */
+    protected ByteArrayOutputStream resolveAnchors(final String pathToFile) throws IOException
+    {
+        // Parse the Yaml with snakeyml
+        final Yaml yaml = new Yaml();
+        final Object loadedYaml = yaml.load(createReader(pathToFile));
+
+        // Place the parsed Yaml with Jacksons SequenceWriter in an ByteArrayOutputSteam
+        final ByteArrayOutputStream anchorlessYaml = new ByteArrayOutputStream();
+        final SequenceWriter sw = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValues(anchorlessYaml);
+        sw.write(loadedYaml);
+        // Place the content inside an ByteArryInputSteam
+        return anchorlessYaml;
     }
 
     @Override

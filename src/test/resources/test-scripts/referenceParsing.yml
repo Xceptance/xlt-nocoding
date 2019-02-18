@@ -1,0 +1,9 @@
+- Action : &id1
+   Name : Reference Action
+   Request :
+       Url : https://localhost:8443/
+       Method : GET
+   Response :
+       Httpcode : 200
+
+- Action: *id1

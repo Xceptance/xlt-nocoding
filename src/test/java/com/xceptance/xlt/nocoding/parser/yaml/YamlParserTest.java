@@ -1,7 +1,10 @@
 package com.xceptance.xlt.nocoding.parser.yaml;
 
 import java.io.FileNotFoundException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,6 +22,8 @@ import com.xceptance.xlt.nocoding.parser.Parser;
 public class YamlParserTest extends AbstractParserTest
 {
     protected final String fileEmptyFile = path + "emptyFile.yml";
+
+    protected final String fileReferenceParsing = path + "referenceParsing.yml";
 
     protected final String fileNotExistingFile = path + "notExistingFile.yml";
 
@@ -40,6 +45,31 @@ public class YamlParserTest extends AbstractParserTest
     }
 
     /**
+     * Verifies yaml references can be parsed
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testReferenceFileParsing() throws Exception
+    {
+        final String patternString = "\"Action\"\\s:\\s(.*(?:[\\r\\n\\t].*)+)\\}(?:.*(?:[\\r\\n\\t].*)+)\"Action\"\\s:\\s(.*(?:[\\r\\n\\t].*)+)\\}";
+        // final String patternString =
+        // "\"Action\"\\s:\\s(.*(?:[\\r\\n\\t].*)+)\\}\\,\\s\\{\\n\\s\\s\"Action\"\\s:\\s(.*(?:[\\r\\n\\t].*)+)\\}";
+        final YamlParser parser = new YamlParser();
+        final String anchorlessYaml = parser.resolveAnchors(fileReferenceParsing).toString(StandardCharsets.UTF_8.name());
+        final Pattern pattern = Pattern.compile(patternString);
+        // final Pattern pattern =
+        // Pattern.compile("\"Action\"\\s:\\s(.*(?:[\\r\\n\\t].*)+)\"Action\"\\s:\\s(.*(?:[\\r\\n\\t].*)+)}");
+        final Matcher matcher = pattern.matcher(anchorlessYaml);
+        while (matcher.find())
+        {
+            final String firstGroup = matcher.group(1);
+            final String secondGroup = matcher.group(2);
+            Assert.assertTrue(firstGroup.contentEquals(secondGroup));
+        }
+    }
+
+    /**
      * Verifies an error is thrown if the file is not found
      *
      * @throws Exception
@@ -49,7 +79,8 @@ public class YamlParserTest extends AbstractParserTest
     {
         final Parser parser = new YamlParser();
         final List<Command> scriptItems = parser.parse(fileNotExistingFile);
-        Assert.assertTrue(scriptItems.isEmpty());
+        Assert.assertFalse(scriptItems.isEmpty());
+        Assert.assertEquals(2, scriptItems.size());
     }
 
     /**
