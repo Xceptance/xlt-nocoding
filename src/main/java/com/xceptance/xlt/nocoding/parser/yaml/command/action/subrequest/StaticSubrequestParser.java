@@ -1,11 +1,12 @@
 package com.xceptance.xlt.nocoding.parser.yaml.command.action.subrequest;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
+import org.yaml.snakeyaml.nodes.Node;
+import org.yaml.snakeyaml.nodes.SequenceNode;
+import org.yaml.snakeyaml.parser.ParserException;
+
 import com.xceptance.xlt.nocoding.command.action.subrequest.StaticSubrequest;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 
@@ -21,32 +22,30 @@ public class StaticSubrequestParser
      * Parses the static subrequest item in the static block to a {@link StaticSubrequest}.
      *
      * @param staticNode
-     *            The {@link JsonNode} the static subrequest item starts at
+     *            The {@link Node} the static subrequest item starts at
      * @return A <code>StaticSubrequest</code> with the parsed URLs
      */
-    public StaticSubrequest parse(final JsonNode staticNode)
+    public StaticSubrequest parse(final Node staticNode)
     {
+        // Verify that we have an array
+        if (!(staticNode instanceof SequenceNode))
+        {
+            throw new ParserException("Node at", staticNode.getStartMark(),
+                                      " is " + staticNode.getNodeId().toString() + " but needs to be an array", null);
+        }
         final List<String> urls = new ArrayList<>();
-        // Verify staticNode is an ArrayNode
-        if (!(staticNode instanceof ArrayNode))
-        {
-            throw new IllegalArgumentException("Expected ArrayNode in Static block but was " + staticNode.getClass().getSimpleName());
-        }
         // Create an iterator over the elements, that is every url
-        final Iterator<JsonNode> staticUrlsIterator = staticNode.elements();
+        final List<Node> urlNodes = ((SequenceNode) staticNode).getValue();
+
         // As long as there are elements, read the url and save it
-        while (staticUrlsIterator.hasNext())
-        {
-            // Read the url
-            final String url = YamlParserUtils.readSingleValue(staticUrlsIterator.next());
-            // Add it to the list
-            urls.add(url);
-        }
+        urlNodes.forEach(urlNode -> {
+            urls.add(YamlParserUtils.transformScalarNodeToString(urlNode));
+        });
 
         // If there were no urls, throw an Exception
         if (urls.isEmpty())
         {
-            throw new IllegalArgumentException("No urls found!");
+            throw new ParserException("Node at", staticNode.getStartMark(), " has no urls", null);
         }
         // Return the specified StaticSubrequest
         return new StaticSubrequest(urls);

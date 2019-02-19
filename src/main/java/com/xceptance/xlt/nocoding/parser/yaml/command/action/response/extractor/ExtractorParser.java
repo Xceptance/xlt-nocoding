@@ -1,6 +1,11 @@
 package com.xceptance.xlt.nocoding.parser.yaml.command.action.response.extractor;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang3.NotImplementedException;
+import org.yaml.snakeyaml.nodes.NodeTuple;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.AbstractExtractor;
@@ -35,16 +40,28 @@ public class ExtractorParser
      * is specified, verifies the <code>AbstractExtractor</code> is a {@link RegexpExtractor}.
      *
      * @param node
-     *            The <code>JsonNode</code> with the extraction item in it
+     *            The <code>NodeTuple</code> with the extraction items
      * @return The <code>AbstractExtractor</code> corresponding to the identifier. <br>
      *         For example, {@link Constants#REGEXP} is parsed to a <code>RegexpExtractor</code>.
      */
-    public AbstractExtractor parse(final JsonNode node)
+    public AbstractExtractor parse(final List<NodeTuple> nodeTupels)
     {
+        // Transform the NodeTuples to a map of strings
+        final Map<String, String> map = new HashMap<String, String>();
+        nodeTupels.forEach(node -> {
+            final String key = YamlParserUtils.transformScalarNodeToString(node.getKeyNode());
+            if (key.equals(identifier) || key.equals(Constants.GROUP))
+            {
+                final String value = YamlParserUtils.transformScalarNodeToString(node.getValueNode());
+                map.put(key, value);
+            }
+        });
+
+        final boolean hasGroup = map.containsKey(Constants.GROUP);
+
         AbstractExtractor extractor = null;
         // Get the associated value
-        final String extractorExpression = YamlParserUtils.readValue(node, identifier);
-        final boolean hasGroup = node.has(Constants.GROUP);
+        final String extractorExpression = map.get(identifier);
         // Build a extractor depending on the name of the selector
         switch (identifier)
         {
@@ -55,7 +72,7 @@ public class ExtractorParser
             case Constants.REGEXP:
                 if (hasGroup)
                 {
-                    extractor = new RegexpExtractor(extractorExpression, YamlParserUtils.readValue(node, Constants.GROUP));
+                    extractor = new RegexpExtractor(extractorExpression, map.get(Constants.GROUP));
                 }
                 else
                 {

@@ -1,16 +1,20 @@
 package com.xceptance.xlt.nocoding.parser.yaml.command.action.response;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.commons.lang3.StringUtils;
+import org.yaml.snakeyaml.nodes.MappingNode;
+import org.yaml.snakeyaml.nodes.Node;
+import org.yaml.snakeyaml.nodes.NodeTuple;
+import org.yaml.snakeyaml.nodes.SequenceNode;
+import org.yaml.snakeyaml.parser.ParserException;
+
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.AbstractExtractor;
 import com.xceptance.xlt.nocoding.command.action.response.store.AbstractResponseStore;
 import com.xceptance.xlt.nocoding.command.action.response.store.ResponseStore;
+import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 import com.xceptance.xlt.nocoding.parser.yaml.command.action.response.extractor.ExtractorParser;
 import com.xceptance.xlt.nocoding.util.Constants;
 
@@ -26,82 +30,91 @@ public class ResponseStoreParser
      * Parses the store item in the response block to a list of {@link AbstractResponseStore}
      *
      * @param responseStoreNode
-     *            The {@link JsonNode} the store item starts at
+     *            The {@link Node} the store item starts at
      * @return A list of all <code>AbstractResponseStore</code>s with the parsed content
      */
-    public List<AbstractResponseStore> parse(final JsonNode responseStoreNode)
+    public List<AbstractResponseStore> parse(final Node responseStoreNode)
     {
         // Verify that an array was used and not an object
-        if (!(responseStoreNode instanceof ArrayNode))
+        if (!(responseStoreNode instanceof SequenceNode))
         {
-            throw new IllegalArgumentException("Expected ArrayNode after Store, but was " + responseStoreNode.getClass().getSimpleName());
+            throw new ParserException("Node at", responseStoreNode.getStartMark(),
+                                      " is " + responseStoreNode.getNodeId().toString() + " but needs to be an array", null);
         }
-        final List<AbstractResponseStore> responseStores = new ArrayList<>();
-        // Get an Iterator over every ResponseStore
-        final Iterator<JsonNode> iteratorOverStores = responseStoreNode.elements();
 
-        // As long as we have another element
-        while (iteratorOverStores.hasNext())
-        {
-            // Get the next element, therefore the ObjectNode with a single ResponseStore in it
-            final JsonNode storeNode = iteratorOverStores.next();
-            final AbstractResponseStore responseStore = parseSingleStore(storeNode);
+        final List<AbstractResponseStore> responseStoreList = new ArrayList<>();
+
+        final List<Node> responseStores = ((SequenceNode) responseStoreNode).getValue();
+        responseStores.forEach(singleResponseStore -> {
+            // Parse a single store item
+            final AbstractResponseStore responseStore = parseSingleStore(singleResponseStore);
+            responseStoreList.add(responseStore);
             // Print a debug statement
             XltLogger.runTimeLogger.debug("Added " + responseStore.getVariableName() + " to the response stores.");
-            responseStores.add(responseStore);
-        }
-        return responseStores;
+        });
+        // Return all responseStores
+        return responseStoreList;
     }
 
-    public AbstractResponseStore parseSingleStore(final JsonNode singleStore)
+    public AbstractResponseStore parseSingleStore(final Node singleStoreWrapper)
     {
-        AbstractResponseStore responseStore = null;
-        // Get an iterator over the fieldNames, which should only be the name of the variable
-        final String variableName = singleStore.fieldNames().next();
-
-        // Get the substructure, that is the ObjectNode with the information of the ResponseStore
-        final JsonNode storeContent = singleStore.get(variableName);
-        // Verify that it is an ObjectNode
-        if (!(storeContent instanceof ObjectNode))
+        // Verify that an object was used
+        if (!(singleStoreWrapper instanceof MappingNode))
         {
-            throw new IllegalArgumentException("Expected ObjectNode after " + variableName + ", but was "
-                                               + storeContent.getClass().getSimpleName());
+            throw new ParserException("Node at", singleStoreWrapper.getStartMark(),
+                                      " is " + singleStoreWrapper.getNodeId().toString() + " but needs to be an object", null);
         }
-        // And get an iterator over the fieldNames, that is the content of a single ResponseStore
-        final Iterator<String> contentFields = storeContent.fieldNames();
-        // If we have a next name
-        if (contentFields.hasNext())
+
+        String variableName = "";
+        AbstractExtractor extractor = null;
+
+        final List<NodeTuple> singleStore = ((MappingNode) singleStoreWrapper).getValue();
+
+        for (final NodeTuple storeItem : singleStore)
         {
-            AbstractExtractor extractor = null;
-            // Build an extractor depending on the next element in the iterator
-            String nextName = contentFields.next();
-            if (Constants.isPermittedExtraction(nextName))
+            // Get the name of the validation
+            variableName = YamlParserUtils.transformScalarNodeToString(storeItem.getKeyNode());
+            // Get all subitems following the variable name
+            final Node storeContent = storeItem.getValueNode();
+            // Verify the validation is an object
+            if (!(storeContent instanceof MappingNode))
             {
-                extractor = new ExtractorParser(nextName).parse(storeContent);
-                // If we have another name, it must be Constants.GROUP
-                if (contentFields.hasNext())
+                throw new ParserException("Node at", storeContent.getStartMark(),
+                                          " is " + storeContent.getNodeId().toString() + " but needs to be an object", null);
+            }
+            // Get the subitems as list
+            final List<NodeTuple> singleStoreContentItems = ((MappingNode) storeContent).getValue();
+            for (final NodeTuple contentItem : singleStoreContentItems)
+            {
+                final String contentKey = YamlParserUtils.transformScalarNodeToString(contentItem.getKeyNode());
+                // If it is an extraction, parse the extraction
+                if (Constants.isPermittedExtraction(contentKey))
                 {
-                    nextName = contentFields.next();
-                    // Verify the value of the nextName is the allowed field Constants.GROUP
-                    if (nextName.equals(Constants.GROUP))
+                    // Verify, that no extractor was parsed already
+                    if (extractor != null)
                     {
-                        // Do nothing
+                        throw new ParserException("Node at", contentItem.getKeyNode().getStartMark(),
+                                                  " defines a second extractor but only one definition is allowed.", null);
                     }
-                    else
-                    {
-                        throw new IllegalArgumentException("Unexpected argument " + nextName);
-                    }
+                    // Parse the extractor
+                    extractor = new ExtractorParser(contentKey).parse(singleStoreContentItems);
+                    XltLogger.runTimeLogger.debug("Extraction Mode is " + extractor);
                 }
-                responseStore = new ResponseStore(variableName, extractor);
+                // If it is not Group OR Group and extractor is null, throw an error
+                else if (!Constants.GROUP.equals(contentKey) || extractor == null)
+                {
+                    throw new ParserException("Node at", contentItem.getKeyNode().getStartMark(), " defines an unknown item.", null);
+                }
             }
         }
 
-        if (responseStore == null)
+        if (extractor == null || StringUtils.isBlank(variableName))
         {
             throw new IllegalArgumentException("Could not create an AbstractResponseStore. Is an extraction missing?");
         }
-        // Return all responseStores
-        return responseStore;
+
+        // Return the responseStores
+        return new ResponseStore(variableName, extractor);
     }
 
 }

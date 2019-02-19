@@ -1,15 +1,17 @@
 package com.xceptance.xlt.nocoding.parser.yaml.command.action.subrequest;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang3.NotImplementedException;
+import org.yaml.snakeyaml.nodes.MappingNode;
+import org.yaml.snakeyaml.nodes.Node;
+import org.yaml.snakeyaml.nodes.NodeTuple;
+import org.yaml.snakeyaml.nodes.SequenceNode;
+import org.yaml.snakeyaml.parser.ParserException;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.xceptance.xlt.nocoding.command.action.AbstractActionSubItem;
 import com.xceptance.xlt.nocoding.command.action.subrequest.AbstractSubrequest;
+import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 import com.xceptance.xlt.nocoding.parser.yaml.command.action.AbstractActionSubItemParser;
 import com.xceptance.xlt.nocoding.util.Constants;
 
@@ -26,64 +28,51 @@ public class SubrequestsParser extends AbstractActionSubItemParser
      * consist of multiple subrequests.
      *
      * @param subrequestNode
-     *            The {@link JsonNode} the subrequest item starts at
+     *            The {@link Node} the subrequest item starts at
      * @return A list with all specified subrequest in the node
      */
     @Override
-    public List<AbstractActionSubItem> parse(final JsonNode subrequestNode)
+    public List<AbstractActionSubItem> parse(final Node subrequestNode)
     {
-        // Verify that we have an ArrayNode
-        if (!(subrequestNode instanceof ArrayNode))
+        // Verify that we have an array
+        if (!(subrequestNode instanceof SequenceNode))
         {
-            throw new IllegalArgumentException("Expected ArrayNode in Subrequest but was " + subrequestNode.getClass().getSimpleName());
+            throw new ParserException("Node at", subrequestNode.getStartMark(),
+                                      " is " + subrequestNode.getNodeId().toString() + " but needs to be an array", null);
         }
         // Initialize Variables
         final List<AbstractSubrequest> subrequests = new ArrayList<>();
 
-        // Get an iterator over the elements, that is every single subrequest
-        final Iterator<JsonNode> iterator = subrequestNode.elements();
-
-        // Iterate over every subrequest
-        while (iterator.hasNext())
-        {
-            // Get the current node, which describes a single subrequest
-            final JsonNode current = iterator.next();
-            // Get the fieldNames of the current node, which should only contain the type of the subrequest (i.e. XHR,
-            // Static)
-            final Iterator<String> fieldNames = current.fieldNames();
-
-            // Iterate over the fieldNames
-            while (fieldNames.hasNext())
+        final List<Node> subrequestItems = ((SequenceNode) subrequestNode).getValue();
+        subrequestItems.forEach(subrequestWrapper -> {
+            // Verify that an array was used and not an object
+            if (!(subrequestWrapper instanceof MappingNode))
             {
-                // Extract the first fieldName, which specifies, what kind of subrequest this is
-                final String fieldName = fieldNames.next();
-
-                // Check if the name is a permitted request item
-                if (!Constants.isPermittedSubRequestItem(fieldName))
-                {
-                    throw new IllegalArgumentException("Not a permitted subrequest item: " + fieldName);
-                }
-
+                throw new ParserException("Node at", subrequestWrapper.getStartMark(),
+                                          " is " + subrequestWrapper.getNodeId().toString() + " but needs to be a mapping", null);
+            }
+            final List<NodeTuple> subrequestList = ((MappingNode) subrequestWrapper).getValue();
+            subrequestList.forEach(subrequest -> {
+                final String subrequestName = YamlParserUtils.transformScalarNodeToString(subrequest.getKeyNode());
                 // Depending on the name, create the correct Parser and execute it
-                switch (fieldName)
+                switch (subrequestName)
                 {
                     case Constants.XHR:
                         // Create an XhrSubrequestParser and parse it
-                        subrequests.add(new XhrSubrequestParser().parse(current.get(fieldName)));
+                        subrequests.add(new XhrSubrequestParser().parse(subrequest.getValueNode()));
                         break;
 
                     case Constants.STATIC:
                         // Create StaticSubrequestParser and parse the current node
-                        subrequests.add(new StaticSubrequestParser().parse(current.get(fieldName)));
+                        subrequests.add(new StaticSubrequestParser().parse(subrequest.getValueNode()));
                         break;
 
                     default:
-                        throw new NotImplementedException("Permitted subrequest item but no parsing specified: " + fieldName);
+                        throw new ParserException("Node at", subrequest.getKeyNode().getStartMark(), " defines an unknown item.", null);
                 }
+            });
+        });
 
-            }
-
-        }
         // Create a new AbstractActionItem list
         final List<AbstractActionSubItem> actionItems = new ArrayList<>();
         // Add all subrequests to it

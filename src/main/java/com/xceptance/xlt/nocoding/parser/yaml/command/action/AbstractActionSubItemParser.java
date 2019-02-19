@@ -2,7 +2,8 @@ package com.xceptance.xlt.nocoding.parser.yaml.command.action;
 
 import java.util.List;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import org.yaml.snakeyaml.nodes.Node;
+
 import com.xceptance.xlt.nocoding.command.action.AbstractActionSubItem;
 
 /**
@@ -17,9 +18,9 @@ public abstract class AbstractActionSubItemParser
      * Parses the defined action item at the node.
      *
      * @param actionItemNode
-     *            The {@link JsonNode} the item starts at
+     *            The {@link Node} the item starts at
      * @return A list of {@link AbstractActionSubItem}
      */
-    public abstract List<AbstractActionSubItem> parse(JsonNode actionItemNode);
+    public abstract List<AbstractActionSubItem> parse(Node actionItemNode);
 
 }

@@ -1,21 +1,21 @@
 package com.xceptance.xlt.nocoding.parser.yaml.command.action;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang3.NotImplementedException;
+import org.yaml.snakeyaml.nodes.MappingNode;
+import org.yaml.snakeyaml.nodes.Node;
+import org.yaml.snakeyaml.nodes.NodeTuple;
+import org.yaml.snakeyaml.nodes.ScalarNode;
+import org.yaml.snakeyaml.parser.ParserException;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.NullNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.command.action.AbstractActionSubItem;
 import com.xceptance.xlt.nocoding.command.action.Action;
 import com.xceptance.xlt.nocoding.command.action.request.Request;
+import com.xceptance.xlt.nocoding.parser.util.StringWrapper;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
-import com.xceptance.xlt.nocoding.parser.yaml.command.AbstractCommandParser;
 import com.xceptance.xlt.nocoding.parser.yaml.command.action.request.RequestParser;
 import com.xceptance.xlt.nocoding.parser.yaml.command.action.response.ResponseParser;
 import com.xceptance.xlt.nocoding.parser.yaml.command.action.subrequest.SubrequestsParser;
@@ -26,113 +26,118 @@ import com.xceptance.xlt.nocoding.util.Constants;
  *
  * @author ckeiner
  */
-public class ActionParser extends AbstractCommandParser
+public class ActionParser
 {
 
     /**
      * Parses the action item to a list of {@link Command}s.
      *
      * @param actionNode
-     *            The {@link JsonNode} with the the action item
+     *            The {@link Node} with the the action item
      * @return A list of <code>ScriptItem</code>s containing a single {@link Action}.
      */
-    @Override
-    public List<Command> parse(final JsonNode actionNode)
+    public static List<Command> parse(final Node actionNode)
     {
         // Initialize variables
-        String name = null;
+        final StringWrapper nameWrapper = new StringWrapper();
         final List<AbstractActionSubItem> actionItems = new ArrayList<>(3);
         final List<Command> scriptItems = new ArrayList<>(1);
 
-        // Verify that this is either a NullNode or an ObjectNode
-        if (!(actionNode instanceof NullNode) && !(actionNode instanceof ObjectNode))
+        // Verify the actionNode is neither an array or a scalar
+        // TODO AnchorNode?
+        if (!(actionNode instanceof MappingNode))
         {
-            throw new IllegalArgumentException("Action must either be emtpy or an ObjectNode, and not a "
-                                               + actionNode.getClass().getSimpleName());
+            throw new ParserException("Node at", actionNode.getStartMark(),
+                                      " is " + actionNode.getNodeId().toString() + " but needs to be an object", null);
         }
-        // Get the fieldName of the objects in the ArrayNode, which is for example Request, Name.
-        final Iterator<String> fieldNames = actionNode.fieldNames();
 
-        while (fieldNames.hasNext())
-        {
-            // Get the next fieldName
-            final String fieldName = fieldNames.next();
+        final List<NodeTuple> actionNodeItems = ((MappingNode) actionNode).getValue();
+
+        actionNodeItems.forEach(item -> {
+            final String itemName = YamlParserUtils.transformScalarNodeToString(item.getKeyNode());
+            // Check if the name is a permitted action item
+            if (!Constants.isPermittedActionItem(itemName))
+            {
+                throw new ParserException("Node at", ((ScalarNode) item.getKeyNode()).getStartMark(), " is not a permitted action item",
+                                          null);
+            }
             AbstractActionSubItemParser actionItemParser = null;
 
-            // Check if the name is a permitted action item
-            if (!Constants.isPermittedActionItem(fieldName))
-            {
-                throw new IllegalArgumentException("Not a permitted action item: " + fieldName);
-            }
-
             // Differentiate between what kind of ActionItem this is
-            switch (fieldName)
+            switch (itemName)
             {
                 case Constants.NAME:
                     // Check that this is the first item we parse
                     if (actionItems.isEmpty())
                     {
                         // Save the name
-                        name = YamlParserUtils.readValue(actionNode, fieldName);
-                        if (name != null)
+                        nameWrapper.setValue(YamlParserUtils.transformScalarNodeToString(item.getValueNode()));
+                        if (nameWrapper != null)
                         {
-                            XltLogger.runTimeLogger.debug("Actionname: " + name);
+                            XltLogger.runTimeLogger.debug("Actionname: " + nameWrapper);
                         }
                         break;
                     }
                     else
                     {
-                        throw new IllegalArgumentException("Name must be defined as first item in action.");
+                        throw new ParserException("The name of the action at", ((ScalarNode) item.getKeyNode()).getStartMark(),
+                                                  " must be defined as first item.", ((ScalarNode) item.getValueNode()).getStartMark());
                     }
 
                 case Constants.REQUEST:
                     // Check that this is the first item we parse (excluding name)
                     if (actionItems.isEmpty())
                     {
-                        XltLogger.runTimeLogger.debug("Request: " + actionNode.get(fieldName).toString());
+                        XltLogger.runTimeLogger.debug("Parsing Request");
                         // Set parser to the request parser
                         actionItemParser = new RequestParser();
                         break;
                     }
                     else
                     {
-                        throw new IllegalArgumentException("Request cannot be defined after a response or subrequest.");
+                        throw new ParserException("The request of the action at", ((ScalarNode) item.getKeyNode()).getStartMark(),
+                                                  " must be define before a response and subrequest.",
+                                                  ((ScalarNode) item.getValueNode()).getStartMark());
                     }
 
                 case Constants.RESPONSE:
                     // Check that no subrequest was defined beforehand
                     if (actionItems.isEmpty() || actionItems.get(0) instanceof Request)
                     {
-                        XltLogger.runTimeLogger.debug("Response: " + actionNode.get(fieldName).toString());
+                        XltLogger.runTimeLogger.debug("Parsing Response");
                         // Set parser to the response parser
                         actionItemParser = new ResponseParser();
                         break;
                     }
                     else
                     {
-                        throw new IllegalArgumentException("Response mustn't be defined after subrequests.");
+                        throw new ParserException("The response of the action at", ((ScalarNode) item.getKeyNode()).getStartMark(),
+                                                  " must be define before a subrequest.",
+                                                  ((ScalarNode) item.getValueNode()).getStartMark());
+
                     }
 
                 case Constants.SUBREQUESTS:
-                    XltLogger.runTimeLogger.debug("Subrequests: " + actionNode.get(fieldName).toString());
+                    XltLogger.runTimeLogger.debug("Parsing Subrequest");
                     // Set parser to subrequest parser
                     actionItemParser = new SubrequestsParser();
                     break;
 
                 default:
-                    // If it has any other value, throw a NotImplementedException
-                    throw new NotImplementedException("Permitted action item but no parsing specified: " + fieldName);
+                    // We didn't find something fitting, so throw an Exception
+                    throw new ParserException("Node at", item.getKeyNode().getStartMark(), " is permitted but unknown", null);
             }
 
             // If we specified an actionItemParser
             if (actionItemParser != null)
             {
                 // Parse the current item and add it to the actionItems
-                actionItems.addAll(actionItemParser.parse(actionNode.get(fieldName)));
+                actionItems.addAll(actionItemParser.parse(item.getValueNode()));
             }
-        }
+
+        });
         // Add the action to the script items
-        scriptItems.add(new Action(name, actionItems));
+        scriptItems.add(new Action(nameWrapper.getValue(), actionItems));
 
         // Return all scriptItems
         return scriptItems;

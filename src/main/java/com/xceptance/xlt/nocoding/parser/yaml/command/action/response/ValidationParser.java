@@ -1,16 +1,19 @@
 package com.xceptance.xlt.nocoding.parser.yaml.command.action.response;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.yaml.snakeyaml.nodes.MappingNode;
+import org.yaml.snakeyaml.nodes.Node;
+import org.yaml.snakeyaml.nodes.NodeTuple;
+import org.yaml.snakeyaml.nodes.SequenceNode;
+import org.yaml.snakeyaml.parser.ParserException;
+
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.command.action.response.Validator;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.AbstractExtractor;
 import com.xceptance.xlt.nocoding.command.action.response.validator.AbstractValidator;
+import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 import com.xceptance.xlt.nocoding.parser.yaml.command.action.response.extractor.ExtractorParser;
 import com.xceptance.xlt.nocoding.parser.yaml.command.action.response.validator.ValidatorParser;
 import com.xceptance.xlt.nocoding.util.Constants;
@@ -26,91 +29,100 @@ public class ValidationParser
     /**
      * Parses the validation items in the response block to a list of {@link Validator}.
      *
-     * @param validateNode
-     *            The {@link JsonNode} with the validation item
+     * @param validationsNode
+     *            The {@link Node} with the validation item
      * @return A list of <code>Validator</code>
      */
-    public List<Validator> parse(final JsonNode validateNode)
+    public List<Validator> parse(final Node validationsNode)
     {
+
         // Verify that an array was used and not an object
-        if (!(validateNode instanceof ArrayNode))
+        if (!(validationsNode instanceof SequenceNode))
         {
-            throw new IllegalArgumentException("Expected ArrayNode after Validate, but was " + validateNode.getClass().getSimpleName());
+            throw new ParserException("Node at", validationsNode.getStartMark(),
+                                      " is " + validationsNode.getNodeId().toString() + " but needs to be an array", null);
         }
+
         // Initialize variables
         final List<Validator> validatorList = new ArrayList<>();
 
-        // Get an Iterator over every validation
-        final Iterator<JsonNode> iteratorOverValidations = validateNode.elements();
-
-        // Iterate over all validations
-        while (iteratorOverValidations.hasNext())
-        {
-            // Get the next element, therefore the ObjectNode with a single validation in it
-            final JsonNode validationNode = iteratorOverValidations.next();
-            final Validator validator = parseSingleValidator(validationNode);
+        final List<Node> validators = ((SequenceNode) validationsNode).getValue();
+        validators.forEach(validatorItem -> {
+            final Validator validator = parseSingleValidator(validatorItem);
+            validatorList.add(validator);
             // Print a debug statement
             XltLogger.runTimeLogger.debug("Added " + validator.getValidationName() + " to Validations.");
-            validatorList.add(validator);
-        }
+        });
         // Return all validations
         return validatorList;
     }
 
-    protected Validator parseSingleValidator(final JsonNode validation)
+    protected Validator parseSingleValidator(final Node validationNodeWrapper)
     {
-        final String validationName = validation.fieldNames().next();
-        final JsonNode validationContent = validation.get(validationName);
-
-        // Verify the validation is an ObjectNode
-        if (!(validationContent instanceof ObjectNode))
+        // Verify that an object was used
+        if (!(validationNodeWrapper instanceof MappingNode))
         {
-            throw new IllegalArgumentException("Expected ObjectNode after the validation name, " + validationName + ", but was "
-                                               + validationContent.getClass().getSimpleName());
+            throw new ParserException("Node at", validationNodeWrapper.getStartMark(),
+                                      " is " + validationNodeWrapper.getNodeId().toString() + " but needs to be an object", null);
         }
-
-        // Get the fieldNames, that is the extraction method and validation method name
-        final Iterator<String> contentKeys = validationContent.fieldNames();
+        String validationName = "";
         AbstractExtractor extractor = null;
         AbstractValidator validationMethod = null;
-        // Iterate over all content keys
-        while (contentKeys.hasNext())
+
+        final List<NodeTuple> validationNode = ((MappingNode) validationNodeWrapper).getValue();
+        for (final NodeTuple validation : validationNode)
         {
-            // Get the next contentKey
-            final String contentKey = contentKeys.next();
-            // If it is an extraction, parse the extraction
-            if (Constants.isPermittedExtraction(contentKey))
+            // Get the name of the validation
+            validationName = YamlParserUtils.transformScalarNodeToString(validation.getKeyNode());
+            final Node validationContent = validation.getValueNode();
+            // Verify the validation is an object
+            if (!(validationContent instanceof MappingNode))
             {
-                // Verify, that no extractor was parsed already
-                if (extractor != null)
-                {
-                    throw new IllegalArgumentException("Cannot parse two extraction methods!");
-                }
-                // Parse the extractor
-                XltLogger.runTimeLogger.debug("Extraction Mode is " + extractor);
-                extractor = new ExtractorParser(contentKey).parse(validationContent);
+                throw new ParserException("Node at", validationContent.getStartMark(),
+                                          " is " + validationContent.getNodeId().toString() + " but needs to be an object", null);
             }
-            // If it is a validation method, parse the validation method
-            else if (Constants.isPermittedValidationMethod(contentKey))
+            final List<NodeTuple> singleValidationContentItems = ((MappingNode) validationContent).getValue();
+            for (final NodeTuple contentItem : singleValidationContentItems)
             {
-                // Verify, that an extractor was parsed already
-                if (extractor == null)
+                final String contentKey = YamlParserUtils.transformScalarNodeToString(contentItem.getKeyNode());
+                // If it is an extraction, parse the extraction
+                if (Constants.isPermittedExtraction(contentKey))
                 {
-                    throw new IllegalArgumentException("Cannot parse validation before the extraction!");
+                    // Verify, that no extractor was parsed already
+                    if (extractor != null)
+                    {
+                        throw new ParserException("Node at", contentItem.getKeyNode().getStartMark(),
+                                                  " defines a second extractor but only one definition is allowed.", null);
+                    }
+                    // Parse the extractor
+                    extractor = new ExtractorParser(contentKey).parse(singleValidationContentItems);
+                    XltLogger.runTimeLogger.debug("Extraction Mode is " + extractor);
                 }
-                // Verify, that no validation was parsed already
-                if (validationMethod != null)
+                // If it is a validation method, parse the validation method
+                else if (Constants.isPermittedValidationMethod(contentKey))
                 {
-                    throw new IllegalArgumentException("Cannot parse two validation methods!");
+                    // Verify, that an extractor was parsed already
+                    if (extractor == null)
+                    {
+                        throw new ParserException("Node at", contentItem.getKeyNode().getStartMark(),
+                                                  " defines a validation method but cannot be parsed before an extractor is defined.",
+                                                  null);
+                    }
+                    // Verify, that no validation was parsed already
+                    if (validationMethod != null)
+                    {
+                        throw new ParserException("Node at", contentItem.getKeyNode().getStartMark(),
+                                                  " defines a second validation method but only one can be defined.", null);
+                    }
+                    // Parse the validation method
+                    validationMethod = new ValidatorParser(contentKey).parse(contentItem.getValueNode());
+                    XltLogger.runTimeLogger.debug("Validation Method is " + validationMethod);
                 }
-                // Parse the validation method
-                XltLogger.runTimeLogger.debug("Validation Method is " + extractor);
-                validationMethod = new ValidatorParser(contentKey).parse(validationContent);
-            }
-            // If it is not Group OR Group and extractor is null, throw an error
-            else if (!Constants.GROUP.equals(contentKey) || extractor == null)
-            {
-                throw new IllegalArgumentException("Unknown Validation Item: " + contentKey);
+                // If it is not Group OR Group and extractor is null, throw an error
+                else if (!Constants.GROUP.equals(contentKey) || extractor == null)
+                {
+                    throw new ParserException("Node at", validationContent.getStartMark(), " defines an unknown item.", null);
+                }
             }
         }
 

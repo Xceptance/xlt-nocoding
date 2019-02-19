@@ -3,12 +3,14 @@ package com.xceptance.xlt.nocoding.parser.yaml.command.storeDefault;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.yaml.snakeyaml.nodes.NodeTuple;
+import org.yaml.snakeyaml.parser.ParserException;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.command.storeDefault.AbstractStoreDefaultItem;
 import com.xceptance.xlt.nocoding.command.storeDefault.StoreDefaultValue;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
-import com.xceptance.xlt.nocoding.parser.yaml.command.AbstractCommandParser;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
@@ -17,93 +19,88 @@ import com.xceptance.xlt.nocoding.util.Constants;
  *
  * @author ckeiner
  */
-public class StoreDefaultParser extends AbstractCommandParser
+public class StoreDefaultParser
 {
-    String variableName;
-
-    public StoreDefaultParser(final String variableName)
-    {
-        this.variableName = variableName;
-    }
 
     /**
      * Parses the default item at the {@link JsonNode} to a list of {@link Command}s.
      *
-     * @param defaultNode
-     *            The {@link JsonNode} the default item starts at
+     * @param node
+     *            The {@link NodeTuple} that contains teh default item
      * @return A list of <code>ScriptItem</code>s with the specified {@link AbstractStoreDefaultItem}s.
      */
-    @Override
-    public List<Command> parse(final JsonNode defaultNode)
+    public static List<Command> parse(final NodeTuple node)
     {
         final List<Command> scriptItems = new ArrayList<>();
 
-        // Since it was a permitted action item, differentiate between the name of the item
-        switch (variableName)
-        {
+        final String defaultItemName = YamlParserUtils.transformScalarNodeToString(node.getKeyNode());
+        String value = null;
 
+        // Since it was a permitted list item, differentiate between the name of the item
+        switch (defaultItemName)
+        {
             case Constants.NAME:
-                scriptItems.add(parseSingleItem(defaultNode));
+                value = YamlParserUtils.transformScalarNodeToString(node.getValueNode());
+                scriptItems.add(new StoreDefaultValue(defaultItemName, value));
                 break;
 
             case Constants.HTTPCODE:
-                scriptItems.add(parseSingleItem(defaultNode));
+                value = YamlParserUtils.transformScalarNodeToString(node.getValueNode());
+                scriptItems.add(new StoreDefaultValue(defaultItemName, value));
                 break;
 
             case Constants.URL:
-                scriptItems.add(parseSingleItem(defaultNode));
+                value = YamlParserUtils.transformScalarNodeToString(node.getValueNode());
+                scriptItems.add(new StoreDefaultValue(defaultItemName, value));
                 break;
 
             case Constants.METHOD:
-                scriptItems.add(parseSingleItem(defaultNode));
+                value = YamlParserUtils.transformScalarNodeToString(node.getValueNode());
+                scriptItems.add(new StoreDefaultValue(defaultItemName, value));
                 break;
 
             case Constants.ENCODEPARAMETERS:
-                scriptItems.add(parseSingleItem(defaultNode));
+                value = YamlParserUtils.transformScalarNodeToString(node.getValueNode());
+                scriptItems.add(new StoreDefaultValue(defaultItemName, value));
                 break;
 
             case Constants.ENCODEBODY:
-                scriptItems.add(parseSingleItem(defaultNode));
-                break;
-
-            case Constants.XHR:
-                scriptItems.add(parseSingleItem(defaultNode));
-                break;
-
-            case Constants.HEADERS:
-                scriptItems.addAll(new StoreDefaultHeadersParser().parse(defaultNode));
-                break;
-
-            case Constants.PARAMETERS:
-                scriptItems.addAll(new StoreDefaultParametersParser().parse(defaultNode));
-                break;
-
-            case Constants.COOKIES:
-                scriptItems.addAll(new StoreDefaultCookiesParser().parse(defaultNode));
+                value = YamlParserUtils.transformScalarNodeToString(node.getValueNode());
+                scriptItems.add(new StoreDefaultValue(defaultItemName, value));
                 break;
 
             case Constants.BODY:
-                scriptItems.add(parseSingleItem(defaultNode));
+                value = YamlParserUtils.transformScalarNodeToString(node.getValueNode());
+                scriptItems.add(new StoreDefaultValue(defaultItemName, value));
+                break;
+
+            case Constants.XHR:
+                value = YamlParserUtils.transformScalarNodeToString(node.getValueNode());
+                scriptItems.add(new StoreDefaultValue(defaultItemName, value));
+                break;
+
+            case Constants.HEADERS:
+                scriptItems.addAll(new StoreDefaultHeadersParser().parse(node.getValueNode()));
+                break;
+
+            case Constants.PARAMETERS:
+                scriptItems.addAll(new StoreDefaultParametersParser().parse(node.getValueNode()));
+                break;
+
+            case Constants.COOKIES:
+                scriptItems.addAll(new StoreDefaultCookiesParser().parse(node.getValueNode()));
                 break;
 
             case Constants.STATIC:
-                scriptItems.addAll(new StoreDefaultStaticSubrequestsParser().parse(defaultNode));
+                scriptItems.addAll(new StoreDefaultStaticSubrequestsParser().parse(node.getValueNode()));
                 break;
 
             default:
                 // We didn't find something fitting, so throw an Exception
-                throw new IllegalArgumentException("Unknown default list item: " + variableName);
+                throw new ParserException("Node at", node.getKeyNode().getStartMark(), " is permitted but unknown", null);
         }
 
         return scriptItems;
-    }
-
-    private Command parseSingleItem(final JsonNode defaultNode)
-    {
-        // Get the value of the default item
-        final String value = YamlParserUtils.readSingleValue(defaultNode);
-        // Create the new StoreDefaultItem and return it
-        return new StoreDefaultValue(variableName, value);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.xceptance.xlt.nocoding.parser.yaml.command.action.response.validator;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.yaml.snakeyaml.nodes.Node;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.xceptance.xlt.nocoding.command.action.response.validator.AbstractValidator;
@@ -32,14 +33,14 @@ public class ValidatorParser
      * Parses the validation method in the {@link JsonNode} to an {@link AbstractValidator}.
      *
      * @param node
-     *            The <code>JsonNode</code> with the validation method
+     *            The <code>Node</code> with the validation method
      * @return An <code>AbstractValidationMethod</code> with the parsed data
      */
-    public AbstractValidator parse(final JsonNode node)
+    public AbstractValidator parse(final Node node)
     {
         AbstractValidator method = null;
         // Get the associated value
-        final String validationExpression = YamlParserUtils.readValue(node, identifier);
+        final String validationExpression = YamlParserUtils.transformScalarNodeToString(node);
         // Build a validation method depending on the name of the selector
         switch (identifier)
         {

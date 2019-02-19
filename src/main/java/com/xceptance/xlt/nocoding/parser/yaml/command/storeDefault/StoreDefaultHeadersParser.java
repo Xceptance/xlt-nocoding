@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import org.yaml.snakeyaml.nodes.Node;
+import org.yaml.snakeyaml.nodes.ScalarNode;
+import org.yaml.snakeyaml.parser.ParserException;
+
 import com.xceptance.xlt.nocoding.command.storeDefault.AbstractStoreDefaultItem;
 import com.xceptance.xlt.nocoding.command.storeDefault.StoreDefaultHeader;
+import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 import com.xceptance.xlt.nocoding.parser.yaml.command.action.request.HeaderParser;
 import com.xceptance.xlt.nocoding.util.Constants;
 
@@ -23,27 +27,26 @@ public class StoreDefaultHeadersParser extends AbstractStoreDefaultSubItemsParse
      * {@link StoreDefaultHeader}.
      *
      * @param defaultHeadersNode
-     *            The {@link JsonNode} the default headers start at
+     *            The {@link Node} the default headers start at
      * @return A list of <code>StoreDefault</code>s with the parsed default headers.
      */
     @Override
-    public List<AbstractStoreDefaultItem> parse(final JsonNode defaultHeadersNode)
+    public List<AbstractStoreDefaultItem> parse(final Node defaultHeadersNode)
     {
         // Create list of defaultItems
         final List<AbstractStoreDefaultItem> defaultItems = new ArrayList<>();
-        // Check if the node is textual
-        if (defaultHeadersNode.isTextual())
+
+        if (defaultHeadersNode instanceof ScalarNode)
         {
-            // Check if the textValue is Constants.DELETE
-            if (defaultHeadersNode.textValue().equals(Constants.DELETE))
+            final String value = YamlParserUtils.transformScalarNodeToString(defaultHeadersNode);
+            if (value.equals(Constants.DELETE))
             {
-                // Create a StoreDefaultHeader item that deletes all default headers
                 defaultItems.add(new StoreDefaultHeader(Constants.HEADERS, Constants.DELETE));
             }
             else
             {
-                throw new IllegalArgumentException("Default Headers must be an ArrayNode or textual and contain " + Constants.DELETE
-                                                   + " and not " + defaultHeadersNode.textValue());
+                throw new ParserException("Node at", defaultHeadersNode.getStartMark(),
+                                          " is " + value + " but needs to be an array or be " + Constants.DELETE, null);
             }
         }
         else

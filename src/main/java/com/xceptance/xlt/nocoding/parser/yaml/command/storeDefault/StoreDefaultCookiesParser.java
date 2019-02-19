@@ -3,7 +3,10 @@ package com.xceptance.xlt.nocoding.parser.yaml.command.storeDefault;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import org.yaml.snakeyaml.nodes.Node;
+import org.yaml.snakeyaml.nodes.ScalarNode;
+import org.yaml.snakeyaml.parser.ParserException;
+
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.command.storeDefault.AbstractStoreDefaultItem;
 import com.xceptance.xlt.nocoding.command.storeDefault.StoreDefaultCookie;
@@ -23,33 +26,32 @@ public class StoreDefaultCookiesParser extends AbstractStoreDefaultSubItemsParse
      * {@link StoreDefaultCookie}.
      *
      * @param defaultCookiesNode
-     *            The {@link JsonNode} the default cookies start at
+     *            The {@link Node} the default cookies start at
      * @return A list of <code>StoreDefault</code>s with the parsed default cookies.
      */
     @Override
-    public List<AbstractStoreDefaultItem> parse(final JsonNode defaultCookiesNode)
+    public List<AbstractStoreDefaultItem> parse(final Node defaultCookiesNode)
     {
         // Create list of defaultItems
         final List<AbstractStoreDefaultItem> defaultItems = new ArrayList<>();
-        // Check if the node is textual
-        if (defaultCookiesNode.isTextual())
+
+        if (defaultCookiesNode instanceof ScalarNode)
         {
-            // Check if the textValue is Constants.DELETE
-            if (defaultCookiesNode.textValue().equals(Constants.DELETE))
+            final String value = YamlParserUtils.transformScalarNodeToString(defaultCookiesNode);
+            if (value.equals(Constants.DELETE))
             {
-                // Create a StoreDefaultHeader item that deletes all default headers
                 defaultItems.add(new StoreDefaultCookie(Constants.COOKIES, Constants.DELETE));
             }
             else
             {
-                throw new IllegalArgumentException("Default Cookie must be an ArrayNode or textual and contain " + Constants.DELETE
-                                                   + " and not " + defaultCookiesNode.textValue());
+                throw new ParserException("Node at", defaultCookiesNode.getStartMark(),
+                                          " is " + value + " but needs to be an array or be " + Constants.DELETE, null);
             }
         }
         else
         {
             // Parse the ArrayNode as NameValuePair
-            final List<NameValuePair> cookies = YamlParserUtils.getArrayNodeAsNameValuePair(defaultCookiesNode);
+            final List<NameValuePair> cookies = YamlParserUtils.getSequenceNodeAsNameValuePair(defaultCookiesNode);
             for (final NameValuePair cookie : cookies)
             {
                 // Create a StoreDefaultHeader for every header key value pair

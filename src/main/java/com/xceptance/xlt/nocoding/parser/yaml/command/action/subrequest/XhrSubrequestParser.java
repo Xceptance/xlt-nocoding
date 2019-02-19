@@ -1,18 +1,19 @@
 package com.xceptance.xlt.nocoding.parser.yaml.command.action.subrequest;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang3.NotImplementedException;
+import org.yaml.snakeyaml.nodes.MappingNode;
+import org.yaml.snakeyaml.nodes.Node;
+import org.yaml.snakeyaml.nodes.NodeTuple;
+import org.yaml.snakeyaml.nodes.ScalarNode;
+import org.yaml.snakeyaml.parser.ParserException;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.NullNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.command.action.AbstractActionSubItem;
 import com.xceptance.xlt.nocoding.command.action.request.Request;
 import com.xceptance.xlt.nocoding.command.action.subrequest.XhrSubrequest;
+import com.xceptance.xlt.nocoding.parser.util.StringWrapper;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 import com.xceptance.xlt.nocoding.parser.yaml.command.action.request.RequestParser;
 import com.xceptance.xlt.nocoding.parser.yaml.command.action.response.ResponseParser;
@@ -30,110 +31,114 @@ public class XhrSubrequestParser
      * Parses the Xhr item to a {@link XhrSubrequest}.
      *
      * @param xhrNode
-     *            The {@link JsonNode} with the xhr subrequest item
+     *            The {@link Node} with the xhr subrequest item
      * @return The <code>XhrSubrequest</code> with the parsed data
      */
-    public XhrSubrequest parse(final JsonNode xhrNode)
+    public XhrSubrequest parse(final Node xhrNode)
     {
         // Verify the node is an ObjectNode or a NullNode
-        if (!(xhrNode instanceof NullNode) && !(xhrNode instanceof ObjectNode))
+        if (!(xhrNode instanceof MappingNode))
         {
-            throw new IllegalArgumentException("Expected NullNode or ObjectNode in Xhr block but was "
-                                               + xhrNode.getClass().getSimpleName());
+            throw new ParserException("Node at", xhrNode.getStartMark(),
+                                      " is " + xhrNode.getNodeId().toString() + " but needs to be a mapping", null);
         }
         // Initialize variables
-        String name = null;
-        final List<AbstractActionSubItem> actionItems = new ArrayList<>();
+        final StringWrapper nameWrapper = new StringWrapper();
+        final List<AbstractActionSubItem> actionItems = new ArrayList<>(3);
 
-        // Extract all fieldNames of the node, which is the information of the node (i.e. Name, Request)
-        final Iterator<String> fieldNames = xhrNode.fieldNames();
+        final List<NodeTuple> actionNodeItems = ((MappingNode) xhrNode).getValue();
 
-        // Iterate over the fieldNames
-        while (fieldNames.hasNext())
-        {
-            // Get the next fieldName
-            final String fieldName = fieldNames.next();
+        actionNodeItems.forEach(item -> {
+            final String itemName = YamlParserUtils.transformScalarNodeToString(item.getKeyNode());
+            // Check if the name is a permitted action item
+            if (!Constants.isPermittedActionItem(itemName))
+            {
+                throw new ParserException("Node at", ((ScalarNode) item.getKeyNode()).getStartMark(), " is not a permitted Xhr Action item",
+                                          null);
+            }
             AbstractActionSubItem actionItem = null;
 
-            // Check if the fieldName is a permitted action item, and thus a permitted XhrSubrequestItem
-            if (!Constants.isPermittedActionItem(fieldName))
-            {
-                throw new IllegalArgumentException("Not a permitted XhrSubrequest item: " + fieldName);
-            }
-
-            switch (fieldName)
+            // Differentiate between what kind of ActionItem this is
+            switch (itemName)
             {
                 case Constants.NAME:
                     // Check that this is the first item we parse
                     if (actionItems.isEmpty())
                     {
-                        name = YamlParserUtils.readValue(xhrNode, fieldName);
-                        if (name != null)
+                        // Save the name
+                        nameWrapper.setValue(YamlParserUtils.transformScalarNodeToString(item.getValueNode()));
+                        if (nameWrapper != null)
                         {
-                            XltLogger.runTimeLogger.debug("Xhr Subrequest Name: " + name);
+                            XltLogger.runTimeLogger.debug("Xhr Subrequest Name: " + nameWrapper.getValue());
                         }
                         break;
                     }
                     else
                     {
-                        throw new IllegalArgumentException("Name must be defined as first item in action.");
+                        throw new ParserException("The name of the Xhr Subrequest at", ((ScalarNode) item.getKeyNode()).getStartMark(),
+                                                  " must be defined as first item.", ((ScalarNode) item.getValueNode()).getStartMark());
                     }
 
                 case Constants.REQUEST:
                     // Check that this is the first item we parse (excluding name)
                     if (actionItems.isEmpty())
                     {
-                        // Log the Request block with the unparsed content
-                        XltLogger.runTimeLogger.debug("Request: " + xhrNode.get(fieldName).toString());
-                        // Create a new request parser and get the first element, so we can set Xhr to true
-                        actionItem = new RequestParser().parse(xhrNode.get(fieldName)).get(0);
+                        XltLogger.runTimeLogger.debug("Parsing Request");
+                        // Set parser to the request parser
+                        actionItem = new RequestParser().parse(item.getValueNode()).get(0);
                         if (actionItem instanceof Request)
                         {
                             ((Request) actionItem).setXhr("true");
                         }
                         else
                         {
-                            throw new IllegalStateException("Could not convert Request Item to Request Object: " + fieldName);
+                            throw new ParserException("Could not vonvert request item to request object ",
+                                                      ((ScalarNode) item.getValueNode()).getStartMark(), "", null);
                         }
                         break;
                     }
                     else
                     {
-                        throw new IllegalArgumentException("Request cannot be defined after a response or subrequest.");
+                        throw new ParserException("The request of the Xhr Subrequest at", ((ScalarNode) item.getKeyNode()).getStartMark(),
+                                                  " must be define before a response and subrequest.",
+                                                  ((ScalarNode) item.getValueNode()).getStartMark());
                     }
 
                 case Constants.RESPONSE:
                     // Check that no subrequest was defined beforehand
                     if (actionItems.isEmpty() || actionItems.get(0) instanceof Request)
                     {
-                        // Log the Response block with the unparsed content
-                        XltLogger.runTimeLogger.debug("Response: " + xhrNode.get(fieldName).toString());
-                        // Create a new ResponseParser and parse the response
-                        actionItem = new ResponseParser().parse(xhrNode.get(fieldName)).get(0);
+                        XltLogger.runTimeLogger.debug("Parsing Response");
+                        // Set parser to the response parser
+                        actionItem = new ResponseParser().parse(item.getValueNode()).get(0);
                         break;
                     }
                     else
                     {
-                        throw new IllegalArgumentException("Response mustn't be defined after subrequests.");
+                        throw new ParserException("The response of the Xhr Subrequest at", ((ScalarNode) item.getKeyNode()).getStartMark(),
+                                                  " must be define before a subrequest.",
+                                                  ((ScalarNode) item.getValueNode()).getStartMark());
+
                     }
 
                 case Constants.SUBREQUESTS:
-                    XltLogger.runTimeLogger.debug("Subrequests: " + xhrNode.get(fieldName).toString());
-                    // Create a new SubrequestParser and parse the subrequest
-                    actionItem = new SubrequestsParser().parse(xhrNode.get(fieldName)).get(0);
+                    XltLogger.runTimeLogger.debug("Parsing Subrequest");
+                    // Set parser to subrequest parser
+                    actionItem = new SubrequestsParser().parse(item.getValueNode()).get(0);
                     break;
 
                 default:
-                    throw new NotImplementedException("Permitted XhrSubrequest item but no parsing specified: " + fieldName);
+                    // We didn't find something fitting, so throw an Exception
+                    throw new ParserException("Node at", item.getKeyNode().getStartMark(), " is permitted but unknown", null);
             }
             if (actionItem != null)
             {
                 actionItems.add(actionItem);
             }
-        }
+        });
 
         // Return the subrequest
-        return new XhrSubrequest(name, actionItems);
+        return new XhrSubrequest(nameWrapper.getValue(), actionItems);
     }
 
 }

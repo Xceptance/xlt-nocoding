@@ -1,25 +1,25 @@
 package com.xceptance.xlt.nocoding.parser.yaml;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.nodes.MappingNode;
+import org.yaml.snakeyaml.nodes.Node;
+import org.yaml.snakeyaml.nodes.NodeTuple;
+import org.yaml.snakeyaml.nodes.ScalarNode;
+import org.yaml.snakeyaml.nodes.SequenceNode;
+import org.yaml.snakeyaml.parser.ParserException;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SequenceWriter;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.yaml.command.action.ActionParser;
@@ -48,91 +48,54 @@ public class YamlParser implements Parser
     @Override
     public List<Command> parse(final String pathToFile) throws IOException
     {
-        final List<Command> scriptItems = new ArrayList<>();
-        // Resolve Anchors
-        final ByteArrayOutputStream anchorlessYaml = resolveAnchors(pathToFile);
-        // Place the content inside an ByteArryInputSteam
-        final ByteArrayInputStream anchorlessYamlInputSteam = new ByteArrayInputStream(anchorlessYaml.toByteArray());
-        // Create the parser
-        final JsonParser parser = new YAMLFactory().createParser(anchorlessYamlInputSteam);
-        // Allow comments in the parser, so we have the correct line numbers
-        parser.enable(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS);
-        parser.enable(Feature.ALLOW_YAML_COMMENTS);
-
-        // Create an ObjectMapper
-        final ObjectMapper mapperYaml = new ObjectMapper();
-        // Map the parsed content to JsonNodes, which are easier to use
-        final JsonNode root = mapperYaml.readTree(parser);
-
-        // Check that the root, which consists of the list items, is an ArrayNode
-        if (root != null)
+        final List<Command> commands = new ArrayList<Command>();
+        // Parse the Yaml with snakeyml
+        final Yaml yaml = new Yaml();
+        // final Object loadedYaml = yaml.load(createReader(pathToFile));
+        final Node root = yaml.compose(createReader(pathToFile));
+        if (root instanceof SequenceNode)
         {
-            if (!(root instanceof ArrayNode))
+            final List<Node> wrapperList = ((SequenceNode) root).getValue();
+            for (final Node allCommandWrapper : wrapperList)
             {
-                throw new IllegalArgumentException("Expected list items to be of type ArrayNode but is of type "
-                                                   + root.getClass().getSimpleName());
-            }
-            // If root is an ArrayNode
-            else
-            {
-                // Get an iterator over the elements
-                final Iterator<JsonNode> nodes = root.elements();
-                // Count the number of list items we have
-                int numberObject = 0;
-
-                // Iterate over all tokens
-                while (nodes.hasNext())
+                if (allCommandWrapper instanceof MappingNode)
                 {
-                    // Get the next element
-                    final JsonNode node = nodes.next();
-                    // final String currentName;
-                    final String currentName = node.fieldNames().next();
-                    // Increase the counter
-                    numberObject++;
-
-                    // Check if we have a permitted list item
-                    if (Constants.isPermittedListItem(currentName))
-                    {
-                        XltLogger.runTimeLogger.info(numberObject + ". ScriptItem: " + currentName);
-
-                        // Try and catch, so we can use a JsonParseException, which prints the line/column number
-                        try
+                    final List<NodeTuple> allCommands = ((MappingNode) allCommandWrapper).getValue();
+                    allCommands.stream().forEachOrdered(commandWrapper -> {
+                        final String commandName = ((ScalarNode) commandWrapper.getKeyNode()).getValue();
+                        // Verify the command is legal
+                        if (Constants.isPermittedListItem(commandName))
                         {
-                            // Differentiate between Store, Action and default definitions
-                            switch (currentName)
+                            if (commandName.equals("Action"))
                             {
-                                case Constants.STORE:
-                                    // Set parser to StoreItemParser
-                                    scriptItems.addAll(new StoreParser().parse(node.get(currentName)));
-                                    break;
-                                case Constants.ACTION:
-                                    // Set parser to ActionItemParser
-                                    scriptItems.addAll(new ActionParser().parse(node.get(currentName)));
-                                    break;
-
-                                default:
-                                    // Set parser to DefaultItemParser
-                                    scriptItems.addAll(new StoreDefaultParser(currentName).parse(node.get(currentName)));
-                                    break;
+                                commands.addAll(ActionParser.parse(commandWrapper.getValueNode()));
+                            }
+                            else if (commandName.equals("Store"))
+                            {
+                                commands.addAll(StoreParser.parse(commandWrapper.getValueNode()));
+                            }
+                            else
+                            {
+                                commands.addAll(StoreDefaultParser.parse(commandWrapper));
                             }
                         }
-                        // Catch any exception while parsing, so we can print the current line/column number with the
-                        // error
-                        catch (final Exception e)
+                        else
                         {
-                            throw new JsonParseException(parser, e.getMessage(), e);
+                            throw new ParserException("Node at", ((ScalarNode) commandWrapper.getKeyNode()).getStartMark(),
+                                                      " is not a permitted list item", null);
                         }
-                    }
-                    // If the item wasn't a permitted list item, throw an exception
-                    else
-                    {
-                        throw new JsonParseException(parser, "No permitted list item: " + currentName);
-                    }
+                    });
                 }
             }
         }
-        // Return all scriptItems
-        return scriptItems;
+        else
+        {
+            throw new ParserException("Node at", root.getStartMark(), " is " + root.getNodeId().toString() + " but needs to be an array.",
+                                      null);
+            // throw new ParserEx
+        }
+
+        return commands;
     }
 
     /**
@@ -146,18 +109,25 @@ public class YamlParser implements Parser
      * @throws IOException
      *             If a {@link Reader} or {@link SequenceWriter} cannot be created.
      */
-    protected ByteArrayOutputStream resolveAnchors(final String pathToFile) throws IOException
+    protected File resolveAnchors(final String pathToFile) throws IOException
     {
         // Parse the Yaml with snakeyml
         final Yaml yaml = new Yaml();
         final Object loadedYaml = yaml.load(createReader(pathToFile));
 
-        // Place the parsed Yaml with Jacksons SequenceWriter in an ByteArrayOutputSteam
-        final ByteArrayOutputStream anchorlessYaml = new ByteArrayOutputStream();
-        final SequenceWriter sw = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValues(anchorlessYaml);
-        sw.write(loadedYaml);
-        // Place the content inside an ByteArryInputSteam
-        return anchorlessYaml;
+        // Place the parsed Yaml with Jacksons SequenceWriter in an FileOutputSteam
+        final File file = File.createTempFile("AnchorlessYaml", ".yml");
+        file.deleteOnExit();
+        final FileOutputStream outputSteam = new FileOutputStream(file);
+        final SequenceWriter swToFile = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValues(outputSteam);
+        swToFile.write(loadedYaml);
+        return file;
+
+        // // Place the parsed Yaml with Jacksons SequenceWriter in an ByteArrayOutputSteam
+        // final ByteArrayOutputStream anchorlessYaml = new ByteArrayOutputStream();
+        // final SequenceWriter sw = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValues(anchorlessYaml);
+        // sw.write(loadedYaml);
+        // return anchorlessYaml;
     }
 
     @Override

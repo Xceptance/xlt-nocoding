@@ -2,7 +2,8 @@ package com.xceptance.xlt.nocoding.parser.yaml.command.storeDefault;
 
 import java.util.List;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import org.yaml.snakeyaml.nodes.Node;
+
 import com.xceptance.xlt.nocoding.command.storeDefault.AbstractStoreDefaultItem;
 
 /**
@@ -13,11 +14,11 @@ import com.xceptance.xlt.nocoding.command.storeDefault.AbstractStoreDefaultItem;
 public abstract class AbstractStoreDefaultSubItemsParser
 {
     /**
-     * Parses the default item at the specified {@link JsonNode}.
+     * Parses the default item at the specified {@link Node}.
      *
      * @param defaultItemNode
-     *            The <code>JsonNode</code> the default item starts at
+     *            The <code>Node</code> the default item starts at
      * @return {@link AbstractStoreDefaultItem}
      */
-    public abstract List<AbstractStoreDefaultItem> parse(JsonNode defaultItemNode);
+    public abstract List<AbstractStoreDefaultItem> parse(Node defaultItemNode);
 }

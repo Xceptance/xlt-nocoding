@@ -1,10 +1,12 @@
 package com.xceptance.xlt.nocoding.parser.yaml.command.storeDefault;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import org.yaml.snakeyaml.nodes.Node;
+import org.yaml.snakeyaml.nodes.ScalarNode;
+import org.yaml.snakeyaml.parser.ParserException;
+
 import com.xceptance.xlt.nocoding.command.storeDefault.AbstractStoreDefaultItem;
 import com.xceptance.xlt.nocoding.command.storeDefault.StoreDefaultStaticSubrequest;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
@@ -23,39 +25,32 @@ public class StoreDefaultStaticSubrequestsParser extends AbstractStoreDefaultSub
      * {@link StoreDefaultStaticSubrequest}.
      *
      * @param staticNode
-     *            The {@link JsonNode} the default static subrequests start at
+     *            The {@link Node} the default static subrequests start at
      * @return A list of <code>StoreDefault</code>s with the parsed default static subrequests.
      */
     @Override
-    public List<AbstractStoreDefaultItem> parse(final JsonNode staticNode)
+    public List<AbstractStoreDefaultItem> parse(final Node staticNode)
     {
         // Create list of defaultItems
         final List<AbstractStoreDefaultItem> defaultItems = new ArrayList<>();
-        // Check if the node is textual
-        if (staticNode.isTextual())
+
+        if (staticNode instanceof ScalarNode)
         {
-            // Check if the textValue is Constants.DELETE
-            if (staticNode.textValue().equals(Constants.DELETE))
+            final String value = YamlParserUtils.transformScalarNodeToString(staticNode);
+            if (value.equals(Constants.DELETE))
             {
-                // Create a StoreDefaultHeader item that deletes all default headers
                 defaultItems.add(new StoreDefaultStaticSubrequest(Constants.DELETE));
             }
             else
             {
-                throw new IllegalArgumentException("Default Static must be an ArrayNode or textual and contain " + Constants.DELETE
-                                                   + " and not " + staticNode.textValue());
+                throw new ParserException("Node at", staticNode.getStartMark(),
+                                          " is " + value + " but needs to be an array or be " + Constants.DELETE, null);
             }
         }
         else
         {
-            // Get an iterator over the elements
-            final Iterator<JsonNode> elementIterator = staticNode.elements();
-            while (elementIterator.hasNext())
+            for (final String url : YamlParserUtils.getSequenceNodeAsStringList(staticNode))
             {
-                // Get the next node
-                final JsonNode nextNode = elementIterator.next();
-                // Read the url
-                final String url = YamlParserUtils.readSingleValue(nextNode);
                 // Create a new StoreDefaultStatic and add it to the defaultItems
                 defaultItems.add(new StoreDefaultStaticSubrequest(url));
             }
