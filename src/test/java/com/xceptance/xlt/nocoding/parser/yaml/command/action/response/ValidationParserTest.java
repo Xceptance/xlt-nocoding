@@ -68,7 +68,6 @@ public class ValidationParserTest
     @Test(expected = ParserException.class)
     public void testInvalidGroupValidation() throws Exception
     {
-        // TODO showcase
         final String yamlSpec = "- val_Name_1 : \n" //
                                 + "    " + Constants.COOKIE + " : cookieName\n" //
                                 + "    " + Constants.TEXT + " : cookieValue\n" //

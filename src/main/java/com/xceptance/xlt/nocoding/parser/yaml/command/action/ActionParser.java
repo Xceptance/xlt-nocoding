@@ -52,7 +52,6 @@ public class ActionParser
             return scriptItems;
         }
         // Verify the actionNode is neither an array or a scalar
-        // TODO AnchorNode?
         if (!(actionNode instanceof MappingNode))
         {
             throw new ParserException("Node at", actionNode.getStartMark(),

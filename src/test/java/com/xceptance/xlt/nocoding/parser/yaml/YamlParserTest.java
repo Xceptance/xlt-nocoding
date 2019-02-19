@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.yaml.snakeyaml.parser.ParserException;
 
 import com.xceptance.xlt.nocoding.command.Command;
+import com.xceptance.xlt.nocoding.command.action.Action;
 import com.xceptance.xlt.nocoding.parser.AbstractParserTest;
 import com.xceptance.xlt.nocoding.parser.Parser;
 
@@ -51,31 +52,21 @@ public class YamlParserTest extends AbstractParserTest
     }
 
     /**
-     * Verifies yaml references can be parsed
+     * Verifies Yaml references can be parsed
      *
      * @throws Exception
      */
     @Test
     public void testReferenceFileParsing() throws Exception
     {
-        // TODO
-        // final String patternString =
-        // "\"Action\"\\s:\\s(.*(?:[\\r\\n\\t].*)+)\\}(?:.*(?:[\\r\\n\\t].*)+)\"Action\"\\s:\\s(.*(?:[\\r\\n\\t].*)+)\\}";
-        // // final String patternString =
-        // // "\"Action\"\\s:\\s(.*(?:[\\r\\n\\t].*)+)\\}\\,\\s\\{\\n\\s\\s\"Action\"\\s:\\s(.*(?:[\\r\\n\\t].*)+)\\}";
-        // final YamlParser parser = new YamlParser();
-        // final String anchorlessYaml =
-        // parser.resolveAnchors(fileReferenceParsing).toString(StandardCharsets.UTF_8.name());
-        // final Pattern pattern = Pattern.compile(patternString);
-        // // final Pattern pattern =
-        // // Pattern.compile("\"Action\"\\s:\\s(.*(?:[\\r\\n\\t].*)+)\"Action\"\\s:\\s(.*(?:[\\r\\n\\t].*)+)}");
-        // final Matcher matcher = pattern.matcher(anchorlessYaml);
-        // while (matcher.find())
-        // {
-        // final String firstGroup = matcher.group(1);
-        // final String secondGroup = matcher.group(2);
-        // Assert.assertTrue(firstGroup.contentEquals(secondGroup));
-        // }
+        final Parser parser = new YamlParser();
+        final List<Command> scriptItems = parser.parse(fileReferenceParsing);
+        Assert.assertEquals(2, scriptItems.size());
+        final Command referencedCommand = scriptItems.get(0);
+        final Command referencingCommand = scriptItems.get(1);
+        Assert.assertTrue(referencedCommand instanceof Action);
+        Assert.assertTrue(referencedCommand.getClass().isInstance(referencingCommand));
+
     }
 
     /**
