@@ -3,8 +3,8 @@ package com.xceptance.xlt.nocoding.parser.yaml.command.action.request;
 import java.io.IOException;
 
 import org.junit.Test;
+import org.yaml.snakeyaml.parser.ParserException;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.xceptance.xlt.nocoding.parser.AbstractParserTest;
 import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParser;
@@ -30,7 +30,7 @@ public class RequestParserTest extends AbstractParserTest
      *
      * @throws IOException
      */
-    @Test(expected = JsonParseException.class)
+    @Test(expected = ParserException.class)
     public void testSyntaxErrorRequestParsing() throws IOException
     {
         final Parser parser = new YamlParser();
@@ -42,7 +42,7 @@ public class RequestParserTest extends AbstractParserTest
      *
      * @throws IOException
      */
-    @Test(expected = JsonParseException.class)
+    @Test(expected = ParserException.class)
     public void testSyntaxErrorRequestArrayNotObjectParsing() throws IOException
     {
         final Parser parser = new YamlParser();

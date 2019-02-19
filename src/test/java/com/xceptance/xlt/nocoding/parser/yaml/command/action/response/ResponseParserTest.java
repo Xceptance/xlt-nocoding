@@ -4,11 +4,9 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.yaml.snakeyaml.nodes.Node;
+import org.yaml.snakeyaml.parser.ParserException;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xceptance.xlt.nocoding.command.action.response.AbstractResponseSubItem;
 import com.xceptance.xlt.nocoding.command.action.response.HttpCodeValidator;
 import com.xceptance.xlt.nocoding.command.action.response.Response;
@@ -19,6 +17,7 @@ import com.xceptance.xlt.nocoding.command.action.response.store.ResponseStore;
 import com.xceptance.xlt.nocoding.parser.AbstractParserTest;
 import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParser;
+import com.xceptance.xlt.nocoding.parser.yaml.YamlParserTestHelper;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
@@ -48,7 +47,7 @@ public class ResponseParserTest extends AbstractParserTest
      *
      * @throws Exception
      */
-    @Test(expected = JsonParseException.class)
+    @Test(expected = ParserException.class)
     public void testSyntaxErrorResponseParsing() throws Exception
     {
         final Parser parser = new YamlParser();
@@ -60,7 +59,7 @@ public class ResponseParserTest extends AbstractParserTest
      *
      * @throws Exception
      */
-    @Test(expected = JsonParseException.class)
+    @Test(expected = ParserException.class)
     public void testSyntaxErrorResponseArrayNotObjectParsing() throws Exception
     {
         final Parser parser = new YamlParser();
@@ -73,7 +72,7 @@ public class ResponseParserTest extends AbstractParserTest
      *
      * @throws Exception
      */
-    @Test(expected = JsonParseException.class)
+    @Test(expected = ParserException.class)
     public void testSyntaxErrorResponseStoreItemArrayNotObjectParsing() throws Exception
     {
         final Parser parser = new YamlParser();
@@ -85,7 +84,7 @@ public class ResponseParserTest extends AbstractParserTest
      *
      * @throws Exception
      */
-    @Test(expected = JsonParseException.class)
+    @Test(expected = ParserException.class)
     public void testSyntaxErrorResponseStoreObjectNotArrayParsing() throws Exception
     {
         final Parser parser = new YamlParser();
@@ -98,7 +97,7 @@ public class ResponseParserTest extends AbstractParserTest
      *
      * @throws Exception
      */
-    @Test(expected = JsonParseException.class)
+    @Test(expected = ParserException.class)
     public void testSyntaxErrorResponseValidationItemArrayNotObjectParsing() throws Exception
     {
         final Parser parser = new YamlParser();
@@ -110,7 +109,7 @@ public class ResponseParserTest extends AbstractParserTest
      *
      * @throws Exception
      */
-    @Test(expected = JsonParseException.class)
+    @Test(expected = ParserException.class)
     public void testSyntaxErrorResponseValidationObjectNotArrayParsing() throws Exception
     {
         final Parser parser = new YamlParser();
@@ -125,41 +124,29 @@ public class ResponseParserTest extends AbstractParserTest
     @Test
     public void testResponseParsing() throws Exception
     {
+        // Httpcode
         final String httpcode = "200";
-        final String validation_extractionExpression = ".*";
+        // Validation
         final String validation_name = "validationName";
-        final String store_extractionExpression = "cookieName";
+        final String validation_extractionType = Constants.REGEXP;
+        final String validation_extractionExpression = ".*";
+        // Store
         final String store_name = "variableName";
-        final JsonNodeFactory jf = new JsonNodeFactory(false);
+        final String store_extractionType = Constants.COOKIE;
+        final String store_extractionExpression = "cookieName";
 
-        // Lowest level validation content -> Extractor, ValidationMethod, Group
-        final ObjectNode singleValidationContent = jf.objectNode();
-        singleValidationContent.put(Constants.REGEXP, validation_extractionExpression);
-        // Name of the validation
-        final ObjectNode validationName = jf.objectNode();
-        validationName.set(validation_name, singleValidationContent);
-        // Save all validation in the ArrayNode
-        final ArrayNode validationContent = jf.arrayNode();
-        validationContent.add(validationName);
+        final String yamlSpec = "Httpcode : " + httpcode + "\n" //
+                                + "Validate : \n" //
+                                + "    - " + validation_name + " :\n" //
+                                + "        " + validation_extractionType + " : " + validation_extractionExpression + "\n" //
+                                + "Store : \n" //
+                                + "    - " + store_name + " :\n" //
+                                + "        " + store_extractionType + " : " + store_extractionExpression;
 
-        // Lowest level store content -> Extractor, Group
-        final ObjectNode singleStoreContent = jf.objectNode();
-        singleStoreContent.put(Constants.COOKIE, store_extractionExpression);
-        // Name of the variable
-        final ObjectNode storeName = jf.objectNode();
-        storeName.set(store_name, singleStoreContent);
-        // Save all stores in the ArrayNode
-        final ArrayNode storeContent = jf.arrayNode();
-        storeContent.add(storeName);
-
-        // Build the response node
-        final ObjectNode responseNode = jf.objectNode();
-        responseNode.put(Constants.HTTPCODE, httpcode);
-        responseNode.set(Constants.VALIDATION, validationContent);
-        responseNode.set(Constants.STORE, storeContent);
+        final Node responseContent = YamlParserTestHelper.parseToNode(yamlSpec);
 
         // Parse response
-        final Response response = (Response) new ResponseParser().parse(responseNode).get(0);
+        final Response response = (Response) new ResponseParser().parse(responseContent).get(0);
 
         // Verify response is correct
         final List<AbstractResponseSubItem> responseItems = response.getResponseItems();

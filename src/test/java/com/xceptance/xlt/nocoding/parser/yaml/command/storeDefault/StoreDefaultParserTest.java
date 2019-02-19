@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.yaml.snakeyaml.nodes.Node;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -22,6 +23,7 @@ import com.xceptance.xlt.nocoding.command.storeDefault.StoreDefaultStaticSubrequ
 import com.xceptance.xlt.nocoding.parser.AbstractParserTest;
 import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParser;
+import com.xceptance.xlt.nocoding.parser.yaml.YamlParserTestHelper;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
@@ -169,18 +171,32 @@ public class StoreDefaultParserTest extends AbstractParserTest
     @Test
     public void testDefaultCookieParsing() throws Exception
     {
-        final String name = "name_1";
-        final String value = "val_1";
+        final String firstCookieName = "name_1";
+        final String firstCookieValue = "val_1";
+        final String secondCookieName = "name_2";
+        final String secondCookieValue = "val_2";
         final JsonNodeFactory jf = new JsonNodeFactory(false);
         final ObjectNode content = jf.objectNode();
-        content.put(name, value);
+        content.put(firstCookieName, firstCookieValue);
         final ArrayNode array = jf.arrayNode();
         array.add(content);
 
-        final AbstractStoreDefaultItem storeDefault = new StoreDefaultCookiesParser().parse(array).get(0);
+        final String yamlSpec = "- " + firstCookieName + " : " + firstCookieValue + "\n" //
+                                + "- " + secondCookieName + " : " + secondCookieValue + "\n";
+
+        final Node defaultCookieContent = YamlParserTestHelper.parseToNode(yamlSpec);
+
+        final List<AbstractStoreDefaultItem> storeDefaults = new StoreDefaultCookiesParser().parse(defaultCookieContent);
+        Assert.assertEquals(2, storeDefaults.size());
+        AbstractStoreDefaultItem storeDefault = storeDefaults.get(0);
         Assert.assertTrue(storeDefault instanceof StoreDefaultCookie);
-        Assert.assertEquals(name, storeDefault.getVariableName());
-        Assert.assertEquals(value, storeDefault.getValue());
+        Assert.assertEquals(firstCookieName, storeDefault.getVariableName());
+        Assert.assertEquals(firstCookieValue, storeDefault.getValue());
+
+        storeDefault = storeDefaults.get(1);
+        Assert.assertTrue(storeDefault instanceof StoreDefaultCookie);
+        Assert.assertEquals(secondCookieName, storeDefault.getVariableName());
+        Assert.assertEquals(secondCookieValue, storeDefault.getValue());
     }
 
     /**
@@ -191,18 +207,27 @@ public class StoreDefaultParserTest extends AbstractParserTest
     @Test
     public void testDefaultParameterParsing() throws Exception
     {
-        final String name = "name_1";
-        final String value = "val_1";
-        final JsonNodeFactory jf = new JsonNodeFactory(false);
-        final ObjectNode content = jf.objectNode();
-        content.put(name, value);
-        final ArrayNode array = jf.arrayNode();
-        array.add(content);
+        final String firstParameterName = "name_1";
+        final String firstParameterValue = "val_1";
+        final String secondParameterName = "name_2";
+        final String secondParameterValue = "val_2";
 
-        final AbstractStoreDefaultItem storeDefault = new StoreDefaultParametersParser().parse(array).get(0);
+        final String yamlSpec = "- " + firstParameterName + " : " + firstParameterValue + "\n" //
+                                + "- " + secondParameterName + " : " + secondParameterValue + "\n";
+
+        final Node defaultParameterContent = YamlParserTestHelper.parseToNode(yamlSpec);
+
+        final List<AbstractStoreDefaultItem> storeDefaults = new StoreDefaultParametersParser().parse(defaultParameterContent);
+        Assert.assertEquals(2, storeDefaults.size());
+        AbstractStoreDefaultItem storeDefault = storeDefaults.get(0);
         Assert.assertTrue(storeDefault instanceof StoreDefaultParameter);
-        Assert.assertEquals(name, storeDefault.getVariableName());
-        Assert.assertEquals(value, storeDefault.getValue());
+        Assert.assertEquals(firstParameterName, storeDefault.getVariableName());
+        Assert.assertEquals(firstParameterValue, storeDefault.getValue());
+
+        storeDefault = storeDefaults.get(1);
+        Assert.assertTrue(storeDefault instanceof StoreDefaultParameter);
+        Assert.assertEquals(secondParameterName, storeDefault.getVariableName());
+        Assert.assertEquals(secondParameterValue, storeDefault.getValue());
     }
 
     /**
@@ -213,18 +238,19 @@ public class StoreDefaultParserTest extends AbstractParserTest
     @Test
     public void testDefaultHeaderParsing() throws Exception
     {
-        final String name = "name_1";
-        final String value = "val_1";
-        final JsonNodeFactory jf = new JsonNodeFactory(false);
-        final ObjectNode content = jf.objectNode();
-        content.put(name, value);
-        final ArrayNode array = jf.arrayNode();
-        array.add(content);
+        final String firstHeaderName = "name_1";
+        final String firstHeaderValue = "val_1";
 
-        final AbstractStoreDefaultItem storeDefault = new StoreDefaultHeadersParser().parse(array).get(0);
+        final String yamlSpec = "- " + firstHeaderName + " : " + firstHeaderValue + "\n";
+
+        final Node defaultHeaderContent = YamlParserTestHelper.parseToNode(yamlSpec);
+
+        final List<AbstractStoreDefaultItem> storeDefaults = new StoreDefaultHeadersParser().parse(defaultHeaderContent);
+        Assert.assertEquals(1, storeDefaults.size());
+        final AbstractStoreDefaultItem storeDefault = storeDefaults.get(0);
         Assert.assertTrue(storeDefault instanceof StoreDefaultHeader);
-        Assert.assertEquals(name, storeDefault.getVariableName());
-        Assert.assertEquals(value, storeDefault.getValue());
+        Assert.assertEquals(firstHeaderName, storeDefault.getVariableName());
+        Assert.assertEquals(firstHeaderValue, storeDefault.getValue());
     }
 
     /**
@@ -242,7 +268,13 @@ public class StoreDefaultParserTest extends AbstractParserTest
         array.add(url);
         array.add(url);
 
-        final List<AbstractStoreDefaultItem> storeDefaultList = new StoreDefaultStaticSubrequestsParser().parse(array);
+        final String yamlSpec = "- " + url + "\n" //
+                                + "- " + url + "\n" //
+                                + "- " + url + "\n";
+
+        final Node defaultStaticContent = YamlParserTestHelper.parseToNode(yamlSpec);
+
+        final List<AbstractStoreDefaultItem> storeDefaultList = new StoreDefaultStaticSubrequestsParser().parse(defaultStaticContent);
         Assert.assertEquals(3, storeDefaultList.size());
         final AbstractStoreDefaultItem storeDefault = storeDefaultList.get(0);
         Assert.assertTrue(storeDefault instanceof StoreDefaultStaticSubrequest);

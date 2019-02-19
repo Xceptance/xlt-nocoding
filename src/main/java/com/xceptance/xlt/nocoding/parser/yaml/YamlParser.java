@@ -88,6 +88,10 @@ public class YamlParser implements Parser
                 }
             }
         }
+        else if (root == null)
+        {
+            // Do nothing
+        }
         else
         {
             throw new ParserException("Node at", root.getStartMark(), " is " + root.getNodeId().toString() + " but needs to be an array.",

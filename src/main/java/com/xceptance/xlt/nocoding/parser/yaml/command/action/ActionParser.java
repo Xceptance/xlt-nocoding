@@ -3,6 +3,7 @@ package com.xceptance.xlt.nocoding.parser.yaml.command.action;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.yaml.snakeyaml.nodes.MappingNode;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.NodeTuple;
@@ -43,6 +44,13 @@ public class ActionParser
         final List<AbstractActionSubItem> actionItems = new ArrayList<>(3);
         final List<Command> scriptItems = new ArrayList<>(1);
 
+        // If the action node is a scalar with no value, then an empty action was specified
+        if (actionNode instanceof ScalarNode && StringUtils.isBlank(((ScalarNode) actionNode).getValue()))
+        {
+            // Return an empty action
+            scriptItems.add(new Action());
+            return scriptItems;
+        }
         // Verify the actionNode is neither an array or a scalar
         // TODO AnchorNode?
         if (!(actionNode instanceof MappingNode))
@@ -96,8 +104,7 @@ public class ActionParser
                     else
                     {
                         throw new ParserException("The request of the action at", ((ScalarNode) item.getKeyNode()).getStartMark(),
-                                                  " must be define before a response and subrequest.",
-                                                  ((ScalarNode) item.getValueNode()).getStartMark());
+                                                  " must be define before a response and subrequest.", null);
                     }
 
                 case Constants.RESPONSE:

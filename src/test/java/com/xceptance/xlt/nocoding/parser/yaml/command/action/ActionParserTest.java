@@ -6,8 +6,8 @@ import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.yaml.snakeyaml.parser.ParserException;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.command.action.Action;
@@ -181,7 +181,7 @@ public class ActionParserTest extends AbstractParserTest
      *
      * @throws Exception
      */
-    @Test(expected = JsonParseException.class)
+    @Test(expected = ParserException.class)
     public void testSyntaxErrorActionParsing() throws Exception
     {
         final Parser parser = new YamlParser();
@@ -193,7 +193,7 @@ public class ActionParserTest extends AbstractParserTest
      *
      * @throws Exception
      */
-    @Test(expected = JsonParseException.class)
+    @Test(expected = ParserException.class)
     public void testSyntaxErrorActionArrayNotObjectParsing() throws Exception
     {
         final Parser parser = new YamlParser();
@@ -205,7 +205,7 @@ public class ActionParserTest extends AbstractParserTest
      *
      * @throws Exception
      */
-    @Test(expected = JsonParseException.class)
+    @Test(expected = ParserException.class)
     public void testWrongOrderActionParsing() throws Exception
     {
         final Parser parser = new YamlParser();
@@ -217,7 +217,7 @@ public class ActionParserTest extends AbstractParserTest
      *
      * @throws Throwable
      */
-    @Test(expected = JsonParseException.class)
+    @Test(expected = ParserException.class)
     public void testWrongOrderParsing() throws Throwable
     {
         final Parser parser = new YamlParser();

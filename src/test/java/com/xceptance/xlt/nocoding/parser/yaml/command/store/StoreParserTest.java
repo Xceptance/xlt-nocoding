@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.yaml.snakeyaml.parser.ParserException;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.command.store.Store;
 import com.xceptance.xlt.nocoding.parser.AbstractParserTest;
@@ -79,7 +79,7 @@ public class StoreParserTest extends AbstractParserTest
      *
      * @throws Exception
      */
-    @Test(expected = JsonParseException.class)
+    @Test(expected = ParserException.class)
     public void testStoreObjectParse() throws Exception
     {
         final Parser parser = new YamlParser();

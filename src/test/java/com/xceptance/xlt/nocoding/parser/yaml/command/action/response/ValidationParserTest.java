@@ -2,10 +2,9 @@ package com.xceptance.xlt.nocoding.parser.yaml.command.action.response;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.yaml.snakeyaml.nodes.Node;
+import org.yaml.snakeyaml.parser.ParserException;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xceptance.xlt.nocoding.command.action.response.Validator;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.CookieExtractor;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.HeaderExtractor;
@@ -14,6 +13,7 @@ import com.xceptance.xlt.nocoding.command.action.response.validator.AbstractVali
 import com.xceptance.xlt.nocoding.command.action.response.validator.CountValidator;
 import com.xceptance.xlt.nocoding.command.action.response.validator.MatchesValidator;
 import com.xceptance.xlt.nocoding.command.action.response.validator.TextValidator;
+import com.xceptance.xlt.nocoding.parser.yaml.YamlParserTestHelper;
 import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
@@ -29,20 +29,17 @@ public class ValidationParserTest
      *
      * @throws Exception
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ParserException.class)
     public void testSyntaxErrorResponseValidationTwoValidationModes() throws Exception
     {
-        final JsonNodeFactory jf = new JsonNodeFactory(false);
-        final ObjectNode content = jf.objectNode();
-        content.put(Constants.REGEXP, "pattern");
-        content.put(Constants.TEXT, "pattern");
-        content.put(Constants.MATCHES, "pattern");
-        final ObjectNode name = jf.objectNode();
-        name.set("val_Name_1", content);
+        final String yamlSpec = "- val_Name_1 : \n" //
+                                + "    " + Constants.REGEXP + " : pattern\n" //
+                                + "    " + Constants.TEXT + " : pattern\n" //
+                                + "    " + Constants.MATCHES + " : pattern\n";
 
-        final ArrayNode validate = jf.arrayNode();
-        validate.add(name);
-        new ValidationParser().parse(validate);
+        final Node validationContent = YamlParserTestHelper.parseToNode(yamlSpec);
+
+        new ValidationParser().parse(validationContent);
     }
 
     /**
@@ -50,20 +47,17 @@ public class ValidationParserTest
      *
      * @throws Exception
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ParserException.class)
     public void testSyntaxErrorResponseValidationTwoExtractors() throws Exception
     {
-        final JsonNodeFactory jf = new JsonNodeFactory(false);
-        final ObjectNode content = jf.objectNode();
-        content.put(Constants.REGEXP, "pattern");
-        content.put(Constants.XPATH, "xpath");
-        content.put(Constants.MATCHES, "pattern");
-        final ObjectNode name = jf.objectNode();
-        name.set("val_Name_1", content);
+        final String yamlSpec = "- val_Name_1 : \n" //
+                                + "    " + Constants.REGEXP + " : pattern\n" //
+                                + "    " + Constants.TEXT + " : pattern\n" //
+                                + "    " + Constants.XPATH + " : pattern\n";
 
-        final ArrayNode validate = jf.arrayNode();
-        validate.add(name);
-        new ValidationParser().parse(validate);
+        final Node validationContent = YamlParserTestHelper.parseToNode(yamlSpec);
+
+        new ValidationParser().parse(validationContent);
     }
 
     /**
@@ -71,20 +65,18 @@ public class ValidationParserTest
      *
      * @throws Exception
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ParserException.class)
     public void testInvalidGroupValidation() throws Exception
     {
-        final JsonNodeFactory jf = new JsonNodeFactory(false);
-        final ObjectNode content = jf.objectNode();
-        content.put(Constants.COOKIE, "cookieName");
-        content.put(Constants.TEXT, "cookieValue");
-        content.put(Constants.GROUP, "3");
-        final ObjectNode name = jf.objectNode();
-        name.set("val_Name_1", content);
+        // TODO showcase
+        final String yamlSpec = "- val_Name_1 : \n" //
+                                + "    " + Constants.COOKIE + " : cookieName\n" //
+                                + "    " + Constants.TEXT + " : cookieValue\n" //
+                                + "    " + Constants.GROUP + " : 2\n";
 
-        final ArrayNode validate = jf.arrayNode();
-        validate.add(name);
-        new ValidationParser().parse(validate);
+        final Node validationContent = YamlParserTestHelper.parseToNode(yamlSpec);
+
+        new ValidationParser().parse(validationContent);
     }
 
     /**
@@ -98,17 +90,15 @@ public class ValidationParserTest
         final String extractionExpression = "RegExpPattern";
         final String validationExpression = "MatchesPattern";
         final String groupExpression = "5";
-        final JsonNodeFactory jf = new JsonNodeFactory(false);
-        final ObjectNode content = jf.objectNode();
-        content.put(Constants.REGEXP, extractionExpression);
-        content.put(Constants.MATCHES, validationExpression);
-        content.put(Constants.GROUP, groupExpression);
-        final ObjectNode name = jf.objectNode();
-        name.set("val_Name_1", content);
+        final String yamlSpec = "- val_Name_1 : \n" //
+                                + "    " + Constants.REGEXP + " : " + extractionExpression + "\n" //
+                                + "    " + Constants.MATCHES + " : " + validationExpression + "\n" //
+                                + "    " + Constants.GROUP + " : " + groupExpression + "\n";
 
-        final ArrayNode validate = jf.arrayNode();
-        validate.add(name);
-        final Validator validator = new ValidationParser().parse(validate).get(0);
+        final Node validationContent = YamlParserTestHelper.parseToNode(yamlSpec);
+
+        final Validator validator = new ValidationParser().parse(validationContent).get(0);
+
         Assert.assertTrue(validator.getExtractor() instanceof RegexpExtractor);
         Assert.assertEquals(extractionExpression, validator.getExtractor().getExtractionExpression());
         Assert.assertEquals(groupExpression, ((RegexpExtractor) validator.getExtractor()).getGroup());
@@ -126,16 +116,14 @@ public class ValidationParserTest
     {
         final String extractionExpression = "CookieName";
         final String validationExpression = "CookieValue";
-        final JsonNodeFactory jf = new JsonNodeFactory(false);
-        final ObjectNode content = jf.objectNode();
-        content.put(Constants.COOKIE, extractionExpression);
-        content.put(Constants.TEXT, validationExpression);
-        final ObjectNode name = jf.objectNode();
-        name.set("val_Name_1", content);
+        final String yamlSpec = "- val_Name_1 : \n" //
+                                + "    " + Constants.COOKIE + " : " + extractionExpression + "\n" //
+                                + "    " + Constants.TEXT + " : " + validationExpression + "\n";
 
-        final ArrayNode validate = jf.arrayNode();
-        validate.add(name);
-        final Validator validator = new ValidationParser().parse(validate).get(0);
+        final Node validationContent = YamlParserTestHelper.parseToNode(yamlSpec);
+
+        final Validator validator = new ValidationParser().parse(validationContent).get(0);
+
         Assert.assertTrue(validator.getExtractor() instanceof CookieExtractor);
         Assert.assertEquals(extractionExpression, validator.getExtractor().getExtractionExpression());
 
@@ -153,15 +141,12 @@ public class ValidationParserTest
     public void testHeaderValidation() throws Exception
     {
         final String extractionExpression = "HeaderName";
-        final JsonNodeFactory jf = new JsonNodeFactory(false);
-        final ObjectNode content = jf.objectNode();
-        content.put(Constants.HEADER, extractionExpression);
-        final ObjectNode name = jf.objectNode();
-        name.set("val_Name_1", content);
+        final String yamlSpec = "- val_Name_1 : \n" //
+                                + "    " + Constants.HEADER + " : " + extractionExpression + "\n";
 
-        final ArrayNode validate = jf.arrayNode();
-        validate.add(name);
-        final Validator validator = new ValidationParser().parse(validate).get(0);
+        final Node validationContent = YamlParserTestHelper.parseToNode(yamlSpec);
+
+        final Validator validator = new ValidationParser().parse(validationContent).get(0);
         Assert.assertTrue(validator.getExtractor() instanceof HeaderExtractor);
         Assert.assertEquals(extractionExpression, validator.getExtractor().getExtractionExpression());
         Assert.assertNull(validator.getMethod());
@@ -177,16 +162,13 @@ public class ValidationParserTest
     {
         final String extractionExpression = "HeaderName";
         final String validationExpression = "5";
-        final JsonNodeFactory jf = new JsonNodeFactory(false);
-        final ObjectNode content = jf.objectNode();
-        content.put(Constants.HEADER, extractionExpression);
-        content.put(Constants.COUNT, validationExpression);
-        final ObjectNode name = jf.objectNode();
-        name.set("val_Name_1", content);
+        final String yamlSpec = "- val_Name_1 : \n" //
+                                + "    " + Constants.HEADER + " : " + extractionExpression + "\n" //
+                                + "    " + Constants.COUNT + " : " + validationExpression + "\n";
 
-        final ArrayNode validate = jf.arrayNode();
-        validate.add(name);
-        final Validator validator = new ValidationParser().parse(validate).get(0);
+        final Node validationContent = YamlParserTestHelper.parseToNode(yamlSpec);
+
+        final Validator validator = new ValidationParser().parse(validationContent).get(0);
         Assert.assertTrue(validator.getExtractor() instanceof HeaderExtractor);
         Assert.assertEquals(extractionExpression, validator.getExtractor().getExtractionExpression());
 

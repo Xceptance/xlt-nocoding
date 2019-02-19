@@ -3,9 +3,9 @@ package com.xceptance.xlt.nocoding.parser.yaml.command.action.subrequest;
 import java.io.IOException;
 
 import org.junit.Test;
+import org.yaml.snakeyaml.parser.ParserException;
 import org.yaml.snakeyaml.scanner.ScannerException;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.xceptance.xlt.nocoding.parser.AbstractParserTest;
 import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParser;
@@ -64,7 +64,7 @@ public class SubrequestsParserTest extends AbstractParserTest
      *
      * @throws IOException
      */
-    @Test(expected = JsonParseException.class)
+    @Test(expected = ParserException.class)
     public void testSyntaxErrorSubrequestsParsing() throws IOException
     {
         final Parser parser = new YamlParser();
@@ -76,7 +76,7 @@ public class SubrequestsParserTest extends AbstractParserTest
      *
      * @throws IOException
      */
-    @Test(expected = JsonParseException.class)
+    @Test(expected = ParserException.class)
     public void testSyntaxErrorSubrequestsObjectNotArrayParsing() throws IOException
     {
         final Parser parser = new YamlParser();
@@ -101,7 +101,7 @@ public class SubrequestsParserTest extends AbstractParserTest
      *
      * @throws IOException
      */
-    @Test(expected = JsonParseException.class)
+    @Test(expected = ParserException.class)
     public void testSyntaxErrorSubrequestsXhrItemArrayNotObjectParsing() throws IOException
     {
         final Parser parser = new YamlParser();
@@ -113,7 +113,7 @@ public class SubrequestsParserTest extends AbstractParserTest
      *
      * @throws IOException
      */
-    @Test(expected = JsonParseException.class)
+    @Test(expected = ParserException.class)
     public void testSyntaxErrorXhrParsing() throws IOException
     {
         final Parser parser = new YamlParser();
@@ -125,7 +125,7 @@ public class SubrequestsParserTest extends AbstractParserTest
      *
      * @throws IOException
      */
-    @Test(expected = JsonParseException.class)
+    @Test(expected = ParserException.class)
     public void testSyntaxErrorStaticParsing() throws IOException
     {
         final Parser parser = new YamlParser();

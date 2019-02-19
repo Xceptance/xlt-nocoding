@@ -4,8 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.NotImplementedException;
+import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.NodeTuple;
+import org.yaml.snakeyaml.parser.ParserException;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.AbstractExtractor;
@@ -40,15 +41,34 @@ public class ExtractorParser
      * is specified, verifies the <code>AbstractExtractor</code> is a {@link RegexpExtractor}.
      *
      * @param node
-     *            The <code>NodeTuple</code> with the extraction items
+     *            The list of <code>NodeTuple</code> containing the extraction
      * @return The <code>AbstractExtractor</code> corresponding to the identifier. <br>
      *         For example, {@link Constants#REGEXP} is parsed to a <code>RegexpExtractor</code>.
      */
-    public AbstractExtractor parse(final List<NodeTuple> nodeTupels)
+    public AbstractExtractor parse(final List<NodeTuple> nodeTuples)
     {
         // Transform the NodeTuples to a map of strings
         final Map<String, String> map = new HashMap<String, String>();
-        nodeTupels.forEach(node -> {
+        Node extractionNode = null;
+        Node groupNode = null;
+        for (final NodeTuple nodeTuple : nodeTuples)
+        {
+            final String key = YamlParserUtils.transformScalarNodeToString(nodeTuple.getKeyNode());
+            if (key.equals(identifier) || key.equals(Constants.GROUP))
+            {
+                if (key.equals(identifier))
+                {
+                    extractionNode = nodeTuple.getKeyNode();
+                }
+                else
+                {
+                    groupNode = nodeTuple.getKeyNode();
+                }
+                final String value = YamlParserUtils.transformScalarNodeToString(nodeTuple.getValueNode());
+                map.put(key, value);
+            }
+        }
+        nodeTuples.forEach(node -> {
             final String key = YamlParserUtils.transformScalarNodeToString(node.getKeyNode());
             if (key.equals(identifier) || key.equals(Constants.GROUP))
             {
@@ -89,14 +109,16 @@ public class ExtractorParser
                 break;
 
             default:
-                throw new NotImplementedException("Permitted Extraction but no parsing specified: " + identifier);
+                throw new ParserException("Node at", nodeTuples.get(0).getKeyNode().getStartMark(),
+                                          " has a permitted extraction but it is unknown.", null);
         }
 
         // Throw an Exception when Constants.GROUP is specified, but the extractor is not a RegexpExtractor
         if (hasGroup && !(extractor instanceof RegexpExtractor))
         {
-            throw new IllegalArgumentException(Constants.GROUP + " only allowed with RegexpExtractor, but is "
-                                               + extractor.getClass().getSimpleName());
+            throw new ParserException("The extraction " + extractor.getClass().getSimpleName() + " at", extractionNode.getStartMark(),
+                                      " defines " + Constants.GROUP + " but this is only allowed with a RegexpExtractor.",
+                                      groupNode.getStartMark());
         }
 
         // Return the extractor

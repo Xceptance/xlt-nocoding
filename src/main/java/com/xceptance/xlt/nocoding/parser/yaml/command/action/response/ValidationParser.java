@@ -94,9 +94,9 @@ public class ValidationParser
                         throw new ParserException("Node at", contentItem.getKeyNode().getStartMark(),
                                                   " defines a second extractor but only one definition is allowed.", null);
                     }
-                    // Parse the extractor
                     extractor = new ExtractorParser(contentKey).parse(singleValidationContentItems);
                     XltLogger.runTimeLogger.debug("Extraction Mode is " + extractor);
+
                 }
                 // If it is a validation method, parse the validation method
                 else if (Constants.isPermittedValidationMethod(contentKey))
