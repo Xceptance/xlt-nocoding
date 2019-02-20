@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.yaml.snakeyaml.error.Mark;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.NodeTuple;
 import org.yaml.snakeyaml.parser.ParserException;
@@ -40,39 +41,36 @@ public class ExtractorParser
      * {@link Constants#GROUP} is specified in the item at the <code>JsonNode</code> and if <code>Constants#GROUP</code>
      * is specified, verifies the <code>AbstractExtractor</code> is a {@link RegexpExtractor}.
      *
+     * @param context
+     *            The {@link Mark} of the surrounding {@link Node}/context.
      * @param node
      *            The list of <code>NodeTuple</code> containing the extraction
      * @return The <code>AbstractExtractor</code> corresponding to the identifier. <br>
      *         For example, {@link Constants#REGEXP} is parsed to a <code>RegexpExtractor</code>.
      */
-    public AbstractExtractor parse(final List<NodeTuple> nodeTuples)
+    public AbstractExtractor parse(final Mark context, final List<NodeTuple> nodeTuples)
     {
         // Transform the NodeTuples to a map of strings
         final Map<String, String> map = new HashMap<String, String>();
-        Node extractionNode = null;
         Node groupNode = null;
         for (final NodeTuple nodeTuple : nodeTuples)
         {
-            final String key = YamlParserUtils.transformScalarNodeToString(nodeTuple.getKeyNode());
+            final String key = YamlParserUtils.transformScalarNodeToString(context, nodeTuple.getKeyNode());
             if (key.equals(identifier) || key.equals(Constants.GROUP))
             {
-                if (key.equals(identifier))
-                {
-                    extractionNode = nodeTuple.getKeyNode();
-                }
-                else
+                if (key.equals(Constants.GROUP))
                 {
                     groupNode = nodeTuple.getKeyNode();
                 }
-                final String value = YamlParserUtils.transformScalarNodeToString(nodeTuple.getValueNode());
+                final String value = YamlParserUtils.transformScalarNodeToString(context, nodeTuple.getValueNode());
                 map.put(key, value);
             }
         }
         nodeTuples.forEach(node -> {
-            final String key = YamlParserUtils.transformScalarNodeToString(node.getKeyNode());
+            final String key = YamlParserUtils.transformScalarNodeToString(context, node.getKeyNode());
             if (key.equals(identifier) || key.equals(Constants.GROUP))
             {
-                final String value = YamlParserUtils.transformScalarNodeToString(node.getValueNode());
+                final String value = YamlParserUtils.transformScalarNodeToString(context, node.getValueNode());
                 map.put(key, value);
             }
         });
@@ -109,15 +107,17 @@ public class ExtractorParser
                 break;
 
             default:
-                throw new ParserException("Node at", nodeTuples.get(0).getKeyNode().getStartMark(),
-                                          " has a permitted extraction but it is unknown.", null);
+                throw new ParserException("Node", context, " contains a permitted extraction but it is unknown.",
+                                          nodeTuples.get(0).getKeyNode().getStartMark());
         }
 
         // Throw an Exception when Constants.GROUP is specified, but the extractor is not a RegexpExtractor
         if (hasGroup && !(extractor instanceof RegexpExtractor))
         {
-            throw new ParserException("The extraction " + extractor.getClass().getSimpleName() + " at", extractionNode.getStartMark(),
-                                      " defines " + Constants.GROUP + " but this is only allowed with a RegexpExtractor.",
+            throw new ParserException("Node", context,
+                                      " defines a " + extractor.getClass().getSimpleName() + " and " + Constants.GROUP
+                                                       + " of which the latter is only allowed with a "
+                                                       + RegexpExtractor.class.getSimpleName(),
                                       groupNode.getStartMark());
         }
 

@@ -1,15 +1,22 @@
 
-- Action : &id1
+- Action :
    Name : Reference Action
    Request :
-       Url : https://localhost:8443/
+       Url : &id2
+           Request
        Method : GET
    Response :
        Httpcode : 200
 
-- Action : *id1
+- Action :
+   Name : Reference Action
+   Request : 
+       Url : &id1
+           Request
+       Method : GET
+   Response :
+       Httpcode : 200
 
 - Action :
-    Name : Second Action
-    Request :
-      unknownKey : unknownItem
+  
+    *id2 : *id1

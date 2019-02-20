@@ -186,7 +186,8 @@ public class StoreDefaultParserTest extends AbstractParserTest
 
         final Node defaultCookieContent = YamlParserTestHelper.parseToNode(yamlSpec);
 
-        final List<AbstractStoreDefaultItem> storeDefaults = new StoreDefaultCookiesParser().parse(defaultCookieContent);
+        final List<AbstractStoreDefaultItem> storeDefaults = new StoreDefaultCookiesParser().parse(defaultCookieContent.getStartMark(),
+                                                                                                   defaultCookieContent);
         Assert.assertEquals(2, storeDefaults.size());
         AbstractStoreDefaultItem storeDefault = storeDefaults.get(0);
         Assert.assertTrue(storeDefault instanceof StoreDefaultCookie);
@@ -217,7 +218,8 @@ public class StoreDefaultParserTest extends AbstractParserTest
 
         final Node defaultParameterContent = YamlParserTestHelper.parseToNode(yamlSpec);
 
-        final List<AbstractStoreDefaultItem> storeDefaults = new StoreDefaultParametersParser().parse(defaultParameterContent);
+        final List<AbstractStoreDefaultItem> storeDefaults = new StoreDefaultParametersParser().parse(defaultParameterContent.getStartMark(),
+                                                                                                      defaultParameterContent);
         Assert.assertEquals(2, storeDefaults.size());
         AbstractStoreDefaultItem storeDefault = storeDefaults.get(0);
         Assert.assertTrue(storeDefault instanceof StoreDefaultParameter);
@@ -245,7 +247,8 @@ public class StoreDefaultParserTest extends AbstractParserTest
 
         final Node defaultHeaderContent = YamlParserTestHelper.parseToNode(yamlSpec);
 
-        final List<AbstractStoreDefaultItem> storeDefaults = new StoreDefaultHeadersParser().parse(defaultHeaderContent);
+        final List<AbstractStoreDefaultItem> storeDefaults = new StoreDefaultHeadersParser().parse(defaultHeaderContent.getStartMark(),
+                                                                                                   defaultHeaderContent);
         Assert.assertEquals(1, storeDefaults.size());
         final AbstractStoreDefaultItem storeDefault = storeDefaults.get(0);
         Assert.assertTrue(storeDefault instanceof StoreDefaultHeader);
@@ -274,7 +277,8 @@ public class StoreDefaultParserTest extends AbstractParserTest
 
         final Node defaultStaticContent = YamlParserTestHelper.parseToNode(yamlSpec);
 
-        final List<AbstractStoreDefaultItem> storeDefaultList = new StoreDefaultStaticSubrequestsParser().parse(defaultStaticContent);
+        final List<AbstractStoreDefaultItem> storeDefaultList = new StoreDefaultStaticSubrequestsParser().parse(defaultStaticContent.getStartMark(),
+                                                                                                                defaultStaticContent);
         Assert.assertEquals(3, storeDefaultList.size());
         final AbstractStoreDefaultItem storeDefault = storeDefaultList.get(0);
         Assert.assertTrue(storeDefault instanceof StoreDefaultStaticSubrequest);

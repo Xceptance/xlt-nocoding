@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.yaml.snakeyaml.parser.ParserException;
 
@@ -23,6 +24,8 @@ public class YamlParserTest extends AbstractParserTest
     protected final String fileEmptyFile = path + "emptyFile.yml";
 
     protected final String fileReferenceParsing = path + "referenceParsing.yml";
+
+    protected final String fileReferenceParsingComplexError = path + "referenceParsingComplexError.yml";
 
     protected final String fileNotExistingFile = path + "notExistingFile.yml";
 
@@ -43,14 +46,6 @@ public class YamlParserTest extends AbstractParserTest
         Assert.assertTrue(scriptItems.isEmpty());
     }
 
-    @Test(expected = ParserException.class)
-    public void complexReferenceParsing() throws IOException
-    {
-        final Parser parser = new YamlParser();
-        final List<Command> scriptItems = parser.parse(path + "referenceParsingComplexError.yml");
-        Assert.assertTrue(scriptItems.isEmpty());
-    }
-
     /**
      * Verifies Yaml references can be parsed
      *
@@ -67,6 +62,27 @@ public class YamlParserTest extends AbstractParserTest
         Assert.assertTrue(referencedCommand instanceof Action);
         Assert.assertTrue(referencedCommand.getClass().isInstance(referencingCommand));
 
+    }
+
+    /**
+     * Verifies a misplaced anchor throws an error.
+     * 
+     * @throws IOException
+     */
+    @Test
+    public void complexReferenceParsing() throws IOException
+    {
+        final Parser parser = new YamlParser();
+        try
+        {
+            parser.parse(fileReferenceParsingComplexError);
+            Assert.assertFalse(true);
+        }
+        catch (final ParserException parserException)
+        {
+            Assert.assertEquals(22, parserException.getContextMark().getLine());
+            Assert.assertEquals(14, parserException.getProblemMark().getLine());
+        }
     }
 
     /**
@@ -105,6 +121,35 @@ public class YamlParserTest extends AbstractParserTest
     {
         final Parser parser = new YamlParser();
         parser.parse(fileSyntaxErrorRootObjectNotArray);
+    }
+
+    @Ignore
+    @Test
+    public void shoudlShowCorrectLineForReferences()
+    {
+        final String yamlSpec = "- Action :\n" + //
+                                "   Name : Reference Action\n" + //
+                                "   Request :\n" + //
+                                "       Url : &id2\n" + //
+                                "           Request\n" + //
+                                "       Method : GET\n" + //
+                                "   Response :\n" + //
+                                "       Httpcode : 200\n" + //
+                                "\n" + //
+                                "- Action :\n" + //
+                                "   Name : Reference Action\n" + //
+                                "   Request : \n" + //
+                                "       Url : &id1\n" + //
+                                "           Request\n" + //
+                                "       Method : GET\n" + //
+                                "   Response :\n" + //
+                                "       Httpcode : 200\n" + //
+                                "\n" + //
+                                "- Action :\n" + //
+                                "\n" + //
+                                "    *id2 : *id1"; //
+        YamlParserTestHelper.parseToNode(yamlSpec);
+
     }
 
 }

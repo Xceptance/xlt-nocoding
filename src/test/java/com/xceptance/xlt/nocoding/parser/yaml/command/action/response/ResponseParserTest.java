@@ -146,7 +146,7 @@ public class ResponseParserTest extends AbstractParserTest
         final Node responseContent = YamlParserTestHelper.parseToNode(yamlSpec);
 
         // Parse response
-        final Response response = (Response) new ResponseParser().parse(responseContent).get(0);
+        final Response response = (Response) new ResponseParser().parse(responseContent.getStartMark(), responseContent).get(0);
 
         // Verify response is correct
         final List<AbstractResponseSubItem> responseItems = response.getResponseItems();

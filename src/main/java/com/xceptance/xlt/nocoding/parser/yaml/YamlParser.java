@@ -1,7 +1,5 @@
 package com.xceptance.xlt.nocoding.parser.yaml;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
@@ -12,14 +10,11 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.nodes.MappingNode;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.NodeTuple;
-import org.yaml.snakeyaml.nodes.ScalarNode;
 import org.yaml.snakeyaml.nodes.SequenceNode;
 import org.yaml.snakeyaml.parser.ParserException;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SequenceWriter;
 import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.yaml.command.action.ActionParser;
@@ -55,36 +50,44 @@ public class YamlParser implements Parser
         final Node root = yaml.compose(createReader(pathToFile));
         if (root instanceof SequenceNode)
         {
-            final List<Node> wrapperList = ((SequenceNode) root).getValue();
-            for (final Node allCommandWrapper : wrapperList)
+            final List<Node> commandWrappersList = ((SequenceNode) root).getValue();
+            for (final Node singleCommandWrapper : commandWrappersList)
             {
-                if (allCommandWrapper instanceof MappingNode)
+                if (singleCommandWrapper instanceof MappingNode)
                 {
-                    final List<NodeTuple> allCommands = ((MappingNode) allCommandWrapper).getValue();
-                    allCommands.stream().forEachOrdered(commandWrapper -> {
-                        final String commandName = ((ScalarNode) commandWrapper.getKeyNode()).getValue();
+                    final List<NodeTuple> commandMapping = ((MappingNode) singleCommandWrapper).getValue();
+                    commandMapping.stream().forEachOrdered(singleMapping -> {
+                        final String commandName = YamlParserUtils.transformScalarNodeToString(singleCommandWrapper.getStartMark(),
+                                                                                               singleMapping.getKeyNode());
                         // Verify the command is legal
                         if (Constants.isPermittedListItem(commandName))
                         {
                             if (commandName.equals("Action"))
                             {
-                                commands.addAll(ActionParser.parse(commandWrapper.getValueNode()));
+                                commands.addAll(ActionParser.parse(singleCommandWrapper.getStartMark(), singleMapping.getValueNode()));
                             }
                             else if (commandName.equals("Store"))
                             {
-                                commands.addAll(StoreParser.parse(commandWrapper.getValueNode()));
+                                commands.addAll(StoreParser.parse(singleCommandWrapper.getStartMark(), singleMapping.getValueNode()));
                             }
                             else
                             {
-                                commands.addAll(StoreDefaultParser.parse(commandWrapper));
+                                commands.addAll(StoreDefaultParser.parse(singleCommandWrapper.getStartMark(), singleMapping));
                             }
                         }
                         else
                         {
-                            throw new ParserException("Node at", ((ScalarNode) commandWrapper.getKeyNode()).getStartMark(),
-                                                      " is not a permitted list item", null);
+                            throw new ParserException("Node", root.getStartMark(), " contains a not permitted list item",
+                                                      singleCommandWrapper.getStartMark());
                         }
                     });
+                }
+                else
+                {
+                    throw new ParserException("Node", root.getStartMark(),
+                                              " contains a " + singleCommandWrapper.getNodeId() + " but it must contain mapping",
+                                              singleCommandWrapper.getStartMark());
+
                 }
             }
         }
@@ -94,44 +97,11 @@ public class YamlParser implements Parser
         }
         else
         {
-            throw new ParserException("Node at", root.getStartMark(), " is " + root.getNodeId().toString() + " but needs to be an array.",
+            throw new ParserException("Node at", root.getStartMark(), " contains a " + root.getNodeId() + " but it must contain an array.",
                                       null);
-            // throw new ParserEx
         }
 
         return commands;
-    }
-
-    /**
-     * Resolves anchors and aliases in the Yaml-file and returns an ByteArrayOutputStream.<br>
-     * Since Jackson cannot resolve anchors and aliases, snakeyml is used to parse it to objects, which are then
-     * transformed via Jackson's {@link SequenceWriter}.
-     * 
-     * @param pathToFile
-     *            The String that describes the path to the file
-     * @return A ByteArrayOutputStream with the anchors resolved as their own object.
-     * @throws IOException
-     *             If a {@link Reader} or {@link SequenceWriter} cannot be created.
-     */
-    protected File resolveAnchors(final String pathToFile) throws IOException
-    {
-        // Parse the Yaml with snakeyml
-        final Yaml yaml = new Yaml();
-        final Object loadedYaml = yaml.load(createReader(pathToFile));
-
-        // Place the parsed Yaml with Jacksons SequenceWriter in an FileOutputSteam
-        final File file = File.createTempFile("AnchorlessYaml", ".yml");
-        file.deleteOnExit();
-        final FileOutputStream outputSteam = new FileOutputStream(file);
-        final SequenceWriter swToFile = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValues(outputSteam);
-        swToFile.write(loadedYaml);
-        return file;
-
-        // // Place the parsed Yaml with Jacksons SequenceWriter in an ByteArrayOutputSteam
-        // final ByteArrayOutputStream anchorlessYaml = new ByteArrayOutputStream();
-        // final SequenceWriter sw = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValues(anchorlessYaml);
-        // sw.write(loadedYaml);
-        // return anchorlessYaml;
     }
 
     @Override

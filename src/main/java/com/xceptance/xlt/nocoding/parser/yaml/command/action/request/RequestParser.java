@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.yaml.snakeyaml.error.Mark;
 import org.yaml.snakeyaml.nodes.MappingNode;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.NodeTuple;
@@ -32,18 +33,20 @@ public class RequestParser extends AbstractActionSubItemParser
     /**
      * Parses a request item to a <code>Request</code>.
      *
+     * @param context
+     *            The {@link Mark} of the surrounding {@link Node}/context.
      * @param requestNode
      *            The {@link Node} with the request in it
      * @return The <code>Request</code> wrapped in a list of <code>AbstractActionItem</code>s.
      */
     @Override
-    public List<AbstractActionSubItem> parse(final Node requestNode)
+    public List<AbstractActionSubItem> parse(final Mark context, final Node requestNode)
     {
         // Verify that an object was used and not an array
         if (!(requestNode instanceof MappingNode))
         {
-            throw new ParserException("Node at", requestNode.getStartMark(),
-                                      " is " + requestNode.getNodeId().toString() + " but needs to be an object", null);
+            throw new ParserException("Node", context, " contains a " + requestNode.getNodeId() + " but it must contain an object",
+                                      requestNode.getStartMark());
         }
 
         // Initialize variables
@@ -61,58 +64,60 @@ public class RequestParser extends AbstractActionSubItemParser
         final List<NodeTuple> requestNodeItems = ((MappingNode) requestNode).getValue();
 
         requestNodeItems.forEach(item -> {
-            final String itemName = YamlParserUtils.transformScalarNodeToString(item.getKeyNode());
+            final String itemName = YamlParserUtils.transformScalarNodeToString(requestNode.getStartMark(), item.getKeyNode());
             // Check if the name is a permitted action item
             if (!Constants.isPermittedRequestItem(itemName))
             {
-                throw new ParserException("Node at", ((ScalarNode) item.getKeyNode()).getStartMark(), " is not a permitted request item",
-                                          null);
+                throw new ParserException("Node", requestNode.getStartMark(), " contains a not permitted request item",
+                                          ((ScalarNode) item.getKeyNode()).getStartMark());
             }
 
             // We generally want to read the value of the fieldName but assign it to different variables
             switch (itemName)
             {
                 case Constants.URL:
-                    url.setValue(YamlParserUtils.transformScalarNodeToString(item.getValueNode()));
+                    url.setValue(YamlParserUtils.transformScalarNodeToString(item.getKeyNode().getStartMark(), item.getValueNode()));
                     break;
 
                 case Constants.METHOD:
-                    method.setValue(YamlParserUtils.transformScalarNodeToString(item.getValueNode()));
+                    method.setValue(YamlParserUtils.transformScalarNodeToString(item.getKeyNode().getStartMark(), item.getValueNode()));
                     break;
 
                 case Constants.XHR:
-                    xhr.setValue(YamlParserUtils.transformScalarNodeToString(item.getValueNode()));
+                    xhr.setValue(YamlParserUtils.transformScalarNodeToString(item.getKeyNode().getStartMark(), item.getValueNode()));
                     break;
 
                 case Constants.ENCODEPARAMETERS:
-                    encodeParameters.setValue(YamlParserUtils.transformScalarNodeToString(item.getValueNode()));
+                    encodeParameters.setValue(YamlParserUtils.transformScalarNodeToString(item.getKeyNode().getStartMark(),
+                                                                                          item.getValueNode()));
                     break;
 
                 case Constants.BODY:
-                    body.setValue(YamlParserUtils.transformScalarNodeToString(item.getValueNode()));
+                    body.setValue(YamlParserUtils.transformScalarNodeToString(item.getKeyNode().getStartMark(), item.getValueNode()));
                     break;
 
                 case Constants.ENCODEBODY:
-                    encodeBody.setValue(YamlParserUtils.transformScalarNodeToString(item.getValueNode()));
+                    encodeBody.setValue(YamlParserUtils.transformScalarNodeToString(item.getKeyNode().getStartMark(), item.getValueNode()));
                     break;
 
                 case Constants.PARAMETERS:
                     // Create a new ParameterParser that parses parameters
-                    parameters.addAll(new ParameterParser().parse(item.getValueNode()));
+                    parameters.addAll(new ParameterParser().parse(item.getKeyNode().getStartMark(), item.getValueNode()));
                     break;
 
                 case Constants.HEADERS:
                     // Create a new HeaderParser that parses headers
-                    headers.putAll(new HeaderParser().parse(item.getValueNode()));
+                    headers.putAll(new HeaderParser().parse(item.getKeyNode().getStartMark(), item.getValueNode()));
                     break;
 
                 case Constants.COOKIES:
-                    cookies.putAll(new CookieParser().parse(item.getValueNode()));
+                    cookies.putAll(new CookieParser().parse(item.getKeyNode().getStartMark(), item.getValueNode()));
                     break;
 
                 default:
                     // We didn't find something fitting, so throw an Exception
-                    throw new ParserException("Node at", item.getKeyNode().getStartMark(), " is permitted but unknown", null);
+                    throw new ParserException("Node", requestNode.getStartMark(), " containst a permitted but unknown request item",
+                                              item.getKeyNode().getStartMark());
             }
         });
 

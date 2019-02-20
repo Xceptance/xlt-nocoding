@@ -3,6 +3,7 @@ package com.xceptance.xlt.nocoding.parser.yaml.command.storeDefault;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.yaml.snakeyaml.error.Mark;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.ScalarNode;
 import org.yaml.snakeyaml.parser.ParserException;
@@ -26,33 +27,36 @@ public class StoreDefaultParametersParser extends AbstractStoreDefaultSubItemsPa
      * Parses the parameters list item to a list of {@link AbstractStoreDefaultItem}s, which consists of multiple
      * {@link StoreDefaultParameter}.
      *
+     * @param context
+     *            The {@link Mark} of the surrounding {@link Node}/context.
      * @param defaultParametersNode
      *            The {@link Node} the default parameters start at
      * @return A list of <code>StoreDefault</code>s with the parsed default parameters.
      */
     @Override
-    public List<AbstractStoreDefaultItem> parse(final Node defaultParametersNode)
+    public List<AbstractStoreDefaultItem> parse(final Mark context, final Node defaultParametersNode)
     {
         // Create list of defaultItems
         final List<AbstractStoreDefaultItem> defaultItems = new ArrayList<>();
 
         if (defaultParametersNode instanceof ScalarNode)
         {
-            final String value = YamlParserUtils.transformScalarNodeToString(defaultParametersNode);
+            final String value = YamlParserUtils.transformScalarNodeToString(context, defaultParametersNode);
             if (value.equals(Constants.DELETE))
             {
                 defaultItems.add(new StoreDefaultParameter(Constants.PARAMETERS, Constants.DELETE));
             }
             else
             {
-                throw new ParserException("Node at", defaultParametersNode.getStartMark(),
-                                          " is " + value + " but needs to be an array or be " + Constants.DELETE, null);
+                throw new ParserException("Node", context,
+                                          " contains " + value + " but it must either contain an array or " + Constants.DELETE,
+                                          defaultParametersNode.getStartMark());
             }
         }
         else
         {
             // Parse parameters with the parameter parser
-            final List<NameValuePair> parameters = new ParameterParser().parse(defaultParametersNode);
+            final List<NameValuePair> parameters = new ParameterParser().parse(context, defaultParametersNode);
             for (final NameValuePair parameter : parameters)
             {
                 // Create a StoreDefaultParameter for every parameter key value pair

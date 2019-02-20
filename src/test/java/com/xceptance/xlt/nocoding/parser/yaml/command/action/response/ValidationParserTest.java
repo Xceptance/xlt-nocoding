@@ -39,7 +39,7 @@ public class ValidationParserTest
 
         final Node validationContent = YamlParserTestHelper.parseToNode(yamlSpec);
 
-        new ValidationParser().parse(validationContent);
+        new ValidationParser().parse(validationContent.getStartMark(), validationContent);
     }
 
     /**
@@ -57,7 +57,7 @@ public class ValidationParserTest
 
         final Node validationContent = YamlParserTestHelper.parseToNode(yamlSpec);
 
-        new ValidationParser().parse(validationContent);
+        new ValidationParser().parse(validationContent.getStartMark(), validationContent);
     }
 
     /**
@@ -75,7 +75,7 @@ public class ValidationParserTest
 
         final Node validationContent = YamlParserTestHelper.parseToNode(yamlSpec);
 
-        new ValidationParser().parse(validationContent);
+        new ValidationParser().parse(validationContent.getStartMark(), validationContent);
     }
 
     /**
@@ -96,7 +96,7 @@ public class ValidationParserTest
 
         final Node validationContent = YamlParserTestHelper.parseToNode(yamlSpec);
 
-        final Validator validator = new ValidationParser().parse(validationContent).get(0);
+        final Validator validator = new ValidationParser().parse(validationContent.getStartMark(), validationContent).get(0);
 
         Assert.assertTrue(validator.getExtractor() instanceof RegexpExtractor);
         Assert.assertEquals(extractionExpression, validator.getExtractor().getExtractionExpression());
@@ -121,7 +121,7 @@ public class ValidationParserTest
 
         final Node validationContent = YamlParserTestHelper.parseToNode(yamlSpec);
 
-        final Validator validator = new ValidationParser().parse(validationContent).get(0);
+        final Validator validator = new ValidationParser().parse(validationContent.getStartMark(), validationContent).get(0);
 
         Assert.assertTrue(validator.getExtractor() instanceof CookieExtractor);
         Assert.assertEquals(extractionExpression, validator.getExtractor().getExtractionExpression());
@@ -145,7 +145,7 @@ public class ValidationParserTest
 
         final Node validationContent = YamlParserTestHelper.parseToNode(yamlSpec);
 
-        final Validator validator = new ValidationParser().parse(validationContent).get(0);
+        final Validator validator = new ValidationParser().parse(validationContent.getStartMark(), validationContent).get(0);
         Assert.assertTrue(validator.getExtractor() instanceof HeaderExtractor);
         Assert.assertEquals(extractionExpression, validator.getExtractor().getExtractionExpression());
         Assert.assertNull(validator.getMethod());
@@ -167,7 +167,7 @@ public class ValidationParserTest
 
         final Node validationContent = YamlParserTestHelper.parseToNode(yamlSpec);
 
-        final Validator validator = new ValidationParser().parse(validationContent).get(0);
+        final Validator validator = new ValidationParser().parse(validationContent.getStartMark(), validationContent).get(0);
         Assert.assertTrue(validator.getExtractor() instanceof HeaderExtractor);
         Assert.assertEquals(extractionExpression, validator.getExtractor().getExtractionExpression());
 

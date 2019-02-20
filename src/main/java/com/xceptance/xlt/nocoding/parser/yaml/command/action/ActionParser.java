@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.yaml.snakeyaml.error.Mark;
 import org.yaml.snakeyaml.nodes.MappingNode;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.NodeTuple;
@@ -33,11 +34,13 @@ public class ActionParser
     /**
      * Parses the action item to a list of {@link Command}s.
      *
+     * @param context
+     *            The {@link Mark} of the surrounding {@link Node}/context.
      * @param actionNode
      *            The {@link Node} with the the action item
      * @return A list of <code>ScriptItem</code>s containing a single {@link Action}.
      */
-    public static List<Command> parse(final Node actionNode)
+    public static List<Command> parse(final Mark context, final Node actionNode)
     {
         // Initialize variables
         final StringWrapper nameWrapper = new StringWrapper();
@@ -54,19 +57,19 @@ public class ActionParser
         // Verify the actionNode is neither an array or a scalar
         if (!(actionNode instanceof MappingNode))
         {
-            throw new ParserException("Node at", actionNode.getStartMark(),
-                                      " is " + actionNode.getNodeId().toString() + " but needs to be an object", null);
+            throw new ParserException("Node", context, " contains a " + actionNode.getNodeId() + " but needs to be an object",
+                                      actionNode.getStartMark());
         }
 
         final List<NodeTuple> actionNodeItems = ((MappingNode) actionNode).getValue();
 
         actionNodeItems.forEach(item -> {
-            final String itemName = YamlParserUtils.transformScalarNodeToString(item.getKeyNode());
+            final String itemName = YamlParserUtils.transformScalarNodeToString(actionNode.getStartMark(), item.getKeyNode());
             // Check if the name is a permitted action item
             if (!Constants.isPermittedActionItem(itemName))
             {
-                throw new ParserException("Node at", ((ScalarNode) item.getKeyNode()).getStartMark(), " is not a permitted action item",
-                                          null);
+                throw new ParserException("Node", actionNode.getStartMark(), " contains a not permitted action item",
+                                          ((ScalarNode) item.getKeyNode()).getStartMark());
             }
             AbstractActionSubItemParser actionItemParser = null;
 
@@ -78,7 +81,7 @@ public class ActionParser
                     if (actionItems.isEmpty())
                     {
                         // Save the name
-                        nameWrapper.setValue(YamlParserUtils.transformScalarNodeToString(item.getValueNode()));
+                        nameWrapper.setValue(YamlParserUtils.transformScalarNodeToString(actionNode.getStartMark(), item.getValueNode()));
                         if (nameWrapper != null)
                         {
                             XltLogger.runTimeLogger.debug("Actionname: " + nameWrapper);
@@ -87,8 +90,8 @@ public class ActionParser
                     }
                     else
                     {
-                        throw new ParserException("The name of the action at", ((ScalarNode) item.getKeyNode()).getStartMark(),
-                                                  " must be defined as first item.", ((ScalarNode) item.getValueNode()).getStartMark());
+                        throw new ParserException("Node", actionNode.getStartMark(), " defines a Name but not as first item.",
+                                                  ((ScalarNode) item.getKeyNode()).getStartMark());
                     }
 
                 case Constants.REQUEST:
@@ -102,8 +105,9 @@ public class ActionParser
                     }
                     else
                     {
-                        throw new ParserException("The request of the action at", ((ScalarNode) item.getKeyNode()).getStartMark(),
-                                                  " must be define before a response and subrequest.", null);
+                        throw new ParserException("Node", actionNode.getStartMark(),
+                                                  " defines a request after another request, a response or a subrequest but must be defined before them.",
+                                                  ((ScalarNode) item.getKeyNode()).getStartMark());
                     }
 
                 case Constants.RESPONSE:
@@ -117,9 +121,9 @@ public class ActionParser
                     }
                     else
                     {
-                        throw new ParserException("The response of the action at", ((ScalarNode) item.getKeyNode()).getStartMark(),
-                                                  " must be define before a subrequest.",
-                                                  ((ScalarNode) item.getValueNode()).getStartMark());
+                        throw new ParserException("Node", actionNode.getStartMark(),
+                                                  " defines a response after another response or a subrequest but must be defined before it.",
+                                                  ((ScalarNode) item.getKeyNode()).getStartMark());
 
                     }
 
@@ -131,14 +135,15 @@ public class ActionParser
 
                 default:
                     // We didn't find something fitting, so throw an Exception
-                    throw new ParserException("Node at", item.getKeyNode().getStartMark(), " is permitted but unknown", null);
+                    throw new ParserException("Node at", actionNode.getStartMark(), " is permitted but unknown",
+                                              item.getKeyNode().getStartMark());
             }
 
             // If we specified an actionItemParser
             if (actionItemParser != null)
             {
                 // Parse the current item and add it to the actionItems
-                actionItems.addAll(actionItemParser.parse(item.getValueNode()));
+                actionItems.addAll(actionItemParser.parse(item.getKeyNode().getStartMark(), item.getValueNode()));
             }
 
         });

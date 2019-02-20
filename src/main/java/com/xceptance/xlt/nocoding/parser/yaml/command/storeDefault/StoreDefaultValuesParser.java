@@ -3,6 +3,7 @@ package com.xceptance.xlt.nocoding.parser.yaml.command.storeDefault;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.yaml.snakeyaml.error.Mark;
 import org.yaml.snakeyaml.nodes.MappingNode;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.NodeTuple;
@@ -27,17 +28,19 @@ public class StoreDefaultValuesParser extends AbstractStoreDefaultSubItemsParser
      * Parses the default item to a list of {@link AbstractStoreDefaultItem}s which consists of a single
      * {@link StoreDefaultValue}.
      *
+     * @param context
+     *            The {@link Mark} of the surrounding {@link Node}/context.
      * @param defaultItemNode
      *            The {@link Node} the default key-value item start at
      * @return A list of <code>StoreDefault</code>s with the parsed default key-value item.
      */
     @Override
-    public List<AbstractStoreDefaultItem> parse(final Node defaultItemNode)
+    public List<AbstractStoreDefaultItem> parse(final Mark context, final Node defaultItemNode)
     {
         if (!(defaultItemNode instanceof MappingNode))
         {
-            throw new ParserException("Node at", defaultItemNode.getStartMark(),
-                                      " is " + defaultItemNode.getNodeId().toString() + " but needs to be a mapping", null);
+            throw new ParserException("Node", context, " contains a " + defaultItemNode.getNodeId() + " but it must contain a mapping",
+                                      defaultItemNode.getStartMark());
         }
 
         // Create new default items list
@@ -46,9 +49,10 @@ public class StoreDefaultValuesParser extends AbstractStoreDefaultSubItemsParser
         final List<NodeTuple> defaultItemWrapper = ((MappingNode) defaultItemNode).getValue();
         defaultItemWrapper.forEach(defaultItem -> {
             // Get the name of the default item
-            final String variableName = YamlParserUtils.transformScalarNodeToString(defaultItem.getKeyNode());
+            final String variableName = YamlParserUtils.transformScalarNodeToString(defaultItemNode.getStartMark(),
+                                                                                    defaultItem.getKeyNode());
             // Get the value of the default item
-            final String value = YamlParserUtils.transformScalarNodeToString(defaultItem.getKeyNode());
+            final String value = YamlParserUtils.transformScalarNodeToString(defaultItemNode.getStartMark(), defaultItem.getKeyNode());
             // Create the new StoreDefaultItem and add it to the default items list
             defaultItems.add(new StoreDefaultValue(variableName, value));
         });

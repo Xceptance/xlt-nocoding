@@ -1,7 +1,8 @@
 package com.xceptance.xlt.nocoding.parser.yaml.command.action.response.validator;
 
-import org.apache.commons.lang3.NotImplementedException;
+import org.yaml.snakeyaml.error.Mark;
 import org.yaml.snakeyaml.nodes.Node;
+import org.yaml.snakeyaml.parser.ParserException;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.xceptance.xlt.nocoding.command.action.response.validator.AbstractValidator;
@@ -32,15 +33,17 @@ public class ValidatorParser
     /**
      * Parses the validation method in the {@link JsonNode} to an {@link AbstractValidator}.
      *
+     * @param context
+     *            The {@link Mark} of the surrounding {@link Node}/context.
      * @param node
      *            The <code>Node</code> with the validation method
      * @return An <code>AbstractValidationMethod</code> with the parsed data
      */
-    public AbstractValidator parse(final Node node)
+    public AbstractValidator parse(final Mark context, final Node node)
     {
         AbstractValidator method = null;
         // Get the associated value
-        final String validationExpression = YamlParserUtils.transformScalarNodeToString(node);
+        final String validationExpression = YamlParserUtils.transformScalarNodeToString(context, node);
         // Build a validation method depending on the name of the selector
         switch (identifier)
         {
@@ -57,7 +60,8 @@ public class ValidatorParser
                 break;
 
             default:
-                throw new NotImplementedException("Permitted Validation Method but no parsing specified: " + identifier);
+                // We didn't find something fitting, so throw an Exception
+                throw new ParserException("Node", context, " contains a permitted but unknown validation item", node.getStartMark());
         }
 
         // Return the method

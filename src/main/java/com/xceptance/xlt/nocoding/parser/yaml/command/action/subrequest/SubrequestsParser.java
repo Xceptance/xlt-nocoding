@@ -3,6 +3,7 @@ package com.xceptance.xlt.nocoding.parser.yaml.command.action.subrequest;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.yaml.snakeyaml.error.Mark;
 import org.yaml.snakeyaml.nodes.MappingNode;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.NodeTuple;
@@ -27,18 +28,20 @@ public class SubrequestsParser extends AbstractActionSubItemParser
      * Parses the subrequest item in the action block to a list of {@link AbstractSubrequest}s. A subrequest item can
      * consist of multiple subrequests.
      *
+     * @param context
+     *            The {@link Mark} of the surrounding {@link Node}/context.
      * @param subrequestNode
      *            The {@link Node} the subrequest item starts at
      * @return A list with all specified subrequest in the node
      */
     @Override
-    public List<AbstractActionSubItem> parse(final Node subrequestNode)
+    public List<AbstractActionSubItem> parse(final Mark context, final Node subrequestNode)
     {
         // Verify that we have an array
         if (!(subrequestNode instanceof SequenceNode))
         {
-            throw new ParserException("Node at", subrequestNode.getStartMark(),
-                                      " is " + subrequestNode.getNodeId().toString() + " but needs to be an array", null);
+            throw new ParserException("Node at", context, " is " + subrequestNode.getNodeId().toString() + " but needs to be an array",
+                                      subrequestNode.getStartMark());
         }
         // Initialize Variables
         final List<AbstractSubrequest> subrequests = new ArrayList<>();
@@ -48,27 +51,30 @@ public class SubrequestsParser extends AbstractActionSubItemParser
             // Verify that an array was used and not an object
             if (!(subrequestWrapper instanceof MappingNode))
             {
-                throw new ParserException("Node at", subrequestWrapper.getStartMark(),
-                                          " is " + subrequestWrapper.getNodeId().toString() + " but needs to be a mapping", null);
+                throw new ParserException("Node at", subrequestNode.getStartMark(),
+                                          " is " + subrequestWrapper.getNodeId().toString() + " but needs to be a mapping",
+                                          subrequestWrapper.getStartMark());
             }
             final List<NodeTuple> subrequestList = ((MappingNode) subrequestWrapper).getValue();
             subrequestList.forEach(subrequest -> {
-                final String subrequestName = YamlParserUtils.transformScalarNodeToString(subrequest.getKeyNode());
+                final String subrequestName = YamlParserUtils.transformScalarNodeToString(subrequestWrapper.getStartMark(),
+                                                                                          subrequest.getKeyNode());
                 // Depending on the name, create the correct Parser and execute it
                 switch (subrequestName)
                 {
                     case Constants.XHR:
                         // Create an XhrSubrequestParser and parse it
-                        subrequests.add(new XhrSubrequestParser().parse(subrequest.getValueNode()));
+                        subrequests.add(new XhrSubrequestParser().parse(subrequestWrapper.getStartMark(), subrequest.getValueNode()));
                         break;
 
                     case Constants.STATIC:
                         // Create StaticSubrequestParser and parse the current node
-                        subrequests.add(new StaticSubrequestParser().parse(subrequest.getValueNode()));
+                        subrequests.add(new StaticSubrequestParser().parse(subrequestWrapper.getStartMark(), subrequest.getValueNode()));
                         break;
 
                     default:
-                        throw new ParserException("Node at", subrequest.getKeyNode().getStartMark(), " defines an unknown item.", null);
+                        throw new ParserException("Node", subrequestWrapper.getStartMark(), " contains an unknown item.",
+                                                  subrequest.getKeyNode().getStartMark());
                 }
             });
         });
