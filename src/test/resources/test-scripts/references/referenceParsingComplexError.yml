@@ -1,0 +1,21 @@
+
+- Action :
+    Name : Reference Action
+    Request : 
+        Url : &id2
+          Request
+        Method : GET
+    Response :
+        Httpcode : 200
+
+- Action :
+    Name : Reference Action
+    Request : 
+        Url : &id1
+            Request
+        Method : GET
+    Response :
+        Httpcode : 200
+
+- Action :
+    *id2 : *id1

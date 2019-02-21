@@ -1,0 +1,24 @@
+- Action :
+    Name : &leftSideDef
+        Regex
+
+- Action : 
+    Name : 
+        blub
+    Response :
+        Validate:
+            - validation_1: &rightSideDef
+                Regex : blub
+            - validation_name:
+                *leftSideDef : blub
+
+
+- Action : 
+    Name : &parentDef
+        validationVariable
+    Response :
+        Validate:
+            - validation_1:
+                Regex : blub
+            - *parentDef:
+                *leftSideDef : *rightSideDef
