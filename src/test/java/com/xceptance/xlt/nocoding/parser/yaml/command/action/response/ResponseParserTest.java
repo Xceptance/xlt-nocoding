@@ -27,7 +27,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
  */
 public class ResponseParserTest extends AbstractParserTest
 {
-    protected final String path = super.path + "actionItems/response/";
+    protected final String path = super.path + "action/response/";
 
     protected final String fileSyntaxErrorResponse = path + "syntaxErrorResponse.yml";
 
@@ -47,11 +47,20 @@ public class ResponseParserTest extends AbstractParserTest
      *
      * @throws Exception
      */
-    @Test(expected = ParserException.class)
+    @Test
     public void testSyntaxErrorResponseParsing() throws Exception
     {
-        final Parser parser = new YamlParser();
-        parser.parse(fileSyntaxErrorResponse);
+        try
+        {
+            final Parser parser = new YamlParser();
+            parser.parse(fileSyntaxErrorResponse);
+            Assert.assertFalse(true);
+        }
+        catch (final ParserException parserException)
+        {
+            Assert.assertEquals(4, parserException.getContextMark().getLine());
+            Assert.assertEquals(5, parserException.getProblemMark().getLine());
+        }
     }
 
     /**
@@ -59,11 +68,20 @@ public class ResponseParserTest extends AbstractParserTest
      *
      * @throws Exception
      */
-    @Test(expected = ParserException.class)
+    @Test
     public void testSyntaxErrorResponseArrayNotObjectParsing() throws Exception
     {
-        final Parser parser = new YamlParser();
-        parser.parse(fileSyntaxErrorResponseArrayNotObject);
+        try
+        {
+            final Parser parser = new YamlParser();
+            parser.parse(fileSyntaxErrorResponseArrayNotObject);
+            Assert.assertFalse(true);
+        }
+        catch (final ParserException parserException)
+        {
+            Assert.assertEquals(1, parserException.getContextMark().getLine());
+            Assert.assertEquals(2, parserException.getProblemMark().getLine());
+        }
     }
 
     /**
@@ -72,11 +90,20 @@ public class ResponseParserTest extends AbstractParserTest
      *
      * @throws Exception
      */
-    @Test(expected = ParserException.class)
+    @Test
     public void testSyntaxErrorResponseStoreItemArrayNotObjectParsing() throws Exception
     {
-        final Parser parser = new YamlParser();
-        parser.parse(fileSyntaxErrorResponseStoreItemArrayNotObject);
+        try
+        {
+            final Parser parser = new YamlParser();
+            parser.parse(fileSyntaxErrorResponseStoreItemArrayNotObject);
+            Assert.assertFalse(true);
+        }
+        catch (final ParserException parserException)
+        {
+            Assert.assertEquals(3, parserException.getContextMark().getLine());
+            Assert.assertEquals(4, parserException.getProblemMark().getLine());
+        }
     }
 
     /**
@@ -84,11 +111,20 @@ public class ResponseParserTest extends AbstractParserTest
      *
      * @throws Exception
      */
-    @Test(expected = ParserException.class)
+    @Test
     public void testSyntaxErrorResponseStoreObjectNotArrayParsing() throws Exception
     {
-        final Parser parser = new YamlParser();
-        parser.parse(fileSyntaxErrorResponseStoreObjectNotArray);
+        try
+        {
+            final Parser parser = new YamlParser();
+            parser.parse(fileSyntaxErrorResponseStoreObjectNotArray);
+            Assert.assertFalse(true);
+        }
+        catch (final ParserException parserException)
+        {
+            Assert.assertEquals(2, parserException.getContextMark().getLine());
+            Assert.assertEquals(3, parserException.getProblemMark().getLine());
+        }
     }
 
     /**
@@ -97,11 +133,20 @@ public class ResponseParserTest extends AbstractParserTest
      *
      * @throws Exception
      */
-    @Test(expected = ParserException.class)
+    @Test
     public void testSyntaxErrorResponseValidationItemArrayNotObjectParsing() throws Exception
     {
-        final Parser parser = new YamlParser();
-        parser.parse(fileSyntaxErrorResponseValidationItemArrayNotObject);
+        try
+        {
+            final Parser parser = new YamlParser();
+            parser.parse(fileSyntaxErrorResponseValidationItemArrayNotObject);
+            Assert.assertFalse(true);
+        }
+        catch (final ParserException parserException)
+        {
+            Assert.assertEquals(3, parserException.getContextMark().getLine());
+            Assert.assertEquals(4, parserException.getProblemMark().getLine());
+        }
     }
 
     /**
@@ -109,11 +154,20 @@ public class ResponseParserTest extends AbstractParserTest
      *
      * @throws Exception
      */
-    @Test(expected = ParserException.class)
+    @Test
     public void testSyntaxErrorResponseValidationObjectNotArrayParsing() throws Exception
     {
-        final Parser parser = new YamlParser();
-        parser.parse(fileSyntaxErrorResponseValidationObjectNotArray);
+        try
+        {
+            final Parser parser = new YamlParser();
+            parser.parse(fileSyntaxErrorResponseValidationObjectNotArray);
+            Assert.assertFalse(true);
+        }
+        catch (final ParserException parserException)
+        {
+            Assert.assertEquals(2, parserException.getContextMark().getLine());
+            Assert.assertEquals(3, parserException.getProblemMark().getLine());
+        }
     }
 
     /**

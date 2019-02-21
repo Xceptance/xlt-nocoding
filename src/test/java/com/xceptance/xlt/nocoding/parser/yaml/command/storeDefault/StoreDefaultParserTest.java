@@ -33,6 +33,7 @@ import com.xceptance.xlt.nocoding.util.Constants;
  */
 public class StoreDefaultParserTest extends AbstractParserTest
 {
+    protected String path = super.path + "storeDefault/";
 
     protected final String fileTestData = path + "testData.yml";
 

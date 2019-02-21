@@ -1,5 +1,6 @@
 package com.xceptance.xlt.nocoding.parser.yaml.command.action;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,8 @@ public class ActionParserTest extends AbstractParserTest
     /*
      * Function test
      */
+
+    protected String path = super.path + "action/";
 
     protected final String fileSingleActionNoDefaultsData = path + "SAND.yml";
 
@@ -188,16 +191,41 @@ public class ActionParserTest extends AbstractParserTest
         parser.parse(fileSyntaxErrorAction);
     }
 
+    @Test
+    public void testSyntaxErrorActionParsingLineNumber() throws IOException
+    {
+        try
+        {
+            final Parser parser = new YamlParser();
+            parser.parse(fileSyntaxErrorAction);
+            Assert.assertFalse(true);
+        }
+        catch (final ParserException parserException)
+        {
+            Assert.assertEquals(0, parserException.getContextMark().getLine());
+            Assert.assertEquals(2, parserException.getProblemMark().getLine());
+        }
+    }
+
     /**
      * Verifies an error happens when "Action" has an array beneath it and not objects
      *
      * @throws Exception
      */
-    @Test(expected = ParserException.class)
+    @Test
     public void testSyntaxErrorActionArrayNotObjectParsing() throws Exception
     {
-        final Parser parser = new YamlParser();
-        parser.parse(fileSyntaxErrorActionArrayNotObject);
+        try
+        {
+            final Parser parser = new YamlParser();
+            parser.parse(fileSyntaxErrorActionArrayNotObject);
+            Assert.assertFalse(true);
+        }
+        catch (final ParserException parserException)
+        {
+            Assert.assertEquals(0, parserException.getContextMark().getLine());
+            Assert.assertEquals(1, parserException.getProblemMark().getLine());
+        }
     }
 
     /**
@@ -205,11 +233,20 @@ public class ActionParserTest extends AbstractParserTest
      *
      * @throws Exception
      */
-    @Test(expected = ParserException.class)
+    @Test
     public void testWrongOrderActionParsing() throws Exception
     {
-        final Parser parser = new YamlParser();
-        parser.parse(fileWrongOrderAction);
+        try
+        {
+            final Parser parser = new YamlParser();
+            parser.parse(fileWrongOrderAction);
+            Assert.assertFalse(true);
+        }
+        catch (final ParserException parserException)
+        {
+            Assert.assertEquals(0, parserException.getContextMark().getLine());
+            Assert.assertEquals(15, parserException.getProblemMark().getLine());
+        }
     }
 
     /**
@@ -217,11 +254,20 @@ public class ActionParserTest extends AbstractParserTest
      *
      * @throws Throwable
      */
-    @Test(expected = ParserException.class)
+    @Test
     public void testWrongOrderParsing() throws Throwable
     {
-        final Parser parser = new YamlParser();
-        parser.parse(fileWrongOrder);
+        try
+        {
+            final Parser parser = new YamlParser();
+            parser.parse(fileWrongOrder);
+            Assert.assertFalse(true);
+        }
+        catch (final ParserException parserException)
+        {
+            Assert.assertEquals(0, parserException.getContextMark().getLine());
+            Assert.assertEquals(28, parserException.getProblemMark().getLine());
+        }
     }
 
 }

@@ -101,7 +101,7 @@ public class StoreDefaultParser
 
             default:
                 // We didn't find something fitting, so throw an Exception
-                throw new ParserException("Node at", node.getKeyNode().getStartMark(), " is permitted but unknown", null);
+                throw new ParserException("Node", context, " contains a permitted but unknown list item", node.getKeyNode().getStartMark());
         }
 
         return scriptItems;

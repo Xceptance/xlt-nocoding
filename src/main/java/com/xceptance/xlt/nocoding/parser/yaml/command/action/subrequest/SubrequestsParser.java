@@ -40,7 +40,7 @@ public class SubrequestsParser extends AbstractActionSubItemParser
         // Verify that we have an array
         if (!(subrequestNode instanceof SequenceNode))
         {
-            throw new ParserException("Node at", context, " is " + subrequestNode.getNodeId().toString() + " but needs to be an array",
+            throw new ParserException("Node", context, " contains a " + subrequestNode.getNodeId() + " but it must contain an array",
                                       subrequestNode.getStartMark());
         }
         // Initialize Variables
@@ -51,8 +51,7 @@ public class SubrequestsParser extends AbstractActionSubItemParser
             // Verify that an array was used and not an object
             if (!(subrequestWrapper instanceof MappingNode))
             {
-                throw new ParserException("Node at", subrequestNode.getStartMark(),
-                                          " is " + subrequestWrapper.getNodeId().toString() + " but needs to be a mapping",
+                throw new ParserException("Node", context, " contains " + subrequestWrapper.getNodeId() + " but it must contain a mapping",
                                           subrequestWrapper.getStartMark());
             }
             final List<NodeTuple> subrequestList = ((MappingNode) subrequestWrapper).getValue();
@@ -73,8 +72,7 @@ public class SubrequestsParser extends AbstractActionSubItemParser
                         break;
 
                     default:
-                        throw new ParserException("Node", subrequestWrapper.getStartMark(), " contains an unknown item.",
-                                                  subrequest.getKeyNode().getStartMark());
+                        throw new ParserException("Node", context, " contains an unknown item.", subrequest.getKeyNode().getStartMark());
                 }
             });
         });

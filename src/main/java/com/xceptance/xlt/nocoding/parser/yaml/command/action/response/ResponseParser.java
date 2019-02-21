@@ -58,8 +58,7 @@ public class ResponseParser extends AbstractActionSubItemParser
             // Check if the name is a permitted action item
             if (!Constants.isPermittedResponseItem(itemName))
             {
-                throw new ParserException("Node", responseNode.getStartMark(), " contains a not permitted response item",
-                                          item.getKeyNode().getStartMark());
+                throw new ParserException("Node", context, " contains a not permitted response item", item.getKeyNode().getStartMark());
             }
 
             switch (itemName)
@@ -86,7 +85,7 @@ public class ResponseParser extends AbstractActionSubItemParser
 
                 default:
                     // We didn't find something fitting, so throw an Exception
-                    throw new ParserException("Node", responseNode.getStartMark(), " contains a permitted but unknown response item",
+                    throw new ParserException("Node", context, " contains a permitted but unknown response item",
                                               item.getKeyNode().getStartMark());
             }
         });

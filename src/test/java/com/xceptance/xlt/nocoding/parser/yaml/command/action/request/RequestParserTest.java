@@ -2,6 +2,7 @@ package com.xceptance.xlt.nocoding.parser.yaml.command.action.request;
 
 import java.io.IOException;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.yaml.snakeyaml.parser.ParserException;
 
@@ -17,7 +18,7 @@ import com.xceptance.xlt.nocoding.parser.yaml.YamlParser;
 public class RequestParserTest extends AbstractParserTest
 {
 
-    protected final String path = super.path + "actionItems/request/";
+    protected final String path = super.path + "action/request/";
 
     protected final String fileSyntaxErrorRequest = path + "syntaxErrorRequest.yml";
 
@@ -30,11 +31,20 @@ public class RequestParserTest extends AbstractParserTest
      *
      * @throws IOException
      */
-    @Test(expected = ParserException.class)
+    @Test
     public void testSyntaxErrorRequestParsing() throws IOException
     {
-        final Parser parser = new YamlParser();
-        parser.parse(fileSyntaxErrorRequest);
+        try
+        {
+            final Parser parser = new YamlParser();
+            parser.parse(fileSyntaxErrorRequest);
+            Assert.assertFalse(true);
+        }
+        catch (final ParserException parserException)
+        {
+            Assert.assertEquals(2, parserException.getContextMark().getLine());
+            Assert.assertEquals(3, parserException.getProblemMark().getLine());
+        }
     }
 
     /**
@@ -42,11 +52,20 @@ public class RequestParserTest extends AbstractParserTest
      *
      * @throws IOException
      */
-    @Test(expected = ParserException.class)
+    @Test
     public void testSyntaxErrorRequestArrayNotObjectParsing() throws IOException
     {
-        final Parser parser = new YamlParser();
-        parser.parse(fileSyntaxErrorRequestArrayNotObject);
+        try
+        {
+            final Parser parser = new YamlParser();
+            parser.parse(fileSyntaxErrorRequestArrayNotObject);
+            Assert.assertFalse(true);
+        }
+        catch (final ParserException parserException)
+        {
+            Assert.assertEquals(1, parserException.getContextMark().getLine());
+            Assert.assertEquals(2, parserException.getProblemMark().getLine());
+        }
     }
 
     /**

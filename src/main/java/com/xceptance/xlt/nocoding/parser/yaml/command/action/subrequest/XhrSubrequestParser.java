@@ -41,7 +41,7 @@ public class XhrSubrequestParser
         // Verify the node is an ObjectNode or a NullNode
         if (!(xhrNode instanceof MappingNode))
         {
-            throw new ParserException("Node", context, " contains a " + xhrNode.getNodeId().toString() + " but it must contain a mapping",
+            throw new ParserException("Node", context, " contains a " + xhrNode.getNodeId() + " but it must contain a mapping",
                                       xhrNode.getStartMark());
         }
         // Initialize variables
@@ -55,8 +55,7 @@ public class XhrSubrequestParser
             // Check if the name is a permitted action item
             if (!Constants.isPermittedActionItem(itemName))
             {
-                throw new ParserException("Node", xhrNode.getStartMark(), " contans a not permitted Xhr Action item",
-                                          item.getKeyNode().getStartMark());
+                throw new ParserException("Node", context, " contans a not permitted Xhr Action item", item.getKeyNode().getStartMark());
             }
             AbstractActionSubItem actionItem = null;
 
@@ -78,7 +77,7 @@ public class XhrSubrequestParser
                     }
                     else
                     {
-                        throw new ParserException("Node", xhrNode.getStartMark(), " defines a Name but not as first item.",
+                        throw new ParserException("Node", context, " defines a Name but not as first item.",
                                                   item.getKeyNode().getStartMark());
                     }
 
@@ -95,15 +94,14 @@ public class XhrSubrequestParser
                         }
                         else
                         {
-                            throw new ParserException("Node", xhrNode.getStartMark(),
-                                                      "contains an item, that could not be converted to a request object.",
+                            throw new ParserException("Node", context, "contains an item, that could not be converted to a request object.",
                                                       item.getValueNode().getStartMark());
                         }
                         break;
                     }
                     else
                     {
-                        throw new ParserException("Node", xhrNode.getStartMark(),
+                        throw new ParserException("Node", context,
                                                   " defines a request after another request, a response or a subrequest, which isn't allowed.",
                                                   item.getKeyNode().getStartMark());
                     }
@@ -119,7 +117,7 @@ public class XhrSubrequestParser
                     }
                     else
                     {
-                        throw new ParserException("Node", xhrNode.getStartMark(),
+                        throw new ParserException("Node", context,
                                                   " defines a response after another response or a subrequest, which isn't allowed.",
                                                   item.getKeyNode().getStartMark());
                     }
@@ -132,8 +130,7 @@ public class XhrSubrequestParser
 
                 default:
                     // We didn't find something fitting, so throw an Exception
-                    throw new ParserException("Node", xhrNode.getStartMark(), " contains a permitted but unknown item",
-                                              item.getKeyNode().getStartMark());
+                    throw new ParserException("Node", context, " contains a permitted but unknown item", item.getKeyNode().getStartMark());
             }
             if (actionItem != null)
             {

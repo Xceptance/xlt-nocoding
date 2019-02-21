@@ -10,7 +10,6 @@ import org.yaml.snakeyaml.error.Mark;
 import org.yaml.snakeyaml.nodes.MappingNode;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.NodeTuple;
-import org.yaml.snakeyaml.nodes.ScalarNode;
 import org.yaml.snakeyaml.parser.ParserException;
 
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
@@ -68,8 +67,7 @@ public class RequestParser extends AbstractActionSubItemParser
             // Check if the name is a permitted action item
             if (!Constants.isPermittedRequestItem(itemName))
             {
-                throw new ParserException("Node", requestNode.getStartMark(), " contains a not permitted request item",
-                                          ((ScalarNode) item.getKeyNode()).getStartMark());
+                throw new ParserException("Node", context, " contains a not permitted request item", item.getKeyNode().getStartMark());
             }
 
             // We generally want to read the value of the fieldName but assign it to different variables
@@ -116,7 +114,7 @@ public class RequestParser extends AbstractActionSubItemParser
 
                 default:
                     // We didn't find something fitting, so throw an Exception
-                    throw new ParserException("Node", requestNode.getStartMark(), " containst a permitted but unknown request item",
+                    throw new ParserException("Node", context, " contains a permitted but unknown request item",
                                               item.getKeyNode().getStartMark());
             }
         });

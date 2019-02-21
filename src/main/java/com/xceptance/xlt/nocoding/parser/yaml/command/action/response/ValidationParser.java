@@ -65,7 +65,8 @@ public class ValidationParser
         // Verify that an object was used
         if (!(validationNodeWrapper instanceof MappingNode))
         {
-            throw new ParserException("Node at", context, " is " + validationNodeWrapper.getNodeId() + " but needs to be an object",
+            throw new ParserException("Node", context,
+                                      " contains a " + validationNodeWrapper.getNodeId() + " but it must contain an object",
                                       validationNodeWrapper.getStartMark());
         }
         String validationName = "";
@@ -81,8 +82,7 @@ public class ValidationParser
             // Verify the validation is an object
             if (!(validationContent instanceof MappingNode))
             {
-                throw new ParserException("Node", validation.getKeyNode().getStartMark(),
-                                          " contains a " + validationContent.getNodeId() + " but needs to be an object",
+                throw new ParserException("Node", context, " contains a " + validationContent.getNodeId() + " but needs to be an object",
                                           validationContent.getStartMark());
             }
             final List<NodeTuple> singleValidationContentItems = ((MappingNode) validationContent).getValue();
@@ -96,11 +96,10 @@ public class ValidationParser
                     // Verify, that no extractor was parsed already
                     if (extractor != null)
                     {
-                        throw new ParserException("Node", validationContent.getStartMark(),
-                                                  " contains two definitions of an extractor but only one is allowed.",
+                        throw new ParserException("Node", context, " contains two definitions of an extractor but only one is allowed.",
                                                   contentItem.getKeyNode().getStartMark());
                     }
-                    extractor = new ExtractorParser(contentKey).parse(validationContent.getStartMark(), singleValidationContentItems);
+                    extractor = new ExtractorParser(contentKey).parse(context, singleValidationContentItems);
                     XltLogger.runTimeLogger.debug("Extraction Mode is " + extractor);
 
                 }
@@ -110,26 +109,25 @@ public class ValidationParser
                     // Verify, that an extractor was parsed already
                     if (extractor == null)
                     {
-                        throw new ParserException("Node", validationContent.getStartMark(),
+                        throw new ParserException("Node", context,
                                                   " contains a definition of a validation method but this cannot be parsed before an extractor was defined.",
                                                   contentItem.getKeyNode().getStartMark());
                     }
                     // Verify, that no validation was parsed already
                     if (validationMethod != null)
                     {
-                        throw new ParserException("Node", validationContent.getStartMark(),
+                        throw new ParserException("Node", context,
                                                   " contains two definitions of validation methods but only one is allowed.",
                                                   contentItem.getKeyNode().getStartMark());
                     }
                     // Parse the validation method
-                    validationMethod = new ValidatorParser(contentKey).parse(validationContent.getStartMark(), contentItem.getValueNode());
+                    validationMethod = new ValidatorParser(contentKey).parse(context, contentItem.getValueNode());
                     XltLogger.runTimeLogger.debug("Validation Method is " + validationMethod);
                 }
                 // If it is not Group OR Group and extractor is null, throw an error
                 else if (!Constants.GROUP.equals(contentKey) || extractor == null)
                 {
-                    throw new ParserException("Node", validationContent.getStartMark(), " contains an unknown item.",
-                                              contentItem.getKeyNode().getStartMark());
+                    throw new ParserException("Node", context, " contains an unknown item.", contentItem.getKeyNode().getStartMark());
                 }
             }
         }

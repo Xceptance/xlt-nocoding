@@ -19,6 +19,8 @@ import com.xceptance.xlt.nocoding.parser.yaml.YamlParser;
  */
 public class StoreParserTest extends AbstractParserTest
 {
+    protected String path = super.path + "store/";
+
     protected final String fileStore = path + "store.yml";
 
     protected final String fileStoreObjectNotArray = path + "syntaxErrorStoreObjectNotArray.yml";
@@ -79,10 +81,19 @@ public class StoreParserTest extends AbstractParserTest
      *
      * @throws Exception
      */
-    @Test(expected = ParserException.class)
+    @Test
     public void testStoreObjectParse() throws Exception
     {
-        final Parser parser = new YamlParser();
-        parser.parse(fileStoreObjectNotArray);
+        try
+        {
+            final Parser parser = new YamlParser();
+            parser.parse(fileStoreObjectNotArray);
+            Assert.assertFalse(true);
+        }
+        catch (final ParserException parserException)
+        {
+            Assert.assertEquals(0, parserException.getContextMark().getLine());
+            Assert.assertEquals(1, parserException.getProblemMark().getLine());
+        }
     }
 }

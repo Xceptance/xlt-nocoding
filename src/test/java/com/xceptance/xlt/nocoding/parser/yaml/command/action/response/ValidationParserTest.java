@@ -23,61 +23,6 @@ import com.xceptance.xlt.nocoding.util.Constants;
  */
 public class ValidationParserTest
 {
-
-    /**
-     * Verifies an error is thrown if two validation modes are found
-     *
-     * @throws Exception
-     */
-    @Test(expected = ParserException.class)
-    public void testSyntaxErrorResponseValidationTwoValidationModes() throws Exception
-    {
-        final String yamlSpec = "- val_Name_1 : \n" //
-                                + "    " + Constants.REGEXP + " : pattern\n" //
-                                + "    " + Constants.TEXT + " : pattern\n" //
-                                + "    " + Constants.MATCHES + " : pattern\n";
-
-        final Node validationContent = YamlParserTestHelper.parseToNode(yamlSpec);
-
-        new ValidationParser().parse(validationContent.getStartMark(), validationContent);
-    }
-
-    /**
-     * Verifies an error is thrown if two extractors are found
-     *
-     * @throws Exception
-     */
-    @Test(expected = ParserException.class)
-    public void testSyntaxErrorResponseValidationTwoExtractors() throws Exception
-    {
-        final String yamlSpec = "- val_Name_1 : \n" //
-                                + "    " + Constants.REGEXP + " : pattern\n" //
-                                + "    " + Constants.TEXT + " : pattern\n" //
-                                + "    " + Constants.XPATH + " : pattern\n";
-
-        final Node validationContent = YamlParserTestHelper.parseToNode(yamlSpec);
-
-        new ValidationParser().parse(validationContent.getStartMark(), validationContent);
-    }
-
-    /**
-     * Verifies an error is thrown if a group is parsed but the extractor is not a {@link RegexpExtractor}
-     *
-     * @throws Exception
-     */
-    @Test(expected = ParserException.class)
-    public void testInvalidGroupValidation() throws Exception
-    {
-        final String yamlSpec = "- val_Name_1 : \n" //
-                                + "    " + Constants.COOKIE + " : cookieName\n" //
-                                + "    " + Constants.TEXT + " : cookieValue\n" //
-                                + "    " + Constants.GROUP + " : 2\n";
-
-        final Node validationContent = YamlParserTestHelper.parseToNode(yamlSpec);
-
-        new ValidationParser().parse(validationContent.getStartMark(), validationContent);
-    }
-
     /**
      * Verifies {@link RegexpExtractor} and {@link MatchesValidator} can be parsed
      *
@@ -172,7 +117,89 @@ public class ValidationParserTest
         Assert.assertEquals(extractionExpression, validator.getExtractor().getExtractionExpression());
 
         Assert.assertTrue(validator.getMethod() instanceof CountValidator);
+    }
 
+    /*
+     * Errors
+     */
+
+    /**
+     * Verifies an error is thrown if two validation modes are found
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testSyntaxErrorResponseValidationTwoValidationModes() throws Exception
+    {
+        final String yamlSpec = "- val_Name_1 : \n" //
+                                + "    " + Constants.REGEXP + " : pattern\n" //
+                                + "    " + Constants.TEXT + " : pattern\n" //
+                                + "    " + Constants.MATCHES + " : pattern\n";
+
+        final Node validationContent = YamlParserTestHelper.parseToNode(yamlSpec);
+
+        try
+        {
+            new ValidationParser().parse(validationContent.getStartMark(), validationContent);
+            Assert.assertFalse(true);
+        }
+        catch (final ParserException parserException)
+        {
+            Assert.assertEquals(0, parserException.getContextMark().getLine());
+            Assert.assertEquals(3, parserException.getProblemMark().getLine());
+        }
+    }
+
+    /**
+     * Verifies an error is thrown if two extractors are found
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testSyntaxErrorResponseValidationTwoExtractors() throws Exception
+    {
+        final String yamlSpec = "- val_Name_1 : \n" //
+                                + "    " + Constants.REGEXP + " : pattern\n" //
+                                + "    " + Constants.XPATH + " : pattern\n"//
+                                + "    " + Constants.TEXT + " : pattern\n";
+
+        final Node validationContent = YamlParserTestHelper.parseToNode(yamlSpec);
+        try
+        {
+            new ValidationParser().parse(validationContent.getStartMark(), validationContent);
+            Assert.assertFalse(true);
+        }
+        catch (final ParserException parserException)
+        {
+            Assert.assertEquals(0, parserException.getContextMark().getLine());
+            Assert.assertEquals(2, parserException.getProblemMark().getLine());
+        }
+    }
+
+    /**
+     * Verifies an error is thrown if a group is parsed but the extractor is not a {@link RegexpExtractor}
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testInvalidGroupValidation() throws Exception
+    {
+        final String yamlSpec = "- val_Name_1 : \n" //
+                                + "    " + Constants.COOKIE + " : cookieName\n" //
+                                + "    " + Constants.TEXT + " : cookieValue\n" //
+                                + "    " + Constants.GROUP + " : 2\n";
+
+        final Node validationContent = YamlParserTestHelper.parseToNode(yamlSpec);
+        try
+        {
+            new ValidationParser().parse(validationContent.getStartMark(), validationContent);
+            Assert.assertFalse(true);
+        }
+        catch (final ParserException parserException)
+        {
+            Assert.assertEquals(0, parserException.getContextMark().getLine());
+            Assert.assertEquals(3, parserException.getProblemMark().getLine());
+        }
     }
 
 }

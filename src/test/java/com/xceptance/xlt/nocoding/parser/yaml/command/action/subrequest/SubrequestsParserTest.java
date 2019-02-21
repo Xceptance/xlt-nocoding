@@ -2,9 +2,9 @@ package com.xceptance.xlt.nocoding.parser.yaml.command.action.subrequest;
 
 import java.io.IOException;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.yaml.snakeyaml.parser.ParserException;
-import org.yaml.snakeyaml.scanner.ScannerException;
 
 import com.xceptance.xlt.nocoding.parser.AbstractParserTest;
 import com.xceptance.xlt.nocoding.parser.Parser;
@@ -17,7 +17,7 @@ import com.xceptance.xlt.nocoding.parser.yaml.YamlParser;
  */
 public class SubrequestsParserTest extends AbstractParserTest
 {
-    protected final String path = super.path + "actionItems/subrequests/";
+    protected final String path = super.path + "action/subrequests/";
 
     protected final String fileXhrSubrequests = path + "xhrSubrequests.yml";
 
@@ -64,11 +64,20 @@ public class SubrequestsParserTest extends AbstractParserTest
      *
      * @throws IOException
      */
-    @Test(expected = ParserException.class)
+    @Test
     public void testSyntaxErrorSubrequestsParsing() throws IOException
     {
-        final Parser parser = new YamlParser();
-        parser.parse(fileSyntaxErrorSubrequests);
+        try
+        {
+            final Parser parser = new YamlParser();
+            parser.parse(fileSyntaxErrorSubrequests);
+            Assert.assertFalse(true);
+        }
+        catch (final ParserException parserException)
+        {
+            Assert.assertEquals(4, parserException.getContextMark().getLine());
+            Assert.assertEquals(5, parserException.getProblemMark().getLine());
+        }
     }
 
     /**
@@ -76,11 +85,20 @@ public class SubrequestsParserTest extends AbstractParserTest
      *
      * @throws IOException
      */
-    @Test(expected = ParserException.class)
+    @Test
     public void testSyntaxErrorSubrequestsObjectNotArrayParsing() throws IOException
     {
-        final Parser parser = new YamlParser();
-        parser.parse(fileSyntaxErrorSubrequestsObjectNotArray);
+        try
+        {
+            final Parser parser = new YamlParser();
+            parser.parse(fileSyntaxErrorSubrequestsObjectNotArray);
+            Assert.assertFalse(true);
+        }
+        catch (final ParserException parserException)
+        {
+            Assert.assertEquals(1, parserException.getContextMark().getLine());
+            Assert.assertEquals(2, parserException.getProblemMark().getLine());
+        }
     }
 
     /**
@@ -89,11 +107,20 @@ public class SubrequestsParserTest extends AbstractParserTest
      *
      * @throws IOException
      */
-    @Test(expected = ScannerException.class)
+    @Test
     public void testSyntaxErrorSubrequestsStaticItemObjectNotArrayParsing() throws IOException
     {
-        final Parser parser = new YamlParser();
-        parser.parse(fileSyntaxErrorSubrequestsStaticItemObjectNotArray);
+        try
+        {
+            final Parser parser = new YamlParser();
+            parser.parse(fileSyntaxErrorSubrequestsStaticItemObjectNotArray);
+            Assert.assertFalse(true);
+        }
+        catch (final ParserException parserException)
+        {
+            Assert.assertEquals(2, parserException.getContextMark().getLine());
+            Assert.assertEquals(3, parserException.getProblemMark().getLine());
+        }
     }
 
     /**
@@ -101,11 +128,20 @@ public class SubrequestsParserTest extends AbstractParserTest
      *
      * @throws IOException
      */
-    @Test(expected = ParserException.class)
+    @Test
     public void testSyntaxErrorSubrequestsXhrItemArrayNotObjectParsing() throws IOException
     {
-        final Parser parser = new YamlParser();
-        parser.parse(fileSyntaxErrorSubrequestsXhrItemArrayNotObject);
+        try
+        {
+            final Parser parser = new YamlParser();
+            parser.parse(fileSyntaxErrorSubrequestsXhrItemArrayNotObject);
+            Assert.assertFalse(true);
+        }
+        catch (final ParserException parserException)
+        {
+            Assert.assertEquals(2, parserException.getContextMark().getLine());
+            Assert.assertEquals(3, parserException.getProblemMark().getLine());
+        }
     }
 
     /**
@@ -113,11 +149,20 @@ public class SubrequestsParserTest extends AbstractParserTest
      *
      * @throws IOException
      */
-    @Test(expected = ParserException.class)
+    @Test
     public void testSyntaxErrorXhrParsing() throws IOException
     {
-        final Parser parser = new YamlParser();
-        parser.parse(fileSyntaxErrorXhr);
+        try
+        {
+            final Parser parser = new YamlParser();
+            parser.parse(fileSyntaxErrorXhr);
+            Assert.assertFalse(true);
+        }
+        catch (final ParserException parserException)
+        {
+            Assert.assertEquals(5, parserException.getContextMark().getLine());
+            Assert.assertEquals(7, parserException.getProblemMark().getLine());
+        }
     }
 
     /**
@@ -125,11 +170,20 @@ public class SubrequestsParserTest extends AbstractParserTest
      *
      * @throws IOException
      */
-    @Test(expected = ParserException.class)
+    @Test
     public void testSyntaxErrorStaticParsing() throws IOException
     {
-        final Parser parser = new YamlParser();
-        parser.parse(fileSyntaxErrorStatic);
+        try
+        {
+            final Parser parser = new YamlParser();
+            parser.parse(fileSyntaxErrorStatic);
+            Assert.assertFalse(true);
+        }
+        catch (final ParserException parserException)
+        {
+            Assert.assertEquals(5, parserException.getContextMark().getLine());
+            Assert.assertEquals(6, parserException.getProblemMark().getLine());
+        }
     }
 
 }

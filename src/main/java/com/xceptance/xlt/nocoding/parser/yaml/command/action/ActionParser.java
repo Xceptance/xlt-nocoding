@@ -68,7 +68,7 @@ public class ActionParser
             // Check if the name is a permitted action item
             if (!Constants.isPermittedActionItem(itemName))
             {
-                throw new ParserException("Node", actionNode.getStartMark(), " contains a not permitted action item",
+                throw new ParserException("Node", context, " contains a not permitted action item",
                                           ((ScalarNode) item.getKeyNode()).getStartMark());
             }
             AbstractActionSubItemParser actionItemParser = null;
@@ -90,8 +90,8 @@ public class ActionParser
                     }
                     else
                     {
-                        throw new ParserException("Node", actionNode.getStartMark(), " defines a Name but not as first item.",
-                                                  ((ScalarNode) item.getKeyNode()).getStartMark());
+                        throw new ParserException("Node", context, " defines a Name but not as first item.",
+                                                  item.getKeyNode().getStartMark());
                     }
 
                 case Constants.REQUEST:
@@ -105,9 +105,9 @@ public class ActionParser
                     }
                     else
                     {
-                        throw new ParserException("Node", actionNode.getStartMark(),
+                        throw new ParserException("Node", context,
                                                   " defines a request after another request, a response or a subrequest but must be defined before them.",
-                                                  ((ScalarNode) item.getKeyNode()).getStartMark());
+                                                  item.getKeyNode().getStartMark());
                     }
 
                 case Constants.RESPONSE:
@@ -121,9 +121,9 @@ public class ActionParser
                     }
                     else
                     {
-                        throw new ParserException("Node", actionNode.getStartMark(),
+                        throw new ParserException("Node", context,
                                                   " defines a response after another response or a subrequest but must be defined before it.",
-                                                  ((ScalarNode) item.getKeyNode()).getStartMark());
+                                                  item.getKeyNode().getStartMark());
 
                     }
 
@@ -135,8 +135,7 @@ public class ActionParser
 
                 default:
                     // We didn't find something fitting, so throw an Exception
-                    throw new ParserException("Node at", actionNode.getStartMark(), " is permitted but unknown",
-                                              item.getKeyNode().getStartMark());
+                    throw new ParserException("Node", context, " contains a permitted but unknown item", item.getKeyNode().getStartMark());
             }
 
             // If we specified an actionItemParser
