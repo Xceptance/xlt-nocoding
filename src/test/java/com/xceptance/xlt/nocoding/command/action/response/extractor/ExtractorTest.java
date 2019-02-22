@@ -3,10 +3,9 @@ package com.xceptance.xlt.nocoding.command.action.response.extractor;
 import org.junit.Before;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
-import com.xceptance.xlt.api.util.XltProperties;
+import com.xceptance.xlt.nocoding.command.AbstractContextTest;
 import com.xceptance.xlt.nocoding.util.MockObjects;
 import com.xceptance.xlt.nocoding.util.context.Context;
-import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
  * Abstract class for extractor tests. Stores the {@link WebResponse} from {@link MockObjects#loadResponse()} in
@@ -14,9 +13,12 @@ import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
  *
  * @author ckeiner
  */
-public abstract class ExtractorTest
+public abstract class ExtractorTest extends AbstractContextTest
 {
-    protected Context<?> context;
+    public ExtractorTest(final Context<?> context)
+    {
+        super(context);
+    }
 
     protected MockObjects mockObjects;
 
@@ -27,7 +29,6 @@ public abstract class ExtractorTest
     @Before
     public void init()
     {
-        context = new LightWeightContext(XltProperties.getInstance());
         mockObjects = new MockObjects();
         mockObjects.loadResponse();
         context.setWebResponse(mockObjects.getResponse());

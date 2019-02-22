@@ -43,7 +43,9 @@ public class NoCodingPropertyAdmin
 
     public static final String DOM = "dom";
 
-    public static final String MODE_DEFAULT = LIGHTWEIGHT;
+    public static final String REQUEST = "request";
+
+    public static final String MODE_DEFAULT = REQUEST;
 
     public static final String DIRECTORY_DEFAULT = "./config/data/";
 

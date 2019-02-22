@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.xceptance.xlt.nocoding.util.MockObjects;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Tests for {@link RegexpExtractor}
@@ -14,6 +15,11 @@ import com.xceptance.xlt.nocoding.util.MockObjects;
  */
 public class RegexpExtractorTest extends ExtractorTest
 {
+
+    public RegexpExtractorTest(final Context<?> context)
+    {
+        super(context);
+    }
 
     /**
      * Verifies {@link RegexpExtractor} extracts the correct string with the pattern from

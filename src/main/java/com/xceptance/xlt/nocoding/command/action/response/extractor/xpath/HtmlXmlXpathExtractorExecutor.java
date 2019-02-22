@@ -11,6 +11,7 @@ import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.context.DomContext;
 import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
+import com.xceptance.xlt.nocoding.util.context.RequestContext;
 
 /**
  * XPath Extractor for "html/text" content type
@@ -79,6 +80,10 @@ public class HtmlXmlXpathExtractorExecutor extends XpathExtractorExecutor
         {
             sgmlPage = ((LightWeightContext) context).getSgmlPage();
         }
+        else if (context instanceof RequestContext)
+        {
+            sgmlPage = ((RequestContext) context).getSgmlPage();
+        }
         // Else, simply get the page
         else if (context instanceof DomContext)
         {
@@ -86,8 +91,9 @@ public class HtmlXmlXpathExtractorExecutor extends XpathExtractorExecutor
         }
         else
         {
-            throw new IllegalStateException("Context must be " + LightWeightContext.class.getSimpleName() + " or "
-                                            + DomContext.class.getSimpleName() + " but is " + context.getClass().getSimpleName());
+            throw new IllegalStateException("Context must be " + LightWeightContext.class.getSimpleName() + ", "
+                                            + RequestContext.class.getSimpleName() + " or " + DomContext.class.getSimpleName() + " but is "
+                                            + context.getClass().getSimpleName());
         }
 
         // Verify, that if the sgmlPage is a XmlPage, that it has content

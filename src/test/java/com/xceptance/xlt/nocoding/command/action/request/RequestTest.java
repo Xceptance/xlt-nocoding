@@ -13,8 +13,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.InvalidArgumentException;
@@ -23,36 +23,42 @@ import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.util.Cookie;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
-import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.engine.XltWebClient;
+import com.xceptance.xlt.nocoding.command.AbstractContextTest;
 import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.command.storeDefault.StoreDefaultHeader;
 import com.xceptance.xlt.nocoding.command.storeDefault.StoreDefaultParameter;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.RecentKeyTreeMap;
 import com.xceptance.xlt.nocoding.util.context.Context;
-import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
+import com.xceptance.xlt.nocoding.util.storage.DataStorage;
 
 /**
  * Tests {@link Request}
  */
-public class RequestTest
+public class RequestTest extends AbstractContextTest
 {
     public Request request;
 
     public WebRequest webRequest;
 
-    public Context<?> context;
-
     private final String url = "https://localhost:8443/posters/";
 
-    /**
-     * Creates a new {@link Context}
-     */
-    @Before
-    public void init()
+    public RequestTest(final Context<?> context)
     {
-        context = new LightWeightContext(XltProperties.getInstance());
+        super(context);
+    }
+
+    @After
+    public void clearStorage()
+    {
+        final DataStorage storage = context.getDataStorage();
+        storage.getDefaultCookies().clear();
+        storage.getDefaultHeaders().clear();
+        storage.getDefaultItems().clear();
+        storage.getDefaultParameters().clear();
+        storage.getDefaultStatics().clear();
+        context.getWebClient().getCookieManager().clearCookies();
     }
 
     /**

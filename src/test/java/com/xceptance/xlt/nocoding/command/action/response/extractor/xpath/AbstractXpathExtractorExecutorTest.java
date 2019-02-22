@@ -3,14 +3,17 @@ package com.xceptance.xlt.nocoding.command.action.response.extractor.xpath;
 import org.junit.Before;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
-import com.xceptance.xlt.api.util.XltProperties;
+import com.xceptance.xlt.nocoding.command.AbstractContextTest;
 import com.xceptance.xlt.nocoding.util.MockObjects;
 import com.xceptance.xlt.nocoding.util.context.Context;
-import com.xceptance.xlt.nocoding.util.context.DomContext;
 
-public abstract class AbstractXpathExtractorExecutorTest
+public abstract class AbstractXpathExtractorExecutorTest extends AbstractContextTest
 {
-    protected Context<?> context;
+
+    public AbstractXpathExtractorExecutorTest(final Context<?> context)
+    {
+        super(context);
+    }
 
     protected MockObjects mockObjects;
 
@@ -21,7 +24,6 @@ public abstract class AbstractXpathExtractorExecutorTest
     @Before
     public void init()
     {
-        context = new DomContext(XltProperties.getInstance());
         mockObjects = new MockObjects();
         mockObjects.loadResponse();
         context.setWebResponse(mockObjects.getResponse());

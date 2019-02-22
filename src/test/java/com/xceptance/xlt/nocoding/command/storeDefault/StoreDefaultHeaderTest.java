@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.util.Constants;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Tests {@link StoreDefaultHeader}
@@ -17,6 +18,11 @@ import com.xceptance.xlt.nocoding.util.Constants;
  */
 public class StoreDefaultHeaderTest extends AbstractStoreDefaultTest
 {
+    public StoreDefaultHeaderTest(final Context<?> context)
+    {
+        super(context);
+    }
+
     /**
      * Verifies {@link StoreDefaultHeader} can store one default header
      *

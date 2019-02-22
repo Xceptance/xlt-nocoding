@@ -5,6 +5,8 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.xceptance.xlt.nocoding.util.context.Context;
+
 /**
  * Tests for {@link HeaderExtractor}
  *
@@ -12,6 +14,11 @@ import org.junit.Test;
  */
 public class HeaderExtractorTest extends ExtractorTest
 {
+
+    public HeaderExtractorTest(final Context<?> context)
+    {
+        super(context);
+    }
 
     /**
      * Verifies that {@link HeaderExtractor} can extract a header

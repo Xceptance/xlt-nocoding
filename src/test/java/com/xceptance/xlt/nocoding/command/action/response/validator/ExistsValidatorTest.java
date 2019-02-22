@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.xceptance.xlt.nocoding.util.context.Context;
+
 /**
  * Tests {@link ExistsValidator}
  *
@@ -12,6 +14,11 @@ import org.junit.Test;
  */
 public class ExistsValidatorTest extends ValidationMethodTest
 {
+
+    public ExistsValidatorTest(final Context<?> context)
+    {
+        super(context);
+    }
 
     /**
      * Verifies {@link ExistsValidator} validates that the result list has an item in it

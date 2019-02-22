@@ -3,7 +3,7 @@
 This is a library for Xceptance LoadTest (XLT) - http://www.xceptance-loadtest.com/.
 
 * Name: xlt-nocoding
-* Version: 2.1.0
+* Version: 2.2.0
 * License: Apache V2.0
 * License URI: http://www.apache.org/licenses/LICENSE-2.0.txt
 * Tags: load testing, performance testing, testing
@@ -36,6 +36,7 @@ Since this is an open-source project and licensed under the Apache License V2.0,
 * Supports two modes to run the test-cases:
     * DOM: the responses are parsed into the DOM, which allows to select elements by XPath for validation purpose
     * LIGHT: there exists no DOM, which makes the test case fast to execute.
+    * REQUEST: Only WebRequests and Responses are sent, which makes this the fastest mode.
 * Cookie handling is automatic
 * JavaScript and Static Content can be handled automatically and also be switched off.
 * ...

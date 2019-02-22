@@ -4,22 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
-import com.xceptance.xlt.api.util.XltProperties;
+import com.xceptance.xlt.nocoding.command.AbstractContextTest;
 import com.xceptance.xlt.nocoding.util.context.Context;
-import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
-public class StaticSubrequestTest
+public class StaticSubrequestTest extends AbstractContextTest
 {
 
-    public Context<?> context;
-
-    @Before
-    public void init()
+    public StaticSubrequestTest(final Context<?> context)
     {
-        context = new LightWeightContext(XltProperties.getInstance());
+        super(context);
     }
 
     @Test

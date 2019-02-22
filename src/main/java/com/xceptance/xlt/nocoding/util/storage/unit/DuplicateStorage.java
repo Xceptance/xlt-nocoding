@@ -82,28 +82,13 @@ public class DuplicateStorage
      */
     public boolean remove(final String itemName)
     {
-        boolean removed = false;
         // Get the maximum amount of removable items
-        int amountRemovableItems = getItems().size();
+        final int amountRemovableItems = getItems().size();
         // Iterate over all elements
-        for (final NameValuePair item : getItems())
-        {
-            // If the name equals itemName
-            if (item.getName().equals(itemName))
-            {
-                // Remove the item
-                removed = getItems().remove(item);
-                // Decrement the amount of removable items
-                amountRemovableItems--;
-                // If we reached zero, there isn't an element left. Therefore, we want to quit the loop.
-                if (amountRemovableItems == 0)
-                {
-                    break;
-                }
-            }
-        }
-        // Return if we removed at least one item
-        return removed;
+        getItems().removeIf(item -> item.getName().equals(itemName));
+
+        // Return true if we removed at least one item and hence have an item less
+        return amountRemovableItems > getItems().size();
     }
 
     /**

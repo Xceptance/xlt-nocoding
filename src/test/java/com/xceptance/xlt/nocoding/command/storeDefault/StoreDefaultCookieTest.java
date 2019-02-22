@@ -9,6 +9,7 @@ import org.junit.Test;
 import com.gargoylesoftware.htmlunit.util.Cookie;
 import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.util.Constants;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Tests {@link StoreDefaultCookie}
@@ -17,6 +18,11 @@ import com.xceptance.xlt.nocoding.util.Constants;
  */
 public class StoreDefaultCookieTest extends AbstractStoreDefaultTest
 {
+
+    public StoreDefaultCookieTest(final Context<?> context)
+    {
+        super(context);
+    }
 
     final String prefixDomain = "domain=";
 

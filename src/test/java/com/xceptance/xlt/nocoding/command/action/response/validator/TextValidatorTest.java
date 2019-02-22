@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.xceptance.xlt.nocoding.util.context.Context;
+
 /**
  * Tests {@link TextValidator}
  *
@@ -12,6 +14,11 @@ import org.junit.Test;
  */
 public class TextValidatorTest extends ValidationMethodTest
 {
+
+    public TextValidatorTest(final Context<?> context)
+    {
+        super(context);
+    }
 
     /**
      * Verifies {@link TextValidator} validates the content of the first result

@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.util.Constants;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Tests {@link StoreDefaultValue}
@@ -13,6 +14,11 @@ import com.xceptance.xlt.nocoding.util.Constants;
  */
 public class StoreDefaultValueTest extends AbstractStoreDefaultTest
 {
+
+    public StoreDefaultValueTest(final Context<?> context)
+    {
+        super(context);
+    }
 
     /**
      * Verifies {@link StoreDefaultValue} can store one default item

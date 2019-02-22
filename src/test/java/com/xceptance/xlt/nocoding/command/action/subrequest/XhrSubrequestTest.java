@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
-import com.xceptance.xlt.api.util.XltProperties;
+import com.xceptance.xlt.nocoding.command.AbstractContextTest;
 import com.xceptance.xlt.nocoding.command.action.AbstractActionSubItem;
 import com.xceptance.xlt.nocoding.command.action.request.Request;
 import com.xceptance.xlt.nocoding.command.action.response.AbstractResponseSubItem;
@@ -17,18 +17,21 @@ import com.xceptance.xlt.nocoding.command.action.response.Validator;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.RegexpExtractor;
 import com.xceptance.xlt.nocoding.util.MockObjects;
 import com.xceptance.xlt.nocoding.util.context.Context;
-import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
  * Tests {@link XhrSubrequest}
  *
  * @author ckeiner
  */
-public class XhrSubrequestTest
+public class XhrSubrequestTest extends AbstractContextTest
 {
     private MockObjects mockObjects;
 
-    private Context<?> context;
+    public XhrSubrequestTest(final Context<?> context)
+    {
+        super(context);
+        init();
+    }
 
     /**
      * Sets {@link WebResponse} via {@link MockObjects#loadResponse()} in {@link Context}
@@ -37,7 +40,6 @@ public class XhrSubrequestTest
     public void init()
     {
         mockObjects = new MockObjects();
-        context = new LightWeightContext(XltProperties.getInstance());
         context.getWebClient().setTimerName("Xhr-TimerName");
         mockObjects.loadResponse();
         context.setWebResponse(mockObjects.getResponse());
@@ -58,7 +60,7 @@ public class XhrSubrequestTest
         final List<AbstractResponseSubItem> responseItems = new ArrayList<>();
         responseItems.add(new HttpCodeValidator("200"));
         final AbstractResponseSubItem responseItem = new Validator("Validate Title", new RegexpExtractor(mockObjects.regexStringExpected),
-                                                                null);
+                                                                   null);
         responseItems.add(responseItem);
         actionItem = new Response(responseItems);
         actionItems.add(actionItem);

@@ -25,6 +25,7 @@ import com.xceptance.xlt.nocoding.util.ObjectUtils;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.context.DomContext;
 import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
+import com.xceptance.xlt.nocoding.util.context.RequestContext;
 
 /**
  * Executes a xlt-nocoding test case by parsing the file specified in the classpath or the properties and executing the
@@ -97,10 +98,14 @@ public abstract class AbstractNocodingTestCase extends AbstractTestCase
                 context = new DomContext(properties);
                 break;
 
+            case NoCodingPropertyAdmin.REQUEST:
+                context = new RequestContext(properties);
+                break;
+
             default:
                 // Mode is neither of the two options, therefore throw an error
-                throw new IllegalStateException("Mode must be " + NoCodingPropertyAdmin.LIGHTWEIGHT + " or " + NoCodingPropertyAdmin.DOM
-                                                + " but is " + mode);
+                throw new IllegalStateException("Mode must be " + NoCodingPropertyAdmin.LIGHTWEIGHT + ", " + NoCodingPropertyAdmin.REQUEST
+                                                + " or " + NoCodingPropertyAdmin.DOM + " but is " + mode);
         }
         // Get the possible filePaths
         final List<String> filepaths = getAllPossibleFilepaths();

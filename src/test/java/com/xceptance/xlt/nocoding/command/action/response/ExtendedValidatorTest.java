@@ -13,8 +13,8 @@ import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
-import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.XltMockWebConnection;
+import com.xceptance.xlt.nocoding.command.AbstractContextTest;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.AbstractExtractor;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.CookieExtractor;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.HeaderExtractor;
@@ -25,16 +25,18 @@ import com.xceptance.xlt.nocoding.command.action.response.validator.ExistsValida
 import com.xceptance.xlt.nocoding.command.action.response.validator.MatchesValidator;
 import com.xceptance.xlt.nocoding.command.action.response.validator.TextValidator;
 import com.xceptance.xlt.nocoding.util.context.Context;
-import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
  * Test {@link Validator} with all combinations of {@link AbstractExtractor} and {@link AbstractValidator}
  *
  * @author ckeiner
  */
-public class ExtendedValidatorTest
+public class ExtendedValidatorTest extends AbstractContextTest
 {
-    private Context<?> context;
+    public ExtendedValidatorTest(final Context<?> context)
+    {
+        super(context);
+    }
 
     private XltMockWebConnection webConnection;
 
@@ -56,7 +58,6 @@ public class ExtendedValidatorTest
         List<NameValuePair> headers;
         String name;
         String value;
-        context = new LightWeightContext(XltProperties.getInstance());
         webConnection = new XltMockWebConnection(context.getWebClient());
 
         // Set answer to localhost/posters/

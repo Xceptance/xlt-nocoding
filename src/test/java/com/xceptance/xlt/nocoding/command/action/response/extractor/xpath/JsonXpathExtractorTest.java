@@ -10,9 +10,15 @@ import org.junit.Test;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.nocoding.util.MockWebResponse;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 public class JsonXpathExtractorTest extends AbstractXpathExtractorExecutorTest
 {
+
+    public JsonXpathExtractorTest(final Context<?> context)
+    {
+        super(context);
+    }
 
     String urlString = "http://www.xceptance.com";
 

@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
-import com.gargoylesoftware.htmlunit.WebResponse;
-import com.xceptance.xlt.api.util.XltProperties;
+import com.xceptance.xlt.nocoding.command.AbstractContextTest;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.AbstractExtractor;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.CookieExtractor;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.HeaderExtractor;
@@ -21,30 +19,23 @@ import com.xceptance.xlt.nocoding.command.action.response.validator.TextValidato
 import com.xceptance.xlt.nocoding.command.store.Store;
 import com.xceptance.xlt.nocoding.util.MockObjects;
 import com.xceptance.xlt.nocoding.util.context.Context;
-import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
  * Tests {@link Validator}
  *
  * @author ckeiner
  */
-public class ValidatorTest
+public class ValidatorTest extends AbstractContextTest
 {
-    public Context<?> context;
-
-    public MockObjects mockObjects;
-
-    /**
-     * Sets {@link WebResponse} via {@link MockObjects#loadResponse()} in {@link Context}
-     */
-    @Before
-    public void init()
+    public ValidatorTest(final Context<?> context)
     {
-        context = new LightWeightContext(XltProperties.getInstance());
+        super(context);
         mockObjects = new MockObjects();
         mockObjects.loadResponse();
         context.setWebResponse(mockObjects.getResponse());
     }
+
+    public MockObjects mockObjects;
 
     /**
      * Validates {@link CookieExtractor} with multiple {@link AbstractValidator}.

@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.util.Constants;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Tests {@link StoreDefaultStaticSubrequest}
@@ -16,6 +17,11 @@ import com.xceptance.xlt.nocoding.util.Constants;
  */
 public class StoreDefaultStaticSubrequestTest extends AbstractStoreDefaultTest
 {
+
+    public StoreDefaultStaticSubrequestTest(final Context<?> context)
+    {
+        super(context);
+    }
 
     /**
      * Verifies {@link StoreDefaultStaticSubrequest} can store one default static url

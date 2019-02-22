@@ -4,34 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
-import com.gargoylesoftware.htmlunit.WebResponse;
-import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.api.validators.HttpResponseCodeValidator;
+import com.xceptance.xlt.nocoding.command.AbstractContextTest;
 import com.xceptance.xlt.nocoding.util.MockObjects;
 import com.xceptance.xlt.nocoding.util.context.Context;
-import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
  * Tests {@link Response}
  *
  * @author ckeiner
  */
-public class ResponseTest
+public class ResponseTest extends AbstractContextTest
 {
-    Context<?> context;
-
     MockObjects mockObjects;
 
-    /**
-     * Sets {@link WebResponse} via {@link MockObjects#loadResponse()} in {@link Context}
-     */
-    @Before
-    public void init()
+    public ResponseTest(final Context<?> context)
     {
-        context = new LightWeightContext(XltProperties.getInstance());
+        super(context);
         mockObjects = new MockObjects();
         mockObjects.loadResponse();
         context.setWebResponse(mockObjects.getResponse());

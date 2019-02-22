@@ -1,15 +1,26 @@
 package com.xceptance.xlt.nocoding.command.action.response.extractor.xpath;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
+import com.gargoylesoftware.htmlunit.Page;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.ExtractorTest;
 import com.xceptance.xlt.nocoding.util.MockWebResponse;
+import com.xceptance.xlt.nocoding.util.context.Context;
+import com.xceptance.xlt.nocoding.util.context.DomContext;
 
 public class XpathExtractorTest extends ExtractorTest
 {
+
+    public XpathExtractorTest(final Context<?> context)
+    {
+        super(context);
+    }
 
     /**
      * Verifies an unsupported type cannot be parsed
@@ -39,11 +50,24 @@ public class XpathExtractorTest extends ExtractorTest
 
     /**
      * Verifies XpathExtractor decides on a specific XpathExtractor and gets the result
+     * 
+     * @throws IOException
+     * @throws FailingHttpStatusCodeException
      */
     @Test
-    public void testGetByXPath()
+    public void testGetByXPath() throws FailingHttpStatusCodeException, IOException
     {
         context.setWebResponse(mockObjects.getResponse());
+        // If the context is Dom, then we additionally have to set a page
+        if (context instanceof DomContext)
+        {
+            final Page page = context.getWebClient()
+                                     .loadWebResponseInto(context.getWebResponse(), context.getWebClient().getCurrentWindow());
+            if (page.isHtmlPage())
+            {
+                ((DomContext) context).setPage((HtmlPage) page);
+            }
+        }
         final XpathExtractor extractor = new XpathExtractor(mockObjects.xPathString);
         extractor.execute(context);
         final List<String> xPathResults = extractor.getResult();

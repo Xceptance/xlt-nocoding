@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
-import com.xceptance.xlt.api.util.XltProperties;
+import com.xceptance.xlt.nocoding.command.AbstractContextTest;
 import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.command.action.request.Request;
 import com.xceptance.xlt.nocoding.command.action.response.Response;
@@ -15,24 +14,17 @@ import com.xceptance.xlt.nocoding.command.action.subrequest.StaticSubrequest;
 import com.xceptance.xlt.nocoding.command.storeDefault.StoreDefaultStaticSubrequest;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.context.Context;
-import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
  * Tests {@link Action}
  *
  * @author ckeiner
  */
-public class ActionTest
+public class ActionTest extends AbstractContextTest
 {
-    Context<?> context;
-
-    /**
-     * Creates a new {@link Context}
-     */
-    @Before
-    public void init()
+    public ActionTest(final Context<?> context)
     {
-        context = new LightWeightContext(XltProperties.getInstance());
+        super(context);
     }
 
     /**

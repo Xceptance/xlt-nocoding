@@ -1,30 +1,23 @@
 package com.xceptance.xlt.nocoding.command.store;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
-import com.xceptance.xlt.api.util.XltProperties;
+import com.xceptance.xlt.nocoding.command.AbstractContextTest;
 import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.util.context.Context;
-import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
  * Tests {@link Store}
  *
  * @author ckeiner
  */
-public class StoreTest
+public class StoreTest extends AbstractContextTest
 {
-    public Context<?> context;
 
-    /**
-     * Creates a new {@link Context}
-     */
-    @Before
-    public void init()
+    public StoreTest(final Context<?> context)
     {
-        context = new LightWeightContext(XltProperties.getInstance());
+        super(context);
     }
 
     /**

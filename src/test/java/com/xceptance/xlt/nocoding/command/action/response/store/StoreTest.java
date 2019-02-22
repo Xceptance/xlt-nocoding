@@ -13,22 +13,24 @@ import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
-import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.XltMockWebConnection;
+import com.xceptance.xlt.nocoding.command.AbstractContextTest;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.CookieExtractor;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.HeaderExtractor;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.RegexpExtractor;
 import com.xceptance.xlt.nocoding.util.context.Context;
-import com.xceptance.xlt.nocoding.util.context.LightWeightContext;
 
 /**
  * Tests {@link AbstractResponseStore}
  *
  * @author ckeiner
  */
-public class StoreTest
+public class StoreTest extends AbstractContextTest
 {
-    private Context<?> context;
+    public StoreTest(final Context<?> context)
+    {
+        super(context);
+    }
 
     private XltMockWebConnection webConnection;
 
@@ -50,7 +52,6 @@ public class StoreTest
         List<NameValuePair> headers;
         String name;
         String value;
-        context = new LightWeightContext(XltProperties.getInstance());
         webConnection = new XltMockWebConnection(context.getWebClient());
         // Set answer to localhost/posters/
         url = new URL("https://localhost:8443/posters/");

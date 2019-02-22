@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.xceptance.xlt.nocoding.util.context.Context;
+
 /**
  * Tests {@link CountValidator}
  *
@@ -12,6 +14,11 @@ import org.junit.Test;
  */
 public class CountValidatorTest extends ValidationMethodTest
 {
+
+    public CountValidatorTest(final Context<?> context)
+    {
+        super(context);
+    }
 
     /**
      * Verifies the {@link CountValidator} validates the correct amount of results

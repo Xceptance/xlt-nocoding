@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.xceptance.xlt.nocoding.util.context.Context;
+
 /**
  * Tests {@link MatchesValidator}
  *
@@ -12,6 +14,11 @@ import org.junit.Test;
  */
 public class MatchesValidatorTest extends ValidationMethodTest
 {
+
+    public MatchesValidatorTest(final Context<?> context)
+    {
+        super(context);
+    }
 
     /**
      * Verifies {@link MatchesValidator} matches the content of the first result with the expected content

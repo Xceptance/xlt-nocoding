@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.xceptance.xlt.nocoding.util.MockObjects;
+import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**
  * Tests for {@link CookieExtractor}
@@ -14,6 +15,11 @@ import com.xceptance.xlt.nocoding.util.MockObjects;
  */
 public class CookieExtractorTest extends ExtractorTest
 {
+
+    public CookieExtractorTest(final Context<?> context)
+    {
+        super(context);
+    }
 
     /**
      * Verifies the {@link CookieExtractor} extracts the cookie from {@link MockObjects}

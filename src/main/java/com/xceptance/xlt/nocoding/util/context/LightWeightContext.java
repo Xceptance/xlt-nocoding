@@ -109,7 +109,7 @@ public class LightWeightContext extends Context<LightWeightPage>
         return sgmlPage;
     }
 
-    protected void setSgmlPage(final SgmlPage sgmlPage)
+    public void setSgmlPage(final SgmlPage sgmlPage)
     {
         this.sgmlPage = sgmlPage;
     }
