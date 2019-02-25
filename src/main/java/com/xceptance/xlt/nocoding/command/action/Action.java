@@ -135,14 +135,14 @@ public class Action implements Command
         }
         catch (final Exception | Error e)
         {
-            XltLogger.runTimeLogger.error("Execution Step failed : " + getName(), e);
+            final String errorMessage = "Execution Step '" + getName() + "' failed: " + e.getMessage();
             if (e instanceof Exception)
             {
-                throw new Exception("Execution Step '" + getName() + "' failed.", e);
+                throw new Exception(errorMessage, e);
             }
             else
             {
-                throw new Error("Execution Step '" + getName() + "' failed.", e);
+                throw new Error(errorMessage, e);
 
             }
         }

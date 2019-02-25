@@ -20,6 +20,8 @@ public class CsvParserTest extends AbstractParserTest
 
     protected final String fileSimpleFile = path + "simple.csv";
 
+    protected final String fileSimpleErrorFile = path + "simpleError.csv";
+
     protected final String fileStaticFile = path + "static.csv";
 
     protected final String fileRegexpStoreWithLettersFile = path + "regexpStoreHeaderWithLetters.csv";
@@ -129,4 +131,23 @@ public class CsvParserTest extends AbstractParserTest
         parser.parse(fileXpathStoreWithLettersFile);
     }
 
+    /**
+     * Verifies the correct line number is shown in the error message
+     * 
+     * @throws IOException
+     */
+    @Test
+    public void shouldThrowLineNumber() throws IOException
+    {
+        try
+        {
+            final Parser parser = new CsvParser();
+            parser.parse(fileSimpleErrorFile);
+            Assert.assertFalse(true);
+        }
+        catch (final IllegalStateException illegalStateException)
+        {
+            Assert.assertTrue(illegalStateException.getMessage().contains("in line 2"));
+        }
+    }
 }
