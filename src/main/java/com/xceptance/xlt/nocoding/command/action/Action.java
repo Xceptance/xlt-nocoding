@@ -133,11 +133,18 @@ public class Action implements Command
             // Execute the requests, responses and subrequests via xlt api
             action.run();
         }
-        catch (final Exception e)
+        catch (final Exception | Error e)
         {
-            XltLogger.runTimeLogger.error("Execution Step failed : " + getName());
-            e.printStackTrace();
-            throw new Exception("Execution Step failed : " + getName(), e);
+            XltLogger.runTimeLogger.error("Execution Step failed : " + getName(), e);
+            if (e instanceof Exception)
+            {
+                throw new Exception("Execution Step '" + getName() + "' failed.", e);
+            }
+            else
+            {
+                throw new Error("Execution Step '" + getName() + "' failed.", e);
+
+            }
         }
         // And always append the page to the result browser
         finally

@@ -124,6 +124,10 @@ public class CsvParser implements Parser
                         throw new IllegalArgumentException("Unknown type: " + type);
                 }
             }
+            else
+            {
+                throw new IllegalStateException("A record does not have enough arguments!");
+            }
         }
         // Return the scriptItems
         return scriptItems;

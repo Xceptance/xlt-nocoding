@@ -27,10 +27,50 @@ import com.xceptance.xlt.nocoding.util.storage.DataStorage;
  */
 public class RequestContext extends Context<Void>
 {
+
     /**
      * The SgmlPage
      */
     protected SgmlPage sgmlPage;
+
+    /**
+     * Calls {@link RequestContext#LightWeightContext(XltProperties, DataStorage)}, with a new {@link DataStorage}.
+     *
+     * @param xltProperties
+     *            The properties to use - normally {@link XltProperties#getInstance()}
+     * @see Context#Context(XltProperties)
+     */
+    public RequestContext(final XltProperties xltProperties)
+    {
+        super(xltProperties);
+    }
+
+    /**
+     * Creates a new {@link RequestContext}, with the provided {@link DataStorage}, creates a new {@link XltWebClient}
+     * and {@link VariableResolver} and finally calls {@link Context#initialize()}.
+     *
+     * @param xltProperties
+     *            The properties to use - normally {@link XltProperties#getInstance()}
+     * @param dataStorage
+     *            The {@link DataStorage} you want to use
+     * @see Context#Context(XltProperties, DataStorage)
+     */
+    public RequestContext(final XltProperties xltProperties, final DataStorage dataStorage)
+    {
+        super(xltProperties, dataStorage);
+    }
+
+    /**
+     * Creates a new {@link RequestContext} out of the old {@link RequestContext}
+     *
+     * @param context
+     *            The Context to copy the values from
+     * @see Context#Context(Context)
+     */
+    public RequestContext(final Context<Void> context)
+    {
+        super(context);
+    }
 
     /**
      * Gets the {@link SgmlPage} if it isn't <code>null</code>. Else, it builds the SgmlPage from the
@@ -74,45 +114,6 @@ public class RequestContext extends Context<Void>
     public void setSgmlPage(final SgmlPage sgmlPage)
     {
         this.sgmlPage = sgmlPage;
-    }
-
-    /**
-     * Calls {@link RequestContext#LightWeightContext(XltProperties, DataStorage)}, with a new {@link DataStorage}.
-     *
-     * @param xltProperties
-     *            The properties to use - normally {@link XltProperties#getInstance()}
-     * @see Context#Context(XltProperties)
-     */
-    public RequestContext(final XltProperties xltProperties)
-    {
-        super(xltProperties);
-    }
-
-    /**
-     * Creates a new {@link RequestContext}, with the provided {@link DataStorage}, creates a new {@link XltWebClient}
-     * and {@link VariableResolver} and finally calls {@link Context#initialize()}.
-     *
-     * @param xltProperties
-     *            The properties to use - normally {@link XltProperties#getInstance()}
-     * @param dataStorage
-     *            The {@link DataStorage} you want to use
-     * @see Context#Context(XltProperties, DataStorage)
-     */
-    public RequestContext(final XltProperties xltProperties, final DataStorage dataStorage)
-    {
-        super(xltProperties, dataStorage);
-    }
-
-    /**
-     * Creates a new {@link RequestContext} out of the old {@link RequestContext}
-     *
-     * @param context
-     *            The Context to copy the values from
-     * @see Context#Context(Context)
-     */
-    public RequestContext(final Context<Void> context)
-    {
-        super(context);
     }
 
     /**
