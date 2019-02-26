@@ -10,6 +10,7 @@ import com.xceptance.xlt.api.data.GeneralDataProvider;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.util.NoCodingPropertyAdmin;
+import com.xceptance.xlt.nocoding.util.WebAction;
 import com.xceptance.xlt.nocoding.util.resolver.VariableResolver;
 import com.xceptance.xlt.nocoding.util.storage.DataStorage;
 import com.xceptance.xlt.nocoding.util.storage.unit.DuplicateStorage;
@@ -64,6 +65,11 @@ public abstract class Context<T>
     protected T page;
 
     /**
+     * The previously executed {@link WebAction}.
+     */
+    protected WebAction previousWebAction;
+
+    /**
      * Creates a new {@link Context#Context(XltProperties, DataStorage)}, with a new {@link DataStorage}.
      *
      * @param xltProperties
@@ -89,6 +95,7 @@ public abstract class Context<T>
         this.propertyAdmin = new NoCodingPropertyAdmin(xltProperties);
         this.webClient = new XltWebClient();
         this.resolver = new VariableResolver(GeneralDataProvider.getInstance());
+        this.previousWebAction = null;
         initialize();
     }
 
@@ -248,6 +255,16 @@ public abstract class Context<T>
         return getDataStorage().getDefaultItems();
     }
 
+    public void setPreviousWebAction(final WebAction previousWebAction)
+    {
+        this.previousWebAction = previousWebAction;
+    }
+
+    public WebAction getPreviousWebAction()
+    {
+        return this.previousWebAction;
+    }
+
     /*
      * Resolver
      */
@@ -300,7 +317,7 @@ public abstract class Context<T>
     }
 
     /**
-     * Configures the webClient as specified in the properties, thus dis-/enabling javascript, css, etc.
+     * Configures the webClient as specified in the properties.
      */
     private void configureWebClient()
     {

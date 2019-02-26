@@ -125,13 +125,13 @@ public class Action implements Command
         resolveValues(context);
 
         // Create the WebAction with the data of this action
-        final WebAction action = new WebAction(name, context, getActionItems());
+        final WebAction webAction = new WebAction(name, context, getActionItems());
 
         // Try to execute it
         try
         {
             // Execute the requests, responses and subrequests via xlt api
-            action.run();
+            webAction.run();
         }
         catch (final Exception | Error e)
         {

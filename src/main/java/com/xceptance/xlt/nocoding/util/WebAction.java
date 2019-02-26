@@ -6,7 +6,9 @@ import java.util.Map;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.common.lang.ReflectionUtils;
+import com.xceptance.xlt.api.actions.AbstractAction;
 import com.xceptance.xlt.api.actions.AbstractWebAction;
+import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.command.action.AbstractActionSubItem;
 import com.xceptance.xlt.nocoding.command.action.request.Request;
 import com.xceptance.xlt.nocoding.command.action.response.Response;
@@ -20,7 +22,7 @@ import com.xceptance.xlt.nocoding.util.context.Context;
  *
  * @author ckeiner
  */
-public class WebAction extends AbstractWebAction
+public class WebAction extends AbstractAction
 {
     /**
      * The context of the current WebAction
@@ -49,7 +51,7 @@ public class WebAction extends AbstractWebAction
      */
     public WebAction(final String timerName, final Context<?> context, final List<AbstractActionSubItem> actionItems)
     {
-        super(timerName);
+        super(context.getPreviousWebAction(), timerName);
         this.context = context;
         webClient = context.getWebClient();
         this.actionItems = actionItems;
@@ -64,6 +66,8 @@ public class WebAction extends AbstractWebAction
     @Override
     protected void execute() throws Exception
     {
+        context.setPreviousWebAction(this);
+        ((XltWebClient) getWebClient()).setTimerName(getTimerName());
         // clear cache with the private method in WebClient, so we can fire a request to the same url twice in a run
         final Map<String, WebResponse> pageLocalCache = ReflectionUtils.readInstanceField(getWebClient(), "pageLocalCache");
         pageLocalCache.clear();
@@ -101,18 +105,8 @@ public class WebAction extends AbstractWebAction
     /**
      * Gets the WebClient if it is set, else it gets the WebClient via {@link AbstractWebAction#getWebClient()}.
      */
-    @Override
     public WebClient getWebClient()
     {
-        WebClient webClient;
-        if (this.webClient != null)
-        {
-            webClient = this.webClient;
-        }
-        else
-        {
-            webClient = super.getWebClient();
-        }
         return webClient;
     }
 
