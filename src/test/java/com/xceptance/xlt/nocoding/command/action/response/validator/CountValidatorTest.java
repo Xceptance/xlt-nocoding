@@ -3,6 +3,7 @@ package com.xceptance.xlt.nocoding.command.action.response.validator;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.xceptance.xlt.nocoding.util.context.Context;
@@ -64,14 +65,23 @@ public class CountValidatorTest extends ValidationMethodTest
      *
      * @throws Exception
      */
-    @Test(expected = AssertionError.class)
+    @Test
     public void testCountValidatorWrongCount() throws Exception
     {
+        final String expected = "0";
         final List<String> result = new ArrayList<>();
         result.add("test");
-        final AbstractValidator method = new CountValidator("0");
+        final AbstractValidator method = new CountValidator(expected);
         method.setExpressionToValidate(result);
-        method.execute(context);
+        try
+        {
+            method.execute(context);
+            Assert.assertTrue(false);
+        }
+        catch (final AssertionError e)
+        {
+            Assert.assertEquals("Expected " + expected + " matches but found " + result.size() + " matches", e.getMessage());
+        }
     }
 
     /**

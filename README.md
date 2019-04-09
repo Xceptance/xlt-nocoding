@@ -36,7 +36,7 @@ Since this is an open-source project and licensed under the Apache License V2.0,
 * Supports three modes to run the test-cases:
     * DOM: the responses are parsed into the DOM, which allows to select elements by XPath for validation purpose
     * LIGHT: there exists no DOM, which makes the test case fast to execute.
-    * REQUEST: Only WebRequests and Responses are sent, which makes this the fastest mode.
+    * REQUEST: Only plain HTTP requests are sent and HTTP responses received, which makes this the fastest mode.
 * Cookie handling is automatic
 * JavaScript and Static Content can be handled automatically and also be switched off.
 * ...
