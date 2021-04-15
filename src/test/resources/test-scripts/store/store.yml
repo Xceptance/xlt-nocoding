@@ -7,4 +7,6 @@
     - var_4 : ${var_2}
     - var_5 : ${var_4}
     - 1234 : 12
-    - var_1 : 
+    - var_1 :
+
+- Store : Delete
