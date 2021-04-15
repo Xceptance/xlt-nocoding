@@ -105,10 +105,14 @@
     - https://www.xceptance.com
 
 
-#Delete default values
+# Delete default values
 - Cookies : Delete
 - Headers : Delete
 - Httpcode : Delete
 - Url : Delete
 - Method : Delete
 - Xhr : Delete
+- Parameters : Delete
+
+# Empty Variable Pool
+- Store : Delete
