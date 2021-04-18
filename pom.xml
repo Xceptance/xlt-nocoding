@@ -55,10 +55,6 @@
             <id>xceptance-releases</id>
             <url>https://lab.xceptance.de/nexus/content/repositories/releases/</url>
         </repository>
-        <repository>
-            <id>bsh-releases</id>
-            <url>https://repo.boundlessgeo.com/main/</url>
-        </repository>
     </repositories>
 
     <dependencies>
