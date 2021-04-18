@@ -73,7 +73,7 @@ public class VariableResolver
                 }
                 else
                 {
-                    throw new IllegalArgumentException("Endless recursion detected at variable: " + toResolve);
+                    throw new IllegalArgumentException("Recursion found for variable: " + toResolve);
                 }
             }
             else
@@ -204,8 +204,9 @@ public class VariableResolver
             }
             catch (final EvalError e)
             {
-                // throw new RuntimeException("Evaluation Error: ", e);
-                // We couldn't resolve it, therefore we simply can ignore it
+                // we do not silently swallow it anymore because this makes it hard to see why
+                // beanshell syntax fails
+                throw new RuntimeException(e);
             }
         }
         // This fixes Text${'{'}
