@@ -79,8 +79,20 @@ public class ParameterInterpreterTest
     @Test
     public void javaCall()
     {
-        final String toResolve = "No ${Math.abs(-1)} here.";
-        Assert.assertEquals("No 1 here.", interpreter.resolveString(toResolve, context));
+        Assert.assertEquals("T1T", interpreter.resolveString("T${Integer.valueOf(\"1\")}T", context));
+        Assert.assertEquals("No 1 here.", interpreter.resolveString("No ${Math.abs(-1)} here.", context));
+        Assert.assertEquals("1", interpreter.resolveString("${Math.abs(-1)}", context));
+        Assert.assertEquals("1", interpreter.resolveString("${new Integer(1)}", context));
+        Assert.assertEquals("1", interpreter.resolveString("${new java.lang.Integer(1)}", context));
+    }
+
+    /**
+     * if this does not work as Java, it comes back as variable
+     */
+    @Test(expected = RuntimeException.class)
+    public void invalidJava()
+    {
+        Assert.assertEquals("Integer(1)", interpreter.resolveString("${Integer(1)}", context));
     }
 
     /**
@@ -242,13 +254,22 @@ public class ParameterInterpreterTest
      * Verifies that a variable can contain '{', '}' and call a method with curly braces in it
      */
     @Test
-    public void invalidMoreCurlyBraces()
+    public void extraCurlyBraces()
     {
         Assert.assertEquals("Text{", interpreter.resolveString("Text${'{'}", context));
         Assert.assertEquals("Text}", interpreter.resolveString("Text${'}'}", context));
-        Assert.assertEquals("TTe2t-TA12000",
-                            interpreter.resolveString("T${java.text.MessageFormat.format(\"Te{0}t\",2)}-T${java.text.MessageFormat.format(\"A{0}{1}\",1,2)}000",
-                                                      context));
+        Assert.assertEquals("Text{}", interpreter.resolveString("Text${'{}'}", context));
+        Assert.assertEquals("{foo}", interpreter.resolveString("${new String(\"'{'foo'}'\")}", context));
+    }
+
+    /**
+     * Verifies that a variable call a method with curly braces in it
+     */
+    @Test
+    public void extraCurlyBraces_Method()
+    {
+        context.getVariables().store("foo", "es");
+        Assert.assertEquals("A-es", interpreter.resolveString("A-${new String(\"${foo}\")}", context));
     }
 
     /**
