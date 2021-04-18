@@ -63,10 +63,10 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.beanshell</groupId>
-            <artifactId>bsh</artifactId>
-            <version>2.1b5</version>
-        </dependency>
+    		<groupId>org.beanshell</groupId>
+    		<artifactId>bsh</artifactId>
+    		<version>2.0b5</version>
+		</dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-csv</artifactId>
@@ -85,7 +85,7 @@
         <dependency>
             <groupId>com.xceptance</groupId>
             <artifactId>xlt</artifactId>
-            <version>4.12.2</version>
+            <version>5.2.1</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
