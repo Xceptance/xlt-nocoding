@@ -79,6 +79,9 @@
     - variable_1 : value_1
     - variable_2 : value_2
 
+# Empty entire pool of stored data
+- Store : Delete
+
 # Define new default values:
 - Name : name 
 - Httpcode : 400
@@ -113,6 +116,3 @@
 - Method : Delete
 - Xhr : Delete
 - Parameters : Delete
-
-# Empty Variable Pool
-- Store : Delete
