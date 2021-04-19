@@ -8,6 +8,7 @@ import org.yaml.snakeyaml.parser.ParserException;
 
 import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.command.store.Store;
+import com.xceptance.xlt.nocoding.command.store.StoreClear;
 import com.xceptance.xlt.nocoding.parser.AbstractParserTest;
 import com.xceptance.xlt.nocoding.parser.Parser;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParser;
@@ -74,11 +75,7 @@ public class StoreParserTest extends AbstractParserTest
         Assert.assertEquals("var_1", storeItem.getVariableName());
         Assert.assertEquals("", storeItem.getValue());
 
-        Assert.assertTrue(scriptItems.get(7) instanceof Store);
-        storeItem = (Store) scriptItems.get(7);
-        Assert.assertEquals("Store", storeItem.getVariableName());
-        Assert.assertEquals("Delete", storeItem.getValue());
-
+        Assert.assertTrue(scriptItems.get(7) instanceof StoreClear);
     }
 
     /**

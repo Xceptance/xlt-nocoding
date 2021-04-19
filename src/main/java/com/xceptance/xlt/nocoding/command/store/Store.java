@@ -38,27 +38,30 @@ public class Store implements Command
 
     /**
      * Executes the {@link Store} by resolving the values and then storing the {@link #variableName} with its
-     * {@link #value} in {@link Context#getVariables()}.
-     * If {@link #getVariableName()} is {@link Constants#STORE} and {@link #getValue()} is {@link Constants#DELETE},
-     * all variables are deleted.
+     * {@link #value} in {@link Context#getVariables()}. If {@link #getVariableName()} is {@link Constants#STORE} and
+     * {@link #getValue()} is {@link Constants#DELETE}, all variables are deleted.
      */
     @Override
     public void execute(final Context<?> context)
     {
         // Resolve values
         resolveValues(context);
+
         // Get the appropriate storage
         final UniqueStorage storage = context.getVariables();
-        // If the variable is not "Store" and the value is not "Delete"
-        if (!variableName.equals(Constants.STORE) && !value.equals(Constants.DELETE))
+
+        // If the variable is "Store" and the value is "Delete"
+        // remove all storage data
+        if (Constants.STORE.equals(variableName) && Constants.DELETE.equals(value))
+        {
+            storage.clear();
+            XltLogger.runTimeLogger.info("Removed all Variables");
+        }
+        else
         {
             // Store the variable
             storage.store(variableName, value);
             XltLogger.runTimeLogger.info("Added Variable: " + variableName + " : " + value);
-        }
-        else {
-            storage.clear();
-            XltLogger.runTimeLogger.info("Removed all Variables");
         }
     }
 

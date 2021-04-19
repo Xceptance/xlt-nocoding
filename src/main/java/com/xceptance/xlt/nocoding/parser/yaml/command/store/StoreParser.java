@@ -3,19 +3,19 @@ package com.xceptance.xlt.nocoding.parser.yaml.command.store;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.xceptance.xlt.nocoding.command.storeDefault.StoreDefaultParameter;
-import com.xceptance.xlt.nocoding.util.Constants;
 import org.yaml.snakeyaml.error.Mark;
 import org.yaml.snakeyaml.nodes.Node;
+import org.yaml.snakeyaml.nodes.ScalarNode;
+import org.yaml.snakeyaml.nodes.SequenceNode;
+import org.yaml.snakeyaml.parser.ParserException;
 
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.command.store.Store;
+import com.xceptance.xlt.nocoding.command.store.StoreClear;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
-import org.yaml.snakeyaml.nodes.ScalarNode;
-import org.yaml.snakeyaml.nodes.SequenceNode;
-import org.yaml.snakeyaml.parser.ParserException;
+import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
  * The class for parsing store items.
@@ -38,34 +38,40 @@ public class StoreParser
     {
         final List<Command> scriptItems = new ArrayList<>();
 
+        // Store: Delete
         if (storeNode instanceof ScalarNode)
         {
             final String value = YamlParserUtils.transformScalarNodeToString(context, storeNode);
-            if (value.equals(Constants.DELETE))
+            if (Constants.DELETE.equals(value))
             {
-                scriptItems.add(new Store(Constants.STORE, Constants.DELETE));
+                // that is Store: Delete
+                scriptItems.add(new StoreClear());
             }
             else
             {
                 throw new ParserException("Node", context,
-                        " contains " + value + " but it must either contain an array or " + Constants.DELETE,
-                        storeNode.getStartMark());
+                                          " contains " + value + " but it must either contain an array or " + Constants.DELETE,
+                                          storeNode.getStartMark());
             }
         }
-        else if (storeNode instanceof SequenceNode) {
+        // Store:
+        // Name: Value
+        else if (storeNode instanceof SequenceNode)
+        {
             // Convert the node to a list of NameValuePair so it retains its order
             final List<NameValuePair> storeItems = YamlParserUtils.getSequenceNodeAsNameValuePair(context, storeNode);
 
-            for (final NameValuePair storeItem : storeItems) {
+            for (final NameValuePair storeItem : storeItems)
+            {
                 // Add a new StoreItem to the scriptItems
                 scriptItems.add(new Store(storeItem.getName(), storeItem.getValue()));
                 // Log the added item
                 XltLogger.runTimeLogger.debug("Added " + storeItem.getName() + "=" + storeItem.getValue() + " to StoreItems");
             }
-        } else {
-            throw new ParserException("Node", context,
-                    " must either contain an array or " + Constants.DELETE,
-                    storeNode.getStartMark());
+        }
+        else
+        {
+            throw new ParserException("Node", context, " must either contain an array or " + Constants.DELETE, storeNode.getStartMark());
         }
 
         // Return all StoreItems

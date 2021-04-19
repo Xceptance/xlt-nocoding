@@ -68,4 +68,20 @@ public class StoreTest extends AbstractContextTest
         Assert.assertEquals("val_1", context.getVariables().get("var_2"));
     }
 
+    /**
+     * Verifies clearing of entire store with Clear command
+     *
+     * @throws Throwable
+     */
+    @Test
+    public void clearStore() throws Throwable
+    {
+        final Command store = new Store("var_1", "val_1");
+        store.execute(context);
+        Assert.assertEquals("val_1", context.getVariables().get("var_1"));
+
+        final Command clear = new StoreClear();
+        clear.execute(context);
+        Assert.assertNull(context.getVariables().get("var_1"));
+    }
 }
