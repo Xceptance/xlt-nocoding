@@ -12,6 +12,11 @@ import com.xceptance.xlt.nocoding.util.storage.unit.unique.UniqueStorage;
 public class StoreClear implements Command
 {
     /**
+     * Fixes the compiler complains, but we don't use that at all
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Executes the {@link StoreClear} by resolving the values and then storing the {@link #variableName} with its
      * {@link #value} in {@link Context#getVariables()}. If {@link #getVariableName()} is {@link Constants#STORE} and
      * {@link #getValue()} is {@link Constants#DELETE}, all variables are deleted.

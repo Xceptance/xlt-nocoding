@@ -15,6 +15,11 @@ import com.xceptance.xlt.nocoding.util.storage.unit.unique.UniqueStorage;
 public class Store implements Command
 {
     /**
+     * Fixes the compiler complains, but we don't use that at all
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * The name of the variable
      */
     private final String variableName;
