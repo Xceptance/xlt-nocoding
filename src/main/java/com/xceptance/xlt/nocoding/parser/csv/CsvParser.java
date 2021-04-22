@@ -26,24 +26,22 @@ public class CsvParser implements Parser
 {
 
     /**
-     * Parses the content of the file at <code>pathToFile</code> to a list of {@link Command}s
+     * Parses the content of the Reader <code>reader</code> to a list of {@link Command}s
      *
-     * @param pathToFile
-     *            The String that describes the path to the file
+     * @param reader
+     *            The Reader that contains {@link Command}s in a parser dependent format
      * @return A list of {@link Command}s
      * @throws IOException
      *             if an I/O error occurs during creating the reader, parsing the file or closing the parser
      */
     @Override
-    public List<Command> parse(final String pathToFile) throws IOException
+    public List<Command> parse(final Reader reader) throws IOException
     {
         // Initialize variables
         final List<Command> scriptItems = new ArrayList<>();
         final ActionWrapper lastAction = new ActionWrapper();
         final StaticSubrequestWrapper lastStatic = new StaticSubrequestWrapper();
 
-        // Create a Reader based on the file
-        final Reader reader = createReader(pathToFile);
         // Create a CSVParser based on the Reader
         final CSVParser parser = new CSVParser(reader, CsvConstants.CSV_FORMAT.withFirstRecordAsHeader());
         try
