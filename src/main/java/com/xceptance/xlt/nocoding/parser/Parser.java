@@ -27,7 +27,20 @@ public interface Parser
      * @return The list of {@link Command}s that is described in the file
      * @throws IOException
      */
-    public abstract List<Command> parse(String pathToFile) throws IOException;
+    public default List<Command> parse(final String pathToFile) throws IOException
+    {
+        return parse(createReader(pathToFile));
+    }
+
+    /**
+     * Parses the content of the <code>reader</code> to a list of {@link Command}s
+     *
+     * @param reader
+     *            The Reader that contains {@link Command}s in a parser dependent format
+     * @return The list of {@link Command}s that is described in the reader
+     * @throws IOException
+     */
+    public abstract List<Command> parse(final Reader reader) throws IOException;
 
     /**
      * Returns all acceptable extensions for this Parser
