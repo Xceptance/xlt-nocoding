@@ -1,10 +1,10 @@
 package com.xceptance.xlt.nocoding.util;
 
-import java.text.MessageFormat;
-
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.engine.XltWebClient;
+
+import java.text.MessageFormat;
 
 /**
  * Handles all property related matters.
@@ -37,6 +37,8 @@ public class NoCodingPropertyAdmin
 
     public static final String DIRECTORY_DEFAULT = "./config/data/";
 
+    public static final String DEFAULT_HTTP_CODE_VALIDATION = "com.xceptance.xlt.nocoding.defaultHttpCodeValidation";
+
     public NoCodingPropertyAdmin(final XltProperties xltProperties)
     {
         this.xltProperties = xltProperties;
@@ -44,7 +46,7 @@ public class NoCodingPropertyAdmin
 
     /**
      * Sets whether redirects should be enabled or not.
-     * 
+     *
      * @param webClient
      *            The {@link XltWebClient} on which to set this property.
      */
