@@ -6,7 +6,7 @@
 
     <groupId>com.xceptance</groupId>
     <artifactId>xlt-nocoding</artifactId>
-    <version>3.0.0-beta-1</version>
+    <version>3.0.0</version>
 
     <name>xlt-nocoding</name>
     <description>A library based on XLT to run Web test cases that are written in either YAML or CSV format.</description>
@@ -20,7 +20,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
     </properties>
 
     <build>
@@ -81,7 +81,7 @@
         <dependency>
             <groupId>com.xceptance</groupId>
             <artifactId>xlt</artifactId>
-            <version>6.0.0-beta-1</version>
+            <version>6.0.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
