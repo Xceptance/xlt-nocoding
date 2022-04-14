@@ -31,23 +31,23 @@ public class YamlParser implements Parser
 {
 
     /**
-     * Parses the content of the file at the <code>pathToFile</code> to a list of {@link Command}s
+     * Parses the content of the Reader <code>reader</code> to a list of {@link Command}s
      *
-     * @param pathToFile
-     *            The String that describes the path to the file
+     * @param reader
+     *            The Reader that contains {@link Command}s in a parser dependent format
      * @return A list of {@link Command}s
      * @throws IOException
      *             If a {@link Reader} or {@link JsonParser} cannot be created or the file cannot be mapped to a
      *             {@link JsonNode}.
      */
     @Override
-    public List<Command> parse(final String pathToFile) throws IOException
+    public List<Command> parse(final Reader reader) throws IOException
     {
         final List<Command> commands = new ArrayList<Command>();
         // Parse the Yaml with snakeyml
         final Yaml yaml = new Yaml();
         // final Object loadedYaml = yaml.load(createReader(pathToFile));
-        final Node root = yaml.compose(createReader(pathToFile));
+        final Node root = yaml.compose(reader);
         if (root instanceof SequenceNode)
         {
             final List<Node> commandWrappersList = ((SequenceNode) root).getValue();
