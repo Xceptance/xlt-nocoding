@@ -68,4 +68,40 @@ public class CookieExtractorTest extends ExtractorTest
         Assert.assertEquals(0, result.size());
     }
 
+    /**
+     * Verifies the {@link CookieExtractor} can extract a part of a cookie value using an additional regex and matching
+     * group.
+     *
+     * @throws Throwable
+     */
+    @Test
+    public void testCookieExtractorWithValueRegexAndGroup() throws Throwable
+    {
+        final AbstractExtractor extractor = new CookieExtractor(mockObjects.cookieName1, "\\d(\\d+)", "1");
+        extractor.execute(context);
+        final List<String> result = extractor.getResult();
+        Assert.assertEquals(1, result.size());
+        Assert.assertEquals(mockObjects.cookieValue1.substring(1), result.get(0));
+    }
+
+    /**
+     * Verifies the {@link CookieExtractor} can extract a part of a cookie value when regex and matching group are
+     * variables.
+     *
+     * @throws Throwable
+     */
+    @Test
+    public void testCookieExtractorWithVariablesForRegexAndGroup() throws Throwable
+    {
+        final String regexVariableName = "variable_1";
+        final String groupVariableName = "variable_2";
+        context.getVariables().store(regexVariableName, "\\d(\\d+)");
+        context.getVariables().store(groupVariableName, "1");
+        final AbstractExtractor extractor = new CookieExtractor(mockObjects.cookieName1, "${" + regexVariableName + "}",
+                                                                "${" + groupVariableName + "}");
+        extractor.execute(context);
+        final List<String> result = extractor.getResult();
+        Assert.assertEquals(1, result.size());
+        Assert.assertEquals(mockObjects.cookieValue1.substring(1), result.get(0));
+    }
 }

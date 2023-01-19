@@ -99,7 +99,7 @@ public class ValidationParser
                         throw new ParserException("Node", context, " contains two definitions of an extractor but only one is allowed.",
                                                   contentItem.getKeyNode().getStartMark());
                     }
-                    extractor = new ExtractorParser(contentKey).parse(context, singleValidationContentItems);
+                    extractor = new ExtractorParser().parse(context, singleValidationContentItems);
                     XltLogger.runTimeLogger.debug("Extraction Mode is " + extractor);
 
                 }

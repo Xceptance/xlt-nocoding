@@ -17,7 +17,6 @@ import com.xceptance.xlt.nocoding.command.action.response.store.AbstractResponse
 import com.xceptance.xlt.nocoding.command.action.response.store.ResponseStore;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 import com.xceptance.xlt.nocoding.parser.yaml.command.action.response.extractor.ExtractorParser;
-import com.xceptance.xlt.nocoding.util.Constants;
 
 /**
  * The class for parsing store items in the response item.
@@ -26,7 +25,6 @@ import com.xceptance.xlt.nocoding.util.Constants;
  */
 public class ResponseStoreParser
 {
-
     /**
      * Parses the store item in the response block to a list of {@link AbstractResponseStore}
      *
@@ -59,7 +57,7 @@ public class ResponseStoreParser
         return responseStoreList;
     }
 
-    public AbstractResponseStore parseSingleStore(final Mark context, final Node singleStoreWrapper)
+    protected AbstractResponseStore parseSingleStore(final Mark context, final Node singleStoreWrapper)
     {
         // Verify that an object was used
         if (!(singleStoreWrapper instanceof MappingNode))
@@ -75,44 +73,33 @@ public class ResponseStoreParser
 
         for (final NodeTuple storeItem : singleStore)
         {
-            // Get the name of the validation
+            // Get the name of the variable
             variableName = YamlParserUtils.transformScalarNodeToString(singleStoreWrapper.getStartMark(), storeItem.getKeyNode());
+
             // Get all subitems following the variable name
             final Node storeContent = storeItem.getValueNode();
-            // Verify the validation is an object
+
+            // Verify the extraction is an object
             if (!(storeContent instanceof MappingNode))
             {
                 throw new ParserException("Node", storeItem.getKeyNode().getStartMark(),
                                           " contains a " + storeContent.getNodeId().toString() + " but it must contain an object",
                                           storeContent.getStartMark());
             }
+
             // Get the subitems as list
             final List<NodeTuple> singleStoreContentItems = ((MappingNode) storeContent).getValue();
-            for (final NodeTuple contentItem : singleStoreContentItems)
+
+            // Verify, that no extractor was parsed already
+            if (extractor != null)
             {
-                final String contentKey = YamlParserUtils.transformScalarNodeToString(storeContent.getStartMark(),
-                                                                                      contentItem.getKeyNode());
-                // If it is an extraction, parse the extraction
-                if (Constants.isPermittedExtraction(contentKey))
-                {
-                    // Verify, that no extractor was parsed already
-                    if (extractor != null)
-                    {
-                        throw new ParserException("Node", storeContent.getStartMark(),
-                                                  " contains two definitions of an extractor but only one is allowed.",
-                                                  contentItem.getKeyNode().getStartMark());
-                    }
-                    // Parse the extractor
-                    extractor = new ExtractorParser(contentKey).parse(storeContent.getStartMark(), singleStoreContentItems);
-                    XltLogger.runTimeLogger.debug("Extraction Mode is " + extractor);
-                }
-                // If it is not Group OR Group and extractor is null, throw an error
-                else if (!Constants.GROUP.equals(contentKey) || extractor == null)
-                {
-                    throw new ParserException("Node", storeContent.getStartMark(), " contains an unknown item.",
-                                              contentItem.getKeyNode().getStartMark());
-                }
+                throw new ParserException("Node", context, " contains two definitions of an extractor but only one is allowed.",
+                                          storeItem.getKeyNode().getStartMark());
             }
+
+            // Parse the extractor
+            extractor = new ExtractorParser().parse(storeItem.getKeyNode().getStartMark(), singleStoreContentItems);
+            XltLogger.runTimeLogger.debug("Extraction Mode is " + extractor);
         }
 
         if (extractor == null || StringUtils.isBlank(variableName))
@@ -125,5 +112,4 @@ public class ResponseStoreParser
         // Return the responseStores
         return new ResponseStore(variableName, extractor);
     }
-
 }
