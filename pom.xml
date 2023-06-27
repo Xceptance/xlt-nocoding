@@ -6,56 +6,145 @@
 
     <groupId>com.xceptance</groupId>
     <artifactId>xlt-nocoding</artifactId>
-    <version>3.2.0</version>
+    <version>4.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
-    <name>xlt-nocoding</name>
+    <name>XLT No-Coding Library</name>
     <description>A library based on XLT to run Web test cases that are written in either YAML or CSV format.</description>
     <url>https://github.com/Xceptance/xlt-nocoding</url>
+    <inceptionYear>2013</inceptionYear>
+
     <organization>
-        <name>Xceptance Software Technologies</name>
+        <name>Xceptance Software Technologies GmbH</name>
         <url>https://www.xceptance.com/</url>
     </organization>
 
-    <packaging>jar</packaging>
+    <developers>
+        <developer>
+            <name>Xceptance Dev Team</name>
+            <id>xceptance</id>
+            <email>xlt.dev@xceptance.com</email>
+            <organization>Xceptance Software Technologies GmbH</organization>
+            <organizationUrl>http://www.xceptance.com/</organizationUrl>
+            <timezone>+1</timezone>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>Apache-2.0</name>
+            <comments>Apache License, Version 2.0</comments>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/Xceptance/xlt-nocoding</url>
+        <connection>scm:git:https://github.com/Xceptance/xlt-nocoding</connection>
+        <developerConnection>scm:git:https://github.com/Xceptance/xlt-nocoding</developerConnection>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/Xceptance/xlt-nocoding/issues</url>
+    </issueManagement>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+    </distributionManagement>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>11</java.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <copyright>Copyright (c) ${project.inceptionYear}-2023 ${project.organization.name}</copyright>
     </properties>
 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.0</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.1</version>
+                <version>3.2.1</version>
                 <executions>
                     <execution>
-                        <id>attach-sources</id>
+                        <phase>package</phase>
                         <goals>
                             <goal>jar</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <additionalparam>--allow-script-in-comments</additionalparam>
+                    <author>false</author>
+                    <breakiterator>true</breakiterator>
+                    <failOnError>false</failOnError>
+                    <notimestamp>true</notimestamp>
+                    <quiet>true</quiet>
+                    <source>11</source>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <gpgArguments>
+                        <arg>--pinentry-mode</arg>
+                        <arg>loopback</arg>
+                    </gpgArguments>
+                </configuration>
+            </plugin>
+            <!-- Adds or updates the license header in source files. -->
+            <!-- Usage: mvn license:format -->
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <header>src/build/resources/license-header.txt</header>
+                    <properties>
+                        <copyright>${copyright}</copyright>
+                    </properties>
+                    <includes>
+                        <include>**/*.java</include>
+                    </includes>
+                    <mapping>
+                        <java>SLASHSTAR_STYLE</java>
+                    </mapping>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-
-    <repositories>
-        <repository>
-            <id>xceptance-releases</id>
-            <url>https://lab.xceptance.de/nexus/content/repositories/releases/</url>
-        </repository>
-    </repositories>
 
     <dependencies>
         <dependency>
@@ -81,16 +170,9 @@
         <dependency>
             <groupId>com.xceptance</groupId>
             <artifactId>xlt</artifactId>
-            <version>6.2.5</version>
+            <version>7.0.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
-
-    <distributionManagement>
-        <repository>
-            <id>xceptance-releases</id>
-            <url>https://lab.xceptance.de/nexus/content/repositories/releases/</url>
-        </repository>
-    </distributionManagement>
 
 </project>
