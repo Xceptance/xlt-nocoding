@@ -2,7 +2,8 @@ package com.xceptance.xlt.nocoding.command.storeDefault;
 
 import java.util.Optional;
 
-import com.gargoylesoftware.htmlunit.WebClient;
+import org.htmlunit.WebClient;
+
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.context.Context;

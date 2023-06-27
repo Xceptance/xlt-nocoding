@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
+import org.htmlunit.FailingHttpStatusCodeException;
+import org.htmlunit.SgmlPage;
+import org.htmlunit.WebResponse;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.gargoylesoftware.htmlunit.SgmlPage;
-import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.nocoding.util.MockWebResponse;
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.context.DomContext;

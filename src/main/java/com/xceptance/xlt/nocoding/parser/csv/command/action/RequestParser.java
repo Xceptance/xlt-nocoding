@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.commons.csv.CSVRecord;
+import org.htmlunit.util.NameValuePair;
 
-import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.command.action.request.Request;
 import com.xceptance.xlt.nocoding.parser.csv.CsvConstants;
 

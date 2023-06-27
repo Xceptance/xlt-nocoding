@@ -5,14 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.htmlunit.util.NameValuePair;
 import org.yaml.snakeyaml.error.Mark;
 import org.yaml.snakeyaml.nodes.MappingNode;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.ScalarNode;
 import org.yaml.snakeyaml.nodes.SequenceNode;
 import org.yaml.snakeyaml.parser.ParserException;
-
-import com.gargoylesoftware.htmlunit.util.NameValuePair;
 
 /**
  * Utility methods for parsing.
@@ -120,11 +119,10 @@ public class YamlParserUtils
         }
         final List<String> singleElement = new ArrayList<>();
         // For each item of the array
-        ((SequenceNode) node).getValue()
-                             .forEach(assignment -> {
-                                 // Transform the scalar to a String and add it to the list
-                                 singleElement.add(transformScalarNodeToString(node.getStartMark(), assignment));
-                             });
+        ((SequenceNode) node).getValue().forEach(assignment -> {
+            // Transform the scalar to a String and add it to the list
+            singleElement.add(transformScalarNodeToString(node.getStartMark(), assignment));
+        });
         return singleElement;
     }
 

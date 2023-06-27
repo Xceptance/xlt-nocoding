@@ -3,6 +3,7 @@ package com.xceptance.xlt.nocoding.parser.yaml;
 import java.util.List;
 import java.util.Map;
 
+import org.htmlunit.util.NameValuePair;
 import org.junit.Assert;
 import org.junit.Test;
 import org.yaml.snakeyaml.nodes.MappingNode;
@@ -10,8 +11,6 @@ import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.ScalarNode;
 import org.yaml.snakeyaml.nodes.SequenceNode;
 import org.yaml.snakeyaml.parser.ParserException;
-
-import com.gargoylesoftware.htmlunit.util.NameValuePair;
 
 /**
  * Tests {@link YamlParserUtils}

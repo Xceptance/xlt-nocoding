@@ -1,10 +1,10 @@
 package com.xceptance.xlt.nocoding.util.storage;
 
+import org.htmlunit.HttpMethod;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.xceptance.xlt.api.util.XltProperties;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.context.Context;

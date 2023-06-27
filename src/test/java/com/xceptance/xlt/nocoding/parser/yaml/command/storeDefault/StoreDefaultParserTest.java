@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.htmlunit.util.NameValuePair;
 import org.junit.Assert;
 import org.junit.Test;
 import org.yaml.snakeyaml.nodes.Node;
@@ -12,7 +13,6 @@ import org.yaml.snakeyaml.nodes.Node;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.command.store.Store;
 import com.xceptance.xlt.nocoding.command.storeDefault.AbstractStoreDefaultItem;

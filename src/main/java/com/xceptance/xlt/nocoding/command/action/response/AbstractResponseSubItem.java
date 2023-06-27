@@ -2,7 +2,8 @@ package com.xceptance.xlt.nocoding.command.action.response;
 
 import java.io.Serializable;
 
-import com.gargoylesoftware.htmlunit.WebResponse;
+import org.htmlunit.WebResponse;
+
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.storage.DataStorage;
 

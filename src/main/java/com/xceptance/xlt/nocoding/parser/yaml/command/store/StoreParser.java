@@ -3,13 +3,13 @@ package com.xceptance.xlt.nocoding.parser.yaml.command.store;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.htmlunit.util.NameValuePair;
 import org.yaml.snakeyaml.error.Mark;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.ScalarNode;
 import org.yaml.snakeyaml.nodes.SequenceNode;
 import org.yaml.snakeyaml.parser.ParserException;
 
-import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.command.store.Store;

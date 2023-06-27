@@ -11,14 +11,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.htmlunit.FailingHttpStatusCodeException;
+import org.htmlunit.HttpMethod;
+import org.htmlunit.WebRequest;
+import org.htmlunit.WebResponse;
+import org.htmlunit.util.NameValuePair;
+import org.htmlunit.util.UrlUtils;
 import org.openqa.selenium.InvalidArgumentException;
 
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.gargoylesoftware.htmlunit.HttpMethod;
-import com.gargoylesoftware.htmlunit.WebRequest;
-import com.gargoylesoftware.htmlunit.WebResponse;
-import com.gargoylesoftware.htmlunit.util.NameValuePair;
-import com.gargoylesoftware.htmlunit.util.UrlUtils;
 import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.command.action.AbstractActionSubItem;
 import com.xceptance.xlt.nocoding.util.Constants;

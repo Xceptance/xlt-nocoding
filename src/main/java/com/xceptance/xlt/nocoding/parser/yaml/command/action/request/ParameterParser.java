@@ -2,10 +2,10 @@ package com.xceptance.xlt.nocoding.parser.yaml.command.action.request;
 
 import java.util.List;
 
+import org.htmlunit.util.NameValuePair;
 import org.yaml.snakeyaml.error.Mark;
 import org.yaml.snakeyaml.nodes.Node;
 
-import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.parser.yaml.YamlParserUtils;
 
 /**

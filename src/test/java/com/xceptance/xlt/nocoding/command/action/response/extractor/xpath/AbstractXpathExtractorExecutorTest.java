@@ -1,8 +1,8 @@
 package com.xceptance.xlt.nocoding.command.action.response.extractor.xpath;
 
+import org.htmlunit.WebResponse;
 import org.junit.Before;
 
-import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.nocoding.command.AbstractContextTest;
 import com.xceptance.xlt.nocoding.util.MockObjects;
 import com.xceptance.xlt.nocoding.util.context.Context;

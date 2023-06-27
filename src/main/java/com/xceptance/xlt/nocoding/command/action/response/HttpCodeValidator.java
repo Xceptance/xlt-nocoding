@@ -1,8 +1,8 @@
 package com.xceptance.xlt.nocoding.command.action.response;
 
+import org.htmlunit.WebResponse;
 import org.junit.Assert;
 
-import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.api.validators.HttpResponseCodeValidator;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.context.Context;

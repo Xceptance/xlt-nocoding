@@ -4,7 +4,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.gargoylesoftware.htmlunit.util.NameValuePair;
+import org.htmlunit.util.NameValuePair;
+
 import com.xceptance.xlt.nocoding.util.context.Context;
 
 /**

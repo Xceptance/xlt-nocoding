@@ -3,7 +3,7 @@ package com.xceptance.xlt.nocoding.util.storage.unit;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gargoylesoftware.htmlunit.util.NameValuePair;
+import org.htmlunit.util.NameValuePair;
 
 /**
  * A storage unit, that can have duplicate items.

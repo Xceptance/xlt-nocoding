@@ -4,7 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gargoylesoftware.htmlunit.WebResponse;
+import org.htmlunit.WebResponse;
+
 import com.xceptance.xlt.nocoding.util.context.Context;
 import com.xceptance.xlt.nocoding.util.resolver.VariableResolver;
 import com.xceptance.xlt.nocoding.util.storage.DataStorage;

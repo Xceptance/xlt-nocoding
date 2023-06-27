@@ -4,10 +4,10 @@ import java.net.MalformedURLException;
 import java.util.StringTokenizer;
 
 import org.apache.commons.lang3.StringUtils;
+import org.htmlunit.CookieManager;
+import org.htmlunit.WebClient;
+import org.htmlunit.util.Cookie;
 
-import com.gargoylesoftware.htmlunit.CookieManager;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.util.Cookie;
 import com.xceptance.xlt.api.util.XltLogger;
 import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.util.Constants;

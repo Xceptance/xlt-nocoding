@@ -3,10 +3,10 @@ package com.xceptance.xlt.nocoding.command.storeDefault;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.htmlunit.util.Cookie;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.gargoylesoftware.htmlunit.util.Cookie;
 import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.util.Constants;
 import com.xceptance.xlt.nocoding.util.context.Context;

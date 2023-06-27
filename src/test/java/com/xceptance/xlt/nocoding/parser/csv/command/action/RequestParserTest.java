@@ -3,10 +3,10 @@ package com.xceptance.xlt.nocoding.parser.csv.command.action;
 import java.io.IOException;
 
 import org.apache.commons.csv.CSVRecord;
+import org.htmlunit.util.NameValuePair;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.command.action.request.Request;
 import com.xceptance.xlt.nocoding.parser.csv.CsvConstants;
 import com.xceptance.xlt.nocoding.parser.csv.command.CsvParserTestUtils;

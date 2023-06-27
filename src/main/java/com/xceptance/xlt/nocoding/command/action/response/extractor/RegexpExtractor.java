@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.gargoylesoftware.htmlunit.WebResponse;
+import org.htmlunit.WebResponse;
+
 import com.xceptance.xlt.api.htmlunit.LightWeightPage;
 import com.xceptance.xlt.nocoding.util.context.Context;
 

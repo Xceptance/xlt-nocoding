@@ -1,12 +1,13 @@
 package com.xceptance.xlt.nocoding.command.action.response;
 
-import com.gargoylesoftware.htmlunit.WebResponse;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.htmlunit.WebResponse;
+
 import com.xceptance.xlt.nocoding.command.action.AbstractActionSubItem;
 import com.xceptance.xlt.nocoding.util.NoCodingPropertyAdmin;
 import com.xceptance.xlt.nocoding.util.context.Context;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The expected response to a request. A response has a list of response items, which validate or store something of the
@@ -65,19 +66,24 @@ public class Response extends AbstractActionSubItem
     /**
      * Adds a {@link HttpCodeValidator} to the {@link #responseItems} if none is specified
      */
-    void fillDefaultData(final Context<?> context) {
-        boolean defaultResponseCodeValidation = context.getPropertyByKey(NoCodingPropertyAdmin.DEFAULT_HTTP_CODE_VALIDATION, true);
-        if (defaultResponseCodeValidation){
+    void fillDefaultData(final Context<?> context)
+    {
+        final boolean defaultResponseCodeValidation = context.getPropertyByKey(NoCodingPropertyAdmin.DEFAULT_HTTP_CODE_VALIDATION, true);
+        if (defaultResponseCodeValidation)
+        {
             boolean hasHttpcodeValidator = false;
             // Look for an instance of HttpcodeValidator
-            for (final AbstractResponseSubItem responseItem : responseItems) {
-                if (responseItem instanceof HttpCodeValidator) {
+            for (final AbstractResponseSubItem responseItem : responseItems)
+            {
+                if (responseItem instanceof HttpCodeValidator)
+                {
                     // If a HttpcodeValidator was found, set hasHttpcodeValidator to true
                     hasHttpcodeValidator = true;
                 }
             }
             // If no HttpcodeValidator was found, add one at the beginning
-            if (!hasHttpcodeValidator) {
+            if (!hasHttpcodeValidator)
+            {
                 responseItems.add(0, new HttpCodeValidator(null));
             }
         }

@@ -13,16 +13,16 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.htmlunit.HttpMethod;
+import org.htmlunit.WebRequest;
+import org.htmlunit.util.Cookie;
+import org.htmlunit.util.NameValuePair;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.InvalidArgumentException;
 
-import com.gargoylesoftware.htmlunit.HttpMethod;
-import com.gargoylesoftware.htmlunit.WebRequest;
-import com.gargoylesoftware.htmlunit.util.Cookie;
-import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.engine.XltWebClient;
 import com.xceptance.xlt.nocoding.command.AbstractContextTest;
 import com.xceptance.xlt.nocoding.command.Command;

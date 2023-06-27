@@ -2,7 +2,7 @@ package com.xceptance.xlt.nocoding.util;
 
 import java.net.URL;
 
-import com.gargoylesoftware.htmlunit.StringWebResponse;
+import org.htmlunit.StringWebResponse;
 
 public class MockWebResponse extends StringWebResponse
 {

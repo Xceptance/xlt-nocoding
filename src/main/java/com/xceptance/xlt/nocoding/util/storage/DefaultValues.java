@@ -1,6 +1,6 @@
 package com.xceptance.xlt.nocoding.util.storage;
 
-import com.gargoylesoftware.htmlunit.HttpMethod;
+import org.htmlunit.HttpMethod;
 
 /**
  * Definitions for normal default values.

@@ -3,12 +3,12 @@ package com.xceptance.xlt.nocoding.command.action.response.extractor.xpath;
 import java.io.IOException;
 import java.util.List;
 
+import org.htmlunit.FailingHttpStatusCodeException;
+import org.htmlunit.Page;
+import org.htmlunit.html.HtmlPage;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.gargoylesoftware.htmlunit.Page;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.xceptance.xlt.nocoding.command.action.response.extractor.ExtractorTest;
 import com.xceptance.xlt.nocoding.util.MockWebResponse;
 import com.xceptance.xlt.nocoding.util.context.Context;

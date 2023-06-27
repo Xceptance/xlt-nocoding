@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.htmlunit.util.NameValuePair;
 import org.junit.Assert;
 import org.junit.Test;
 import org.yaml.snakeyaml.parser.ParserException;
 
-import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.command.Command;
 import com.xceptance.xlt.nocoding.command.action.Action;
 import com.xceptance.xlt.nocoding.command.action.request.Request;

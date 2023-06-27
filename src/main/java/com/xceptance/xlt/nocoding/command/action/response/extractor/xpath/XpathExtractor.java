@@ -1,6 +1,7 @@
 package com.xceptance.xlt.nocoding.command.action.response.extractor.xpath;
 
-import com.gargoylesoftware.htmlunit.WebResponse;
+import org.htmlunit.WebResponse;
+
 import com.xceptance.xlt.nocoding.command.action.response.extractor.AbstractExtractor;
 import com.xceptance.xlt.nocoding.util.context.Context;
 

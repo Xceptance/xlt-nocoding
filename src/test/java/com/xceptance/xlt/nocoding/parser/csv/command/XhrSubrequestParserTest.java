@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.csv.CSVRecord;
+import org.htmlunit.util.NameValuePair;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.xceptance.xlt.nocoding.command.action.request.Request;
 import com.xceptance.xlt.nocoding.command.action.response.AbstractResponseSubItem;
 import com.xceptance.xlt.nocoding.command.action.response.HttpCodeValidator;

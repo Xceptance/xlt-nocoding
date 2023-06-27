@@ -4,11 +4,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+import org.htmlunit.WebResponse;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.nocoding.util.MockWebResponse;
 import com.xceptance.xlt.nocoding.util.context.Context;
 

@@ -3,8 +3,9 @@ package com.xceptance.xlt.nocoding.util;
 import java.util.List;
 import java.util.Map;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.WebResponse;
+import org.htmlunit.WebClient;
+import org.htmlunit.WebResponse;
+
 import com.xceptance.common.lang.ReflectionUtils;
 import com.xceptance.xlt.api.actions.AbstractAction;
 import com.xceptance.xlt.api.actions.AbstractWebAction;

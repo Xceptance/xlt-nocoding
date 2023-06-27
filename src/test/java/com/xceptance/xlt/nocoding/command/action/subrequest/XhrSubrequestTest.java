@@ -3,10 +3,10 @@ package com.xceptance.xlt.nocoding.command.action.subrequest;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.htmlunit.WebResponse;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.gargoylesoftware.htmlunit.WebResponse;
 import com.xceptance.xlt.nocoding.command.AbstractContextTest;
 import com.xceptance.xlt.nocoding.command.action.AbstractActionSubItem;
 import com.xceptance.xlt.nocoding.command.action.request.Request;
