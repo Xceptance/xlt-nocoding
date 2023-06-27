@@ -86,7 +86,12 @@ public class CsvConstants
         PERMITTEDHEADERFIELDS.add(TEXT);
         PERMITTEDHEADERFIELDS.add(ENCODED);
 
-        CSV_FORMAT = CSVFormat.RFC4180.withIgnoreEmptyLines(true).withCommentMarker('#').withHeader().withIgnoreSurroundingSpaces(true);
+        CSV_FORMAT = CSVFormat.RFC4180.builder()
+                                      .setIgnoreEmptyLines(true)
+                                      .setCommentMarker('#')
+                                      .setHeader()
+                                      .setIgnoreSurroundingSpaces(true)
+                                      .build();
     }
 
     public static boolean isPermittedHeaderField(final String s)

@@ -27,6 +27,6 @@ public class CsvParserTestUtils
     public static Iterable<CSVRecord> buildRecord(final String input) throws IOException
     {
         final StringReader in = new StringReader(input);
-        return CsvConstants.CSV_FORMAT.withFirstRecordAsHeader().parse(in);
+        return CsvConstants.CSV_FORMAT.parse(in);
     }
 }

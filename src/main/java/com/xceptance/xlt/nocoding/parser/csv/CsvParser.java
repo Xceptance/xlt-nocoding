@@ -58,7 +58,7 @@ public class CsvParser implements Parser
         final StaticSubrequestWrapper lastStatic = new StaticSubrequestWrapper();
 
         // Create a CSVParser based on the Reader
-        final CSVParser parser = new CSVParser(reader, CsvConstants.CSV_FORMAT.withFirstRecordAsHeader());
+        final CSVParser parser = new CSVParser(reader, CsvConstants.CSV_FORMAT);
         try
         {
             validateHeader(parser.getHeaderMap().keySet());
