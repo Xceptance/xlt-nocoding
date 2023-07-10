@@ -3,7 +3,7 @@
 This is a library used by the [testsuite-nocoding](https://github.com/Xceptance/testsuite-nocoding) for Xceptance LoadTest (XLT) - http://www.xceptance-loadtest.com/.
 
 * Name: xlt-nocoding
-* Version: 3.2.0
+* Version: 4.0.0
 * License: Apache V2.0
 * License URI: http://www.apache.org/licenses/LICENSE-2.0.txt
 * Tags: load testing, performance testing, testing
