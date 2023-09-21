@@ -207,6 +207,25 @@ public class RequestTest extends AbstractContextTest
         context.getVariables().store("header3_value", value);
         headers_var.put("${header3_key}", "${header3_value}");
 
+        // Cookies
+        final Map<String, String> expectedCookies = new HashMap<>();
+        final Map<String, String> cookiesWithVars = new HashMap<>();
+
+        key = "SESSION_1";
+        value = "1234567890";
+        context.getVariables().store("cookieVar1", key);
+        context.getVariables().store("cookieVar2", value);
+        cookiesWithVars.put("${cookieVar1}", "${cookieVar2}");
+        expectedCookies.put(key, value);
+
+        key = "SESSION_2";
+        value = "abcdefgh";
+        context.getVariables().store("cookieVar3", key);
+        context.getVariables().store("cookieVar4", value);
+        cookiesWithVars.put("prefix ${cookieVar3} suffix", "leading ${cookieVar4} trailing");
+        expectedCookies.put("prefix " + key + " suffix", "leading " + value + " trailing");
+
+        // build the request
         request = new Request(url_var);
         request.setHttpMethod(method_var);
         request.setParameters(parameters_var);
@@ -214,22 +233,24 @@ public class RequestTest extends AbstractContextTest
         request.setEncodeBody(encodeBody_var);
         request.setEncodeParameters(encodeParameters_var);
         request.setHeaders(headers_var);
+        request.setCookies(cookiesWithVars);
         request.setXhr(xhr_var);
 
         request.resolveValues(context);
 
+        // build actual web request
         webRequest = request.buildWebRequest(context);
-        // URL, Method
-        final WebRequest expected = new WebRequest(new URL(url), method);
-        // Parameters
-        expected.setRequestParameters(parameters);
-        // Headers
 
+        // build expected web request for validation (TODO: really needed?)
+        final WebRequest expected = new WebRequest(new URL(url), method);
+        expected.setRequestParameters(parameters);
         expected.getAdditionalHeaders().putAll(headers);
+
         if (xhr)
         {
             expected.setXHR();
         }
+
         if (expected.getHttpMethod() == HttpMethod.POST || expected.getHttpMethod() == HttpMethod.PUT
             || expected.getHttpMethod() == HttpMethod.PATCH)
         {
@@ -246,6 +267,7 @@ public class RequestTest extends AbstractContextTest
             Assert.assertEquals(paramQuery, webRequest.getUrl().getQuery());
         }
 
+        // validate expectations
         Assert.assertEquals(expected.getRequestBody(), webRequest.getRequestBody());
         Assert.assertEquals(expected.getAdditionalHeaders(), webRequest.getAdditionalHeaders());
         Assert.assertEquals(expected.getHttpMethod(), webRequest.getHttpMethod());
@@ -253,6 +275,11 @@ public class RequestTest extends AbstractContextTest
         Assert.assertEquals(expected.getUrl().toString(), url);
         Assert.assertEquals(expected.isXHR(), webRequest.isXHR());
 
+        // validate cookies
+        final Set<Cookie> webClientCookies = context.getWebClient().getCookies(new URL(url));
+        final Map<String, String> actualCookies = new HashMap<>();
+        webClientCookies.forEach(cookie -> actualCookies.put(cookie.getName(), cookie.getValue()));
+        Assert.assertEquals(expectedCookies, actualCookies);
     }
 
     /**

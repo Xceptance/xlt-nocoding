@@ -349,6 +349,19 @@ public class Request extends AbstractActionSubItem
             setHeaders(resolvedHeaders);
         }
 
+        // Resolve each cookie in cookies if is neither null nor empty
+        if (getCookies() != null && !getCookies().isEmpty())
+        {
+            // Create a new map
+            final Map<String, String> resolvedCookies = new HashMap<>();
+            // And insert the resolved key and value of the old map into the new one
+            getCookies().forEach((final String key, final String value) -> {
+                resolvedCookies.put(context.resolveString(key), context.resolveString(value));
+            });
+            // Reassign the cookies to its resolved values
+            setCookies(resolvedCookies);
+        }
+
         // Resolve encodeBody if it isn't null
         if (getEncodeBody() != null)
         {
