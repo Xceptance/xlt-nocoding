@@ -49,7 +49,7 @@ public class RequestContext extends Context<Void>
     protected SgmlPage sgmlPage;
 
     /**
-     * Calls {@link RequestContext#LightWeightContext(XltProperties, DataStorage)}, with a new {@link DataStorage}.
+     * Calls {@link Context#Context(XltProperties, DataStorage)}, with a new {@link DataStorage}.
      *
      * @param xltProperties
      *            The properties to use - normally {@link XltProperties#getInstance()}
@@ -164,7 +164,7 @@ public class RequestContext extends Context<Void>
     /**
      * Creates a new {@link RequestContext} out of the current one.
      *
-     * @return A new <code>LightWeightContext</code> via {@link #LightWeightContext(Context)}
+     * @return A new <code>RequestContext</code> via {@link #RequestContext(Context)}
      */
     @Override
     public Context<Void> buildNewContext()

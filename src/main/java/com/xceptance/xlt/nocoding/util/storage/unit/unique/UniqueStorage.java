@@ -27,7 +27,7 @@ public class UniqueStorage
 {
 
     /**
-     * Stores all items in a {@link Map}<{@link String},{@link String}>
+     * Stores all items in a {@link Map}.
      */
     protected final Map<String, String> items;
 
